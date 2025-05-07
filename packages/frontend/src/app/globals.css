@@ -246,4 +246,12 @@
   h2 {
     @apply text-2xl sm:text-3xl md:text-4xl;
   }
+
+  .feature-item-animate {
+    @apply opacity-0;
+  }
+
+  .feature-item-animate.in-view {
+    @apply opacity-100 transition-all duration-700 ease-out;
+  }
 }

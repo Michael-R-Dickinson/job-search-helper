@@ -1,5 +1,6 @@
 'use client'
 
+import ResumeTailoringSection from '../ResumeTailoringSection'
 import ApplicationAutofill from './ApplicationAutofill'
 import ApplicationTracking from './ApplicationTracking'
 import ResumeTailoring from './ResumeTailoring'
@@ -10,6 +11,7 @@ const ValueProposition = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <ResumeTailoring />
+          <ResumeTailoringSection />
           <ApplicationAutofill />
           <ApplicationTracking />
         </div>
