@@ -1,5 +1,5 @@
 import { FileText, SquareArrowRight, ListChecks } from 'lucide-react'
-import FeatureTile from './FeatureTile'
+import FeatureTile from '../FeatureTile'
 
 const HowItWorks = () => (
   <div

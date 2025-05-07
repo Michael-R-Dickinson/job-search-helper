@@ -2,7 +2,7 @@ import CallToAction from '@/components/CTA'
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import NavBar from '@/components/NavBar'
-import ValueProposition from '@/components/ValueProposition'
+import ValueProposition from '@/components/Hero/ValueProposition'
 
 export default function Home() {
   return (
