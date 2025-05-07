@@ -1,5 +1,5 @@
 import { Button } from './BasicButton'
-import HowItWorks from './Hero/HowItWorks'
+import HowItWorks from './Landing/HowItWorks'
 
 const Hero = () => {
   return (
