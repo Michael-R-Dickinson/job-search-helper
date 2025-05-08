@@ -21,7 +21,7 @@ const Hero = () => {
 
           {/* CTA Button - Moved above the feature tiles */}
           <div className="animate-fade-in mb-12" style={{ animationDelay: '0.3s' }}>
-            <Button className="cta-button text-lg px-8 py-6">
+            <Button className="cta-button text-lg px-8 py-6" href="/getStarted">
               {"Start Applying Faster – It's Free!"}
             </Button>
             <p className="text-sm text-muted-foreground mt-2">No account needed.</p>
