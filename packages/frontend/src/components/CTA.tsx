@@ -10,12 +10,9 @@ const CallToAction = () => {
           interviews faster with Perfectify.
         </p>
         <div>
-          <button className="cta-button text-lg px-8 py-6 shadow-xl hover:shadow-perfectify-primary/20">
+          <button className="cta-button text-lg px-7 py-5 shadow-xl hover:shadow-perfectify-primary/20 cursor-pointer">
             Start Applying Faster – It&apos;s Free!
           </button>
-          <p className="text-sm text-muted-foreground mt-4">
-            No account needed. Works with Google Docs, Word, and major job platforms.
-          </p>
         </div>
       </div>
     </section>

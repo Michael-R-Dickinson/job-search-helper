@@ -87,7 +87,7 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4 text-lg">Try Perfectify</h3>
             <p className="text-gray-300 mb-4">
-              Ready to supercharge your job search? Get started with Perfectify today—no signup
+              Ready to supercharge your job search? Get started with Perfectify today – no signup
               required.
             </p>
             <Button className="cta-button">Start for Free</Button>

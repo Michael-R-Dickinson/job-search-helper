@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from './BasicButton'
+import Link from 'next/link'
 
 const NavBar = () => {
   return (
@@ -16,12 +17,11 @@ const NavBar = () => {
       }}
     >
       <div className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center">
-          {/* <h1 className="text-xl font-bold gradient-text">Perfectify</h1> */}
+        <Link href="/" className="flex items-center">
           <div className="ml-2">
             <div className="gradient-image" />
           </div>
-        </div>
+        </Link>
         <div className="hidden md:flex items-center space-x-6 py-3">
           <a
             href="#features"
