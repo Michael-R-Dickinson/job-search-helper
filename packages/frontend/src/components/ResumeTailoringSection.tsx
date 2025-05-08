@@ -11,7 +11,7 @@ const ResumeTailoringSection = () => {
         Step 1: <span className="gradient-text">Craft a Winning Resume</span> for Every Role.
         Instantly.
       </h2>
-      <p className="text-center text-gray-500 mb-8 text-xl feature-item-animate">
+      <p className="text-center text-gray-500 sm:mb-8 text-xl feature-item-animate">
         Tailors your <span className="font-bold">existing resume </span> to to any job description
         in seconds.
       </p>
@@ -34,7 +34,9 @@ const ResumeTailoringSection = () => {
         </div>
       </div> */}
 
-      <ResumeComparison />
+      <div className="hidden sm:block">
+        <ResumeComparison />
+      </div>
 
       <ProcessSteps />
 

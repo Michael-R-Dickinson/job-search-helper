@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react'
 
 const ResumeComparison = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-24">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-24 mb-22">
       {/* Left side - Current Resume */}
       <div className="feature-item-animate">
         <ResumeCard type="original" />
