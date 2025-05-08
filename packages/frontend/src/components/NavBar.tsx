@@ -32,7 +32,7 @@ const NavBar = () => {
           >
             How it Works
           </a>
-          <Button className="cta-button">Get Started - Free</Button>
+          <Button className="cta-button font-semibold">Dashboard</Button>
         </div>
         <div className="md:hidden">
           <Button variant="ghost" className="text-perfectify-primary">

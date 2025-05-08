@@ -24,9 +24,7 @@ const Hero = () => {
             <Button className="cta-button text-lg px-8 py-6">
               {"Start Applying Faster – It's Free!"}
             </Button>
-            <p className="text-sm text-muted-foreground mt-4">
-              No account needed. Unleash your job search now.
-            </p>
+            <p className="text-sm text-muted-foreground mt-2">No account needed.</p>
           </div>
 
           {/* How Perfectify Works - Steps */}

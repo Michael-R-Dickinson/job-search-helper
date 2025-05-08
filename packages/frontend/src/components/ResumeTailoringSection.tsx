@@ -2,10 +2,11 @@ import FeatureSection from '@/components/FeatureSection'
 import ResumeComparison from '@/components/ResumeComparison'
 import ProcessSteps from '@/components/ProcessSteps'
 import ExplanationSection from '@/components/ExplanationSection'
+import { LINKED_SECTION_IDS } from '@/lib/enums'
 
 const ResumeTailoringSection = () => {
   return (
-    <FeatureSection className="bg-gray-50">
+    <FeatureSection id={LINKED_SECTION_IDS.RESUME_TAILORING} className="bg-gray-50">
       <h2 className="mb-5 text-center feature-item-animate">
         Step 1: <span className="gradient-text">Craft a Winning Resume</span> for Every Role.
         Instantly.
