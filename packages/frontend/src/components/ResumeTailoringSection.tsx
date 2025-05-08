@@ -316,7 +316,7 @@ const ResumeTailoringSection = () => {
 
       {/* Process illustration - NEW */}
       <div
-        className="mt-12 max-w-4xl mx-auto feature-item-animate"
+        className="mt-22 max-w-4xl mx-auto feature-item-animate"
         style={{ transitionDelay: '400ms' }}
       >
         <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
