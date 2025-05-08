@@ -9,7 +9,7 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
   if (type === 'original') {
     return (
       <div className="relative">
-        <div className="absolute -top-6 left-4">
+        <div className="absolute -top-8 left-4">
           <div className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-gray-600 text-sm font-medium">
             <FileText className="h-4 w-4 mr-2" />
             Original Resume
