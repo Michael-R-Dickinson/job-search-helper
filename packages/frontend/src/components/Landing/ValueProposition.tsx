@@ -8,10 +8,8 @@ const ValueProposition = () => {
   return (
     <div className="mx-auto w-full">
       <ResumeTailoringSection />
-      <div className="max-w-5xl mx-auto">
-        <ApplicationAutofill />
-        <ApplicationTracking />
-      </div>
+      <ApplicationAutofill />
+      <ApplicationTracking />
     </div>
   )
 }

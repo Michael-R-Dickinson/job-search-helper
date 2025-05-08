@@ -1,11 +1,12 @@
 import React from 'react'
+import FeatureSection from '../FeatureSection'
 
 const ApplicationTracking = () => (
-  <div className="">
-    <h2 className="mb-6 text-center">
+  <FeatureSection className="max-w-5xl mx-auto">
+    <h2 className="mb-6 text-center feature-item-animate">
       Step 3: <span className="gradient-text">Track</span> Your Applications and Stay Organized.
     </h2>
-    <div className="mb-8 bg-white rounded-xl p-6 shadow-lg">
+    <div className="mb-8 bg-white rounded-xl p-6 shadow-lg feature-item-animate">
       <div className="border border-gray-200 rounded-lg p-4">
         <div className="text-sm font-medium mb-4">APPLICATION DASHBOARD</div>
         <div className="grid grid-cols-3 gap-4 mb-4">
@@ -47,7 +48,7 @@ const ApplicationTracking = () => (
         </div>
       </div>
     </div>
-    <ul className="space-y-4 mb-6">
+    <ul className="space-y-4 mb-6 feature-item-animate">
       <li className="flex gap-3">
         <div className="mt-1 bg-perfectify-light rounded-full p-1">
           <svg
@@ -126,7 +127,7 @@ const ApplicationTracking = () => (
         </div>
       </li>
     </ul>
-  </div>
+  </FeatureSection>
 )
 
 export default ApplicationTracking

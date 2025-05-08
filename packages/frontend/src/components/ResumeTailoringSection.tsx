@@ -4,14 +4,14 @@ import { Card } from './BasicCard'
 
 const ResumeTailoringSection = () => {
   return (
-    <FeatureSection className="bg-gradient-to-b to-white from-gray-50">
+    <FeatureSection className="bg-gray-50">
       <h2 className="mb-5 text-center feature-item-animate">
         Step 1: <span className="gradient-text">Craft a Winning Resume</span> for Every Role.
         Instantly.
       </h2>
       <p className="text-center text-gray-500 mb-8 text-xl feature-item-animate">
         Tailors your <span className="font-bold">existing resume </span> to to any job description
-        in seconds
+        in seconds.
       </p>
       {/* Upload sources banner */}
       {/* <div className="flex flex-col items-center mb-8 feature-item-animate">
@@ -319,8 +319,8 @@ const ResumeTailoringSection = () => {
         className="mt-22 max-w-4xl mx-auto feature-item-animate"
         style={{ transitionDelay: '400ms' }}
       >
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-          <h3 className="text-center font-semibold text-lg mb-6">How It Works</h3>
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+          <h3 className="text-center font-semibold text-xl mb-6">How It Works</h3>
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex-1 flex flex-col items-center text-center p-3">
@@ -383,23 +383,25 @@ const ResumeTailoringSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 text-left">
           <div
             className="feature-item-animate p-4 rounded-lg bg-white border border-gray-100 shadow-sm"
-            style={{ transitionDelay: '500ms' }}
+            style={{ transitionDelay: '600ms' }}
           >
-            <h4 className="font-medium mb-2 text-perfectify-purple">Perfect Keyword Matching</h4>
+            <h4 className="font-medium mb-2 text-perfectify-purple">Experience Optimization</h4>
             <p className="text-sm text-gray-600">
-              Our AI intelligently identifies and incorporates job-specific keywords to help you
-              pass ATS screening systems.
+              We reframe your work history to emphasize the skills and achievements most relevant to
+              your target position.
             </p>
           </div>
 
           <div
             className="feature-item-animate p-4 rounded-lg bg-white border border-gray-100 shadow-sm"
-            style={{ transitionDelay: '600ms' }}
+            style={{ transitionDelay: '500ms' }}
           >
-            <h4 className="font-medium mb-2 text-perfectify-purple">Experience Enhancement</h4>
+            <h4 className="font-medium mb-2 text-perfectify-purple">
+              Intelligent Keyword Matching
+            </h4>
             <p className="text-sm text-gray-600">
-              We reframe your work history to emphasize the skills and achievements most relevant to
-              your target position.
+              Our system identifies and incorporates job-specific keywords to help you pass ATS
+              screening systems.
             </p>
           </div>
 
@@ -409,7 +411,7 @@ const ResumeTailoringSection = () => {
           >
             <h4 className="font-medium mb-2 text-perfectify-purple">Instant Results</h4>
             <p className="text-sm text-gray-600">
-              No more spending hours tailoring resumes by hand — get a perfectly optimized resume in
+              No need to spend hours tailoring resumes by hand — get a perfectly optimized resume in
               seconds.
             </p>
           </div>
