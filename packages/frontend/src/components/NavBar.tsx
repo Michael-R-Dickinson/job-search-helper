@@ -4,7 +4,7 @@ import { Button } from './BasicButton'
 const NavBar = () => {
   return (
     <nav
-      className=" bg-white/90 backdrop-blur-xs py-4 shadow-xs"
+      className=" bg-white/90 backdrop-blur-xs py-1 shadow-xs"
       // These do not use tailwind so that they are applied before tailwind styles are applied
       // This prevents a layout shift when the page loads
       style={{
@@ -17,9 +17,12 @@ const NavBar = () => {
     >
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-xl font-bold gradient-text">Perfectify</h1>
+          {/* <h1 className="text-xl font-bold gradient-text">Perfectify</h1> */}
+          <div className="ml-2">
+            <div className="gradient-image" />
+          </div>
         </div>
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-6 py-3">
           <a
             href="#features"
             className="text-perfectify-dark hover:text-perfectify-primary transition-colors"
