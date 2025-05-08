@@ -10,7 +10,6 @@ const LinkedInJobIndicator = () => (
         </div>
         <div className="text-sm text-gray-700 font-medium">Senior Frontend Developer @ Meta</div>
       </div>
-      <div className="w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-white"></div>
     </div>
   </div>
 )

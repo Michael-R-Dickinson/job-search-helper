@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from './BasicButton'
 import Link from 'next/link'
+import DashboardButton from './DashboardButton'
 
 const NavBar = () => {
   return (
@@ -27,7 +28,7 @@ const NavBar = () => {
             href="#features"
             className="text-perfectify-dark hover:text-perfectify-primary transition-colors"
           >
-            Features
+            About
           </a>
           <a
             href="#how-it-works"
@@ -35,7 +36,7 @@ const NavBar = () => {
           >
             How it Works
           </a>
-          <Button className="cta-button font-semibold">Dashboard</Button>
+          <DashboardButton />
         </div>
         <div className="md:hidden">
           <Button variant="ghost" className="text-perfectify-primary">
