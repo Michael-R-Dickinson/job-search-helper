@@ -46,6 +46,8 @@
   --color-perfectify-tertiary: #6e59a5;
   --color-perfectify-light: #e5deff;
   --color-perfectify-dark: #1a1f2c;
+  --color-perfectify-teal: #2dd4bf;
+  --color-perfectify-purple: #5e48e8;
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
