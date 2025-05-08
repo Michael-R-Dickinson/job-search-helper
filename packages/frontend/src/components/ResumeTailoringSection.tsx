@@ -1,13 +1,20 @@
-import React from 'react'
 import FeatureSection from '@/components/FeatureSection'
-import { FileText, Linkedin, ArrowRight, CheckCircle, File } from 'lucide-react'
+import { FileText, Linkedin, ArrowRight, CheckCircle } from 'lucide-react'
 import { Card } from './BasicCard'
 
 const ResumeTailoringSection = () => {
   return (
-    <FeatureSection bgClass="bg-gradient-to-b from-white to-gray-50">
+    <FeatureSection className="bg-gradient-to-b to-white from-gray-50">
+      <h2 className="mb-5 text-center feature-item-animate">
+        Step 1: <span className="gradient-text">Craft a Winning Resume</span> for Every Role.
+        Instantly.
+      </h2>
+      <p className="text-center text-gray-500 mb-8 text-xl feature-item-animate">
+        Tailors your <span className="font-bold">existing resume </span> to to any job description
+        in seconds
+      </p>
       {/* Upload sources banner */}
-      <div className="flex flex-col items-center mb-8 feature-item-animate">
+      {/* <div className="flex flex-col items-center mb-8 feature-item-animate">
         <div className="bg-white py-3 px-5 rounded-full shadow-md border border-gray-100 flex items-center gap-4 mb-6">
           <div className="flex items-center gap-1">
             <FileText className="h-5 w-5 text-blue-600" />
@@ -23,9 +30,9 @@ const ResumeTailoringSection = () => {
             Use Your Existing Resume
           </span>
         </div>
-      </div>
+      </div> */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-24">
         {/* Left side - Current Resume */}
         <div className="feature-item-animate">
           <div className="relative">

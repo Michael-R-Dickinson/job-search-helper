@@ -4,10 +4,9 @@ import React, { useEffect, useRef } from 'react'
 interface FeatureSectionProps {
   children: React.ReactNode
   className?: string
-  bgClass?: string
 }
 
-const FeatureSection = ({ children, className, bgClass = 'bg-white' }: FeatureSectionProps) => {
+const FeatureSection = ({ children, className }: FeatureSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -19,7 +18,7 @@ const FeatureSection = ({ children, className, bgClass = 'bg-white' }: FeatureSe
             animatedElements.forEach((elem, index) => {
               setTimeout(() => {
                 elem.classList.add('in-view')
-              }, index * 150)
+              }, index * 75)
             })
           }
         })
@@ -42,9 +41,9 @@ const FeatureSection = ({ children, className, bgClass = 'bg-white' }: FeatureSe
   }, [])
 
   return (
-    <section ref={sectionRef} className={cn('py-16 md:py-24 overflow-hidden', bgClass, className)}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mt-8">{children}</div>
+    <section ref={sectionRef} className={cn('overflow-hidden w-full', className)}>
+      <div className="container">
+        <div className="py-16 md:py-24 mx-auto px-4 sm:px-6 lg:px-8 mt-8">{children}</div>
       </div>
     </section>
   )
