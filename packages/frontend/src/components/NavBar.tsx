@@ -3,7 +3,18 @@ import { Button } from './BasicButton'
 
 const NavBar = () => {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xs py-4 shadow-xs">
+    <nav
+      className=" bg-white/90 backdrop-blur-xs py-4 shadow-xs"
+      // These do not use tailwind so that they are applied before tailwind styles are applied
+      // This prevents a layout shift when the page loads
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50,
+      }}
+    >
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
           <h1 className="text-xl font-bold gradient-text">Perfectify</h1>
