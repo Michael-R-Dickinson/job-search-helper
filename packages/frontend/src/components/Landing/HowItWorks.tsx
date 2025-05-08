@@ -2,10 +2,7 @@ import { FileText, SquareArrowRight, ListChecks } from 'lucide-react'
 import FeatureTile from '../FeatureTile'
 
 const HowItWorks = () => (
-  <div
-    className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in"
-    style={{ animationDelay: '0.4s' }}
-  >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ animationDelay: '0.4s' }}>
     <FeatureTile
       icon={<FileText className="w-8 h-8" />}
       title="1. AI Resume Tailoring"

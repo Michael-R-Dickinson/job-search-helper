@@ -1,7 +1,7 @@
 import React from 'react'
 
 const ApplicationTracking = () => (
-  <div className="animate-fade-in">
+  <div className="">
     <h2 className="mb-6 text-center">
       Step 3: <span className="gradient-text">Track</span> Your Applications and Stay Organized.
     </h2>
