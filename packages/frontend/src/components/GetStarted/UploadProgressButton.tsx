@@ -5,9 +5,13 @@ import { auth, storage } from '../../../firebase'
 
 interface UploadButtonProgressProps {
   resumeFile: File | null
+  onUploadComplete: () => void
 }
 
-const UploadButtonProgress: React.FC<UploadButtonProgressProps> = ({ resumeFile }) => {
+const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
+  resumeFile,
+  onUploadComplete,
+}) => {
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
@@ -29,6 +33,9 @@ const UploadButtonProgress: React.FC<UploadButtonProgressProps> = ({ resumeFile 
       },
       async () => {
         setProgress(100)
+        setTimeout(() => {
+          onUploadComplete()
+        }, 1000)
       },
     )
   }
@@ -66,4 +73,4 @@ const UploadButtonProgress: React.FC<UploadButtonProgressProps> = ({ resumeFile 
   )
 }
 
-export default UploadButtonProgress
+export default PublishResumeProgressButton

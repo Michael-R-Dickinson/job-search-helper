@@ -6,7 +6,7 @@ interface UploadResumeButtonProps {
   setResumeFile: (file: File | null) => void
 }
 
-const UploadResumeButton: React.FC<UploadResumeButtonProps> = ({ resumeFile, setResumeFile }) => {
+const UploadResumeInput: React.FC<UploadResumeButtonProps> = ({ resumeFile, setResumeFile }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setResumeFile(e.target.files[0])
@@ -27,4 +27,4 @@ const UploadResumeButton: React.FC<UploadResumeButtonProps> = ({ resumeFile, set
   )
 }
 
-export default UploadResumeButton
+export default UploadResumeInput
