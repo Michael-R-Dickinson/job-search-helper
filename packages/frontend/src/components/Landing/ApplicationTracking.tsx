@@ -1,8 +1,8 @@
 import React from 'react'
 import FeatureSection from '../FeatureSection'
-
+import { LINKED_SECTION_IDS } from '@/lib/enums'
 const ApplicationTracking = () => (
-  <FeatureSection className="max-w-5xl mx-auto">
+  <FeatureSection id={LINKED_SECTION_IDS.SMART_TRACKING} className="max-w-5xl mx-auto">
     <h2 className="mb-6 text-center feature-item-animate">
       Step 3: <span className="gradient-text">Track</span> Your Applications and Stay Organized.
     </h2>
