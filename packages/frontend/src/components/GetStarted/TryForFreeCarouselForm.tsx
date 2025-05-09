@@ -2,6 +2,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import React, { useState } from 'react'
 import ResumeUploadTile from './ResumeUploadTile'
+import LinkedinLinkPaste from './LinkedinLinkPaste'
 
 const TryForFreeCarouselForm = () => {
   const [step, setStep] = useState(0)
@@ -9,21 +10,15 @@ const TryForFreeCarouselForm = () => {
 
   const slides = [
     <ResumeUploadTile onUploadComplete={next} key="upload" />,
-    <div key="upload">
-      <h1>Upload Your Resume</h1>
-      <p>Drag &amp; drop your resume here, or click below to choose a file.</p>
-    </div>,
-    // <QuestionStep key="q2" question="What’s your email?" onNext={next} />,
-    // <UploadStep key="upload" onNext={next} />,
+    <LinkedinLinkPaste onLinkInputted={next} key="linkedin" />,
   ]
 
   if (step > slides.length - 1) {
     return <div>Done</div>
   }
   return (
-    <div className="mt-[33vh] w-full max-w-md bg-white p-8 rounded-2xl shadow-lg text-center space-y-6 h-fit">
-      {/* exitBeforeEnter */}
-      <AnimatePresence initial={false}>
+    <div className="mt-[33vh] w-full max-w-md bg-white px-8 py-12 rounded-2xl shadow-lg text-center space-y-6 h-[400px]">
+      <AnimatePresence initial={false} mode="wait">
         <motion.div
           key={step}
           initial={{ x: 300, opacity: 0 }}

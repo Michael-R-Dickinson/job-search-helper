@@ -1,7 +1,6 @@
-import { ref, uploadBytesResumable } from 'firebase/storage'
 import { UploadCloud } from 'lucide-react'
 import React, { useState } from 'react'
-import { auth, storage } from '../../../firebase'
+import { auth } from '../../../firebase'
 
 interface UploadButtonProgressProps {
   resumeFile: File | null
@@ -18,9 +17,22 @@ const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
   const handleUpload = () => {
     if (!resumeFile || !auth.currentUser) return
 
-    const path = `resumes/${auth.currentUser.uid}/${resumeFile.name}`
-    const storageRef = ref(storage, path)
-    const uploadTask = uploadBytesResumable(storageRef, resumeFile)
+    // const path = `resumes/${auth.currentUser.uid}/${resumeFile.name}`
+    // const storageRef = ref(storage, path)
+    // const uploadTask = uploadBytesResumable(storageRef, resumeFile)
+
+    // For testing, simulate an instant upload
+    const uploadTask = {
+      on: (
+        event: string,
+        progressCallback: (snapshot: { bytesTransferred: number; totalBytes: number }) => void,
+        errorCallback: (error: { message: string }) => void,
+        completeCallback: () => void,
+      ) => {
+        progressCallback({ bytesTransferred: 100, totalBytes: 100 })
+        completeCallback()
+      },
+    }
 
     uploadTask.on(
       'state_changed',
@@ -33,9 +45,7 @@ const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
       },
       async () => {
         setProgress(100)
-        setTimeout(() => {
-          onUploadComplete()
-        }, 1000)
+        onUploadComplete()
       },
     )
   }
@@ -45,8 +55,7 @@ const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
       <button
         onClick={handleUpload}
         disabled={!resumeFile || (progress > 0 && progress < 100)}
-        className={`text-indigo-500 relative w-full h-12 overflow-hidden rounded-full border-2 cursor-pointer hover:bg-purple-100 ${resumeFile ? 'border-perfectify-primary' : 'border-gray-300 opacity-60 cursor-not-allowed'}
-`}
+        className={`text-indigo-500 relative w-full h-12 overflow-hidden rounded-full border-2 cursor-pointer hover:bg-purple-100 ${resumeFile ? 'border-perfectify-primary' : 'border-gray-300 opacity-60 cursor-not-allowed'}`}
         style={{
           pointerEvents: !resumeFile || (progress > 0 && progress < 100) ? 'none' : 'auto',
         }}

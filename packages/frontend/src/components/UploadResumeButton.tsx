@@ -13,7 +13,7 @@ const UploadResumeInput: React.FC<UploadResumeButtonProps> = ({ resumeFile, setR
     }
   }
   return (
-    <label className="cursor-pointer block">
+    <label className="cursor-pointer block mt-3 mb-5">
       <div className="flex flex-col items-center justify-center h-40 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg">
         <UploadCloud className="w-10 h-10 text-gray-400 mb-2" />
         {resumeFile ? (
