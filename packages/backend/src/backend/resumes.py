@@ -44,7 +44,7 @@ def segment_resume(doc: Document):
     """
     Segments the resume into sections based on headings.
     """
-    sections = {}
+    sections = {"intro": []}
 
     current_section_heading = "intro"
     prev_para_was_heading = False
@@ -52,7 +52,7 @@ def segment_resume(doc: Document):
     for p in iter_doc_paragraphs(doc):
         if is_likely_heading(p, doc) and not prev_para_was_heading:
             prev_para_was_heading = True
-            current_section_heading = p.text
+            current_section_heading = p.text.strip()
             sections[current_section_heading] = []
 
         else:
@@ -64,6 +64,6 @@ def segment_resume(doc: Document):
 
 if __name__ == "__main__":
     # resumePath = fetch_resume("testUserId", "V3 Compressed Fabric.docx")
-    resumePath = "resumes/testUserId/V3Resume.docx"
-    # resumePath = "resumes/testUserId/Senior-Product-Manager-Resume-Example.docx"
+    # resumePath = "resumes/testUserId/V3Resume.docx"
+    resumePath = "resumes/testUserId/Senior-Product-Manager-Resume-Example.docx"
     parse_resume(resumePath)
