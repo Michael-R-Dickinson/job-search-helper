@@ -209,14 +209,12 @@ def is_likely_heading(para, doc):
     if not para.text.strip():
         return False
 
-    # Fast positives
-    # if is_builtin_heading_style(para) or has_keyword(para):
-    #     return True
-
     processed_para = copy.deepcopy(para)
     preprocess_paragraph(processed_para)
 
     signals = [
+        is_builtin_heading_style(para),
+        has_keyword(para),
         is_above_average_font_size(processed_para, doc),
         is_primarily_bold(processed_para),
         has_extra_whitespace(processed_para),
