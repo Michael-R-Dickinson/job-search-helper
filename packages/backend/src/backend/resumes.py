@@ -47,15 +47,15 @@ def parse_resume(resumePath: str):
             display_table_text(p, doc)
 
 
-def display_table_text(table):
+def display_table_text(table, doc):
     for row in table.rows:
         for cell in row.cells:
             for paragraph in cell.paragraphs:
-                display_paragraph(paragraph)
+                display_paragraph(paragraph, doc)
 
 
 if __name__ == "__main__":
     # resumePath = fetch_resume("testUserId", "V3 Compressed Fabric.docx")
-    # resumePath = "resumes/testUserId/V3Resume.docx"
-    resumePath = "resumes/testUserId/Senior-Product-Manager-Resume-Example.docx"
+    resumePath = "resumes/testUserId/V3Resume.docx"
+    # resumePath = "resumes/testUserId/Senior-Product-Manager-Resume-Example.docx"
     parse_resume(resumePath)
