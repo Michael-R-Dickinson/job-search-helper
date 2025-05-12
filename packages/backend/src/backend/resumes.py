@@ -11,7 +11,7 @@ import re
 from docx.oxml.ns import qn
 from docx import Document
 
-from backend.docx_functions import is_likely_heading
+from backend.docx_functions import is_likely_heading, iter_doc_paragraphs
 
 
 def fetch_resume(userId: str, resumeName: str):
@@ -29,29 +29,13 @@ def fetch_resume(userId: str, resumeName: str):
     return resumePath
 
 
-def display_paragraph(para, doc):
-    if is_likely_heading(para, doc):
-        # print(f"Heading: {para.text}")
-        pass
-    # print(para.text)
-
-
 def parse_resume(resumePath: str):
     doc = Document(resumePath)
 
-    for p in doc.iter_inner_content():
-        if isinstance(p, Paragraph):
-            display_paragraph(p, doc)
-
-        else:
-            display_table_text(p, doc)
-
-
-def display_table_text(table, doc):
-    for row in table.rows:
-        for cell in row.cells:
-            for paragraph in cell.paragraphs:
-                display_paragraph(paragraph, doc)
+    for p in iter_doc_paragraphs(doc):
+        if is_likely_heading(p, doc):
+            print(f"Heading: {p.text}")
+            pass
 
 
 if __name__ == "__main__":

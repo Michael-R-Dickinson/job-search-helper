@@ -5,6 +5,7 @@ from docx.shared import Pt
 from docx.oxml.ns import qn
 
 from docx.text.paragraph import Paragraph
+from docx.table import Table
 
 
 def preprocess_paragraph(para):
@@ -232,12 +233,24 @@ def is_likely_heading(para, doc):
 
     is_heading = total_positive_indicators >= 2
 
-    if is_heading:
-        print(
-            f"Indicators: {total_positive_indicators} \t Heading: {processed_para.text}"
-        )
+    # if is_heading:
+    #     print(
+    #         f"Indicators: {total_positive_indicators} \t Heading: {processed_para.text}"
+    #     )
 
     return is_heading
+
+
+def iter_doc_paragraphs(doc):
+    for p in doc.iter_inner_content():
+        if isinstance(p, Paragraph):
+            yield p
+
+        elif isinstance(p, Table):
+            for row in p.rows:
+                for cell in row.cells:
+                    for paragraph in cell.paragraphs:
+                        yield paragraph
 
 
 if __name__ == "__main__":
