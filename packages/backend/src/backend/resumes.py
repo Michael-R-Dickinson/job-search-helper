@@ -30,10 +30,10 @@ def fetch_resume(userId: str, resumeName: str):
 
 
 def display_paragraph(para, doc):
-    # para.text = re.sub(r"\s+", " ", para.text).strip()
-    # print(para.text)
     if is_likely_heading(para, doc):
-        print(f"Heading: {para.text}")
+        # print(f"Heading: {para.text}")
+        pass
+    # print(para.text)
 
 
 def parse_resume(resumePath: str):

@@ -1,7 +1,66 @@
+import copy
 import re
 from docx import Document
 from docx.shared import Pt
 from docx.oxml.ns import qn
+
+from docx.text.paragraph import Paragraph
+
+
+def preprocess_paragraph(para):
+    """
+    Preprocess the text by removing extra whitespace.
+    """
+    clean_paragraph_whitespace(para)
+
+    return para
+
+
+def clean_paragraph_whitespace(para: Paragraph) -> None:
+    """
+    Removes unnecessary whitespace from the paragraph - IN PLACE
+
+    Specifically:
+    Collapse unnecessary whitespace between single-character runs (letters)
+    while preserving styling on those runs, and normalize multiple
+    whitespace runs into a single space.
+    """
+    runs = para.runs
+    n = len(runs)
+
+    # 1) Remove spaces between single-character runs
+    for i in range(1, n - 1):
+        prev_text = runs[i - 1].text
+        curr_text = runs[i].text
+        next_text = runs[i + 1].text
+
+        # if this run is only whitespace, and neighbors are each exactly one non-space char
+        if (
+            curr_text.strip() == ""
+            and len(prev_text.strip()) == 1
+            and len(next_text.strip()) == 1
+        ):
+            runs[i].text = ""
+
+    # 2) Normalize contiguous whitespace runs into a single space
+    i = 0
+    while i < len(runs):
+        # detect runs that contain only whitespace
+        if runs[i].text.strip() == "" and runs[i].text != "":
+            # start of a whitespace-run group
+            j = i
+            # collect the group
+            while j < len(runs) and runs[j].text.strip() == "" and runs[j].text != "":
+                j += 1
+            group = runs[i:j]
+            # collapse group: first run → single space, others → empty
+            if group:
+                group[0].text = " "
+                for extra in group[1:]:
+                    extra.text = ""
+            i = j
+        else:
+            i += 1
 
 
 def is_builtin_heading_style(para):
@@ -23,14 +82,21 @@ def compute_average_font_size(doc):
     return sum(sizes) / len(sizes) if sizes else None
 
 
-def is_above_average_font_size(para, avg_size, multiplier=1.3):
+def is_above_average_font_size(para, doc, multiplier=1.0):
     """
     True if any run in para has font.size > avg_size * multiplier.
     """
+
+    # Compute avg font size once per doc
+    avg_size = getattr(doc, "_avg_font_size", None)
+    if avg_size is None:
+        avg_size = compute_average_font_size(doc)
+        doc._avg_font_size = avg_size
+
     if avg_size is None:
         return False
     threshold = avg_size * multiplier
-    return any(run.font.size and run.font.size.pt >= threshold for run in para.runs)
+    return any(run.font.size and run.font.size.pt > threshold for run in para.runs)
 
 
 def is_primarily_bold(para, bold_ratio=0.6):
@@ -140,29 +206,40 @@ def is_likely_heading(para, doc):
     OR at least two formatting signals of:
       font jump, bold/all-caps, whitespace, border, title/short.
     """
-    # Fast positives
-    if is_builtin_heading_style(para) or has_keyword(para):
-        return True
+    if not para.text.strip():
+        return False
 
-    # Compute avg font size once per doc
-    avg_size = getattr(doc, "_avg_font_size", None)
-    if avg_size is None:
-        avg_size = compute_average_font_size(doc)
-        doc._avg_font_size = avg_size
+    # Fast positives
+    # if is_builtin_heading_style(para) or has_keyword(para):
+    #     return True
+
+    processed_para = copy.deepcopy(para)
+    preprocess_paragraph(processed_para)
 
     signals = [
-        is_above_average_font_size(para, avg_size),
-        is_primarily_bold(para),
-        has_extra_whitespace(para),
-        has_border(para),
-        is_title_or_upper_case(para),
+        is_above_average_font_size(processed_para, doc),
+        is_primarily_bold(processed_para),
+        has_extra_whitespace(processed_para),
+        has_border(processed_para),
+        is_title_or_upper_case(processed_para),
     ]
 
     # The number of things making it likely a paragraph is a heading
     total_positive_indicators = sum(signals)
-    if not has_few_distinct_words(para):
+
+    # Headings should not be more than a few words long
+    if not has_few_distinct_words(processed_para, max_words=4):
         total_positive_indicators -= 2
 
     is_heading = total_positive_indicators >= 2
 
+    if is_heading:
+        print(
+            f"Indicators: {total_positive_indicators} \t Heading: {processed_para.text}"
+        )
+
     return is_heading
+
+
+if __name__ == "__main__":
+    print("This module is not meant to be run directly.")
