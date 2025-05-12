@@ -99,6 +99,7 @@ def is_above_average_font_size(para, doc, multiplier=1.0):
     return any(run.font.size and run.font.size.pt > threshold for run in para.runs)
 
 
+# TODO: Perhaps change this to any emphasized text (bold, underline)
 def is_primarily_bold(para, bold_ratio=0.6):
     """
     True if more than bold_ratio of runs are bold.
