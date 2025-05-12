@@ -1,2 +1,3 @@
 /firebase_admin_creds.json
-/src/backend/resumes/*
+resumes/**/*
+__pycache__/
