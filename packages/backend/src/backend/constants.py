@@ -1,3 +1,4 @@
+CACHE_PATH = "llm_output_cache.json"
 RESUMES_PATH = "resumes"
 
 EXPERIENCE_TOKENS = {
