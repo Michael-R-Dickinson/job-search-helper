@@ -1,4 +1,5 @@
 import copy
+import itertools
 import re
 from docx import Document
 from docx.shared import Pt
@@ -239,6 +240,50 @@ def is_likely_heading(para, doc):
     #     )
 
     return is_heading
+
+
+def merge_identical_runs(para: Paragraph) -> None:
+    """
+    Merge consecutive runs in `para` that share exactly the same formatting,
+    collapsing their text into a single run and removing the extras.
+    """
+
+    def run_format_key(run):
+        """
+        Create a key that uniquely identifies a run's full styling:
+          - run.style.name
+          - the raw <w:rPr> XML (empty string if none)
+        """
+        style_name = run.style.name or ""
+        rPr = run._element.rPr  # the <w:rPr> element or None
+        rPr_xml = rPr.xml if rPr is not None else ""
+        return (style_name, rPr_xml)
+
+    runs = para.runs
+    if not runs:
+        return
+
+    # 1) Group adjacent runs by identical formatting keys
+    groups = []
+    for key, group in itertools.groupby(runs, key=run_format_key):
+        group = list(group)
+        groups.append((key, group))
+
+    # 2) For each group with more than one run, merge them
+    for _, group in groups:
+        if len(group) <= 1:
+            continue
+
+        # Combine their text
+        merged_text = "".join(r.text for r in group)
+
+        # Assign merged text to the first run
+        first_run = group[0]
+        first_run.text = merged_text
+
+        # Remove the extra run elements from the paragraph's XML
+        for extra_run in group[1:]:
+            para._p.remove(extra_run._element)
 
 
 def iter_doc_paragraphs(doc: Document):
