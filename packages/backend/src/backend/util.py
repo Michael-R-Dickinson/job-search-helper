@@ -37,3 +37,11 @@ def clean_heading_text(text):
     normalized_text = cleaned_text.lower()
 
     return normalized_text
+
+
+def print_sections(sections):
+    for section, content in sections.items():
+        print(f"Section: {section}")
+        for paragraph in content:
+            print(paragraph.text)
+        print("\n")

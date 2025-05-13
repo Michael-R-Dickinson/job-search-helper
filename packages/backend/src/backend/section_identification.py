@@ -50,7 +50,7 @@ if __name__ == "__main__":
     ]
 
     skills_examples = [
-        "Skills",
+        "skills",
         "Key Skills",
         "Skills and Abilities",
         "Core Competencies",

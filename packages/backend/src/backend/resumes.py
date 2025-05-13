@@ -12,7 +12,9 @@ from docx.oxml.ns import qn
 from docx import Document
 
 from backend.docx_functions import is_likely_heading, iter_doc_paragraphs
-from backend.util import clean_heading_text
+from backend.util import clean_heading_text, print_sections
+from backend.section_header_constants import SECTION_HEADER_TOKENS
+from backend.section_identification import is_section_header
 
 
 def fetch_resume(userId: str, resumeName: str):
@@ -33,20 +35,23 @@ def fetch_resume(userId: str, resumeName: str):
 def parse_resume(resumePath: str):
     doc = Document(resumePath)
     segments = segment_resume(doc)
-
-    for section, content in segments.items():
-        print(f"Section: {section}")
-        for paragraph in content:
-            print(f"{len(paragraph.runs)} \t {paragraph.text[0: 22]}")
-        print("\n")
+    critical_sections = filter_to_critical_sections(segments)
+    print_sections(critical_sections)
 
 
-def filter_to_critical_sections():
+def filter_to_critical_sections(sections):
     """
     Filters the sections to only include important sections for tailoring
     """
 
-    # if
+    critical_sections = {}
+    for section in sections.keys():
+        for header_title in SECTION_HEADER_TOKENS.keys():
+            if is_section_header(section, header_title):
+                critical_sections[header_title] = sections[section]
+                break
+
+    return critical_sections
 
 
 def segment_resume(doc: Document):
@@ -73,6 +78,6 @@ def segment_resume(doc: Document):
 
 if __name__ == "__main__":
     # resumePath = fetch_resume("testUserId", "V3 Compressed Fabric.docx")
-    resumePath = "resumes/testUserId/V3Resume.docx"
-    # resumePath = "resumes/testUserId/Senior-Product-Manager-Resume-Example.docx"
+    # resumePath = "resumes/testUserId/V3Resume.docx"
+    resumePath = "resumes/testUserId/Senior-Product-Manager-Resume-Example.docx"
     parse_resume(resumePath)
