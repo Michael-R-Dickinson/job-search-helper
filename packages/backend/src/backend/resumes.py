@@ -1,3 +1,4 @@
+import copy
 import os
 from docx import Document
 from docx.text.paragraph import Paragraph
@@ -6,6 +7,7 @@ from firebase_admin import storage
 from backend.firebase import init_firebase
 
 from backend.docx_functions import (
+    insert_paragraph_after,
     is_likely_heading,
     iter_doc_paragraphs,
     merge_identical_runs,
@@ -13,6 +15,7 @@ from backend.docx_functions import (
 from backend.util import clean_heading_text, print_sections
 from backend.section_identification import is_section_header
 from backend.constants import RESUMES_PATH, SECTION_HEADER_TOKENS
+from backend.tailoring.schema import SerializedParagraph, SerializedRun
 
 
 def fetch_resume(userId: str, resumeName: str):
@@ -39,7 +42,7 @@ def parse_resume_for_sections(resumePath: str):
         for para in section_paragraphs:
             merge_identical_runs(para)
 
-    return critical_sections
+    return critical_sections, doc
 
 
 def filter_to_critical_sections(sections):
@@ -77,6 +80,83 @@ def segment_resume(doc: Document):
             prev_para_was_heading = False
 
     return sections
+
+
+def clear_runs_only(para: Paragraph):
+    """
+    Remove only the <w:r> children of this paragraph, leaving its
+    paragraph properties (styles, spacing, etc.) intact.
+    """
+    for run in list(para.runs):
+        para._p.remove(run._element)
+
+
+def add_runs_to_paragraph(
+    paragraph: Paragraph,
+    runs: list[SerializedRun],
+    run_template=None,
+):
+    for run in runs:
+        if run_template:
+            new_run = copy.deepcopy(run_template)
+            new_run.text = run.text
+
+            paragraph._p.append(new_run._element)
+        else:
+            new_run = paragraph.add_run(run.text)
+
+        new_run.bold = "bold" in run.styles
+        new_run.italic = "italic" in run.styles
+        new_run.underline = "underline" in run.styles
+
+
+def update_resume_section(
+    section_content: list[Paragraph], new_paragraphs: list[SerializedParagraph]
+):
+    """
+    Updates the section with the new paragraphs.
+    """
+    pointer_paragraph = section_content[-1]
+    for i, updated_para in enumerate(new_paragraphs):
+        if i < len(section_content):
+            original_para = section_content[i]
+
+            # gets the styles of the original paragraph's runs by copying the first run directly
+            run_template = copy.deepcopy(
+                original_para.runs[0] if original_para.runs else None
+            )
+            run_template.text = ""
+
+            if original_para.text == updated_para.get_text():
+                continue
+
+            # if original_para.runs:
+            #     print("element, ", original_para.runs[0]._element)
+            #     print("style, ", original_para.runs[0].style)
+            #     print("rpr, ", original_para.runs[0]._element.rPr)
+            #     # print("xml, ", original_para.runs[0]._element.xml)
+
+            clear_runs_only(original_para)
+            add_runs_to_paragraph(
+                original_para, updated_para.runs, run_template=run_template
+            )
+
+            # if original_para.runs:
+            #     run_el = original_para.runs[-1]
+            #     print("UPDATED:")
+            #     print("element, ", run_el._element)
+            #     print("style, ", run_el.style)
+            #     print("rpr, ", run_el._element.rPr)
+            #     # print("xml, ", run_el._element.xml)
+            #     print("\n\n")
+
+        else:
+            # Uses custom function to insert a new paragraph after the pointer paragraph
+            # print("NEW PARA: ", updated_para)
+            # print("POINTER PARA: ", pointer_paragraph.text)
+            # new_para = insert_paragraph_after(pointer_paragraph)
+            # add_runs_to_paragraph(new_para, updated_para.runs)
+            pass
 
 
 if __name__ == "__main__":

@@ -21,7 +21,9 @@ def json_serialize_paragraph(paragraph):
 
         serialized_runs.append(serialized)
 
+    # This is a potential old format that may work better with the LLM
     return {"runs": serialized_runs}
+    # return serialized_runs
 
 
 def serialize_sections(sections):

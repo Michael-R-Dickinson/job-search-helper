@@ -7,6 +7,7 @@ from docx.oxml.ns import qn
 
 from docx.text.paragraph import Paragraph
 from docx.table import Table
+from docx.oxml.shared import OxmlElement
 
 
 def preprocess_paragraph(para):
@@ -284,6 +285,18 @@ def merge_identical_runs(para: Paragraph) -> None:
         # Remove the extra run elements from the paragraph's XML
         for extra_run in group[1:]:
             para._p.remove(extra_run._element)
+
+
+def insert_paragraph_after(paragraph, text=None, style=None):
+    """Insert a new paragraph after the given paragraph."""
+    new_p = OxmlElement("w:p")
+    paragraph._p.addnext(new_p)
+    new_para = Paragraph(new_p, paragraph._parent)
+    if text:
+        new_para.add_run(text)
+    if style is not None:
+        new_para.style = style
+    return new_para
 
 
 def iter_doc_paragraphs(doc: Document):
