@@ -1,3 +1,4 @@
+import os
 from backend.resumes import (
     fetch_resume,
     parse_resume_for_sections,
@@ -7,6 +8,8 @@ from backend.scrapeLinkdin import fetch_job_description_markdown
 from backend.tailoring.serialization import serialize_raw_resume, serialize_sections
 from backend.tailoring.LLM_prompt import generate_llm_prompt
 from backend.tailoring.gemini import execute_tailoring_with_gemini
+from backend.constants import RESUMES_PATH
+from datetime import datetime
 
 
 def main(userId: str, resumeName: str, linkedinUrl: str):
@@ -24,15 +27,21 @@ def main(userId: str, resumeName: str, linkedinUrl: str):
         skills_paragraphs=sections_string["skills"],
     )
 
-    # print("PROMPT:\n", prompt)
-
     updated_resume_data = execute_tailoring_with_gemini(prompt)
     update_resume_section(
         resume_sections["skills"],
         updated_resume_data.skillsSection,
     )
 
-    doc.save("output.docx")
+    update_resume_section(
+        resume_sections["experience"],
+        updated_resume_data.experienceSection,
+    )
+
+    os.makedirs(f"{RESUMES_PATH}/outputs", exist_ok=True)
+    doc.save(
+        f"{RESUMES_PATH}/outputs/resume-{datetime.now().strftime("%d_%H-%M-%S")}.docx"
+    )
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ from backend.docx_functions import (
     is_likely_heading,
     iter_doc_paragraphs,
     merge_identical_runs,
+    set_list_indent_level,
 )
 from backend.util import clean_heading_text, print_sections
 from backend.section_identification import is_section_header
@@ -100,21 +101,22 @@ def add_runs_to_paragraph(
         if run_template:
             new_run = copy.deepcopy(run_template)
             new_run.text = run.text
-
             paragraph._p.append(new_run._element)
+
         else:
             new_run = paragraph.add_run(run.text)
 
-        new_run.bold = "bold" in run.styles
-        new_run.italic = "italic" in run.styles
-        new_run.underline = "underline" in run.styles
+        if run.styles is not None:
+            new_run.bold = "bold" in run.styles
+            new_run.italic = "italic" in run.styles
+            new_run.underline = "underline" in run.styles
 
 
 def update_resume_section(
     section_content: list[Paragraph], new_paragraphs: list[SerializedParagraph]
 ):
     """
-    Updates the section with the new paragraphs.
+    Updates the section with new paragraphs
     """
     pointer_paragraph = section_content[-1]
     for i, updated_para in enumerate(new_paragraphs):
@@ -130,27 +132,15 @@ def update_resume_section(
             if original_para.text == updated_para.get_text():
                 continue
 
-            # if original_para.runs:
-            #     print("element, ", original_para.runs[0]._element)
-            #     print("style, ", original_para.runs[0].style)
-            #     print("rpr, ", original_para.runs[0]._element.rPr)
-            #     # print("xml, ", original_para.runs[0]._element.xml)
-
             clear_runs_only(original_para)
             add_runs_to_paragraph(
                 original_para, updated_para.runs, run_template=run_template
             )
-
-            # if original_para.runs:
-            #     run_el = original_para.runs[-1]
-            #     print("UPDATED:")
-            #     print("element, ", run_el._element)
-            #     print("style, ", run_el.style)
-            #     print("rpr, ", run_el._element.rPr)
-            #     # print("xml, ", run_el._element.xml)
-            #     print("\n\n")
+            if updated_para.list_indent_level is not None:
+                set_list_indent_level(original_para, updated_para.list_indent_level)
 
         else:
+            # !!!
             # Uses custom function to insert a new paragraph after the pointer paragraph
             # print("NEW PARA: ", updated_para)
             # print("POINTER PARA: ", pointer_paragraph.text)

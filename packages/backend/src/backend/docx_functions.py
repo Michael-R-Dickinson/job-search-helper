@@ -8,6 +8,7 @@ from docx.oxml.ns import qn
 from docx.text.paragraph import Paragraph
 from docx.table import Table
 from docx.oxml.shared import OxmlElement
+from docx.shared import Inches
 
 
 def preprocess_paragraph(para):
@@ -235,6 +236,7 @@ def is_likely_heading(para, doc):
 
     is_heading = total_positive_indicators >= 2
 
+    # ! Debugging
     # if is_heading:
     #     print(
     #         f"Indicators: {total_positive_indicators} \t Heading: {processed_para.text}"
@@ -264,13 +266,13 @@ def merge_identical_runs(para: Paragraph) -> None:
     if not runs:
         return
 
-    # 1) Group adjacent runs by identical formatting keys
+    # Group adjacent runs by identical formatting keys
     groups = []
     for key, group in itertools.groupby(runs, key=run_format_key):
         group = list(group)
         groups.append((key, group))
 
-    # 2) For each group with more than one run, merge them
+    # For each group with more than one run, merge them
     for _, group in groups:
         if len(group) <= 1:
             continue
@@ -309,6 +311,59 @@ def iter_doc_paragraphs(doc: Document):
                 for cell in row.cells:
                     for paragraph in cell.paragraphs:
                         yield paragraph
+
+
+def get_list_level(para):
+    """
+    If `para` is a list item, returns its level as an int (0,1,2,…).
+    Otherwise returns None.
+    """
+    pPr = para._p.pPr
+    if pPr is None:
+        return None
+    numPr = pPr.find(qn("w:numPr"))
+    if numPr is None:
+        return None
+    ilvl = numPr.find(qn("w:ilvl"))
+    if ilvl is None:
+        return None
+    return int(ilvl.get(qn("w:val")))
+
+
+def set_list_indent_level(
+    para, level: int, num_id: int = 1, indent_per_level=Inches(0.5)
+):
+    """
+    Turn `para` into a list item at `level` (0=top,1=sub-item,2=sub-sub-item)
+    referencing numbering definition `num_id`, and also set its left‐indent.
+
+    - level: the w:ilvl value
+    - num_id: w:numId (must exist in numbering.xml; usually 1 is the default list)
+    - indent_per_level: how much to indent (inches) per nesting level
+    """
+
+    # Indent level 1 is actually the first sub-item (0 is the top level indent)
+    level = level + 1
+
+    p = para._p
+    pPr = p.pPr or OxmlElement("w:pPr")
+    if p.pPr is None:
+        p.insert(0, pPr)
+
+    old = pPr.find(qn("w:numPr"))
+    if old is not None:
+        pPr.remove(old)
+
+    numPr = OxmlElement("w:numPr")
+    ilvl = OxmlElement("w:ilvl")
+    ilvl.set(qn("w:val"), str(level))
+    numId = OxmlElement("w:numId")
+    numId.set(qn("w:val"), str(num_id))
+    numPr.append(ilvl)
+    numPr.append(numId)
+    pPr.append(numPr)
+
+    para.paragraph_format.left_indent = indent_per_level * level
 
 
 if __name__ == "__main__":

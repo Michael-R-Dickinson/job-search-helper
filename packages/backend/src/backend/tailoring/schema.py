@@ -1,18 +1,17 @@
+from typing import Optional
 from pydantic import BaseModel
 
 
 class SerializedRun(BaseModel):
     text: str
-    styles: list[str]
+    styles: Optional[list[str]]
 
 
 class SerializedParagraph(BaseModel):
     runs: list[SerializedRun]
+    list_indent_level: Optional[int] = None
 
     def get_text(self) -> str:
-        """
-        Returns the text of the paragraph by concatenating the text of all runs.
-        """
         return "".join(run.text for run in self.runs)
 
 

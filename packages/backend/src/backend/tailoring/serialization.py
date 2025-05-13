@@ -2,10 +2,13 @@ import os
 from md2docx_python.src.docx2md_python import word_to_markdown
 
 from backend.constants import RESUMES_PATH
+from backend.docx_functions import get_list_level
 
 
 def json_serialize_paragraph(paragraph):
     serialized_runs = []
+    list_level = get_list_level(paragraph)
+
     for run in paragraph.runs:
         serialized = {
             "text": run.text,
@@ -21,9 +24,11 @@ def json_serialize_paragraph(paragraph):
 
         serialized_runs.append(serialized)
 
-    # This is a potential old format that may work better with the LLM
-    return {"runs": serialized_runs}
-    # return serialized_runs
+    serialized_paragraph = {"runs": serialized_runs}
+    if not (list_level == 0):
+        serialized_paragraph["list_indent_level"] = list_level
+
+    return serialized_paragraph
 
 
 def serialize_sections(sections):
