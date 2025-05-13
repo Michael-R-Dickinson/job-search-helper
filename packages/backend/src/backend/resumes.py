@@ -37,8 +37,16 @@ def parse_resume(resumePath: str):
     for section, content in segments.items():
         print(f"Section: {section}")
         for paragraph in content:
-            print(paragraph)
+            print(f"{len(paragraph.runs)} \t {paragraph.text[0: 22]}")
         print("\n")
+
+
+def filter_to_critical_sections():
+    """
+    Filters the sections to only include important sections for tailoring
+    """
+
+    # if
 
 
 def segment_resume(doc: Document):
@@ -57,7 +65,7 @@ def segment_resume(doc: Document):
             sections[current_section_heading] = []
 
         else:
-            sections[current_section_heading].append(p.text)
+            sections[current_section_heading].append(p)
             prev_para_was_heading = False
 
     return sections
