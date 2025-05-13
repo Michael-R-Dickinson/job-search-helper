@@ -241,7 +241,7 @@ def is_likely_heading(para, doc):
     return is_heading
 
 
-def iter_doc_paragraphs(doc):
+def iter_doc_paragraphs(doc: Document):
     for p in doc.iter_inner_content():
         if isinstance(p, Paragraph):
             yield p
