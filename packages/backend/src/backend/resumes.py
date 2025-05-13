@@ -11,8 +11,8 @@ from backend.docx_functions import (
     merge_identical_runs,
 )
 from backend.util import clean_heading_text, print_sections
-from backend.section_header_constants import SECTION_HEADER_TOKENS
 from backend.section_identification import is_section_header
+from backend.constants import RESUMES_PATH, SECTION_HEADER_TOKENS
 
 
 def fetch_resume(userId: str, resumeName: str):
@@ -23,8 +23,8 @@ def fetch_resume(userId: str, resumeName: str):
     if not resumeFile.exists():
         raise FileNotFoundError(f"Resume {resumeName} not found for user {userId}")
 
-    os.makedirs(f"resumes/{userId}", exist_ok=True)
-    resumePath = f"resumes/{userId}/{resumeName}"
+    os.makedirs(f"{RESUMES_PATH}/{userId}", exist_ok=True)
+    resumePath = f"{RESUMES_PATH}/{userId}/{resumeName}"
     resumeFile.download_to_filename(resumePath)
 
     return resumePath
@@ -81,6 +81,6 @@ def segment_resume(doc: Document):
 
 if __name__ == "__main__":
     # resumePath = fetch_resume("testUserId", "V3 Compressed Fabric.docx")
-    # resumePath = "resumes/testUserId/V3Resume.docx"
-    resumePath = "resumes/testUserId/Senior-Product-Manager-Resume-Example.docx"
+    # resumePath = f"{RESUMES_PATH}/testUserId/V3Resume.docx"
+    resumePath = f"{RESUMES_PATH}/testUserId/Senior-Product-Manager-Resume-Example.docx"
     parse_resume_for_sections(resumePath)

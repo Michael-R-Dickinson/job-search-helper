@@ -1,6 +1,7 @@
 import re
 
-from backend.section_header_constants import SECTION_HEADER_TOKENS
+from backend.constants import SECTION_HEADER_TOKENS
+
 
 _word_re = re.compile(r"\b\w+\b")
 

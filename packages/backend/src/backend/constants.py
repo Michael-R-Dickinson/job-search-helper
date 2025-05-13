@@ -1,3 +1,5 @@
+RESUMES_PATH = "resumes"
+
 EXPERIENCE_TOKENS = {
     "experience",
     "employment",
