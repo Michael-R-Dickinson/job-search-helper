@@ -7,8 +7,6 @@ For the experience section, you may:
 - change the paragraph's text to highlight the user's most relevant skills and experiences (also attempting to incorporate keywords from the job description)
 You may not change constant pieces of information (like job titles, company names, dates, locations)
 
-#! Withing the first job experience - uncrewed aircraft systems - add atleast one new paragraph/bullet point
-
 Attempt to respect the original formatting of the resume as much as possible and the user's original writing. Also follow the user's original tone and style. If the user has a specific writing style, match it - this is very important.
 
 For the skills section, you may:
@@ -23,8 +21,10 @@ One element of your output, the `preserved` flag is very important. It indicates
 - job titles
 - projects
 - standalone dates or locations that are outside of the flow of a bullet point
-The flag should be false for thins like:
+pay attention to things like bold and underline, if the text is short, prefaces some bullets and is bolded/underlined, that is a very strong indicator that it should be preserved
+The flag should be false for things like:
 - bullet points
+Be liberal in what you preserve, it is better to err on the side of preserving.
 
 Job description:
 {job_description}
