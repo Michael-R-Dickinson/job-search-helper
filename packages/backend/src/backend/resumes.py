@@ -150,8 +150,11 @@ def update_resume_section(
 
     pointer_paragraph = section_content[0]
     for updated_para in new_paragraphs:
-        if updated_para.get_text() in existing_paragraphs_lookup:
-            # If the paragraph already exists, we preserve it and add additional paragraphs after it
+        if (
+            updated_para.get_text() in existing_paragraphs_lookup
+            and updated_para.preserved
+        ):
+            # print("Found in lookup: ", updated_para.get_text()[:25])
             existing_paragraph_idx = existing_paragraphs_lookup.get(
                 updated_para.get_text()
             )
@@ -161,60 +164,30 @@ def update_resume_section(
                 start_idx=existing_paragraph_idx + 1,
             )
 
-            # The only attribute we still modify on the existing paragraph indent level
-            if updated_para.list_indent_level is not None:
-                set_list_indent_level(
-                    section_content[existing_paragraph_idx],
-                    updated_para.list_indent_level,
-                )
-
             continue
 
         # Otherwise, we need to insert a new paragraph
-        print(f"Adding new paragraph before: {pointer_paragraph.text[0:25]}")
         new_para = pointer_paragraph.insert_paragraph_before(
             style=pointer_paragraph.style
         )
-        add_runs_to_paragraph(new_para, updated_para.runs)
+        add_runs_to_paragraph(
+            new_para,
+            updated_para.runs,
+            run_template=pointer_paragraph.runs[0] if pointer_paragraph.runs else None,
+        )
+
+        if updated_para.list_indent_level is not None:
+            set_list_indent_level(
+                new_para,
+                updated_para.list_indent_level,
+            )
 
     # Delete all paragraphs that are not in the new paragraphs
     # These are just the old paragraphs from the original resume
     # So we delete them
-    new_paragraphs_lookup = set([p.get_text() for p in new_paragraphs])
     for para in section_content:
-        if para.text not in new_paragraphs_lookup:
+        if para.text not in preserved_paragraphs_lookup:
             delete_paragraph(para)
-            print(f"Deleted paragraph: {para.text[0:25]}")
-
-        # !
-        # !
-        # !
-
-        # if i < len(section_content):
-        #     original_para = section_content[i]
-
-        #     # gets the styles of the original paragraph's runs by copying the first run directly
-        #     run_template = copy.deepcopy(
-        #         original_para.runs[0] if original_para.runs else None
-        #     )
-        #     run_template.text = ""
-
-        #     if original_para.text == updated_para.get_text():
-        #         continue
-
-        #     clear_runs_only(original_para)
-        #     add_runs_to_paragraph(
-        #         original_para, updated_para.runs, run_template=run_template
-        #     )
-        #     if updated_para.list_indent_level is not None:
-        #         set_list_indent_level(original_para, updated_para.list_indent_level)
-
-        # else:
-        #     # Uses custom function to insert a new paragraph after the pointer paragraph
-        #     # print("NEW PARA: ", updated_para)
-        #     # print("POINTER PARA: ", pointer_paragraph.text)
-        #     new_para = insert_paragraph_after(pointer_paragraph)
-        #     add_runs_to_paragraph(new_para, updated_para.runs)
 
 
 if __name__ == "__main__":
