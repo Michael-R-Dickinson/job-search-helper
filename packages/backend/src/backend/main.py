@@ -1,3 +1,4 @@
+import json
 import os
 from backend.resumes import (
     fetch_resume,
@@ -17,14 +18,14 @@ def main(userId: str, resumeName: str, linkedinUrl: str):
 
     resume_path = fetch_resume(userId, resumeName)
     resume_sections, doc = parse_resume_for_sections(resume_path)
-    sections_string = serialize_sections(resume_sections)
+    sections_strings = serialize_sections(resume_sections)
 
     raw_resume_string = serialize_raw_resume(resume_path)
     prompt = generate_llm_prompt(
         job_description=job_description,
         resume=raw_resume_string,
-        experience_paragraphs=sections_string["experience"],
-        skills_paragraphs=sections_string["skills"],
+        experience_paragraphs=sections_strings["experience"],
+        skills_paragraphs=sections_strings["skills"],
     )
 
     updated_resume_data = execute_tailoring_with_gemini(prompt)
