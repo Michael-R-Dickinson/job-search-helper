@@ -196,9 +196,12 @@ def update_resume_section(
         # if updated_para_raw.list_indent_level is not None:
         set_list_indent_level(
             new_para,
-            updated_para_raw.list_indent_level or 0,
+            updated_para_raw.list_indent_level,
         )
 
+        # Ideally, we move the pointer to the next paragraph if it is not an anchor
+        # This allows us to maximally use the styles provided by the original document
+        # However when we run out of lines with styling from the doc, we just keep using the last one's styling
         next_non_anchor, next_non_anchor_idx = find_next_non_anchor(
             section_content,
             anchor_paragraphs_lookup,

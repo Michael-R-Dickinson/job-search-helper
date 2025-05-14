@@ -313,7 +313,7 @@ def iter_doc_paragraphs(doc: Document):
                         yield paragraph
 
 
-def get_list_level(para):
+def get_list_level(para: Paragraph) -> int | None:
     """
     If `para` is a list item, returns its level as an int (0,1,2,…).
     Otherwise returns None.
@@ -331,11 +331,17 @@ def get_list_level(para):
 
 
 def set_list_indent_level(
-    para, level: int, num_id: int = 1, indent_per_level=Inches(0.5)
+    para, level: int | None, num_id: int = 1, indent_per_level=Inches(0.5)
 ):
     """
-    Turn `para` into a list item at `level` (0=top,1=sub-item,2=sub-sub-item)
-    referencing numbering definition `num_id`, and also set its left‐indent.
+    Sets a paragraph to a bullet with indentation level - notably indent level 1 is the first level of a NESTED bullet
+    so level 0 is the top level indent
+
+    We have special rules for indent level = None
+    - if level is None, we don't know whether the item should be indented once or not at all
+      we just know it should not be a nested indent
+    - so if the indent level is < 1 we make no changes
+    - and if it is >= 1 we set the indent level to 0
 
     - level: the w:ilvl value
     - num_id: w:numId (must exist in numbering.xml; usually 1 is the default list)
@@ -343,8 +349,14 @@ def set_list_indent_level(
     """
 
     # Indent level 1 is actually the first sub-item (0 is the top level indent)
-    level = level + 1
+    if level is None:
+        current_level = get_list_level(para)
+        if current_level is None or current_level < 1:
+            return
+        else:
+            level = 0
 
+    level = level + 1
     p = para._p
     pPr = p.pPr or OxmlElement("w:pPr")
     if p.pPr is None:

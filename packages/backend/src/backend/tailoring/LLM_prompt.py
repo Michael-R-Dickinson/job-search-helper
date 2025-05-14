@@ -15,6 +15,8 @@ For the skills section, you may:
 
 Be extremely mindful of the job description - making sure every important keyword and proficiency is included in the resume if possible.
 
+Keep in mind, list_indent_level = 0 is an indented bullet point, and list_indent_level = 1 is the first level of sub-bullets
+
 One element of your output, the `preserved` flag is very important. It indicates whether preserving the original formatting for this paragraph is necessary or whether it can be generically overwritten. Often things like job titles or dates are positioned or formatted differently in a way that is not displayed to you through the raw runs. These should be preserved. Things with formatting that need to be preserved are:
 - titles/headers of any kind - even those that just contextualize bullet points
 - company names
