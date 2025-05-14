@@ -150,7 +150,6 @@ def update_resume_section(
 
     pointer_paragraph = section_content[0]
     for updated_para in new_paragraphs:
-
         if updated_para.get_text() in existing_paragraphs_lookup:
             # If the paragraph already exists, we preserve it and add additional paragraphs after it
             existing_paragraph_idx = existing_paragraphs_lookup.get(
@@ -161,6 +160,14 @@ def update_resume_section(
                 preserved_paragraphs_lookup,
                 start_idx=existing_paragraph_idx + 1,
             )
+
+            # The only attribute we still modify on the existing paragraph indent level
+            if updated_para.list_indent_level is not None:
+                set_list_indent_level(
+                    section_content[existing_paragraph_idx],
+                    updated_para.list_indent_level,
+                )
+
             continue
 
         # Otherwise, we need to insert a new paragraph
