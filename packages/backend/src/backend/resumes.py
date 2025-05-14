@@ -193,11 +193,11 @@ def update_resume_section(
             run_template=pointer_paragraph.runs[0] if pointer_paragraph.runs else None,
         )
 
-        if updated_para_raw.list_indent_level is not None:
-            set_list_indent_level(
-                new_para,
-                updated_para_raw.list_indent_level,
-            )
+        # if updated_para_raw.list_indent_level is not None:
+        set_list_indent_level(
+            new_para,
+            updated_para_raw.list_indent_level or 0,
+        )
 
         next_non_anchor, next_non_anchor_idx = find_next_non_anchor(
             section_content,
