@@ -149,14 +149,14 @@ def update_resume_section(
     }
 
     pointer_paragraph = section_content[0]
-    for updated_para in new_paragraphs:
+    for updated_para_raw in new_paragraphs:
         if (
-            updated_para.get_text() in existing_paragraphs_lookup
-            and updated_para.preserved
+            updated_para_raw.get_text() in existing_paragraphs_lookup
+            and updated_para_raw.preserved
         ):
             # print("Found in lookup: ", updated_para.get_text()[:25])
             existing_paragraph_idx = existing_paragraphs_lookup.get(
-                updated_para.get_text()
+                updated_para_raw.get_text()
             )
             pointer_paragraph = find_first_non_match(
                 section_content,
@@ -172,14 +172,14 @@ def update_resume_section(
         )
         add_runs_to_paragraph(
             new_para,
-            updated_para.runs,
+            updated_para_raw.runs,
             run_template=pointer_paragraph.runs[0] if pointer_paragraph.runs else None,
         )
 
-        if updated_para.list_indent_level is not None:
+        if updated_para_raw.list_indent_level is not None:
             set_list_indent_level(
                 new_para,
-                updated_para.list_indent_level,
+                updated_para_raw.list_indent_level,
             )
 
     # Delete all paragraphs that are not in the new paragraphs
