@@ -3,28 +3,39 @@ from md2docx_python.src.docx2md_python import word_to_markdown
 
 from backend.constants import RESUMES_PATH
 from backend.docx_functions import get_list_level
+from docx.text.paragraph import Paragraph
 
 
-def json_serialize_paragraph(paragraph):
+def add_font_styles(styleSet: set, styles):
+    if styles.bold:
+        styleSet.add("bold")
+    if styles.italic:
+        styleSet.add("italic")
+    if styles.underline:
+        styleSet.add("underline")
+
+    return styleSet
+
+
+def json_serialize_paragraph(paragraph: Paragraph):
+    paragraph_styles = add_font_styles(set(), paragraph.style.font)
+
     serialized_runs = []
-    list_level = get_list_level(paragraph)
-
     for run in paragraph.runs:
+        # Add in run level styles
+        run_styles = paragraph_styles.copy()
+        add_font_styles(run_styles, run.style.font)
+
         serialized = {
             "text": run.text,
-            "styles": [],
+            "styles": list(run_styles),
         }
-
-        if run.bold:
-            serialized["styles"].append("bold")
-        if run.italic:
-            serialized["styles"].append("italic")
-        if run.underline:
-            serialized["styles"].append("underline")
 
         serialized_runs.append(serialized)
 
     serialized_paragraph = {"runs": serialized_runs}
+
+    list_level = get_list_level(paragraph)
     if not (list_level == 0):
         serialized_paragraph["list_indent_level"] = list_level
 
