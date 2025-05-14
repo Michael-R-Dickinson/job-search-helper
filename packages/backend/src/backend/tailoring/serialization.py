@@ -24,7 +24,7 @@ def json_serialize_paragraph(paragraph: Paragraph):
     for run in paragraph.runs:
         # Add in run level styles
         run_styles = paragraph_styles.copy()
-        add_font_styles(run_styles, run.style.font)
+        run_styles = add_font_styles(run_styles, run)
 
         serialized = {
             "text": run.text,
