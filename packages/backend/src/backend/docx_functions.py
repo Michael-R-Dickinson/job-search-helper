@@ -358,9 +358,11 @@ def set_list_indent_level(
 
     level = level + 1
     p = para._p
-    pPr = p.pPr or OxmlElement("w:pPr")
     if p.pPr is None:
+        pPr = OxmlElement("w:pPr")
         p.insert(0, pPr)
+    else:
+        pPr = p.pPr
 
     old = pPr.find(qn("w:numPr"))
     if old is not None:
