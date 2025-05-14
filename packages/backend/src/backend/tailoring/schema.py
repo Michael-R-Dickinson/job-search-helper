@@ -10,6 +10,7 @@ class SerializedRun(BaseModel):
 class SerializedParagraph(BaseModel):
     runs: list[SerializedRun]
     list_indent_level: Optional[int] = None
+    preserved: Optional[bool] = False
 
     def get_text(self) -> str:
         return "".join(run.text for run in self.runs)

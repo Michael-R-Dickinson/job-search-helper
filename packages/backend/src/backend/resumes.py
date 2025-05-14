@@ -141,7 +141,9 @@ def update_resume_section(
     Updates the section with new paragraphs
     """
 
-    new_paragraphs_lookup = set([p.get_text() for p in new_paragraphs])
+    preserved_paragraphs_lookup = set(
+        [p.get_text() for p in new_paragraphs if p.preserved]
+    )
     existing_paragraphs_lookup = {
         para.text: idx for idx, para in enumerate(section_content)
     }
@@ -156,7 +158,7 @@ def update_resume_section(
             )
             pointer_paragraph = find_first_non_match(
                 section_content,
-                new_paragraphs_lookup,
+                preserved_paragraphs_lookup,
                 start_idx=existing_paragraph_idx + 1,
             )
             continue
@@ -171,6 +173,7 @@ def update_resume_section(
     # Delete all paragraphs that are not in the new paragraphs
     # These are just the old paragraphs from the original resume
     # So we delete them
+    new_paragraphs_lookup = set([p.get_text() for p in new_paragraphs])
     for para in section_content:
         if para.text not in new_paragraphs_lookup:
             delete_paragraph(para)
