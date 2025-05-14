@@ -94,10 +94,10 @@ def clear_runs_only(para: Paragraph):
 
 def add_runs_to_paragraph(
     paragraph: Paragraph,
-    runs: list[SerializedRun],
+    runs_data: list[SerializedRun],
     run_template=None,
 ):
-    for run in runs:
+    for run in runs_data:
         if run_template:
             new_run = copy.deepcopy(run_template)
             new_run.text = run.text
@@ -111,6 +111,8 @@ def add_runs_to_paragraph(
             new_run.italic = "italic" in run.styles
             new_run.underline = "underline" in run.styles
 
+    return paragraph
+
 
 def delete_paragraphs(paragraphs: list[Paragraph]):
     for para in paragraphs:
@@ -122,7 +124,7 @@ def delete_paragraph(paragraph: Paragraph):
     element.getparent().remove(element)
 
 
-def find_first_non_match(paragraphs, lookup, start_idx=0):
+def find_next_non_anchor(paragraphs, lookup, start_idx=0):
     """
     Finds the first paragraph that does not match the lookup
     """
@@ -139,40 +141,49 @@ def update_resume_section(
 ):
     """
     Updates the section with new paragraphs
+
+    Understanding this function:
+        # Anchor paragraphs are paragraphs that are the same between the original and the updated resume (often headings, dates or job position)
+        # We use them as "anchor" points to insert new paragraphs after
+        # So when we reach a new paragraph that is in the anchor_points_lookup, we find that same paragraph in the original resume
+        # and begin adding the following new paragraphs after it
+        # Note: we don't actually insert directly after the anchor paragraph, we instead assign a "pointer" paragraph as the
+        # next non-anchor paragraph
+        # The reason for this is so that we can use the insert_paragraph_before function, and insert our paragraphs in order
+        # This also makes it easier to use the styles from the pointer paragraph which will tend to be closer to the style we want for the new
+        # paragraphs as the anchor paragraphs often are headings and have the associated different styles
     """
 
-    preserved_paragraphs_lookup = set(
-        [p.get_text() for p in new_paragraphs if p.preserved]
-    )
-    existing_paragraphs_lookup = {
-        para.text: idx for idx, para in enumerate(section_content)
+    preserved_paragraphs = set([p.get_text() for p in new_paragraphs if p.preserved])
+    anchor_paragraphs_lookup = {
+        para.text: idx
+        for idx, para in enumerate(section_content)
+        if para.text in preserved_paragraphs
     }
 
     pointer_paragraph = section_content[0]
     for updated_para_raw in new_paragraphs:
-        if (
-            updated_para_raw.get_text() in existing_paragraphs_lookup
-            and updated_para_raw.preserved
-        ):
+        # If the paragraph is preserved, we don't need to do anything with it
+        # Just move the pointer location to the next non-anchor
+        if updated_para_raw.get_text() in anchor_paragraphs_lookup:
             # print("Found in lookup: ", updated_para.get_text()[:25])
-            existing_paragraph_idx = existing_paragraphs_lookup.get(
+            existing_paragraph_idx = anchor_paragraphs_lookup.get(
                 updated_para_raw.get_text()
             )
-            pointer_paragraph = find_first_non_match(
+            pointer_paragraph = find_next_non_anchor(
                 section_content,
-                preserved_paragraphs_lookup,
+                anchor_paragraphs_lookup,
                 start_idx=existing_paragraph_idx + 1,
             )
-
             continue
 
         # Otherwise, we need to insert a new paragraph
         new_para = pointer_paragraph.insert_paragraph_before(
             style=pointer_paragraph.style
         )
-        add_runs_to_paragraph(
-            new_para,
-            updated_para_raw.runs,
+        new_para = add_runs_to_paragraph(
+            paragraph=new_para,
+            runs_data=updated_para_raw.runs,
             run_template=pointer_paragraph.runs[0] if pointer_paragraph.runs else None,
         )
 
@@ -186,7 +197,7 @@ def update_resume_section(
     # These are just the old paragraphs from the original resume
     # So we delete them
     for para in section_content:
-        if para.text not in preserved_paragraphs_lookup:
+        if para.text not in anchor_paragraphs_lookup:
             delete_paragraph(para)
 
 
