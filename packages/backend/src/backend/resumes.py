@@ -7,6 +7,7 @@ from firebase_admin import storage
 from backend.firebase import init_firebase
 
 from backend.docx_functions import (
+    copy_paragraph_format,
     insert_paragraph_after,
     is_likely_heading,
     iter_doc_paragraphs,
@@ -129,11 +130,13 @@ def find_next_non_anchor(paragraphs, lookup, start_idx=0):
     Finds the first paragraph that does not match the lookup
     """
 
+    idx = start_idx
     for para in paragraphs[start_idx:]:
         if para.text not in lookup:
-            return para
+            return para, idx
+        idx += 1
 
-    return paragraphs[-1]
+    return paragraphs[-1], idx
 
 
 def update_resume_section(
@@ -162,6 +165,7 @@ def update_resume_section(
     }
 
     pointer_paragraph = section_content[0]
+    pointer_paragraph_idx = 0
     for updated_para_raw in new_paragraphs:
         # If the paragraph is preserved, we don't need to do anything with it
         # Just move the pointer location to the next non-anchor
@@ -170,7 +174,7 @@ def update_resume_section(
             existing_paragraph_idx = anchor_paragraphs_lookup.get(
                 updated_para_raw.get_text()
             )
-            pointer_paragraph = find_next_non_anchor(
+            pointer_paragraph, pointer_paragraph_idx = find_next_non_anchor(
                 section_content,
                 anchor_paragraphs_lookup,
                 start_idx=existing_paragraph_idx + 1,
@@ -181,6 +185,8 @@ def update_resume_section(
         new_para = pointer_paragraph.insert_paragraph_before(
             style=pointer_paragraph.style
         )
+        copy_paragraph_format(pointer_paragraph, new_para)
+
         new_para = add_runs_to_paragraph(
             paragraph=new_para,
             runs_data=updated_para_raw.runs,
@@ -193,6 +199,16 @@ def update_resume_section(
                 updated_para_raw.list_indent_level,
             )
 
+        next_non_anchor, next_non_anchor_idx = find_next_non_anchor(
+            section_content,
+            anchor_paragraphs_lookup,
+            start_idx=pointer_paragraph_idx + 1,
+        )
+        if next_non_anchor_idx == pointer_paragraph_idx + 1:
+            pointer_paragraph, pointer_paragraph_idx = (
+                next_non_anchor,
+                next_non_anchor_idx,
+            )
     # Delete all paragraphs that are not in the new paragraphs
     # These are just the old paragraphs from the original resume
     # So we delete them

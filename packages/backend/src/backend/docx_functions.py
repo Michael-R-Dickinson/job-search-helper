@@ -366,5 +366,20 @@ def set_list_indent_level(
     para.paragraph_format.left_indent = indent_per_level * level
 
 
+def copy_paragraph_format(src: Paragraph, tgt: Paragraph):
+    src_pPr = src._p.pPr
+    if src_pPr is None:
+        return
+
+    # Remove existing <w:pPr> from the target
+    tgt_pPr = tgt._p.pPr
+    if tgt_pPr is not None:
+        tgt._p.remove(tgt_pPr)
+
+    # Deep‐copy and insert the source <w:pPr>
+    new_pPr = copy.deepcopy(src_pPr)
+    tgt._p.insert(0, new_pPr)
+
+
 if __name__ == "__main__":
     print("This module is not meant to be run directly.")
