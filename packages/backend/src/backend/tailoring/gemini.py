@@ -1,10 +1,13 @@
 import os
 from dotenv import load_dotenv
-from google import genai
 from pydantic import BaseModel
+
+from google import genai
+from google.genai import types
 
 from backend.tailoring.schema import ResumeOutput
 from backend.constants import CACHE_PATH
+from backend.tailoring.LLM_prompt import LLM_CONTENT_CONFIG
 
 
 def load_cached_response():
@@ -38,12 +41,17 @@ def execute_tailoring_with_gemini(prompt: str):
 
     client = genai.Client(api_key=api_key)
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        # Flash 2.5 is stronger but more expensive
+        # model="gemini-2.0-flash",
+        model="gemini-2.5-flash-preview-04-17",
         contents=prompt,
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": ResumeOutput,
-        },
+        config=types.GenerateContentConfig(
+            system_instruction=LLM_CONTENT_CONFIG,
+            response_mime_type="application/json",
+            response_schema=ResumeOutput,
+            # Uncomment to disable thinking
+            # thinking_budget=0,
+        ),
     )
 
     # Use instantiated objects.

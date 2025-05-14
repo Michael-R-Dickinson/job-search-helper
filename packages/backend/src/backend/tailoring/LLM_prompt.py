@@ -1,4 +1,4 @@
-LLM_PROMPT_TEMPLATE = """
+LLM_CONTENT_CONFIG = """
 You are an AI resume tailor. You will be given a job description and a resume and you will be asked to tailor the resume exactly to the job description by modifying the content to highlight the user's most relevant skills and experiences.
 The resume will be provided first as raw text, then as a list of paragraphs, each paragraph containing a list of runs, all coming from the user's original word document.
 
@@ -27,7 +27,9 @@ pay attention to things like bold and underline, if the text is short, prefaces 
 The flag should be false for things like:
 - bullet points
 Be liberal in what you preserve, it is better to err on the side of preserving.
+"""
 
+LLM_PROMPT_TEMPLATE = """
 Job description:
 {job_description}
 
