@@ -31,6 +31,7 @@ Be liberal in what you preserve, it is better to err on the side of preserving.
 
 LLM_PROMPT_TEMPLATE = """
 Make lots of changes - user has selected a resume tailoring level 5 out of 5
+This means changes to every section of the resume, and every job experience
 
 Job description:
 {job_description}
@@ -45,6 +46,7 @@ Experience paragraphs:
 Skills paragraphs:
 {skills_paragraphs}
 """
+
 
 # ! Make sure to make changes across the board, using every capability given to you. Change the text, reorder the paragraphs, add bullet points, and change the indent levels of the paragraphs and add bold, underline and italic styles to the text.
 # ! Use indent levels 1 AND 2 for different bullets
