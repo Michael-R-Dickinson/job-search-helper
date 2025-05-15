@@ -6,8 +6,6 @@ from backend.firebase import init_firebase
 
 
 def fetch_and_download_resume(userId: str, resumeName: str):
-    init_firebase()
-
     bucket = storage.bucket()
     resumeFile = bucket.blob(f"resumes/{userId}/{resumeName}")
     if not resumeFile.exists():

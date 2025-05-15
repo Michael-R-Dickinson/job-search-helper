@@ -1,3 +1,4 @@
+from datetime import datetime
 import re
 
 
@@ -45,3 +46,19 @@ def print_sections(sections):
         for paragraph in content:
             print(paragraph.text)
         print("\n")
+
+
+def get_user_bucket_path(userId: str, tailored: bool = False) -> str:
+    """
+    Returns the path to the user's bucket,
+    either for tailored resumes or original resumes
+    """
+    base = f"users/{userId}"
+    if tailored:
+        return f"{base}/tailored/"
+    else:
+        return base
+
+
+def get_time_string():
+    return datetime.now().strftime("%d_%H-%M-%S")

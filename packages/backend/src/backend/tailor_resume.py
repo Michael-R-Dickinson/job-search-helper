@@ -1,11 +1,14 @@
 import os
 
+from backend.util import get_time_string, get_user_bucket_path
+from firebase_admin import storage
+
 from backend.fetch_data.fetch_job_description import fetch_job_description_markdown
 from backend.LLM_tailoring.serialization import serialize_raw_resume, serialize_sections
 from backend.LLM_tailoring.LLM_prompt import generate_llm_prompt
 from backend.LLM_tailoring.gemini import execute_tailoring_with_gemini
 from backend.constants import RESUMES_PATH
-from datetime import datetime
+import datetime
 
 from backend.segmentation.segment_resume import (
     parse_resume_for_sections,
@@ -16,10 +19,30 @@ from backend.deserialization.update_resume import (
 )
 
 
-def tailor_resume(userId: str, resumeName: str, linkedinUrl: str):
-    job_description = fetch_job_description_markdown(linkedinUrl)
+def upload_tailored_resume(resume_path: str, userId: str, resume_name: str):
+    """
+    Uploads resume to the user's bucket
+    returns download url
+    """
+    bucket = storage.bucket()
+    fileLocation = bucket.blob(
+        f"{get_user_bucket_path(userId=userId, tailored=True)}/{resume_name}_{get_time_string()}.docx"
+    )
+    fileLocation.upload_from_filename(resume_path)
 
-    resume_path = fetch_and_download_resume(userId, resumeName)
+    download_url = fileLocation.generate_signed_url(
+        version="v4",
+        expiration=datetime.datetime.now() + datetime.timedelta(days=1),
+        method="GET",
+    )
+
+    return download_url
+
+
+def tailor_resume(userId: str, resume_name: str, linkedin_url: str):
+    job_description = fetch_job_description_markdown(linkedin_url)
+
+    resume_path = fetch_and_download_resume(userId, resume_name)
     resume_sections, doc = parse_resume_for_sections(resume_path)
     sections_strings = serialize_sections(resume_sections)
 
@@ -42,10 +65,13 @@ def tailor_resume(userId: str, resumeName: str, linkedinUrl: str):
         updated_resume_data.experienceSection,
     )
 
+    resume_path = f"{RESUMES_PATH}/outputs/resume-{get_time_string()}.docx"
     os.makedirs(f"{RESUMES_PATH}/outputs", exist_ok=True)
-    doc.save(
-        f"{RESUMES_PATH}/outputs/resume-{datetime.now().strftime("%d_%H-%M-%S")}.docx"
-    )
+    doc.save(resume_path)
+
+    download_url = upload_tailored_resume(resume_path, userId, resume_name)
+
+    return download_url
 
 
 if __name__ == "__main__":
