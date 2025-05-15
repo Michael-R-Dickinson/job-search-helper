@@ -12,6 +12,8 @@ Attempt to respect the original formatting of the resume as much as possible and
 For the skills section, you may:
 - reorder skills or skill groups
 - add or remove skills - for all new skills you add, remember to list them in the skills added section of your output - this will allow the user to select which ones to keep
+- make sure to include ALL skills from the job description in the skills section - we want to make sure the user passes ATS
+don't go crazy with bolding and underling though
 
 Be extremely mindful of the job description - making sure every important keyword and proficiency is included in the resume if possible.
 
