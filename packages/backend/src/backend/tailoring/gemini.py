@@ -24,8 +24,8 @@ def load_cached_response():
 
 
 def cache_response(response: ResumeOutput):
-    if not (os.environ["CACHE_LLM_RESPONSES"] == "True"):
-        return None
+    # We always cache the response, even if we don't load it later
+    # This is because we want to be able to debug the response if needed
     with open(CACHE_PATH, "w") as f:
         f.write(response.json())
 
