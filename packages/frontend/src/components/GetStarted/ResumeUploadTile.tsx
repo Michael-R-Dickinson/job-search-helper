@@ -20,7 +20,7 @@ const ResumeUploadTile: React.FC<{ onUploadComplete: () => void }> = ({ onUpload
           // Wait a second so so that no transitions happen before animations are complete
           setTimeout(() => {
             onUploadComplete()
-          }, 500)
+          }, 400)
         }}
       />
     </div>
