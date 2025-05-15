@@ -10,18 +10,49 @@ from backend.docx_functions import (
 from backend.LLM_tailoring.schema import SerializedParagraph
 
 
-def find_next_non_anchor(paragraphs, lookup, start_idx=0):
+def is_anchor_paragraph(para: Paragraph, anchor_lookup: set[str]) -> bool:
+    """
+    Checks if the paragraph is an anchor paragraph based on whether it is in the lookup dictionary
+    """
+    return para.text in anchor_lookup
+
+
+def find_next_non_anchor(paragraphs, anchor_lookup, start_idx=0):
     """
     Finds the first paragraph that does not match the lookup
     """
 
     idx = start_idx
     for para in paragraphs[start_idx:]:
-        if para.text not in lookup:
+        if not is_anchor_paragraph(para, anchor_lookup):
             return para, idx
         idx += 1
 
     return paragraphs[-1], idx
+
+
+def add_paragraph_before(
+    src_paragraph: Paragraph, new_paragraph_data: SerializedParagraph
+) -> Paragraph:
+    """
+    Adds a new paragraph before the source paragraph
+    """
+    new_para = src_paragraph.insert_paragraph_before(style=src_paragraph.style)
+
+    copy_paragraph_format(src_paragraph, new_para)
+
+    new_para = add_runs_to_paragraph(
+        paragraph=new_para,
+        runs_data=new_paragraph_data.runs,
+        run_template=src_paragraph.runs[0] if src_paragraph.runs else None,
+    )
+
+    set_list_indent_level(
+        new_para,
+        new_paragraph_data.list_indent_level,
+    )
+
+    return new_para
 
 
 def update_resume_section(
@@ -55,10 +86,11 @@ def update_resume_section(
         # If the paragraph is preserved, we don't need to do anything with it
         # Just move the pointer location to the next non-anchor
         if updated_para_raw.get_text() in anchor_paragraphs_lookup:
-            # print("Found in lookup: ", updated_para.get_text()[:25])
             existing_paragraph_idx = anchor_paragraphs_lookup.get(
                 updated_para_raw.get_text()
             )
+            # Pointer paragraph is a paragraph in the ORIGINAL resume
+            # And so the pointer_paragraph_idx should be used to index section_content
             pointer_paragraph, pointer_paragraph_idx = find_next_non_anchor(
                 section_content,
                 anchor_paragraphs_lookup,
@@ -67,36 +99,31 @@ def update_resume_section(
             continue
 
         # Otherwise, we need to insert a new paragraph
-        new_para = pointer_paragraph.insert_paragraph_before(
-            style=pointer_paragraph.style
-        )
-        copy_paragraph_format(pointer_paragraph, new_para)
-
-        new_para = add_runs_to_paragraph(
-            paragraph=new_para,
-            runs_data=updated_para_raw.runs,
-            run_template=pointer_paragraph.runs[0] if pointer_paragraph.runs else None,
-        )
-
-        # if updated_para_raw.list_indent_level is not None:
-        set_list_indent_level(
-            new_para,
-            updated_para_raw.list_indent_level,
+        new_para = add_paragraph_before(
+            src_paragraph=pointer_paragraph,
+            new_paragraph_data=updated_para_raw,
         )
 
         # Ideally, we move the pointer to the next paragraph if it is not an anchor
         # This allows us to maximally use the styles provided by the original document
-        # However when we run out of lines with styling from the doc, we just keep using the last one's styling
-        next_non_anchor, next_non_anchor_idx = find_next_non_anchor(
-            section_content,
-            anchor_paragraphs_lookup,
-            start_idx=pointer_paragraph_idx + 1,
-        )
-        if next_non_anchor_idx == pointer_paragraph_idx + 1:
-            pointer_paragraph, pointer_paragraph_idx = (
-                next_non_anchor,
-                next_non_anchor_idx,
+        # However because the last paragraph before an anchor often has different styling, we avoid
+        # moving the pointer to the last paragraph before the anchor
+        try:
+            next_source_para_is_anchor = is_anchor_paragraph(
+                section_content[pointer_paragraph_idx + 1], anchor_paragraphs_lookup
             )
+            next_next_source_para_is_anchor = is_anchor_paragraph(
+                section_content[pointer_paragraph_idx + 2], anchor_paragraphs_lookup
+            )
+            if not (next_source_para_is_anchor or next_next_source_para_is_anchor):
+                pointer_paragraph, pointer_paragraph_idx = (
+                    section_content[pointer_paragraph_idx + 1],
+                    pointer_paragraph_idx + 1,
+                )
+        except IndexError:
+            # We are at the end of the section, so we just keep the pointer where it is
+            pass
+
     # Delete all paragraphs that are not in the new paragraphs
     # These are just the old paragraphs from the original resume
     # So we delete them
