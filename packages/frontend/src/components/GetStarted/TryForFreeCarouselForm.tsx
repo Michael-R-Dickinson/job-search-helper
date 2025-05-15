@@ -25,9 +25,9 @@ const TryForFreeCarouselForm = () => {
         delay: 0.1,
       }}
       style={{
-        height: step === 0 ? '400px' : '300px',
+        height: step === 0 ? '400px' : '275px',
       }}
-      className="mt-[33vh] w-full max-w-md bg-white px-8 py-12 rounded-2xl shadow-lg text-center space-y-6 h-fit"
+      className="mt-[33vh] w-full max-w-md bg-white px-8 py-12 rounded-2xl shadow-lg text-center space-y-6"
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.div
