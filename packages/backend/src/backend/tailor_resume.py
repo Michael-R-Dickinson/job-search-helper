@@ -16,7 +16,7 @@ from backend.deserialization.update_resume import (
 )
 
 
-def main(userId: str, resumeName: str, linkedinUrl: str):
+def tailor_resume(userId: str, resumeName: str, linkedinUrl: str):
     job_description = fetch_job_description_markdown(linkedinUrl)
 
     resume_path = fetch_and_download_resume(userId, resumeName)
@@ -49,7 +49,7 @@ def main(userId: str, resumeName: str, linkedinUrl: str):
 
 
 if __name__ == "__main__":
-    main(
+    tailor_resume(
         "testUserId",
         "V3 Compressed Fabric.docx",
         "https://www.linkedin.com/jobs/view/4220271151/?alternateChannel=search",

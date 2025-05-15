@@ -1,0 +1,18 @@
+{
+  "functions": [
+    {
+      "source": "packages/backend",
+      "predeploy": [
+        "cd \"$RESOURCE_DIR\" && ln -sf .venv venv && poetry export --format requirements.txt --output requirements.txt --without-hashes"
+      ],
+      "codebase": "default",
+      "ignore": [
+        "venv",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}

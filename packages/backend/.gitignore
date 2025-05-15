@@ -3,3 +3,5 @@ resumes/**/*
 __pycache__/
 .env
 llm_output_cache.json
+
+requirements.txt
