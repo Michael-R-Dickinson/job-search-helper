@@ -2,7 +2,7 @@ import os
 from md2docx_python.src.docx2md_python import word_to_markdown
 
 from backend.constants import RESUMES_PATH
-from backend.docx_functions import get_list_level
+from backend.docx_functions import get_list_indent_level
 from docx.text.paragraph import Paragraph
 
 
@@ -35,7 +35,7 @@ def json_serialize_paragraph(paragraph: Paragraph):
 
     serialized_paragraph = {"runs": serialized_runs}
 
-    list_level = get_list_level(paragraph)
+    list_level = get_list_indent_level(paragraph)
     if not (list_level == 0):
         serialized_paragraph["list_indent_level"] = list_level
 

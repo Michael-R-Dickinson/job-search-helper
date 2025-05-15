@@ -1,96 +1,13 @@
 import copy
-import os
-from docx import Document
 from docx.text.paragraph import Paragraph
 
-from firebase_admin import storage
-from backend.firebase import init_firebase
 
 from backend.docx_functions import (
     copy_paragraph_format,
-    insert_paragraph_after,
-    is_likely_heading,
-    iter_doc_paragraphs,
-    merge_identical_runs,
+    delete_paragraph,
     set_list_indent_level,
 )
-from backend.util import clean_heading_text, print_sections
-from backend.section_identification import is_section_header
-from backend.constants import RESUMES_PATH, SECTION_HEADER_TOKENS
 from backend.tailoring.schema import SerializedParagraph, SerializedRun
-
-
-def fetch_resume(userId: str, resumeName: str):
-    init_firebase()
-
-    bucket = storage.bucket()
-    resumeFile = bucket.blob(f"resumes/{userId}/{resumeName}")
-    if not resumeFile.exists():
-        raise FileNotFoundError(f"Resume {resumeName} not found for user {userId}")
-
-    os.makedirs(f"{RESUMES_PATH}/{userId}", exist_ok=True)
-    resumePath = f"{RESUMES_PATH}/{userId}/{resumeName}"
-    resumeFile.download_to_filename(resumePath)
-
-    return resumePath
-
-
-def parse_resume_for_sections(resumePath: str):
-    doc = Document(resumePath)
-    segments = segment_resume(doc)
-    critical_sections = filter_to_critical_sections(segments)
-
-    for section_paragraphs in critical_sections.values():
-        for para in section_paragraphs:
-            merge_identical_runs(para)
-
-    return critical_sections, doc
-
-
-def filter_to_critical_sections(sections):
-    """
-    Filters the sections to only include important sections for tailoring
-    """
-
-    critical_sections = {}
-    for section in sections.keys():
-        for header_title in SECTION_HEADER_TOKENS.keys():
-            if is_section_header(section, header_title):
-                critical_sections[header_title] = sections[section]
-                break
-
-    return critical_sections
-
-
-def segment_resume(doc: Document):
-    """
-    Segments the resume into sections based on headings.
-    """
-    sections = {"intro": []}
-
-    current_section_heading = "intro"
-    prev_para_was_heading = False
-
-    for p in iter_doc_paragraphs(doc):
-        if is_likely_heading(p, doc) and not prev_para_was_heading:
-            prev_para_was_heading = True
-            current_section_heading = clean_heading_text(p.text)
-            sections[current_section_heading] = []
-
-        else:
-            sections[current_section_heading].append(p)
-            prev_para_was_heading = False
-
-    return sections
-
-
-def clear_runs_only(para: Paragraph):
-    """
-    Remove only the <w:r> children of this paragraph, leaving its
-    paragraph properties (styles, spacing, etc.) intact.
-    """
-    for run in list(para.runs):
-        para._p.remove(run._element)
 
 
 def add_runs_to_paragraph(
@@ -115,16 +32,6 @@ def add_runs_to_paragraph(
     return paragraph
 
 
-def delete_paragraphs(paragraphs: list[Paragraph]):
-    for para in paragraphs:
-        delete_paragraph(para)
-
-
-def delete_paragraph(paragraph: Paragraph):
-    element = paragraph._element
-    element.getparent().remove(element)
-
-
 def find_next_non_anchor(paragraphs, lookup, start_idx=0):
     """
     Finds the first paragraph that does not match the lookup
@@ -146,15 +53,15 @@ def update_resume_section(
     Updates the section with new paragraphs
 
     Understanding this function:
-        # Anchor paragraphs are paragraphs that are the same between the original and the updated resume (often headings, dates or job position)
-        # We use them as "anchor" points to insert new paragraphs after
-        # So when we reach a new paragraph that is in the anchor_points_lookup, we find that same paragraph in the original resume
-        # and begin adding the following new paragraphs after it
-        # Note: we don't actually insert directly after the anchor paragraph, we instead assign a "pointer" paragraph as the
-        # next non-anchor paragraph
-        # The reason for this is so that we can use the insert_paragraph_before function, and insert our paragraphs in order
-        # This also makes it easier to use the styles from the pointer paragraph which will tend to be closer to the style we want for the new
-        # paragraphs as the anchor paragraphs often are headings and have the associated different styles
+        Anchor paragraphs are paragraphs that are the same between the original and the updated resume (often headings, dates or job position)
+        We use them as "anchor" points to insert new paragraphs after
+        So when we reach a new paragraph that is in the anchor_points_lookup, we find that same paragraph in the original resume
+        and begin adding the following new paragraphs after it
+        Note: we don't actually insert directly after the anchor paragraph, we instead assign a "pointer" paragraph as the
+        next non-anchor paragraph
+        The reason for this is so that we can use the insert_paragraph_before function, and insert our paragraphs in order
+        This also makes it easier to use the styles from the pointer paragraph which will tend to be closer to the style we want for the new
+        paragraphs as the anchor paragraphs often are headings and have the associated different styles
     """
 
     preserved_paragraphs = set([p.get_text() for p in new_paragraphs if p.preserved])
@@ -220,8 +127,8 @@ def update_resume_section(
             delete_paragraph(para)
 
 
-if __name__ == "__main__":
-    # resumePath = fetch_resume("testUserId", "V3 Compressed Fabric.docx")
-    # resumePath = f"{RESUMES_PATH}/testUserId/V3Resume.docx"
-    resumePath = f"{RESUMES_PATH}/testUserId/Senior-Product-Manager-Resume-Example.docx"
-    parse_resume_for_sections(resumePath)
+# if __name__ == "__main__":
+#     # resumePath = fetch_resume("testUserId", "V3 Compressed Fabric.docx")
+#     # resumePath = f"{RESUMES_PATH}/testUserId/V3Resume.docx"
+#     resumePath = f"{RESUMES_PATH}/testUserId/Senior-Product-Manager-Resume-Example.docx"
+#     parse_resume_for_sections(resumePath)

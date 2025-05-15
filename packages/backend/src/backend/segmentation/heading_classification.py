@@ -6,7 +6,7 @@ from backend.constants import SECTION_HEADER_TOKENS
 _word_re = re.compile(r"\b\w+\b")
 
 
-def is_section_header(text: str, header: str) -> bool:
+def is_header_text(text: str, header: str) -> bool:
     """Determines if a text is likely a section header for a given section.
     This should only be used on text that is already identified as a heading
 
@@ -64,8 +64,8 @@ if __name__ == "__main__":
     ]
 
     for h in skills_examples:
-        print(f"{h:25} -> {is_section_header(h, 'skills')}")
+        print(f"{h:25} -> {is_header_text(h, 'skills')}")
     print("\n")
 
     for h in experience_examples:
-        print(f"{h:25} -> {is_section_header(h, 'experience')}")
+        print(f"{h:25} -> {is_header_text(h, 'experience')}")
