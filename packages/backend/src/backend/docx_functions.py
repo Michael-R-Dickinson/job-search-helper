@@ -9,7 +9,7 @@ from docx.table import Table
 from docx.oxml.shared import OxmlElement
 from docx.shared import Inches
 
-from backend.tailoring.schema import SerializedRun
+from backend.LLM_tailoring.schema import SerializedRun
 
 
 def clean_paragraph_whitespace(para: Paragraph) -> None:

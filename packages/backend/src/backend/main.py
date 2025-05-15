@@ -1,9 +1,9 @@
 import os
 
 from backend.fetch_data.fetch_job_description import fetch_job_description_markdown
-from backend.tailoring.serialization import serialize_raw_resume, serialize_sections
-from backend.tailoring.LLM_prompt import generate_llm_prompt
-from backend.tailoring.gemini import execute_tailoring_with_gemini
+from backend.LLM_tailoring.serialization import serialize_raw_resume, serialize_sections
+from backend.LLM_tailoring.LLM_prompt import generate_llm_prompt
+from backend.LLM_tailoring.gemini import execute_tailoring_with_gemini
 from backend.constants import RESUMES_PATH
 from datetime import datetime
 

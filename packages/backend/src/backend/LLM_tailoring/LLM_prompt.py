@@ -30,6 +30,8 @@ Be liberal in what you preserve, it is better to err on the side of preserving.
 """
 
 LLM_PROMPT_TEMPLATE = """
+Make lots of changes - user has selected a resume tailoring level 5 out of 5
+
 Job description:
 {job_description}
 

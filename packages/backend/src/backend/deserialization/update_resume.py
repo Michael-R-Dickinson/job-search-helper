@@ -7,7 +7,7 @@ from backend.docx_functions import (
     delete_paragraph,
     set_list_indent_level,
 )
-from backend.tailoring.schema import SerializedParagraph
+from backend.LLM_tailoring.schema import SerializedParagraph
 
 
 def find_next_non_anchor(paragraphs, lookup, start_idx=0):

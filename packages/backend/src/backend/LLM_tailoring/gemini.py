@@ -5,9 +5,9 @@ from pydantic import BaseModel
 from google import genai
 from google.genai import types
 
-from backend.tailoring.schema import ResumeOutput
+from backend.LLM_tailoring.schema import ResumeOutput
 from backend.constants import CACHE_PATH
-from backend.tailoring.LLM_prompt import LLM_CONTENT_CONFIG
+from backend.LLM_tailoring.LLM_prompt import LLM_CONTENT_CONFIG
 
 
 def load_cached_response():
