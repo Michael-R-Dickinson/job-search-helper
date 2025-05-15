@@ -55,7 +55,7 @@ def get_user_bucket_path(userId: str, tailored: bool = False) -> str:
     """
     base = f"resumes/{userId}"
     if tailored:
-        return f"{base}/tailored/"
+        return f"{base}/tailored"
     else:
         return base
 
