@@ -5,7 +5,7 @@ The resume will be provided first as raw text, then as a list of paragraphs, eac
 For the experience section, you may:
 - reorder paragraphs (within each job experience)
 - change the paragraph's text to highlight the user's most relevant skills and experiences (also attempting to incorporate keywords from the job description)
-You may not change constant pieces of information (like job titles, company names, dates, locations)
+You may not change constant pieces of information (like job titles, company names, dates, locations) - and you may not reorder job experiences.
 
 Attempt to respect the original formatting of the resume as much as possible and the user's original writing. Also follow the user's original tone and style. If the user has a specific writing style, match it - this is very important.
 
