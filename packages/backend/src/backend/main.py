@@ -7,17 +7,19 @@ from backend.tailoring.gemini import execute_tailoring_with_gemini
 from backend.constants import RESUMES_PATH
 from datetime import datetime
 
-from backend.resumes import update_resume_section
 from backend.segmentation.segment_resume import (
     parse_resume_for_sections,
 )
-from backend.fetch_data.fetch_resume import download_resume
+from backend.fetch_data.fetch_resume import fetch_and_download_resume
+from backend.deserialization.update_resume import (
+    update_resume_section,
+)
 
 
 def main(userId: str, resumeName: str, linkedinUrl: str):
     job_description = fetch_job_description_markdown(linkedinUrl)
 
-    resume_path = download_resume(userId, resumeName)
+    resume_path = fetch_and_download_resume(userId, resumeName)
     resume_sections, doc = parse_resume_for_sections(resume_path)
     sections_strings = serialize_sections(resume_sections)
 

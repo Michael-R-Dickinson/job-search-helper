@@ -5,7 +5,7 @@ from backend.constants import RESUMES_PATH
 from backend.firebase import init_firebase
 
 
-def download_resume(userId: str, resumeName: str):
+def fetch_and_download_resume(userId: str, resumeName: str):
     init_firebase()
 
     bucket = storage.bucket()
@@ -18,3 +18,8 @@ def download_resume(userId: str, resumeName: str):
     resumeFile.download_to_filename(resumePath)
 
     return resumePath
+
+
+if __name__ == "__main__":
+    resumePath = fetch_and_download_resume("testUserId", "V3 Compressed Fabric.docx")
+    print(resumePath)

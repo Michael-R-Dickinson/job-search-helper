@@ -1,35 +1,13 @@
-import copy
 from docx.text.paragraph import Paragraph
 
 
 from backend.docx_functions import (
+    add_runs_to_paragraph,
     copy_paragraph_format,
     delete_paragraph,
     set_list_indent_level,
 )
-from backend.tailoring.schema import SerializedParagraph, SerializedRun
-
-
-def add_runs_to_paragraph(
-    paragraph: Paragraph,
-    runs_data: list[SerializedRun],
-    run_template=None,
-):
-    for run in runs_data:
-        if run_template:
-            new_run = copy.deepcopy(run_template)
-            new_run.text = run.text
-            paragraph._p.append(new_run._element)
-
-        else:
-            new_run = paragraph.add_run(run.text)
-
-        if run.styles is not None:
-            new_run.bold = "bold" in run.styles
-            new_run.italic = "italic" in run.styles
-            new_run.underline = "underline" in run.styles
-
-    return paragraph
+from backend.tailoring.schema import SerializedParagraph
 
 
 def find_next_non_anchor(paragraphs, lookup, start_idx=0):
@@ -125,10 +103,3 @@ def update_resume_section(
     for para in section_content:
         if para.text not in anchor_paragraphs_lookup:
             delete_paragraph(para)
-
-
-# if __name__ == "__main__":
-#     # resumePath = fetch_resume("testUserId", "V3 Compressed Fabric.docx")
-#     # resumePath = f"{RESUMES_PATH}/testUserId/V3Resume.docx"
-#     resumePath = f"{RESUMES_PATH}/testUserId/Senior-Product-Manager-Resume-Example.docx"
-#     parse_resume_for_sections(resumePath)

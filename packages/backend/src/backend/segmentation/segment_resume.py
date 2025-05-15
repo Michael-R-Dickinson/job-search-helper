@@ -1,5 +1,5 @@
 from docx import Document
-from backend.constants import SECTION_HEADER_TOKENS
+from backend.constants import RESUMES_PATH, SECTION_HEADER_TOKENS
 from backend.docx_functions import (
     iter_doc_paragraphs,
     merge_identical_runs,
@@ -60,3 +60,9 @@ def parse_resume_for_sections(resumePath: str):
             merge_identical_runs(para)
 
     return critical_sections, doc
+
+
+if __name__ == "__main__":
+    # resumePath = f"{RESUMES_PATH}/testUserId/V3Resume.docx"
+    resumePath = f"{RESUMES_PATH}/testUserId/Senior-Product-Manager-Resume-Example.docx"
+    parse_resume_for_sections(resumePath)

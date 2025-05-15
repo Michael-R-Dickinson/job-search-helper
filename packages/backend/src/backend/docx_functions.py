@@ -9,6 +9,8 @@ from docx.table import Table
 from docx.oxml.shared import OxmlElement
 from docx.shared import Inches
 
+from backend.tailoring.schema import SerializedRun
+
 
 def clean_paragraph_whitespace(para: Paragraph) -> None:
     """
@@ -169,6 +171,28 @@ def delete_paragraphs(paragraphs: list[Paragraph]):
 def delete_paragraph(paragraph: Paragraph):
     element = paragraph._element
     element.getparent().remove(element)
+
+
+def add_runs_to_paragraph(
+    paragraph: Paragraph,
+    runs_data: list[SerializedRun],
+    run_template=None,
+):
+    for run in runs_data:
+        if run_template:
+            new_run = copy.deepcopy(run_template)
+            new_run.text = run.text
+            paragraph._p.append(new_run._element)
+
+        else:
+            new_run = paragraph.add_run(run.text)
+
+        if run.styles is not None:
+            new_run.bold = "bold" in run.styles
+            new_run.italic = "italic" in run.styles
+            new_run.underline = "underline" in run.styles
+
+    return paragraph
 
 
 def get_list_indent_level(para: Paragraph) -> int | None:
