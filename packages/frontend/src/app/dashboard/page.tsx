@@ -1,7 +1,12 @@
+'use client'
 import UploadFileInput from '@/components/UploadFileInput'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
+const TEST_RESUME_URL =
+  'https://storage.googleapis.com/jobsearchhelper-231cf.firebasestorage.app/resumes/testUserId/tailored/business_resume._16_19-21-12.docx'
 const Dashboard = () => {
+  const router = useRouter()
   return (
     <main className="grow mt-16">
       <div className="p-8 min-h-screen">
@@ -30,8 +35,13 @@ const Dashboard = () => {
           <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
             <div className="space-y-2">
-              <button className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                New Project
+              <button
+                onClick={() =>
+                  router.push(`/resumeViewer?resumeUrl=${encodeURIComponent(TEST_RESUME_URL)}`)
+                }
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              >
+                Display Resume
               </button>
               <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
                 View All Projects
