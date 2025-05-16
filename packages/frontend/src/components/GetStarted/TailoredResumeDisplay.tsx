@@ -2,6 +2,7 @@ import React from 'react'
 import TailoredResumeLoading from './TailoredResumeLoading'
 import { useQuery } from '@tanstack/react-query'
 import { getTailoredResume } from '@/lib/api'
+import Link from 'next/link'
 
 interface TailoredResumeDisplayProps {
   fileName?: string
@@ -23,14 +24,18 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
   const { json, status } = data || {}
 
   if (isLoading) return loadingScreen
-  if (error) {
-    console.error('Error fetching tailored resume:', error)
-    return <div>Error: {error.message}</div>
+  if (error || status !== 200) {
+    return (
+      <div>
+        Error: {error?.message} {json?.message}
+      </div>
+    )
   }
 
   return (
     <div>
       SUCCESS {json?.message}, url: {json?.download_url}
+      {json?.download_url && <Link href={json?.download_url}></Link>}
     </div>
   )
 }

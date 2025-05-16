@@ -22,12 +22,18 @@ export async function getTailoredResume(
     jobDescriptionLink: linkedInJobUrl,
   })
   const url = `${RESUME_TAILOR_API_URL}?${queryParams.toString()}`
-  console.log('Fetching tailored resume from:', url)
   const res = await fetch(url, {
     method: 'GET',
     cache: 'force-cache',
     next: { revalidate: false },
   })
-  console.log('Response from tailored resume API:', res)
-  return { json: await res.json(), status: res.status, statusText: res.statusText }
+
+  const json = await res.json()
+
+  if (!res.ok) {
+    const errorText = json?.message || 'No error message provided'
+    throw new Error(`Error: ${res.status} ${res.statusText} - ${errorText}`)
+  }
+
+  return { json: json, status: res.status, statusText: res.statusText }
 }
