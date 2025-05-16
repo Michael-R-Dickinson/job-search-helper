@@ -75,14 +75,14 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({}) => {
   }, [currentIndex])
 
   return (
-    <div className="flex flex-col justify-between h-full p-4 pb-2">
+    <div className="flex flex-col justify-between h-full p-4 pb-0">
       <div className="flex flex-col items-center justify-center text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900">
           Your tailored resume is being generated...
         </h2>
       </div>
 
-      <div className="flex flex-col justify-end space-y-2 overflow-hidden">
+      <div className="flex flex-col justify-end space-y-2 overflow-hidden h-44">
         <AnimatePresence initial={false}>
           {completedTasks.map((task, idx) => (
             <motion.div

@@ -29,7 +29,10 @@ const TryForFreeCarouselForm = () => {
     {
       component: (
         <ResumeUploadTile
-          onUploadComplete={(fileName) => updateResumeDetail('fileName', fileName)}
+          onUploadComplete={(fileName) => {
+            updateResumeDetail('fileName', fileName)
+            next()
+          }}
           key="upload"
         />
       ),
@@ -38,7 +41,10 @@ const TryForFreeCarouselForm = () => {
     {
       component: (
         <LinkedinLinkPaste
-          onLinkInputted={(link) => updateResumeDetail('linkedInJobUrl', link)}
+          onLinkInputted={(link) => {
+            updateResumeDetail('linkedInJobUrl', link)
+            next()
+          }}
           key="linkedin"
         />
       ),
@@ -77,7 +83,6 @@ const TryForFreeCarouselForm = () => {
           initial={{ x: 300, opacity: 0, transition: { duration: 0.35 } }}
           animate={{ x: 0, opacity: 1, transition: { duration: 0.35, delay: 0.2 } }}
           exit={{ opacity: 0 }}
-          className="h-full"
         >
           {slides[step].component}
         </motion.div>
