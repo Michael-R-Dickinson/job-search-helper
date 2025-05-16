@@ -16,6 +16,8 @@ type SlideFormat = {
   width?: string
 }
 
+const TEST_USER_ID = 'test_user_id'
+
 const TryForFreeCarouselForm = () => {
   const [resumeDetails, setResumeDetails] = useState<ResumeTailoringDetails>({})
   const updateResumeDetail = (key: keyof ResumeTailoringDetails, value: string) =>
@@ -55,6 +57,7 @@ const TryForFreeCarouselForm = () => {
         <TailoredResumeDisplay
           linkedInJobUrl={resumeDetails.linkedInJobUrl}
           fileName={resumeDetails.fileName}
+          userId={TEST_USER_ID}
           key="tailored"
         />
       ),
