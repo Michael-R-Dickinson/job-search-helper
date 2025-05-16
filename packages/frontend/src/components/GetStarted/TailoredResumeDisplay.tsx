@@ -81,7 +81,6 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({}) => {
         </h2>
       </div>
 
-      {/* Left: Task History + Current */}
       <div className="flex flex-col justify-end space-y-2 overflow-hidden">
         <AnimatePresence initial={false}>
           {completedTasks.map((task, idx) => (
