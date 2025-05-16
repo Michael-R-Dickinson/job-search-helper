@@ -49,8 +49,10 @@ def execute_tailoring_with_gemini(prompt: str):
             system_instruction=LLM_CONTENT_CONFIG,
             response_mime_type="application/json",
             response_schema=ResumeOutput,
-            # Uncomment to disable thinking
-            # thinking_budget=0,
+            thinking_config=types.ThinkingConfig(
+                # Disable thinking
+                thinking_budget=0
+            ),
         ),
     )
 
