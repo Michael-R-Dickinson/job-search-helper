@@ -20,7 +20,7 @@ from backend.deserialization.update_resume import (
 
 
 def upload_tailored_resume(
-    resume_path: str, userId: str, file_name: str, extension: str
+    resume_path: str, userId: str, file_name: str, extension: str, public: bool = False
 ):
     """
     Uploads resume to the user's bucket
@@ -28,9 +28,13 @@ def upload_tailored_resume(
     """
     bucket = storage.bucket()
     fileLocation = bucket.blob(
-        f"{get_user_bucket_path(userId=userId, tailored=True)}/{file_name}_{get_time_string()}"
+        f"{get_user_bucket_path(userId=userId, tailored=True)}/{file_name}_{get_time_string()}{extension}"
     )
     fileLocation.upload_from_filename(resume_path)
+    if public:
+        fileLocation.make_public()
+
+    public_url = fileLocation.public_url
 
     download_url = fileLocation.generate_signed_url(
         version="v4",
@@ -38,7 +42,7 @@ def upload_tailored_resume(
         method="GET",
     )
 
-    return download_url
+    return download_url, public_url
 
 
 def tailor_resume(user_id: str, resume_name: str, linkedin_url: str):

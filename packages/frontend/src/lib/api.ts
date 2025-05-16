@@ -5,6 +5,7 @@ const RESUME_TAILOR_API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-ce
 interface ResponseJson {
   message: string
   docx_download_url: string
+  public_url: string
 }
 
 export async function getTailoredResume(
@@ -32,6 +33,7 @@ export async function getTailoredResume(
 
   if (!res.ok) {
     const errorText = json?.message || 'No error message provided'
+    console.log('Error response:', json)
     throw new Error(`Error: ${res.status} ${res.statusText} - ${errorText}`)
   }
 

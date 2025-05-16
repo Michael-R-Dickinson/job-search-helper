@@ -38,8 +38,8 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
             linkedin_url=jobDescriptionLink,
         )
 
-        docx_download_url = upload_tailored_resume(
-            resume_path, user_id, file_name, extension=".docx"
+        docx_download_url, public_url = upload_tailored_resume(
+            resume_path, user_id, file_name[:-5], extension=".docx", public=True
         )
 
     except DescriptionNotFound as e:
@@ -72,6 +72,7 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
             {
                 "message": "Tailored resume uploaded to firebase",
                 "docx_download_url": docx_download_url,
+                "public_url": public_url,
             }
         ),
         status=200,
