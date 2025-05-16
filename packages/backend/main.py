@@ -1,5 +1,6 @@
 import json
 
+from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
 from backend.firebase import init_firebase
 from backend.tailor_resume import tailor_resume
 from firebase_functions import https_fn, options
@@ -34,10 +35,28 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
             resume_name=fileName,
             linkedin_url=jobDescriptionLink,
         )
+    except DescriptionNotFound as e:
+        print(f"Error fetching job description: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Error fetching job description, {e}"}),
+            status=500,
+        )
+    except LinkedinError as e:
+        print(f"Error parsing job description: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Error parsing job description, {e}"}),
+            status=500,
+        )
+    except ValueError as e:
+        print(f"Invalid inputs: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Invalid inputs, {e}"}),
+            status=400,
+        )
     except Exception as e:
         print(f"Error tailoring resume: {e}")
         return https_fn.Response(
-            f"Error tailoring resume, {e}",
+            json.dumps({"message": f"Error tailoring resume, {e}"}),
             status=500,
         )
 

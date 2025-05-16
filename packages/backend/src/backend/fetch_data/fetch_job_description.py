@@ -1,3 +1,4 @@
+from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
 import requests
 import random
 
@@ -57,8 +58,19 @@ def fetch_job_html(url: str) -> str:
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     }
 
-    resp = requests.get(url, headers=headers)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(url, headers=headers)
+        resp.raise_for_status()
+    except requests.HTTPError as e:
+        if resp.status_code == 403 or resp.status_code == 429:
+            raise LinkedinError(
+                f"Status {resp.status_code}: LinkedIn may have blocked the request."
+            )
+        elif resp.status_code == 404:
+            raise LinkedinError("404 Not Found: The job listing may no longer exist.")
+        else:
+            raise RuntimeError(f"HTTP error: {e}")
+
     return resp.text
 
 
@@ -72,7 +84,7 @@ def parse_job_description(html: str) -> List[Tuple[str, str]]:
     soup = BeautifulSoup(html, "html.parser")
     markup = soup.select_one("div.show-more-less-html__markup")
     if not markup:
-        raise RuntimeError("Couldn't find the description container")
+        raise DescriptionNotFound("Couldn't find the description container")
 
     blocks: List[Tuple[str, str]] = []
     # Depth-first, document order:
