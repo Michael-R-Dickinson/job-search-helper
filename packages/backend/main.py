@@ -2,11 +2,17 @@ from backend.firebase import init_firebase
 from backend.tailor_resume import tailor_resume
 from firebase_functions import https_fn
 from firebase_admin import initialize_app
+from firebase_functions import options
 
 init_firebase()
 
 
-@https_fn.on_request()
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins="*",
+        cors_methods=["get", "post"],
+    )
+)
 def on_request(req: https_fn.Request) -> https_fn.Response:
     print("Received request:", req.args)
 
