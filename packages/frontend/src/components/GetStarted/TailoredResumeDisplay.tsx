@@ -3,7 +3,8 @@ import { CheckCircle2, Loader2 } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 
 interface TailoredResumeDisplayProps {
-  key?: string
+  fileName?: string
+  linkedInJobUrl?: string
 }
 
 const COMPLETING_TASKS: string[] = [

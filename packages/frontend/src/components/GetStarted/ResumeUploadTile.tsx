@@ -4,7 +4,9 @@ import { useState } from 'react'
 import UploadResumeInput from '../UploadResumeButton'
 import PublishResumeProgressButton from './UploadProgressButton'
 
-const ResumeUploadTile: React.FC<{ onUploadComplete: () => void }> = ({ onUploadComplete }) => {
+const ResumeUploadTile: React.FC<{ onUploadComplete: (fileName: string) => void }> = ({
+  onUploadComplete,
+}) => {
   const [resumeFile, setResumeFile] = useState<File | null>(null)
   return (
     <div>
@@ -19,7 +21,7 @@ const ResumeUploadTile: React.FC<{ onUploadComplete: () => void }> = ({ onUpload
         onUploadComplete={() => {
           // Wait a second so so that no transitions happen before animations are complete
           setTimeout(() => {
-            onUploadComplete()
+            onUploadComplete(resumeFile?.name || 'no-name-provided')
           }, 400)
         }}
       />

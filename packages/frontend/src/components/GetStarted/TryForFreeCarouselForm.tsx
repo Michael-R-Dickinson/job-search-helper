@@ -5,6 +5,11 @@ import ResumeUploadTile from './ResumeUploadTile'
 import LinkedinLinkPaste from './LinkedinLinkPaste'
 import TailoredResumeDisplay from './TailoredResumeDisplay'
 
+type ResumeTailoringDetails = {
+  fileName?: string
+  linkedInJobUrl?: string
+}
+
 type SlideFormat = {
   component: React.ReactNode
   height: string
@@ -12,14 +17,44 @@ type SlideFormat = {
 }
 
 const TryForFreeCarouselForm = () => {
-  const [step, setStep] = useState(2)
+  const [resumeDetails, setResumeDetails] = useState<ResumeTailoringDetails>({})
+  const updateResumeDetail = (key: keyof ResumeTailoringDetails, value: string) =>
+    void setResumeDetails((prev) => ({ ...prev, [key]: value }))
+
+  const [step, setStep] = useState(0)
   const maxSlides = 3
   const next = () => void setStep((prev) => (prev + 1 < maxSlides ? prev + 1 : 0))
 
   const slides: SlideFormat[] = [
-    { component: <ResumeUploadTile onUploadComplete={next} key="upload" />, height: '400px' },
-    { component: <LinkedinLinkPaste onLinkInputted={next} key="linkedin" />, height: '275px' },
-    { component: <TailoredResumeDisplay key="tailored" />, height: '400px', width: '600px' },
+    {
+      component: (
+        <ResumeUploadTile
+          onUploadComplete={(fileName) => updateResumeDetail('fileName', fileName)}
+          key="upload"
+        />
+      ),
+      height: '400px',
+    },
+    {
+      component: (
+        <LinkedinLinkPaste
+          onLinkInputted={(link) => updateResumeDetail('linkedInJobUrl', link)}
+          key="linkedin"
+        />
+      ),
+      height: '275px',
+    },
+    {
+      component: (
+        <TailoredResumeDisplay
+          linkedInJobUrl={resumeDetails.linkedInJobUrl}
+          fileName={resumeDetails.fileName}
+          key="tailored"
+        />
+      ),
+      height: '400px',
+      width: '600px',
+    },
   ]
 
   return (
