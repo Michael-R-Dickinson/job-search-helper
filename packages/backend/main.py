@@ -3,6 +3,7 @@ import json
 from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
 from backend.firebase import init_firebase
 from backend.tailor_resume import tailor_resume
+from backend.util import validate_inputs
 from firebase_functions import https_fn, options
 from firebase_admin import initialize_app
 
@@ -23,13 +24,13 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
     fileName = req.args.get("fileName")
     jobDescriptionLink = req.args.get("jobDescriptionLink")
 
-    if not userId or not fileName or not jobDescriptionLink:
-        return https_fn.Response(
-            "Missing userId or fileName or jobDescriptionLink in the request.",
-            status=400,
+    try:
+        validate_inputs(
+            userId=userId,
+            fileName=fileName,
+            jobDescriptionLink=jobDescriptionLink,
         )
 
-    try:
         download_url = tailor_resume(
             userId=userId,
             resume_name=fileName,
@@ -63,8 +64,8 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
     return https_fn.Response(
         json.dumps(
             {
-                "message": f"Tailored resume uploaded to: {download_url}",
-                download_url: download_url,
+                "message": "Tailored resume uploaded to firebase",
+                "download_url": download_url,
             }
         ),
         status=200,

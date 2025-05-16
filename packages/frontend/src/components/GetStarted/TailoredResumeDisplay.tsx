@@ -25,6 +25,7 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
 
   if (isLoading) return loadingScreen
   if (error || status !== 200) {
+    console.error('Error fetching tailored resume:', error)
     return (
       <div>
         Error: {error?.message} {json?.message}
@@ -33,9 +34,9 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
   }
 
   return (
-    <div>
-      SUCCESS {json?.message}, url: {json?.download_url}
-      {json?.download_url && <Link href={json?.download_url}></Link>}
+    <div className="flex flex-col">
+      SUCCESS {json?.message}
+      {json?.download_url && <Link href={json?.download_url}>Download Resume</Link>}
     </div>
   )
 }
