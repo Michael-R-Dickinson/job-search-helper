@@ -1,11 +1,12 @@
 import json
 
-from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
-from backend.firebase import init_firebase
-from backend.tailor_resume import tailor_resume
-from backend.util import validate_inputs
 from firebase_functions import https_fn, options
 from firebase_admin import initialize_app
+
+from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
+from backend.firebase import init_firebase
+from backend.tailor_resume import tailor_resume, upload_tailored_resume
+from backend.util import validate_inputs
 
 init_firebase()
 
@@ -20,22 +21,27 @@ init_firebase()
     )
 )
 def on_request(req: https_fn.Request) -> https_fn.Response:
-    userId = req.args.get("userId")
-    fileName = req.args.get("fileName")
+    user_id = req.args.get("userId")
+    file_name = req.args.get("fileName")
     jobDescriptionLink = req.args.get("jobDescriptionLink")
 
     try:
         validate_inputs(
-            userId=userId,
-            fileName=fileName,
+            userId=user_id,
+            fileName=file_name,
             jobDescriptionLink=jobDescriptionLink,
         )
 
-        download_url = tailor_resume(
-            userId=userId,
-            resume_name=fileName,
+        resume_path = tailor_resume(
+            user_id=user_id,
+            resume_name=file_name,
             linkedin_url=jobDescriptionLink,
         )
+
+        docx_download_url = upload_tailored_resume(
+            resume_path, user_id, file_name, extension=".docx"
+        )
+
     except DescriptionNotFound as e:
         print(f"Error fetching job description: {e}")
         return https_fn.Response(
@@ -65,8 +71,20 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
         json.dumps(
             {
                 "message": "Tailored resume uploaded to firebase",
-                "download_url": download_url,
+                "docx_download_url": docx_download_url,
             }
         ),
         status=200,
     )
+
+
+if __name__ == "__main__":
+    req = https_fn.Request(
+        environ={
+            "userId": "testUserId",
+            "fileName": "business_resume.docx_16_06-45-52.docx",
+            "jobDescriptionLink": "https://www.linkedin.com/jobs/view/4096785875/?alternateChannel=search",
+        }
+    )
+    res = on_request(req)
+    print(res.get_data(as_text=True))

@@ -4,7 +4,7 @@ const RESUME_TAILOR_API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-ce
 
 interface ResponseJson {
   message: string
-  download_url: string
+  docx_download_url: string
 }
 
 export async function getTailoredResume(

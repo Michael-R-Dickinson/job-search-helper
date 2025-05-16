@@ -36,7 +36,7 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
   return (
     <div className="flex flex-col">
       SUCCESS {json?.message}
-      {json?.download_url && <Link href={json?.download_url}>Download Resume</Link>}
+      DOCX: {json?.docx_download_url && <Link href={json?.docx_download_url}>Download Resume</Link>}
     </div>
   )
 }

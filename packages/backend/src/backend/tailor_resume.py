@@ -19,14 +19,16 @@ from backend.deserialization.update_resume import (
 )
 
 
-def upload_tailored_resume(resume_path: str, userId: str, resume_name: str):
+def upload_tailored_resume(
+    resume_path: str, userId: str, file_name: str, extension: str
+):
     """
     Uploads resume to the user's bucket
     returns download url
     """
     bucket = storage.bucket()
     fileLocation = bucket.blob(
-        f"{get_user_bucket_path(userId=userId, tailored=True)}/{resume_name}_{get_time_string()}.docx"
+        f"{get_user_bucket_path(userId=userId, tailored=True)}/{file_name}_{get_time_string()}"
     )
     fileLocation.upload_from_filename(resume_path)
 
@@ -39,10 +41,10 @@ def upload_tailored_resume(resume_path: str, userId: str, resume_name: str):
     return download_url
 
 
-def tailor_resume(userId: str, resume_name: str, linkedin_url: str):
+def tailor_resume(user_id: str, resume_name: str, linkedin_url: str):
     job_description = fetch_job_description_markdown(linkedin_url)
 
-    resume_path = fetch_and_download_resume(userId, resume_name)
+    resume_path = fetch_and_download_resume(user_id, resume_name)
     resume_sections, doc = parse_resume_for_sections(resume_path)
     sections_strings = serialize_sections(resume_sections)
 
@@ -69,9 +71,7 @@ def tailor_resume(userId: str, resume_name: str, linkedin_url: str):
     os.makedirs(f"{RESUMES_PATH}/outputs", exist_ok=True)
     doc.save(resume_path)
 
-    download_url = upload_tailored_resume(resume_path, userId, resume_name)
-
-    return download_url
+    return resume_path
 
 
 if __name__ == "__main__":
