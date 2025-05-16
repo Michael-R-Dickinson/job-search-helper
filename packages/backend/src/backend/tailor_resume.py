@@ -78,5 +78,5 @@ if __name__ == "__main__":
     tailor_resume(
         "testUserId",
         "V3 Compressed Fabric.docx",
-        "https://www.linkedin.com/jobs/view/4220271151/?alternateChannel=search",
+        "https://www.linkedin.com/jobs/view/4189842654/?alternateChannel=search",
     )

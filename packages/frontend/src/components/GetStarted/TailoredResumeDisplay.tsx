@@ -23,11 +23,14 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
   const { json, status } = data || {}
 
   if (isLoading) return loadingScreen
-  if (error) return <div>Error: {JSON.stringify(error)}</div>
+  if (error) {
+    console.error('Error fetching tailored resume:', error)
+    return <div>Error: {error.message}</div>
+  }
 
   return (
     <div>
-      SUCCESS: {json}, status: {status}
+      SUCCESS {json?.message}, url: {json?.download_url}
     </div>
   )
 }

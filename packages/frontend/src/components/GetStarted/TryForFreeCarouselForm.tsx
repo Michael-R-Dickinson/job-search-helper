@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import ResumeUploadTile from './ResumeUploadTile'
 import LinkedinLinkPaste from './LinkedinLinkPaste'
 import TailoredResumeDisplay from './TailoredResumeDisplay'
+import { auth } from '../../../firebase'
 
 type ResumeTailoringDetails = {
   fileName?: string
@@ -15,8 +16,6 @@ type SlideFormat = {
   height: string
   width?: string
 }
-
-const TEST_USER_ID = 'test_user_id'
 
 const TryForFreeCarouselForm = () => {
   const [resumeDetails, setResumeDetails] = useState<ResumeTailoringDetails>({})
@@ -57,7 +56,7 @@ const TryForFreeCarouselForm = () => {
         <TailoredResumeDisplay
           linkedInJobUrl={resumeDetails.linkedInJobUrl}
           fileName={resumeDetails.fileName}
-          userId={TEST_USER_ID}
+          userId={auth.currentUser.uid}
           key="tailored"
         />
       ),
