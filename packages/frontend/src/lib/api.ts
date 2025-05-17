@@ -30,6 +30,7 @@ export async function getTailoredResume(
   })
 
   const json = await res.json()
+  console.log('Response JSON:', json)
 
   if (!res.ok) {
     const errorText = json?.message || 'No error message provided'
