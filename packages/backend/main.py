@@ -1,5 +1,6 @@
 import json
 
+from backend.docx_to_pdf import convert_docx_to_pdf
 from firebase_functions import https_fn, options
 from firebase_admin import initialize_app
 
@@ -38,6 +39,8 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
             linkedin_url=jobDescriptionLink,
         )
 
+        pdf_url = convert_docx_to_pdf(resume_path)
+
         docx_download_url, public_url = upload_tailored_resume(
             resume_path, user_id, file_name[:-5], extension=".docx", public=True
         )
@@ -73,6 +76,7 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
                 "message": "Tailored resume uploaded to firebase",
                 "docx_download_url": docx_download_url,
                 "public_url": public_url,
+                "pdf_url": pdf_url,
             }
         ),
         status=200,

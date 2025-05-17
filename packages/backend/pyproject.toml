@@ -20,6 +20,7 @@ md2docx-python = "^1.0.0"
 google-genai = "^1.14.0"
 python-dotenv = "^1.1.0"
 firebase-functions = "^0.4.2"
+cloudconvert = "^2.1.0"
 
 
 [build-system]

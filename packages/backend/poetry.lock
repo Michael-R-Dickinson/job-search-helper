@@ -302,6 +302,21 @@ files = [
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
+name = "cloudconvert"
+version = "2.1.0"
+description = "Python REST API wrapper for cloud convert"
+optional = false
+python-versions = "*"
+files = [
+    {file = "cloudconvert-2.1.0-py3-none-any.whl", hash = "sha256:70736187f3e05eb233971428d1c423581967ef855e0a9e37a5e2b7eea14c3b3b"},
+    {file = "cloudconvert-2.1.0.tar.gz", hash = "sha256:2de51626baebb7a6096475795c6e2f188a3733e4aca110ff3c51355e9a0953af"},
+]
+
+[package.dependencies]
+requests = "*"
+urllib3 = "*"
+
+[[package]]
 name = "cloudevents"
 version = "1.9.0"
 description = "CloudEvents Python SDK"
@@ -1892,4 +1907,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "67f67ae6a9b2b0b350370b9f7510248d5ca6b6f2fff79b69aa18259af685dfb4"
+content-hash = "170f5c0b1d7993e06b711f6693231e5b0e79432f25f31180ff8b780e36843884"
