@@ -1,8 +1,9 @@
+'use client'
 import React from 'react'
 import TailoredResumeLoading from './TailoredResumeLoading'
 import { useQuery } from '@tanstack/react-query'
 import { getTailoredResume } from '@/lib/api'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface TailoredResumeDisplayProps {
   fileName?: string
@@ -15,7 +16,6 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
   linkedInJobUrl,
   userId,
 }) => {
-  const loadingScreen = <TailoredResumeLoading />
   const { data, isLoading, error } = useQuery({
     queryKey: ['tailorResume', userId, fileName, linkedInJobUrl],
     queryFn: async () => await getTailoredResume(fileName!, linkedInJobUrl!, userId!),
@@ -23,7 +23,8 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
   })
   const { json, status } = data || {}
 
-  if (isLoading) return loadingScreen
+  if (isLoading) return <TailoredResumeLoading />
+
   if (error || status !== 200) {
     console.error('Error fetching tailored resume:', error)
     return (
@@ -33,14 +34,13 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
     )
   }
 
-  console.log('Tailored Resume:', json)
-  return (
-    <div className="flex flex-col">
-      SUCCESS {json?.message}
-      DOCX: {json?.docx_download_url && <Link href={json?.docx_download_url}>Download Resume</Link>}
-      PUBLIC_URL: {json?.public_url && <Link href={json?.public_url}>View Resume</Link>}
-    </div>
-  )
+  if (!json) {
+    return <div>No tailored resume data available</div>
+  }
+
+  if (json?.pdf_url) {
+    window.open(json.pdf_url, '_blank', 'noopener,noreferrer')
+  }
 }
 
 export default TailoredResumeDisplay

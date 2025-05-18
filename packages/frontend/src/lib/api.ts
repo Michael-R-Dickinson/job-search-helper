@@ -6,6 +6,7 @@ interface ResponseJson {
   message: string
   docx_download_url: string
   public_url: string
+  pdf_url: string
 }
 
 export async function getTailoredResume(
