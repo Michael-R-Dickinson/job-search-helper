@@ -5,10 +5,14 @@ import ResumeUploadTile from './ResumeUploadTile'
 import LinkedinLinkPaste from './LinkedinLinkPaste'
 import TailoredResumeHandler from './TailoredResumeHandler'
 import { auth } from '../../../firebase'
+import SelectSkillsHandler from './SelectSkillsHandler'
+import { QuestionAnswers } from '@/lib/api'
 
-type ResumeTailoringDetails = {
+export type ResumeTailoringDetails = {
   fileName?: string
   linkedInJobUrl?: string
+  chatId?: string
+  questionAnswers?: QuestionAnswers
 }
 
 type SlideFormat = {
@@ -53,10 +57,20 @@ const TryForFreeCarouselForm = () => {
     },
     {
       component: (
-        <TailoredResumeHandler
-          linkedInJobUrl={resumeDetails.linkedInJobUrl}
-          fileName={resumeDetails.fileName}
+        <SelectSkillsHandler
           userId={auth.currentUser.uid}
+          fileName={resumeDetails.fileName}
+          linkedInJobUrl={resumeDetails.linkedInJobUrl}
+          setResumeDetail={updateResumeDetail}
+        />
+      ),
+      height: '400px',
+    },
+    {
+      component: (
+        <TailoredResumeHandler
+          userId={auth.currentUser.uid}
+          fileName={resumeDetails.fileName}
           key="tailored"
         />
       ),

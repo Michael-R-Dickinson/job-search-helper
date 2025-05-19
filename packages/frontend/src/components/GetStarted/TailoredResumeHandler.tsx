@@ -2,24 +2,25 @@
 import React from 'react'
 import TailoredResumeLoading from './TailoredResumeLoading'
 import { useQuery } from '@tanstack/react-query'
-import { getTailoredResume } from '@/lib/api'
-import { useRouter } from 'next/router'
+import { getTailoredResume, QuestionAnswers } from '@/lib/api'
 
 interface TailoredResumeDisplayProps {
-  fileName?: string
-  linkedInJobUrl?: string
   userId: string
+  fileName?: string
+  chatId?: string
+  questionAnswers?: QuestionAnswers
 }
 
 const TailoredResumeHandler: React.FC<TailoredResumeDisplayProps> = ({
-  fileName,
-  linkedInJobUrl,
   userId,
+  fileName,
+  chatId,
+  questionAnswers,
 }) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['tailorResume', userId, fileName, linkedInJobUrl],
-    queryFn: async () => await getTailoredResume(fileName!, linkedInJobUrl!, userId!),
-    enabled: Boolean(fileName && linkedInJobUrl),
+    queryKey: ['tailorResume', userId, fileName, chatId],
+    queryFn: async () => await getTailoredResume(fileName!, userId!, chatId!, questionAnswers!), // We know these will be defined because the query is disabled otherwise
+    enabled: Boolean(fileName && userId && chatId && questionAnswers),
   })
   const { json, status } = data || {}
 
