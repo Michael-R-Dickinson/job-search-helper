@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from pydantic import BaseModel
 
 
@@ -16,7 +16,35 @@ class SerializedParagraph(BaseModel):
         return "".join(run.text for run in self.runs)
 
 
-class ResumeOutput(BaseModel):
+class ResumeContent(BaseModel):
     experienceSection: list[SerializedParagraph]
     skillsSection: list[SerializedParagraph]
     skillsAdded: list[str]
+
+
+class ResumeTailoringQuestions(BaseModel):
+    skills_to_add: list[str]
+    experience_questions: list[str]
+
+    def to_dict(self) -> dict:
+        return {
+            "skills_to_add": self.skills_to_add,
+            "experience_questions": self.experience_questions,
+        }
+
+
+ResponseSchema = Union[ResumeTailoringQuestions, ResumeContent]
+
+
+QuestionAnswers = dict[str, bool]
+
+
+class AnsweredResumeTailoringQuestions(BaseModel):
+    skills_to_add: QuestionAnswers
+    experience_questions: QuestionAnswers
+
+    def to_dict(self) -> dict:
+        return {
+            "skills_to_add": self.skills_to_add,
+            "experience_questions": self.experience_questions,
+        }

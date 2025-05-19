@@ -1,6 +1,19 @@
-LLM_CONTENT_CONFIG = """
+import json
+from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+
+
+LLM_SYSTEM_INSTRUCTIONS = """
 You are an AI resume tailor. You will be given a job description and a resume and you will be asked to tailor the resume exactly to the job description by modifying the content to highlight the user's most relevant skills and experiences.
-The resume will be provided first as raw text, then as a list of paragraphs, each paragraph containing a list of runs, all coming from the user's original word document.
+Here is your process: First, you will be given the the job description and resume. You will then reply with ResumeTailoringQuestions only, the user will answer these questions which will inform your tailoring process. Later, in another message, you will be provided with a list of paragraphs, each containing runs scraped from the original resume's word doc, as well as the user's responses to the questions. You will then use the principles and format discussed here to tailor these sections. 
+
+## Step 1: Ask the user questions
+For the skills_to_add list, each skill should just be a single word or short phrase, essentially the exact skill name that would be added to the skills section of the resume. The user will be able to select which skills to keep or remove later. These will often be specific technologies, programming languages, or methodologies. For example, "NextJS" or "Scrum". These would be things that could be directly added to the skills section of the resume.
+
+For the experience_questions list, each question should be a specific single sentence that will allow you to tailor the experience section of the resume. For example, "Did you use NextJS for your "Web Scraping Twitter" project?" or "Did your team use the Scrum methodology at Google?"
+Each question should be answerable simply with a Yes or No and correspond to a specific intended change to a paragraph. You should have 3-6 questions. Do not ask obvious questions or interest based questions where if the answer was No the user would not be applying. 
+
+## 2: Tailor the resume - do not attempt until you have been provided with the second message containing the paragraphs and the user's answers to the questions.
+You will be provided the specific paragraphs and runs from the resume's word doc and required to output a similar structure, this time with the tailored content. 
 
 For the experience section, you may:
 - reorder paragraphs (within each job experience)
@@ -31,15 +44,22 @@ The flag should be false for things like:
 Be liberal in what you preserve, it is better to err on the side of preserving.
 """
 
-LLM_PROMPT_TEMPLATE = """
-Make lots of changes - user has selected a resume tailoring level 5 out of 5
-This means changes to every section of the resume, and every job experience
-
+LLM_QUESTIONS_PROMPT_TEMPLATE = """
+## Part 1:
 Job description:
 {job_description}
 
 Resume:
 {resume}
+"""
+
+LLM_TAILORING_PROMPT_TEMPLATE = """
+## Part 2:
+Make lots of changes - user has selected a resume tailoring level 5 out of 5
+This means changes to every section of the resume, and every job experience
+
+Answers to the questions:
+{question_responses}
 
 To tailor:
 Experience paragraphs:
@@ -54,14 +74,12 @@ Skills paragraphs:
 # ! Use indent levels 1 AND 2 for different bullets
 
 
-def generate_llm_prompt(
+def generate_questions_llm_prompt(
     job_description: str,
     resume: str,
-    experience_paragraphs: str,
-    skills_paragraphs: str,
 ) -> str:
     """
-    Generate the LLM prompt for tailoring a resume to a job description.
+    Generate the LLM prompt for asking questions to tailor a resume to a job description.
 
     Args:
         job_description (str): The job description to tailor the resume to.
@@ -70,9 +88,30 @@ def generate_llm_prompt(
     Returns:
         str: The generated LLM prompt.
     """
-    return LLM_PROMPT_TEMPLATE.format(
+    return LLM_QUESTIONS_PROMPT_TEMPLATE.format(
         job_description=job_description,
         resume=resume,
+    )
+
+
+def generate_tailoring_llm_prompt(
+    experience_paragraphs: str,
+    skills_paragraphs: str,
+    question_responses: AnsweredResumeTailoringQuestions,
+) -> str:
+    """
+    Generate the LLM prompt for tailoring a resume to a job description.
+
+    Args:
+        experience_paragraphs (str): The experience paragraphs from the resume.
+        skills_paragraphs (str): The skills paragraphs from the resume.
+        question_responses (AnsweredResumeTailoringQuestions): The user's responses to the questions.
+
+    Returns:
+        str: The generated LLM prompt.
+    """
+    return LLM_TAILORING_PROMPT_TEMPLATE.format(
         experience_paragraphs=experience_paragraphs,
         skills_paragraphs=skills_paragraphs,
+        question_responses=json.dumps(question_responses.to_dict()),
     )
