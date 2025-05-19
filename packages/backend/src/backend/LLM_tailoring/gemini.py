@@ -1,13 +1,18 @@
 import os
 from dotenv import load_dotenv
-from pydantic import BaseModel
 
 from google import genai
 from google.genai import types
 
-from backend.LLM_tailoring.schema import ResumeOutput
+from backend.LLM_tailoring.schema import (
+    ResponseSchema,
+    ResumeContent,
+    ResumeTailoringQuestions,
+)
 from backend.constants import CACHE_PATH
-from backend.LLM_tailoring.LLM_prompt import LLM_CONTENT_CONFIG
+from backend.LLM_tailoring.LLM_prompt import (
+    LLM_SYSTEM_INSTRUCTIONS,
+)
 
 
 def load_cached_response():
@@ -20,45 +25,60 @@ def load_cached_response():
     with open(CACHE_PATH, "r") as f:
         raw = f.read()
     # parse back into Pydantic model
-    return ResumeOutput.parse_raw(raw)
+    return ResumeContent.parse_raw(raw)
 
 
-def cache_response(response: ResumeOutput):
+def cache_response(response: ResumeContent):
     # We always cache the response, even if we don't load it later
     # This is because we want to be able to debug the response if needed
     with open(CACHE_PATH, "w") as f:
         f.write(response.json())
 
 
-def execute_tailoring_with_gemini(prompt: str):
+def get_chat(**kwargs):
     load_dotenv()
-
-    cached_response = load_cached_response()
-    if cached_response is not None:
-        return cached_response
-
     api_key = os.environ.get("GCP_AI_API_KEY")
-
     client = genai.Client(api_key=api_key)
-    response = client.models.generate_content(
-        # Flash 2.5 is stronger but more expensive
-        # model="gemini-2.0-flash",
-        model="gemini-2.5-flash-preview-04-17",
-        contents=prompt,
+
+    chat = client.chats.create(
         config=types.GenerateContentConfig(
-            system_instruction=LLM_CONTENT_CONFIG,
+            system_instruction=LLM_SYSTEM_INSTRUCTIONS,
             response_mime_type="application/json",
-            response_schema=ResumeOutput,
+            response_schema=ResponseSchema,
             thinking_config=types.ThinkingConfig(
                 # Disable thinking
                 thinking_budget=0
             ),
         ),
+        model="gemini-2.5-flash-preview-04-17",
+        **kwargs,
     )
 
-    # Use instantiated objects.
-    tailored_resume_raw: ResumeOutput = response.parsed
-    cache_response(tailored_resume_raw)
+    return chat
+
+
+def generate_questions_with_llm(prompt: str):
+    chat = get_chat()
+    response = chat.send_message(prompt)
+    chat_history = chat.get_history()
+
+    questions_raw: ResumeTailoringQuestions = response.parsed
+
+    return questions_raw, chat_history
+
+
+def execute_tailoring_with_gemini(prompt: str, chat_history: dict) -> ResumeContent:
+    cached_response = load_cached_response()
+    if cached_response is not None:
+        return cached_response
+
+    # Bring back chat history which includes the resume and job description
+    chat = get_chat(history=chat_history)
+    response = chat.send_message(
+        prompt,
+    )
+
+    tailored_resume_raw: ResumeContent = response.parsed
 
     return tailored_resume_raw
 
