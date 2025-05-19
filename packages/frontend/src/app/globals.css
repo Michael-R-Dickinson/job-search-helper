@@ -4,6 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@plugin "daisyui";
+
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
