@@ -94,13 +94,14 @@ const TryForFreeCarouselForm = () => {
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.div
-          layout
+          layout="position"
           key={step}
           initial={{ x: 300, opacity: 0, transition: { duration: 0.35 } }}
           animate={{ x: 0, opacity: 1, transition: { duration: 0.35, delay: 0.2 } }}
           exit={{ opacity: 0 }}
+          className="h-full w-full"
         >
-          {slides[step].component}
+          <>{slides[step].component}</>
         </motion.div>
       </AnimatePresence>
     </motion.div>
