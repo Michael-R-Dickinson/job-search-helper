@@ -19,5 +19,6 @@ def fetch_and_download_resume(userId: str, resumeName: str):
 
 
 if __name__ == "__main__":
+    init_firebase()
     resumePath = fetch_and_download_resume("testUserId", "V3 Compressed Fabric.docx")
     print(resumePath)
