@@ -12,7 +12,11 @@ from backend.tailor_resume import (
     tailor_resume,
     upload_tailored_resume,
 )
-from backend.util import generate_uuid, validate_inputs
+from backend.util import (
+    generate_uuid,
+    validate_inputs_questions,
+    validate_inputs_tailoring,
+)
 
 init_firebase()
 
@@ -65,11 +69,10 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
 def handle_resume_questions_request(
     user_id: str, file_name: str, job_description_link: str
 ):
-    validate_inputs(
+    validate_inputs_questions(
         userId=user_id,
         fileName=file_name,
         job_description_link=job_description_link,
-        require_job_description=True,
     )
 
     questions, chat_history = get_tailoring_questions(
@@ -104,11 +107,10 @@ def handle_resume_tailor_request(
     History object with the context of the resume, and job description
     """
     try:
-        validate_inputs(
+        validate_inputs_tailoring(
             userId=user_id,
             fileName=file_name,
             question_answers=question_answers,
-            require_question_answers=True,
         )
 
         question_responses = json.loads(question_answers)

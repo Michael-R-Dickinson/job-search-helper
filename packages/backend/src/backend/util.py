@@ -88,53 +88,63 @@ def validate_file_name(file_name: str) -> bool:
     return bool(pattern.match(file_name))
 
 
-def validate_inputs(
+def validate_file_name_and_userId(
     userId: str,
     fileName: str,
-    job_description_link: Optional[str] = None,
-    question_answers: Optional[str] = None,
-    require_job_description: bool = False,
-    require_question_answers: bool = False,
-) -> bool:
+):
     """
-    Validates the inputs
+    Validates the file name and userId
     """
     if not userId or not fileName:
-        raise ValueError(
-            "Missing userId or fileName or jobDescriptionLink in the request."
-        )
+        raise ValueError("Missing userId or fileName in the request.")
 
     if not validate_file_name(fileName):
         raise ValueError(
             "Invalid file name. Please provide a valid file name with .docx extension."
         )
 
-    if require_job_description and not job_description_link:
+
+def validate_inputs_questions(
+    userId: str,
+    fileName: str,
+    job_description_link: str,
+):
+    validate_file_name_and_userId(
+        userId=userId,
+        fileName=fileName,
+    )
+    if not job_description_link:
         raise ValueError(
             "Missing jobDescriptionLink in the request. Please provide a valid LinkedIn job description link."
         )
-
-    if (job_description_link is not None) and (
-        not validate_linkedin_url(job_description_link)
-    ):
+    if not validate_linkedin_url(job_description_link):
         raise ValueError(
             "Invalid LinkedIn URL. Please provide a valid LinkedIn job description link."
         )
 
-    if require_question_answers and not question_answers:
+
+def validate_inputs_tailoring(
+    userId: str,
+    fileName: str,
+    question_answers: str,
+):
+    validate_file_name_and_userId(
+        userId=userId,
+        fileName=fileName,
+    )
+    if not question_answers:
         raise ValueError(
             "Missing questionAnswers in the request. Please provide valid question answers."
         )
-    if question_answers is not None:
-        try:
-            question_answers_obj = json.loads(question_answers)
-            AnsweredResumeTailoringQuestions(**question_answers_obj)
-        except json.JSONDecodeError as e:
-            raise ValueError(
-                f"Invalid questionAnswers format. Please provide valid JSON. Error: {e}"
-            )
-        except ValidationError as e:
-            raise ValueError(f"Validation failed for questionAnswers: {e.errors()}")
+    try:
+        question_answers_obj = json.loads(question_answers)
+        AnsweredResumeTailoringQuestions(**question_answers_obj)
+    except json.JSONDecodeError as e:
+        raise ValueError(
+            f"Invalid questionAnswers format. Please provide valid JSON. Error: {e}"
+        )
+    except ValidationError as e:
+        raise ValueError(f"Validation failed for questionAnswers: {e.errors()}")
 
 
 def generate_uuid() -> str:
