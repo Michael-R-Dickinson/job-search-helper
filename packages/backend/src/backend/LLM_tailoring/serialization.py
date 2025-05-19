@@ -42,7 +42,7 @@ def json_serialize_paragraph(paragraph: Paragraph):
     return serialized_paragraph
 
 
-def serialize_sections(sections):
+def serialize_sections(sections) -> dict:
     """
     Format the sections for the LLM.
     """
