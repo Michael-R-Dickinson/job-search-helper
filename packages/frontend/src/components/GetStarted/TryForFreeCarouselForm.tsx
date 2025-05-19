@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import React, { useState } from 'react'
 import ResumeUploadTile from './ResumeUploadTile'
 import LinkedinLinkPaste from './LinkedinLinkPaste'
-import TailoredResumeDisplay from './TailoredResumeDisplay'
+import TailoredResumeHandler from './TailoredResumeHandler'
 import { auth } from '../../../firebase'
 
 type ResumeTailoringDetails = {
@@ -53,7 +53,7 @@ const TryForFreeCarouselForm = () => {
     },
     {
       component: (
-        <TailoredResumeDisplay
+        <TailoredResumeHandler
           linkedInJobUrl={resumeDetails.linkedInJobUrl}
           fileName={resumeDetails.fileName}
           userId={auth.currentUser.uid}

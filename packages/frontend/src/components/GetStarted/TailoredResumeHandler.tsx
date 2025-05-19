@@ -11,7 +11,7 @@ interface TailoredResumeDisplayProps {
   userId: string
 }
 
-const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
+const TailoredResumeHandler: React.FC<TailoredResumeDisplayProps> = ({
   fileName,
   linkedInJobUrl,
   userId,
@@ -43,4 +43,4 @@ const TailoredResumeDisplay: React.FC<TailoredResumeDisplayProps> = ({
   }
 }
 
-export default TailoredResumeDisplay
+export default TailoredResumeHandler
