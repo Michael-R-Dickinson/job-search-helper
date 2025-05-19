@@ -126,12 +126,18 @@ def validate_inputs_questions(
 def validate_inputs_tailoring(
     userId: str,
     fileName: str,
+    chat_id: str,
     question_answers: str,
 ):
     validate_file_name_and_userId(
         userId=userId,
         fileName=fileName,
     )
+    if not chat_id:
+        raise ValueError(
+            "Missing chatId in the request. Please provide a valid chat ID."
+        )
+
     if not question_answers:
         raise ValueError(
             "Missing questionAnswers in the request. Please provide valid question answers."

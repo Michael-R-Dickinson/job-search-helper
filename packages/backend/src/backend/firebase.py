@@ -36,6 +36,10 @@ def unpickle_object(obj: str) -> object:
     return pickle.loads(pickled_obj)
 
 
+def get_cache_path(id: str) -> str:
+    return f"cache/{id}"
+
+
 def cache_set_object(id: str, obj: object, expiry_length_seconds: int = 3600):
     """
     Cache an object at a given ID in Firebase.
@@ -47,7 +51,7 @@ def cache_set_object(id: str, obj: object, expiry_length_seconds: int = 3600):
         ).isoformat(),
     }
 
-    ref = db.reference(f"cache/{id}")
+    ref = db.reference(get_cache_path(id))
     ref.set(payload)
 
 
@@ -55,10 +59,15 @@ def cache_get_object(id: str) -> object:
     """
     Get an object from the cache.
     """
-    ref = db.reference(f"cache/{id}")
+    ref = db.reference(get_cache_path(id))
+    print("path", ref.path)
     payload = ref.get()
 
-    obj = payload["object"]
+    try:
+        obj = payload["object"]
+    except TypeError:
+        raise ValueError("Object not found in cache")
+
     return unpickle_object(obj)
 
 

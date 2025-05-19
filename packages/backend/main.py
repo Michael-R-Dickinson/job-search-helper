@@ -83,7 +83,7 @@ def handle_resume_questions_request(
 
     chat_id = generate_uuid()
     cache_set_object(
-        id=f"chats/{chat_id}",
+        id=chat_id,
         obj=chat_history,
     )
 
@@ -110,6 +110,7 @@ def handle_resume_tailor_request(
         validate_inputs_tailoring(
             userId=user_id,
             fileName=file_name,
+            chat_id=chat_id,
             question_answers=question_answers,
         )
 
