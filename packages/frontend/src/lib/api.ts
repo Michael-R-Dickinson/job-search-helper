@@ -16,6 +16,7 @@ export interface QuestionsResponse {
     skills_to_add: string[]
     experience_questions: string[]
   }
+  chat_id: string
 }
 
 export const getTailoringQuestions = async (
@@ -69,7 +70,10 @@ export const getTailoredResume = async (
     userId: userId,
     fileName: fileName,
     chatId: chatId,
-    questionAnswers: JSON.stringify(questionAnswers),
+    questionAnswers: JSON.stringify({
+      skills_to_add: questionAnswers.skillsToAdd,
+      experience_questions: questionAnswers.experienceQuestions,
+    }),
   })
   const url = `${RESUME_TAILOR_API_URL}?${queryParams.toString()}`
   const res = await fetch(url, {

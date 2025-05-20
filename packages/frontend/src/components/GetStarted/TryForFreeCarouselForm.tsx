@@ -67,9 +67,7 @@ const TryForFreeCarouselForm = () => {
           fileName={resumeDetails.fileName}
           linkedInJobUrl={resumeDetails.linkedInJobUrl}
           setResumeDetail={updateResumeDetail}
-          onQuestionsAnsweredCallback={() => {
-            next()
-          }}
+          onQuestionsAnsweredCallback={() => next()}
         />
       ),
       height: '500px',
@@ -80,6 +78,8 @@ const TryForFreeCarouselForm = () => {
         <TailoredResumeHandler
           userId={auth.currentUser.uid}
           fileName={resumeDetails.fileName}
+          chatId={resumeDetails.chatId}
+          questionAnswers={resumeDetails.questionAnswers}
           key="tailored"
         />
       ),
@@ -87,6 +87,7 @@ const TryForFreeCarouselForm = () => {
       width: '600px',
     },
   ]
+  console.log('resume details', resumeDetails)
 
   return (
     // This outer motion.div only deals with the height and width of the carousel tile

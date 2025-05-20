@@ -48,6 +48,10 @@ const SelectSkillsDisplay: React.FC<SelectSkillsDisplayProps> = ({
               skillsToAdd: skillsSelected,
               experienceQuestions: experienceQuestionAnswers,
             })
+            console.log('set questionAnswers to', {
+              skillsToAdd: skillsSelected,
+              experienceQuestions: experienceQuestionAnswers,
+            })
             onQuestionsAnsweredCallback?.()
           }}
         />

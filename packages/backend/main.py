@@ -92,7 +92,7 @@ def handle_resume_questions_request(
             {
                 "message": "Tailoring questions generated",
                 "questions": questions.to_dict(),
-                "chatId": chat_id,
+                "chat_id": chat_id,
             }
         ),
         status=200,

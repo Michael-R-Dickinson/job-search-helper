@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { UpdateResumeDetails } from './TryForFreeCarouselForm'
 import { getTailoringQuestions } from '@/lib/api'
 import SelectSkillsDisplay from './SelectSkillsDisplay'
@@ -22,7 +22,11 @@ const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
 }) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['selectSkills'],
-    queryFn: async () => await getTailoringQuestions(userId, fileName!, linkedInJobUrl!),
+    queryFn: async () => {
+      const data = await getTailoringQuestions(userId, fileName!, linkedInJobUrl!)
+      if (data?.json) setResumeDetail('chatId', data.json.chat_id)
+      return data
+    },
     enabled: Boolean(fileName && linkedInJobUrl),
   })
 
