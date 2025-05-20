@@ -3,6 +3,8 @@ import { ResumeTailoringDetails } from './TryForFreeCarouselForm'
 import { getEmptyMap } from '@/lib/utils'
 import SkillsToAddChips from './SkillsToAddChips'
 
+export type QuestionAnswerMap = Record<string, boolean>
+
 interface SelectSkillsDisplayProps {
   skillsToAdd: string[]
   experienceQuestions: string[]
@@ -19,9 +21,9 @@ const SelectSkillsDisplay: React.FC<SelectSkillsDisplayProps> = ({
   const [skillsSelected, setSkillsSelected] = useState<Record<string, boolean>>(
     getEmptyMap(skillsToAdd, false),
   )
-  const [experienceQuestionAnswers, setExperienceQuestionAnswers] = useState<
-    Record<string, boolean>
-  >(getEmptyMap(experienceQuestions, false))
+  const [experienceQuestionAnswers, setExperienceQuestionAnswers] = useState<QuestionAnswerMap>(
+    getEmptyMap(experienceQuestions, false),
+  )
   return (
     <div className="h-full w-full">
       <div>

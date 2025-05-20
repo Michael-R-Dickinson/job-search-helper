@@ -1,8 +1,9 @@
 import { cva } from 'class-variance-authority'
+import { QuestionAnswerMap } from './SelectSkillsDisplay'
 
 const SkillsToAddChips: React.FC<{
-  skillsSelected: Record<string, boolean>
-  setSkillsSelected: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
+  skillsSelected: QuestionAnswerMap
+  setSkillsSelected: React.Dispatch<React.SetStateAction<QuestionAnswerMap>>
 }> = ({ skillsSelected, setSkillsSelected }) => {
   const toggleSkill = (skill: string) => {
     setSkillsSelected((prev) => ({ ...prev, [skill]: !prev[skill] }))
