@@ -70,7 +70,7 @@ const TryForFreeCarouselForm = () => {
           onQuestionsAnsweredCallback={() => next()}
         />
       ),
-      height: '500px',
+      height: 'fit-content',
       width: '600px',
     },
     {
@@ -87,7 +87,6 @@ const TryForFreeCarouselForm = () => {
       width: '600px',
     },
   ]
-  console.log('resume details', resumeDetails)
 
   return (
     // This outer motion.div only deals with the height and width of the carousel tile

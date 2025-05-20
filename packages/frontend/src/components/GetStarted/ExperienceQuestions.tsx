@@ -11,7 +11,7 @@ const ExperienceQuestionSingle: React.FC<{
   const [checkedState, setCheckedState] = useState<ToggleStates>('default')
 
   return (
-    <div className="flex justify-between items-center gap-2">
+    <div className="flex justify-between items-center gap-2 my-3 text-gray-700">
       <p className="text-left">{question}</p>
       <YesNoToggle
         checkedState={checkedState}

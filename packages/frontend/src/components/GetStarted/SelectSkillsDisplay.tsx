@@ -27,7 +27,7 @@ const SelectSkillsDisplay: React.FC<SelectSkillsDisplayProps> = ({
     getEmptyMap(experienceQuestions, false),
   )
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full mb-4 px-4">
       <div className="mb-12">
         <div className="mb-4">
           <h2 className="text-2xl ">Do you have these skills?</h2>
