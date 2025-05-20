@@ -3,6 +3,7 @@ import React from 'react'
 import TailoredResumeLoading from './TailoredResumeLoading'
 import { useQuery } from '@tanstack/react-query'
 import { getTailoredResume, QuestionAnswers } from '@/lib/api'
+import Link from 'next/link'
 
 interface TailoredResumeDisplayProps {
   userId: string
@@ -40,7 +41,24 @@ const TailoredResumeHandler: React.FC<TailoredResumeDisplayProps> = ({
   }
 
   if (json?.pdf_url) {
-    window.open(json.pdf_url, '_blank', 'noopener,noreferrer')
+    return (
+      <div className="h-full">
+        <h2 className="mb-4">Your Resume is Ready!</h2>
+        <div className="flex w-full justify-center gap-12">
+          <button
+            className="btn btn-primary w-44 h-12"
+            onClick={() => {
+              window.open(json.pdf_url, '_blank', 'noopener,noreferrer')
+            }}
+          >
+            View PDF
+          </button>
+          <Link className="btn btn-info w-44 h-12" href={json.docx_download_url}>
+            Download DOCX
+          </Link>
+        </div>
+      </div>
+    )
   }
 }
 
