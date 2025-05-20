@@ -27,7 +27,7 @@ const SelectSkillsDisplay: React.FC<SelectSkillsDisplayProps> = ({
   )
   return (
     <div className="h-full w-full">
-      <div className="mb-8">
+      <div className="mb-12">
         <div className="mb-4">
           <h2 className="text-2xl ">Do you have these skills?</h2>
           <p className="text-gray-600">Click skills to add</p>

@@ -74,7 +74,7 @@ const ExperienceQuestions: React.FC<ExperienceQuestionsProps> = ({
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
         >
           {questionGroup.map(([question, value], index) => (
             <ExperienceQuestionSingle
