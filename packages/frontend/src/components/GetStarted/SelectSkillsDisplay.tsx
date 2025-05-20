@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ResumeTailoringDetails } from './TryForFreeCarouselForm'
 import { getEmptyMap } from '@/lib/utils'
 import SkillsToAddChips from './SkillsToAddChips'
+import ExperienceQuestions from './ExperienceQuestions'
 
 export type QuestionAnswerMap = Record<string, boolean>
 
@@ -26,12 +27,22 @@ const SelectSkillsDisplay: React.FC<SelectSkillsDisplayProps> = ({
   )
   return (
     <div className="h-full w-full">
-      <div>
+      <div className="mb-8">
         <div className="mb-4">
           <h2 className="text-2xl ">Do you have these skills?</h2>
           <p className="text-gray-600">Click skills to add</p>
         </div>
         <SkillsToAddChips skillsSelected={skillsSelected} setSkillsSelected={setSkillsSelected} />
+      </div>
+      <div>
+        <div className="mb-4">
+          <h2 className="text-2xl ">Tailoring Questions</h2>
+          <p className="text-gray-600">Click Yes or No</p>
+        </div>
+        <ExperienceQuestions
+          experienceQuestionAnswers={experienceQuestionAnswers}
+          setExperienceQuestionAnswers={setExperienceQuestionAnswers}
+        />
       </div>
     </div>
   )

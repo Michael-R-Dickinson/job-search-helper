@@ -25,3 +25,10 @@ export const getEmptyMap = <T extends string | number, U>(
     {} as Record<T, U>,
   )
 }
+
+export const floorDivision = (a: number, b: number): number => {
+  if (b === 0) {
+    throw new Error('Division by zero')
+  }
+  return Math.floor(a / b)
+}

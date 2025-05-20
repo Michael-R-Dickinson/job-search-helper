@@ -64,7 +64,8 @@ const TryForFreeCarouselForm = () => {
           setResumeDetail={updateResumeDetail}
         />
       ),
-      height: '400px',
+      height: '500px',
+      width: '600px',
     },
     {
       component: (
@@ -80,6 +81,7 @@ const TryForFreeCarouselForm = () => {
   ]
 
   return (
+    // This outer motion.div only deals with the height and width of the carousel tile
     <motion.div
       layout
       transition={{
@@ -92,6 +94,7 @@ const TryForFreeCarouselForm = () => {
       }}
       className="mt-[33vh] bg-white px-8 py-12 rounded-2xl shadow-lg text-center space-y-6"
     >
+      {/* This inner AnimatePresence and motion.div deals with switching the slide */}
       <AnimatePresence initial={false} mode="wait">
         <motion.div
           layout="position"
