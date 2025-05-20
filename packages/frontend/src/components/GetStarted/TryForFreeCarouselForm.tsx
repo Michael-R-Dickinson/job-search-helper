@@ -21,13 +21,18 @@ type SlideFormat = {
   width?: string
 }
 
+export type UpdateResumeDetails = (
+  key: keyof ResumeTailoringDetails,
+  value: ResumeTailoringDetails[keyof ResumeTailoringDetails],
+) => void
+
 const TryForFreeCarouselForm = () => {
   const [resumeDetails, setResumeDetails] = useState<ResumeTailoringDetails>({})
-  const updateResumeDetail = (key: keyof ResumeTailoringDetails, value: string) =>
+  const updateResumeDetail: UpdateResumeDetails = (key, value) =>
     void setResumeDetails((prev) => ({ ...prev, [key]: value }))
 
   const [step, setStep] = useState(0)
-  const maxSlides = 3
+  const maxSlides = 4
   const next = () => void setStep((prev) => (prev + 1 < maxSlides ? prev + 1 : 0))
 
   const slides: SlideFormat[] = [
@@ -62,6 +67,9 @@ const TryForFreeCarouselForm = () => {
           fileName={resumeDetails.fileName}
           linkedInJobUrl={resumeDetails.linkedInJobUrl}
           setResumeDetail={updateResumeDetail}
+          onQuestionsAnsweredCallback={() => {
+            next()
+          }}
         />
       ),
       height: '500px',

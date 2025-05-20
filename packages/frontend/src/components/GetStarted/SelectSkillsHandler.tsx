@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import { ResumeTailoringDetails } from './TryForFreeCarouselForm'
+import { UpdateResumeDetails } from './TryForFreeCarouselForm'
 import { getTailoringQuestions } from '@/lib/api'
 import SelectSkillsDisplay from './SelectSkillsDisplay'
 import GenericLoader from '../GenericLoader'
@@ -9,7 +9,8 @@ interface SelectSkillsHandlerProps {
   userId: string
   fileName?: string
   linkedInJobUrl?: string
-  setResumeDetail: (key: keyof ResumeTailoringDetails, value: string) => void
+  setResumeDetail: UpdateResumeDetails
+  onQuestionsAnsweredCallback?: () => void
 }
 
 const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
@@ -17,6 +18,7 @@ const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
   fileName,
   linkedInJobUrl,
   setResumeDetail,
+  onQuestionsAnsweredCallback,
 }) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['selectSkills'],
@@ -36,6 +38,7 @@ const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
       skillsToAdd={json.questions.skills_to_add}
       experienceQuestions={json.questions.experience_questions}
       setResumeDetail={setResumeDetail}
+      onQuestionsAnsweredCallback={onQuestionsAnsweredCallback}
     />
   )
 }

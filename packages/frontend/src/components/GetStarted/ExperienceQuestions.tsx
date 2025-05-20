@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { QuestionAnswerMap } from './SelectSkillsDisplay'
 import { AnimatePresence, motion } from 'motion/react'
 import YesNoToggle, { ToggleStates } from '../YesNoToggle'
 import { floorDivision } from '@/lib/utils'
+import { QuestionAnswerMap } from '@/lib/api'
 
 const ExperienceQuestionSingle: React.FC<{
   question: string
@@ -11,7 +11,7 @@ const ExperienceQuestionSingle: React.FC<{
   const [checkedState, setCheckedState] = useState<ToggleStates>('default')
 
   return (
-    <div className="flex content-around items-center gap-2">
+    <div className="flex justify-between items-center gap-2">
       <p className="text-left">{question}</p>
       <YesNoToggle
         checkedState={checkedState}
@@ -30,18 +30,23 @@ const ExperienceQuestionSingle: React.FC<{
 interface ExperienceQuestionsProps {
   experienceQuestionAnswers: Record<string, boolean>
   setExperienceQuestionAnswers: React.Dispatch<React.SetStateAction<QuestionAnswerMap>>
+  selectionFinishedCallback?: () => void
 }
 
 const QUESTION_GROUP_SIZE = 3
 const ExperienceQuestions: React.FC<ExperienceQuestionsProps> = ({
   experienceQuestionAnswers,
   setExperienceQuestionAnswers,
+  selectionFinishedCallback,
 }) => {
+  // TODO: Bad practice, we end up storing the same data here and also with the default state in each
+  // TODO: ExperienceQuestionSingle component, fix this
+  const [answeredQuestions, setAnsweredQuestions] = useState<string[]>([])
+  const [activeGroupIdx, setActiveGroupIdx] = useState(0)
+
   const questionsArray = Object.entries(experienceQuestionAnswers)
   const numQuestions = questionsArray.length
   const numQuestionGroups = floorDivision(numQuestions, QUESTION_GROUP_SIZE)
-
-  const [activeGroupIdx, setActiveGroupIdx] = React.useState(0)
 
   const questionGroup = questionsArray.slice(
     activeGroupIdx * 3,
@@ -52,7 +57,7 @@ const ExperienceQuestions: React.FC<ExperienceQuestionsProps> = ({
     if (activeGroupIdx + 1 < numQuestionGroups) {
       setActiveGroupIdx((prev) => prev + 1)
     } else {
-      setActiveGroupIdx(numQuestionGroups - 1)
+      selectionFinishedCallback?.()
     }
   }
 
@@ -61,8 +66,14 @@ const ExperienceQuestions: React.FC<ExperienceQuestionsProps> = ({
       ...prev,
       [question]: value,
     }))
-    if (question === questionGroup[questionGroup.length - 1][0]) {
-      nextQuestionGroup()
+    if (!answeredQuestions.includes(question)) {
+      // If we use the state variable directly, it will not be updated immediately
+      const newAnsweredQuestions = [...answeredQuestions, question]
+      setAnsweredQuestions(newAnsweredQuestions)
+
+      if (questionGroup.every(([question, _]) => newAnsweredQuestions.includes(question))) {
+        nextQuestionGroup()
+      }
     }
   }
 

@@ -1,25 +1,26 @@
 import React, { useState } from 'react'
-import { ResumeTailoringDetails } from './TryForFreeCarouselForm'
+import { UpdateResumeDetails } from './TryForFreeCarouselForm'
 import { getEmptyMap } from '@/lib/utils'
 import SkillsToAddChips from './SkillsToAddChips'
 import ExperienceQuestions from './ExperienceQuestions'
-
-export type QuestionAnswerMap = Record<string, boolean>
+import { QuestionAnswerMap } from '@/lib/api'
 
 interface SelectSkillsDisplayProps {
   skillsToAdd: string[]
   experienceQuestions: string[]
-  setResumeDetail: (key: keyof ResumeTailoringDetails, value: string) => void
+  setResumeDetail: UpdateResumeDetails
+  onQuestionsAnsweredCallback?: () => void
 }
 
 const SelectSkillsDisplay: React.FC<SelectSkillsDisplayProps> = ({
   skillsToAdd,
   experienceQuestions,
   setResumeDetail,
+  onQuestionsAnsweredCallback,
 }) => {
   // A map of a skill to a boolean value indicating if the user has the skill and therefore
   // should be added to the resume
-  const [skillsSelected, setSkillsSelected] = useState<Record<string, boolean>>(
+  const [skillsSelected, setSkillsSelected] = useState<QuestionAnswerMap>(
     getEmptyMap(skillsToAdd, false),
   )
   const [experienceQuestionAnswers, setExperienceQuestionAnswers] = useState<QuestionAnswerMap>(
@@ -42,6 +43,13 @@ const SelectSkillsDisplay: React.FC<SelectSkillsDisplayProps> = ({
         <ExperienceQuestions
           experienceQuestionAnswers={experienceQuestionAnswers}
           setExperienceQuestionAnswers={setExperienceQuestionAnswers}
+          selectionFinishedCallback={() => {
+            setResumeDetail('questionAnswers', {
+              skillsToAdd: skillsSelected,
+              experienceQuestions: experienceQuestionAnswers,
+            })
+            onQuestionsAnsweredCallback?.()
+          }}
         />
       </div>
     </div>
