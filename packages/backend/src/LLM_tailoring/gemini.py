@@ -24,14 +24,15 @@ def get_cache_name(args):
 def load_cached_response(*args):
     if not (os.environ["CACHE_LLM_RESPONSES"] == "True"):
         return None
+    print("attempting to load cached response")
 
     cache_name = get_cache_name(args)
     cache_path = os.path.join(CACHE_PATH, cache_name)
 
+    print("Loading from", cache_path)
     if not (os.path.exists(cache_path)):
         return None
 
-    print(f"Loading cached response from {cache_path}")
     with open(cache_path, "r") as f:
         raw = f.read()
 
@@ -47,7 +48,6 @@ def load_cached_response(*args):
 
 def cache_response(*args, response):
     # Get rid of old cache files
-    get_objects_hash(response)
     os.makedirs(CACHE_PATH, exist_ok=True)
     delete_top_level_files(CACHE_PATH)
 
@@ -78,8 +78,9 @@ def execute_tailoring_with_gemini(
     model: str,
     chat_history: Optional[dict] = None,
 ):
-    cached_response = load_cached_response(prompt, chat_history, model, content_config)
+    cached_response = load_cached_response(str(prompt))
     if cached_response is not None:
+        print("Successfully loaded cached response")
         return cached_response
 
     # Bring back chat history which includes the resume and job description
@@ -90,13 +91,7 @@ def execute_tailoring_with_gemini(
 
     tailored_resume_raw = response.parsed
 
-    cache_response(
-        prompt,
-        chat_history,
-        model,
-        content_config,
-        response=tailored_resume_raw,
-    )
+    cache_response(str(prompt), response=tailored_resume_raw)
 
     return tailored_resume_raw
 
