@@ -2,7 +2,7 @@ import os
 from docx_functions.paragraph_info import get_list_indent_level
 from md2docx_python.src.docx2md_python import word_to_markdown
 
-from backend.constants import RESUMES_PATH
+from constants import RESUMES_PATH
 from docx.text.paragraph import Paragraph
 
 

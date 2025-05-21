@@ -9,7 +9,7 @@ from backend.LLM_tailoring.schema import (
     ResumeContent,
     ResumeTailoringQuestions,
 )
-from backend.constants import CACHE_PATH
+from constants import CACHE_PATH
 from backend.LLM_tailoring.LLM_prompt import (
     LLM_SYSTEM_INSTRUCTIONS,
 )

@@ -1,8 +1,8 @@
 import os
+from firebase import init_firebase
 from firebase_admin import storage
 
-from backend.constants import RESUMES_PATH
-from backend.firebase import init_firebase
+from constants import RESUMES_PATH
 
 
 def fetch_and_download_resume(userId: str, resumeName: str):

@@ -1,8 +1,9 @@
 import os
 
 from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
-from backend.firebase import cache_get_object, init_firebase
+from backend.firebase import cache_get_object
 from backend.util import get_time_string, get_user_bucket_path
+from firebase import init_firebase
 from firebase_admin import storage
 
 from backend.fetch_data.fetch_job_description import fetch_job_description_markdown
@@ -15,13 +16,13 @@ from backend.LLM_tailoring.gemini import (
     execute_tailoring_with_gemini,
     generate_questions_with_llm,
 )
-from backend.constants import RESUMES_PATH
+from constants import RESUMES_PATH
 import datetime
 
 from backend.segmentation.segment_resume import (
     parse_resume_for_sections,
 )
-from backend.fetch_data.fetch_resume import fetch_and_download_resume
+from firebase.fetch_resume import fetch_and_download_resume
 from backend.deserialization.update_resume import (
     update_resume_section,
 )

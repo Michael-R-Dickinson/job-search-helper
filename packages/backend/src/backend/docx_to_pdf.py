@@ -1,6 +1,6 @@
 import os
 
-from backend.constants import RESUMES_PATH
+from constants import RESUMES_PATH
 import cloudconvert
 from dotenv import load_dotenv
 import requests
