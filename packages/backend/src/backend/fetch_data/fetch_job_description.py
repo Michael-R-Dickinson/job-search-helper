@@ -1,4 +1,6 @@
+import os
 from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
+from dotenv import load_dotenv
 import requests
 import random
 
@@ -47,7 +49,18 @@ USER_AGENTS = [
 ]
 
 
+def get_proxies() -> str:
+    load_dotenv()
+    proxy = os.getenv("PROXY_URL")
+
+    return {
+        "http": proxy,
+        "https": proxy,
+    }
+
+
 def fetch_job_html(url: str) -> str:
+
     headers = {
         "User-Agent": random.choice(USER_AGENTS),
         "Accept": "text/html,application/xhtml+xml",
@@ -59,7 +72,8 @@ def fetch_job_html(url: str) -> str:
     }
 
     try:
-        resp = requests.get(url, headers=headers)
+        proxies = get_proxies()
+        resp = requests.get(url, headers=headers, proxies=proxies)
         resp.raise_for_status()
     except requests.HTTPError as e:
         if resp.status_code == 403 or resp.status_code == 429:
