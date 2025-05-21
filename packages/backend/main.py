@@ -23,10 +23,7 @@ init_firebase()
 
 @https_fn.on_request(
     cors=options.CorsOptions(
-        cors_origins=[
-            "http://localhost:3000",
-            "http://localhost:8080",
-        ],
+        cors_origins=["*"],
         cors_methods=["GET", "POST", "OPTIONS"],
     )
 )
@@ -69,34 +66,60 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
 def handle_resume_questions_request(
     user_id: str, file_name: str, job_description_link: str
 ):
-    validate_inputs_questions(
-        userId=user_id,
-        fileName=file_name,
-        job_description_link=job_description_link,
-    )
+    try:
+        validate_inputs_questions(
+            userId=user_id,
+            fileName=file_name,
+            job_description_link=job_description_link,
+        )
 
-    questions, chat_history = get_tailoring_questions(
-        user_id=user_id,
-        resume_name=file_name,
-        linkedin_url=job_description_link,
-    )
+        questions, chat_history = get_tailoring_questions(
+            user_id=user_id,
+            resume_name=file_name,
+            linkedin_url=job_description_link,
+        )
 
-    chat_id = generate_uuid()
-    cache_set_object(
-        id=chat_id,
-        obj=chat_history,
-    )
+        chat_id = generate_uuid()
+        cache_set_object(
+            id=chat_id,
+            obj=chat_history,
+        )
 
-    return https_fn.Response(
-        json.dumps(
-            {
-                "message": "Tailoring questions generated",
-                "questions": questions.to_dict(),
-                "chat_id": chat_id,
-            }
-        ),
-        status=200,
-    )
+        return https_fn.Response(
+            json.dumps(
+                {
+                    "message": "Tailoring questions generated",
+                    "questions": questions.to_dict(),
+                    "chat_id": chat_id,
+                }
+            ),
+            status=200,
+        )
+
+    except ValueError as e:
+        print(f"Invalid inputs: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Invalid inputs, {e}"}),
+            status=400,
+        )
+    except DescriptionNotFound as e:
+        print(f"Error fetching job description: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Error fetching job description, {e}"}),
+            status=500,
+        )
+    except LinkedinError as e:
+        print(f"Error parsing job description: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Error parsing job description, {e}"}),
+            status=500,
+        )
+    except Exception as e:
+        print(f"Error generating questions resume: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Error generating questions resume, {e}"}),
+            status=500,
+        )
 
 
 def handle_resume_tailor_request(
@@ -130,17 +153,16 @@ def handle_resume_tailor_request(
             resume_path, user_id, file_name[:-5], extension=".docx", public=True
         )
 
-    except DescriptionNotFound as e:
-        print(f"Error fetching job description: {e}")
         return https_fn.Response(
-            json.dumps({"message": f"Error fetching job description, {e}"}),
-            status=500,
-        )
-    except LinkedinError as e:
-        print(f"Error parsing job description: {e}")
-        return https_fn.Response(
-            json.dumps({"message": f"Error parsing job description, {e}"}),
-            status=500,
+            json.dumps(
+                {
+                    "message": "Tailored resume uploaded to firebase",
+                    "docx_download_url": docx_download_url,
+                    "public_url": public_url,
+                    "pdf_url": pdf_url,
+                }
+            ),
+            status=200,
         )
     except ValueError as e:
         print(f"Invalid inputs: {e}")
@@ -148,21 +170,9 @@ def handle_resume_tailor_request(
             json.dumps({"message": f"Invalid inputs, {e}"}),
             status=400,
         )
-    # except Exception as e:
-    #     print(f"Error tailoring resume: {e}")
-    #     return https_fn.Response(
-    #         json.dumps({"message": f"Error tailoring resume, {e}"}),
-    #         status=500,
-    #     )
-
-    return https_fn.Response(
-        json.dumps(
-            {
-                "message": "Tailored resume uploaded to firebase",
-                "docx_download_url": docx_download_url,
-                "public_url": public_url,
-                "pdf_url": pdf_url,
-            }
-        ),
-        status=200,
-    )
+    except Exception as e:
+        print(f"Error tailoring resume: {e}")
+        return https_fn.Response(
+            json.dumps({"message": f"Error tailoring resume, {e}"}),
+            status=500,
+        )
