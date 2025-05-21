@@ -24,12 +24,10 @@ def get_cache_name(args):
 def load_cached_response(*args):
     if not (os.environ["CACHE_LLM_RESPONSES"] == "True"):
         return None
-    print("attempting to load cached response")
 
     cache_name = get_cache_name(args)
     cache_path = os.path.join(CACHE_PATH, cache_name)
 
-    print("Loading from", cache_path)
     if not (os.path.exists(cache_path)):
         return None
 
