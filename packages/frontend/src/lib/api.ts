@@ -1,7 +1,7 @@
-// const RESUME_TAILOR_API_URL =
+const RESUME_TAILOR_API_URL =
+  'https://us-central1-jobsearchhelper-231cf.cloudfunctions.net/on_request'
 
-//   'https://us-central1-jobsearchhelper-231cf.cloudfunctions.net/on_request'
-const RESUME_TAILOR_API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1/on_request'
+// const RESUME_TAILOR_API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1/on_request'
 
 export type QuestionAnswerMap = Record<string, boolean>
 
