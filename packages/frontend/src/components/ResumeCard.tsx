@@ -1,9 +1,26 @@
-import { Card } from './BasicCard'
+import { Card } from './BasicCard' // Assuming BasicCard.tsx exists
 import { FileText } from 'lucide-react'
 
 interface ResumeCardProps {
   type: 'original' | 'tailored'
 }
+
+// Helper component for new/changed text in tailored resume
+const ChangedText = ({ children }: { children: React.ReactNode }) => (
+  <span className="font-medium text-perfectify-purple">{children}</span>
+)
+
+// Helper component for new skill tags
+const NewSkillTag = ({ children }: { children: React.ReactNode }) => (
+  <span className="px-2 py-1 bg-perfectify-purple/10 rounded text-xs text-perfectify-purple font-medium">
+    {children}
+  </span>
+)
+
+// Helper component for existing skill tags (original or retained in tailored)
+const ExistingSkillTag = ({ children }: { children: React.ReactNode }) => (
+  <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">{children}</span>
+)
 
 const ResumeCard = ({ type }: ResumeCardProps) => {
   if (type === 'original') {
@@ -19,11 +36,11 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
           <div className="bg-white p-6">
             {/* Resume header */}
             <div className="border-b border-gray-200 pb-4 mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">John Doe</h2>
+              <h2 className="text-2xl font-bold text-gray-800">Alex Chen</h2>
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <span className="text-sm text-gray-500">Software Engineer</span>
                 <span className="text-gray-300">•</span>
-                <span className="text-sm text-gray-500">johndoe@email.com</span>
+                <span className="text-sm text-gray-500">alex.chen@email.com</span>
                 <span className="text-gray-300">•</span>
                 <span className="text-sm text-gray-500">(555) 123-4567</span>
               </div>
@@ -32,8 +49,10 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
             <div className="mb-4">
               <h3 className="text-md font-semibold text-gray-700 mb-2">Professional Summary</h3>
               <p className="text-sm text-gray-600">
-                Software Engineer with 5+ years experience in web development. Proficient in
-                JavaScript, React and Node.js. Led teams and managed projects in agile environments.
+                Results-oriented Software Engineer with 5+ years of experience in full-stack web
+                development. Proven ability in designing, developing, and deploying web applications
+                using JavaScript, React, and Node.js. A collaborative team player with experience in
+                agile methodologies and project coordination.
               </p>
             </div>
             {/* Experience */}
@@ -41,24 +60,33 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
               <h3 className="text-md font-semibold text-gray-700 mb-2">Experience</h3>
               <div className="mb-3">
                 <div className="flex justify-between items-start">
-                  <h4 className="text-sm font-medium">Senior Developer, TechCorp</h4>
+                  <h4 className="text-sm font-medium text-gray-700">
+                    Software Engineer, Innovate Solutions
+                  </h4>
                   <span className="text-xs text-gray-500">2020 - Present</span>
                 </div>
                 <ul className="mt-1 pl-5 text-sm text-gray-600 list-disc">
-                  <li>Developed front-end interfaces using React</li>
-                  <li>Managed team of 5 junior developers</li>
-                  <li>Implemented CI/CD pipelines for faster deployments</li>
+                  <li>
+                    Developed and maintained key features for client-facing web applications using
+                    React and Redux.
+                  </li>
+                  <li>Contributed to backend API development with Node.js and Express.</li>
+                  <li>
+                    Participated in daily stand-ups and sprint planning in an Agile environment.
+                  </li>
                 </ul>
               </div>
               <div>
                 <div className="flex justify-between items-start">
-                  <h4 className="text-sm font-medium">Web Developer, StartupXYZ</h4>
+                  <h4 className="text-sm font-medium text-gray-700">
+                    Web Developer, WebWorks Inc.
+                  </h4>
                   <span className="text-xs text-gray-500">2018 - 2020</span>
                 </div>
                 <ul className="mt-1 pl-5 text-sm text-gray-600 list-disc">
-                  <li>Built responsive web applications</li>
-                  <li>Worked with agile methodologies</li>
-                  <li>Collaborated with designers on UI/UX improvements</li>
+                  <li>Built responsive user interfaces for e-commerce platforms.</li>
+                  <li>Worked closely with senior developers to debug and optimize code.</li>
+                  <li>Assisted in migrating legacy code to modern JavaScript frameworks.</li>
                 </ul>
               </div>
             </div>
@@ -66,17 +94,15 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
             <div>
               <h3 className="text-md font-semibold text-gray-700 mb-2">Skills</h3>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">
-                  JavaScript
-                </span>
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">React</span>
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">Node.js</span>
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">CSS</span>
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">Git</span>
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">Agile</span>
-                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">
-                  REST APIs
-                </span>
+                <ExistingSkillTag>JavaScript</ExistingSkillTag>
+                <ExistingSkillTag>React</ExistingSkillTag>
+                <ExistingSkillTag>Node.js</ExistingSkillTag>
+                <ExistingSkillTag>HTML</ExistingSkillTag>
+                <ExistingSkillTag>CSS</ExistingSkillTag>
+                <ExistingSkillTag>Git</ExistingSkillTag>
+                <ExistingSkillTag>Agile</ExistingSkillTag>
+                <ExistingSkillTag>REST APIs</ExistingSkillTag>
+                <ExistingSkillTag>SQL</ExistingSkillTag>
               </div>
             </div>
           </div>
@@ -85,21 +111,20 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
     )
   }
 
-  // Tailored resume
+  // Tailored resume for Senior Frontend Developer @ Meta
   return (
     <Card className="border border-perfectify-teal/20 shadow-lg overflow-hidden p-0 relative">
-      {/* Gradient border at the top */}
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-perfectify-purple via-perfectify-teal to-perfectify-purple" />
       <div className="bg-white p-6">
         {/* Resume header */}
         <div className="border-b border-gray-200 pb-4 mb-4">
-          <h2 className="text-2xl font-bold text-gray-800">John Doe</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Alex Chen</h2>
           <div className="flex flex-wrap items-center gap-2 mt-1">
             <span className="text-sm text-gray-500">
-              <span className="font-medium text-perfectify-purple">Senior Frontend Developer</span>
+              <ChangedText>Senior Frontend Developer</ChangedText>
             </span>
             <span className="text-gray-300">•</span>
-            <span className="text-sm text-gray-500">johndoe@email.com</span>
+            <span className="text-sm text-gray-500">alex.chen@email.com</span>
             <span className="text-gray-300">•</span>
             <span className="text-sm text-gray-500">(555) 123-4567</span>
           </div>
@@ -107,16 +132,19 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
         {/* Professional Summary */}
         <div className="mb-4">
           <h3 className="text-md font-semibold text-gray-700 mb-2">Professional Summary</h3>
-          <p className="text-sm text-gray-600">
-            <span className="font-medium text-perfectify-purple">Senior Frontend Developer</span>{' '}
-            with 5+ years experience specializing in{' '}
-            <span className="font-medium text-perfectify-purple">React ecosystem</span>. Expert in
-            building{' '}
-            <span className="font-medium text-perfectify-purple">scalable UI components</span> and
-            implementing{' '}
-            <span className="font-medium text-perfectify-purple">performance optimizations</span>.
-            Led teams in{' '}
-            <span className="font-medium text-perfectify-purple">agile environments</span>.
+          <p className="text-sm text-gray-600 leading-relaxed">
+            Results-oriented Software Engineer with{' '}
+            <ChangedText>5+ years of dedicated frontend and full-stack experience</ChangedText>,
+            specializing in crafting{' '}
+            <ChangedText>high-quality, scalable user interfaces with React</ChangedText>. Expert in{' '}
+            <ChangedText>
+              modern JavaScript (including TypeScript), state management (Redux)
+            </ChangedText>
+            , and building responsive web applications. Proven ability to{' '}
+            <ChangedText>
+              lead frontend initiatives and optimize application performance
+            </ChangedText>{' '}
+            within agile teams.
           </p>
         </div>
         {/* Experience */}
@@ -124,55 +152,65 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
           <h3 className="text-md font-semibold text-gray-700 mb-2">Experience</h3>
           <div className="mb-3">
             <div className="flex justify-between items-start">
-              <h4 className="text-sm font-medium">Senior Developer, TechCorp</h4>
+              {/* Title remains "Software Engineer" as per original, but bullets highlight frontend leadership */}
+              <h4 className="text-sm font-medium text-gray-700">
+                Software Engineer, Innovate Solutions
+              </h4>
               <span className="text-xs text-gray-500">2020 - Present</span>
             </div>
-            <ul className="mt-1 pl-5 text-sm text-gray-600 list-disc">
+            <ul className="mt-1 pl-5 text-sm text-gray-600 list-disc space-y-1">
               <li>
-                Developed{' '}
-                <span className="font-medium text-perfectify-purple">
-                  reusable UI component library
-                </span>{' '}
-                using React that increased team velocity by 40%
+                Led the{' '}
+                <ChangedText>
+                  frontend development of key client-facing features using React and Redux
+                </ChangedText>
+                , enhancing user experience and{' '}
+                <ChangedText>improving application stability by 20%</ChangedText> through robust
+                code.
               </li>
               <li>
-                Led{' '}
-                <span className="font-medium text-perfectify-purple">
-                  UI performance optimization
-                </span>{' '}
-                initiatives reducing load time by 60%
+                Engineered{' '}
+                <ChangedText>
+                  reusable React components and optimized component rendering
+                </ChangedText>
+                , contributing to a{' '}
+                <ChangedText>15% improvement in overall application load times</ChangedText>.
               </li>
               <li>
-                Implemented{' '}
-                <span className="font-medium text-perfectify-purple">CI/CD pipelines</span> for
-                automated testing and deployment
+                Collaborated within an Agile team to{' '}
+                <ChangedText>define frontend architecture for new modules</ChangedText> and ensure
+                timely delivery.
               </li>
             </ul>
           </div>
           <div>
             <div className="flex justify-between items-start">
-              <h4 className="text-sm font-medium">Web Developer, StartupXYZ</h4>
+              <h4 className="text-sm font-medium text-gray-700">
+                {/* Title changed slightly to emphasize frontend focus, plausible tailoring */}
+                <ChangedText>Frontend-Focused Web Developer</ChangedText>, WebWorks Inc.
+              </h4>
               <span className="text-xs text-gray-500">2018 - 2020</span>
             </div>
-            <ul className="mt-1 pl-5 text-sm text-gray-600 list-disc">
+            <ul className="mt-1 pl-5 text-sm text-gray-600 list-disc space-y-1">
               <li>
-                Built{' '}
-                <span className="font-medium text-perfectify-purple">
-                  responsive single-page applications
-                </span>{' '}
-                using React and Redux
+                Developed{' '}
+                <ChangedText>
+                  responsive and accessible user interfaces for e-commerce platforms
+                </ChangedText>
+                , focusing on{' '}
+                <ChangedText>React-based solutions and cross-browser compatibility</ChangedText>.
               </li>
               <li>
-                Worked in{' '}
-                <span className="font-medium text-perfectify-purple">
-                  cross-functional agile teams
-                </span>{' '}
-                to deliver features on schedule
+                Proactively{' '}
+                <ChangedText>identified and resolved frontend performance bottlenecks</ChangedText>,
+                improving user interaction smoothness.
               </li>
               <li>
-                Collaborated with designers to implement{' '}
-                <span className="font-medium text-perfectify-purple">pixel-perfect UI/UX</span>{' '}
-                designs
+                Played a key role in{' '}
+                <ChangedText>
+                  migrating legacy UI elements to a modern React architecture
+                </ChangedText>
+                , enhancing code maintainability.
               </li>
             </ul>
           </div>
@@ -181,26 +219,24 @@ const ResumeCard = ({ type }: ResumeCardProps) => {
         <div>
           <h3 className="text-md font-semibold text-gray-700 mb-2">Skills</h3>
           <div className="flex flex-wrap gap-2">
-            <span className="px-2 py-1 bg-perfectify-purple/10 rounded text-xs text-perfectify-purple font-medium">
-              React
-            </span>
-            <span className="px-2 py-1 bg-perfectify-purple/10 rounded text-xs text-perfectify-purple font-medium">
-              React Native
-            </span>
-            <span className="px-2 py-1 bg-perfectify-purple/10 rounded text-xs text-perfectify-purple font-medium">
-              JavaScript (ES6+)
-            </span>
-            <span className="px-2 py-1 bg-perfectify-purple/10 rounded text-xs text-perfectify-purple font-medium">
-              TypeScript
-            </span>
-            <span className="px-2 py-1 bg-perfectify-purple/10 rounded text-xs text-perfectify-purple font-medium">
-              Redux
-            </span>
-            <span className="px-2 py-1 bg-perfectify-purple/10 rounded text-xs text-perfectify-purple font-medium">
-              Performance Optimization
-            </span>
-            <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">CSS</span>
-            <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">Git</span>
+            <NewSkillTag>React (Expert)</NewSkillTag>
+            <NewSkillTag>TypeScript</NewSkillTag>
+            <NewSkillTag>Redux</NewSkillTag>
+            <NewSkillTag>JavaScript (ES6+)</NewSkillTag>{' '}
+            {/* Kept as new for emphasis, but was in original */}
+            <NewSkillTag>Next.js</NewSkillTag>
+            <NewSkillTag>Performance Optimization</NewSkillTag>
+            <NewSkillTag>Accessibility (A11y)</NewSkillTag>
+            <NewSkillTag>Jest & RTL</NewSkillTag>
+            <NewSkillTag>Webpack/Vite</NewSkillTag>
+            <NewSkillTag>CI/CD</NewSkillTag>
+            <ExistingSkillTag>HTML5</ExistingSkillTag>
+            <ExistingSkillTag>CSS3 & SASS</ExistingSkillTag>
+            <ExistingSkillTag>Node.js</ExistingSkillTag>
+            <ExistingSkillTag>Git</ExistingSkillTag>
+            <ExistingSkillTag>Agile Methodologies</ExistingSkillTag>
+            <ExistingSkillTag>REST APIs</ExistingSkillTag>
+            <ExistingSkillTag>SQL</ExistingSkillTag>
           </div>
         </div>
       </div>
