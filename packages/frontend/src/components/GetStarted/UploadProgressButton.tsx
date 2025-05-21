@@ -1,6 +1,8 @@
 import { UploadCloud } from 'lucide-react'
 import React, { useState } from 'react'
-import { auth } from '../../../firebase'
+import { auth, storage } from '../../../firebase'
+import { ref, uploadBytesResumable } from 'firebase/storage'
+import { getUserBucketPath } from '@/lib/utils'
 
 interface UploadButtonProgressProps {
   resumeFile: File | null
@@ -17,22 +19,22 @@ const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
   const handleUpload = () => {
     if (!resumeFile || !auth.currentUser) return
 
-    // const path = `resumes/${auth.currentUser.uid}/${resumeFile.name}`
-    // const storageRef = ref(storage, path)
-    // const uploadTask = uploadBytesResumable(storageRef, resumeFile)
+    const path = `${getUserBucketPath(auth.currentUser.uid, false)}/${resumeFile.name}`
+    const storageRef = ref(storage, path)
+    const uploadTask = uploadBytesResumable(storageRef, resumeFile)
 
     // For testing, simulate an instant upload
-    const uploadTask = {
-      on: (
-        event: string,
-        progressCallback: (snapshot: { bytesTransferred: number; totalBytes: number }) => void,
-        errorCallback: (error: { message: string }) => void,
-        completeCallback: () => void,
-      ) => {
-        progressCallback({ bytesTransferred: 100, totalBytes: 100 })
-        completeCallback()
-      },
-    }
+    // const uploadTask = {
+    //   on: (
+    //     event: string,
+    //     progressCallback: (snapshot: { bytesTransferred: number; totalBytes: number }) => void,
+    //     errorCallback: (error: { message: string }) => void,
+    //     completeCallback: () => void,
+    //   ) => {
+    //     progressCallback({ bytesTransferred: 100, totalBytes: 100 })
+    //     completeCallback()
+    //   },
+    // }
 
     uploadTask.on(
       'state_changed',

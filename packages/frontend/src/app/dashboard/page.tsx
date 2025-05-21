@@ -1,15 +1,20 @@
+'use client'
 import UploadFileInput from '@/components/UploadFileInput'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
+const TEST_RESUME_URL =
+  'https://us-east.storage.cloudconvert.com/tasks/9ff1bb85-be05-4d23-933c-13829bf04785/output.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cloudconvert-production%2F20250517%2Fva%2Fs3%2Faws4_request&X-Amz-Date=20250517T045450Z&X-Amz-Expires=86400&X-Amz-Signature=ab70291aea981868ee6017c3816d1fbd3d68d43e4d58874e9f8ceae6a31b10d3&X-Amz-SignedHeaders=host&response-content-disposition=inline%3B%20filename%3D%22output.pdf%22&response-content-type=application%2Fpdf&x-id=GetObject'
 const Dashboard = () => {
+  const router = useRouter()
   return (
     <main className="grow mt-16">
-      <div className="p-8 min-h-screen">
-        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+      <div className="min-h-screen p-8">
+        <h1 className="mb-6 text-3xl font-bold">Dashboard</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Quick Stats</h2>
+        <div className="md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1 gap-6">
+          <div className="p-6 bg-white rounded-lg shadow">
+            <h2 className="mb-4 text-xl font-semibold">Quick Stats</h2>
             <div className="space-y-4">
               <div>
                 <p className="text-gray-600">Total Projects</p>
@@ -22,25 +27,30 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+          <div className="p-6 bg-white rounded-lg shadow">
+            <h2 className="mb-4 text-xl font-semibold">Recent Activity</h2>
             <div className="text-gray-600">No recent activity</div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+          <div className="p-6 bg-white rounded-lg shadow">
+            <h2 className="mb-4 text-xl font-semibold">Quick Actions</h2>
             <div className="space-y-2">
-              <button className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                New Project
+              <button
+                onClick={() =>
+                  router.push(`/resumeViewer?resumeUrl=${encodeURIComponent(TEST_RESUME_URL)}`)
+                }
+                className="hover:bg-blue-600 w-full px-4 py-2 text-white bg-blue-500 rounded"
+              >
+                Display Resume
               </button>
-              <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
+              <button className="hover:bg-gray-200 w-full px-4 py-2 text-gray-700 bg-gray-100 rounded">
                 View All Projects
               </button>
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow max-w-3xl">
-          <h2 className="text-xl font-semibold mb-4">Upload</h2>
+        <div className="max-w-3xl p-6 bg-white rounded-lg shadow">
+          <h2 className="mb-4 text-xl font-semibold">Upload</h2>
           <UploadFileInput />
         </div>
       </div>

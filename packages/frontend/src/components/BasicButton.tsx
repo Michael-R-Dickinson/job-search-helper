@@ -50,9 +50,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-        onClick={() => {
+        onClick={(e) => {
           if (href) {
             router.push(href)
+          } else {
+            props.onClick?.(e)
           }
         }}
       />
