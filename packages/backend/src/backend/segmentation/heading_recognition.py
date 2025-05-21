@@ -1,10 +1,9 @@
 import copy
 import re
-from backend.docx_functions import (
+from docx_functions.modifications import (
     clean_paragraph_whitespace,
-    has_border,
-    has_spacing,
 )
+from docx_functions.paragraph_info import has_border, has_spacing
 
 
 SECTION_HEADER_KEYWORDS = {

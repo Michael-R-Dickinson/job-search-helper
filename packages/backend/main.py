@@ -139,7 +139,6 @@ def handle_resume_tailor_request(
 
         question_responses = json.loads(question_answers)
         question_responses = AnsweredResumeTailoringQuestions(**question_responses)
-        print("QUESTION RESPONSES", question_responses)
         resume_path = tailor_resume(
             user_id=user_id,
             resume_name=file_name,
@@ -176,3 +175,21 @@ def handle_resume_tailor_request(
             json.dumps({"message": f"Error tailoring resume, {e}"}),
             status=500,
         )
+
+
+# @https_fn.on_request(
+#     cors=options.CorsOptions(
+#         cors_origins=["*"],
+#         cors_methods=["GET", "POST", "OPTIONS"],
+#     )
+# )
+# def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
+#     userId = req.args.get("userId")
+#     fileName = req.args.get("fileName")
+#     jobDescriptionLink = (req.args.get("jobDescriptionLink"),)
+
+#     get_tailored_cover_letter(
+#         userId=userId,
+#         fileName=fileName,
+#         jobDescriptionLink=jobDescriptionLink,
+#     )

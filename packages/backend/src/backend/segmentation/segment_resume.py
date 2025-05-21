@@ -1,7 +1,7 @@
 from docx import Document
 from backend.constants import RESUMES_PATH, SECTION_HEADER_TOKENS
-from backend.docx_functions import (
-    iter_doc_paragraphs,
+from docx_functions.general import iter_doc_paragraphs
+from docx_functions.modifications import (
     merge_identical_runs,
 )
 from backend.segmentation.heading_classification import (

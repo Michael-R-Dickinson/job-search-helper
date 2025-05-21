@@ -10,6 +10,7 @@ from docx.oxml.shared import OxmlElement
 from docx.shared import Inches
 
 from backend.LLM_tailoring.schema import SerializedRun
+from docx_functions.paragraph_info import get_list_indent_level
 
 
 def clean_paragraph_whitespace(para: Paragraph) -> None:
@@ -57,33 +58,6 @@ def clean_paragraph_whitespace(para: Paragraph) -> None:
             i = j
         else:
             i += 1
-
-
-def has_spacing(para, space_pt_threshold=6):
-    """
-    True if space_before or space_after ≥ space_pt_threshold (in points).
-
-    space_before and after are the extra space before and after the paragraph
-    usually headings added space before
-    """
-    fmt = para.paragraph_format
-    for attr in ("space_before", "space_after"):
-        val = getattr(fmt, attr)
-        pt = getattr(val, "pt", None)
-        if pt is not None and pt >= space_pt_threshold:
-            return True
-    return False
-
-
-def has_border(para):
-    """
-    True if the paragraph has any border defined in its pPr.
-    """
-    pPr = para._p.pPr
-    if pPr is None:
-        return False
-    # look for any <w:pBdr> (paragraph borders)
-    return pPr.find(qn("w:pBdr")) is not None
 
 
 def merge_identical_runs(para: Paragraph) -> None:
@@ -142,18 +116,6 @@ def insert_paragraph_after(paragraph, text=None, style=None):
     return new_para
 
 
-def iter_doc_paragraphs(doc: Document):
-    for p in doc.iter_inner_content():
-        if isinstance(p, Paragraph):
-            yield p
-
-        elif isinstance(p, Table):
-            for row in p.rows:
-                for cell in row.cells:
-                    for paragraph in cell.paragraphs:
-                        yield paragraph
-
-
 def clear_runs_only(para: Paragraph):
     """
     Remove only the <w:r> children of this paragraph, leaving its
@@ -193,23 +155,6 @@ def add_runs_to_paragraph(
             new_run.underline = "underline" in run.styles
 
     return paragraph
-
-
-def get_list_indent_level(para: Paragraph) -> int | None:
-    """
-    If `para` is a list item, returns its level as an int (0,1,2,…).
-    Otherwise returns None.
-    """
-    pPr = para._p.pPr
-    if pPr is None:
-        return None
-    numPr = pPr.find(qn("w:numPr"))
-    if numPr is None:
-        return None
-    ilvl = numPr.find(qn("w:ilvl"))
-    if ilvl is None:
-        return None
-    return int(ilvl.get(qn("w:val")))
 
 
 def set_list_indent_level(

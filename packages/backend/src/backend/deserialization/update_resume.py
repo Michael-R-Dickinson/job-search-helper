@@ -1,7 +1,7 @@
 from docx.text.paragraph import Paragraph
 
 
-from backend.docx_functions import (
+from docx_functions.modifications import (
     add_runs_to_paragraph,
     copy_paragraph_format,
     delete_paragraph,
