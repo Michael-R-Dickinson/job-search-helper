@@ -1,13 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { UpdateResumeDetails } from './TryForFreeCarouselForm'
 import { getTailoringQuestions } from '@/lib/api'
 import SelectSkillsDisplay from './SelectSkillsDisplay'
 import GenericLoader from '../GenericLoader'
-
-const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-[400px] h-[400px]">{children}</div>
-)
 
 interface SelectSkillsHandlerProps {
   userId: string
@@ -34,20 +30,25 @@ const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
     enabled: Boolean(fileName && linkedInJobUrl),
   })
 
-  if (!data || isLoading) return <GenericLoader size={45} />
   if (error) {
     console.error('Error fetching skills:', error)
     return <div>Error: {error.message}</div>
   }
-  const { json } = data
 
+  const isNotLoaded = !data || isLoading
   return (
-    <SelectSkillsDisplay
-      skillsToAdd={json.questions.skills_to_add}
-      experienceQuestions={json.questions.experience_questions}
-      setResumeDetail={setResumeDetail}
-      onQuestionsAnsweredCallback={onQuestionsAnsweredCallback}
-    />
+    <div className="min-h-[400px] h-[400px]">
+      {isNotLoaded ? (
+        <GenericLoader size={45} />
+      ) : (
+        <SelectSkillsDisplay
+          skillsToAdd={data.json.questions.skills_to_add}
+          experienceQuestions={data.json.questions.experience_questions}
+          setResumeDetail={setResumeDetail}
+          onQuestionsAnsweredCallback={onQuestionsAnsweredCallback}
+        />
+      )}
+    </div>
   )
 }
 

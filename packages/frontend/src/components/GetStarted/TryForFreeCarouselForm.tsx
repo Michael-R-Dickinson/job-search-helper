@@ -1,6 +1,6 @@
 'use client'
-import { AnimatePresence, motion } from 'motion/react'
-import React, { useState } from 'react'
+import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ResumeUploadTile from './ResumeUploadTile'
 import LinkedinLinkPaste from './LinkedinLinkPaste'
 import TailoredResumeHandler from './TailoredResumeHandler'
@@ -70,7 +70,7 @@ const TryForFreeCarouselForm = () => {
           onQuestionsAnsweredCallback={() => next()}
         />
       ),
-      height: '500px',
+      height: '550px',
       width: '600px',
     },
     {
@@ -91,7 +91,7 @@ const TryForFreeCarouselForm = () => {
   return (
     // This outer motion.div only deals with the height and width of the carousel tile
     <motion.div
-      layout
+      layout="size"
       transition={{
         duration: 0.35,
         delay: 0.1,
@@ -110,19 +110,8 @@ const TryForFreeCarouselForm = () => {
           initial={{ x: 300, opacity: 0, transition: { duration: 0.35 } }}
           animate={{ x: 0, opacity: 1, transition: { duration: 0.35, delay: 0.2 } }}
           exit={{ opacity: 0 }}
-          // className="h-full w-full"
         >
-          <>
-            {slides[step].component}
-            <div
-              className="absolute cursor-pointer"
-              onClick={() => {
-                setStep(step - 1)
-              }}
-            >
-              back
-            </div>
-          </>
+          <>{slides[step].component}</>
         </motion.div>
       </AnimatePresence>
     </motion.div>
