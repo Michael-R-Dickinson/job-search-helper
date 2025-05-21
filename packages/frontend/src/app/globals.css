@@ -50,6 +50,8 @@
   --color-perfectify-teal: #2dd4bf;
   --color-perfectify-purple: #5e48e8;
 
+  --color-gray-150: #f0f0f0;
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
