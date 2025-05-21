@@ -6,14 +6,36 @@ from util import (
     generate_uuid,
 )
 from firebase_functions import https_fn
-from functions.validation import validate_inputs_questions
+from functions.validation import (
+    validate_file_name_and_userId,
+    validate_linkedin_url,
+)
+
+
+def validate_inputs(
+    userId: str,
+    fileName: str,
+    job_description_link: str,
+):
+    validate_file_name_and_userId(
+        userId=userId,
+        fileName=fileName,
+    )
+    if not job_description_link:
+        raise ValueError(
+            "Missing jobDescriptionLink in the request. Please provide a valid LinkedIn job description link."
+        )
+    if not validate_linkedin_url(job_description_link):
+        raise ValueError(
+            "Invalid LinkedIn URL. Please provide a valid LinkedIn job description link."
+        )
 
 
 def handle_resume_questions_request(
     user_id: str, file_name: str, job_description_link: str
 ):
     try:
-        validate_inputs_questions(
+        validate_inputs(
             userId=user_id,
             fileName=file_name,
             job_description_link=job_description_link,
