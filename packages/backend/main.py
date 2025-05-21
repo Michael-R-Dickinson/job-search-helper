@@ -3,21 +3,20 @@ import json
 from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
 from backend.docx_to_pdf import convert_docx_to_pdf
 from firebase import init_firebase
+from firebase.buckets import upload_tailored_resume
 from firebase_functions import https_fn, options
 from firebase_admin import initialize_app
 
 from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
-from backend.firebase import cache_set_object
+from firebase.realtime_db import cache_set_object
 from backend.tailor_resume import (
     get_tailoring_questions,
     tailor_resume,
-    upload_tailored_resume,
 )
-from backend.util import (
+from util import (
     generate_uuid,
-    validate_inputs_questions,
-    validate_inputs_tailoring,
 )
+from functions.validation import validate_inputs_questions, validate_inputs_tailoring
 
 init_firebase()
 

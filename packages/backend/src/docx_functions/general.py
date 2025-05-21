@@ -14,3 +14,11 @@ def iter_doc_paragraphs(doc: Document):
                 for cell in row.cells:
                     for paragraph in cell.paragraphs:
                         yield paragraph
+
+
+def print_sections(sections: dict[str, list[Paragraph]]):
+    for section, content in sections.items():
+        print(f"Section: {section}")
+        for paragraph in content:
+            print(paragraph.text)
+        print("\n")

@@ -1,18 +1,11 @@
 from datetime import timedelta, datetime
 from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from util import pickle_object
+from firebase import init_firebase
 import firebase_admin
 from firebase_admin import credentials, db
 import pickle
 import base64
-
-
-def pickle_object(obj: object) -> str:
-    """
-    Pickle an object to a string.
-    """
-
-    pickled_obj = pickle.dumps(obj)
-    return base64.b64encode(pickled_obj).decode("utf-8")
 
 
 def unpickle_object(obj: str) -> object:

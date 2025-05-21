@@ -1,12 +1,11 @@
 import os
 
 from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
-from backend.firebase import cache_get_object
-from backend.util import get_time_string, get_user_bucket_path
+from firebase.realtime_db import cache_get_object
+from util import get_time_string
 from firebase import init_firebase
-from firebase_admin import storage
 
-from backend.fetch_data.fetch_job_description import fetch_job_description_markdown
+from linkedin_fetching.fetch_job_description import fetch_job_description_markdown
 from backend.LLM_tailoring.serialization import serialize_raw_resume, serialize_sections
 from backend.LLM_tailoring.LLM_prompt import (
     generate_questions_llm_prompt,
@@ -17,41 +16,14 @@ from backend.LLM_tailoring.gemini import (
     generate_questions_with_llm,
 )
 from constants import RESUMES_PATH
-import datetime
 
 from backend.segmentation.segment_resume import (
     parse_resume_for_sections,
 )
-from firebase.fetch_resume import fetch_and_download_resume
+from firebase.buckets import fetch_and_download_resume
 from backend.deserialization.update_resume import (
     update_resume_section,
 )
-
-
-def upload_tailored_resume(
-    resume_path: str, userId: str, file_name: str, extension: str, public: bool = False
-):
-    """
-    Uploads resume to the user's bucket
-    returns download url
-    """
-    bucket = storage.bucket()
-    fileLocation = bucket.blob(
-        f"{get_user_bucket_path(userId=userId, tailored=True)}/{file_name}_{get_time_string()}{extension}"
-    )
-    fileLocation.upload_from_filename(resume_path)
-    if public:
-        fileLocation.make_public()
-
-    public_url = fileLocation.public_url
-
-    download_url = fileLocation.generate_signed_url(
-        version="v4",
-        expiration=datetime.datetime.now() + datetime.timedelta(days=1),
-        method="GET",
-    )
-
-    return download_url, public_url
 
 
 def tailor_resume(

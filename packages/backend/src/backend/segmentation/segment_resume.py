@@ -2,6 +2,7 @@ from docx import Document
 from constants import RESUMES_PATH, SECTION_HEADER_TOKENS
 from docx_functions.general import iter_doc_paragraphs
 from docx_functions.modifications import (
+    clean_heading_text,
     merge_identical_runs,
 )
 from backend.segmentation.heading_classification import (
@@ -10,7 +11,6 @@ from backend.segmentation.heading_classification import (
 from backend.segmentation.heading_recognition import (
     is_likely_heading,
 )
-from backend.util import clean_heading_text
 
 
 def filter_to_critical_sections(sections):
