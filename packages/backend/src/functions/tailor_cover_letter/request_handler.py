@@ -5,17 +5,22 @@ from functions.validation import validate_file_name_and_userId, validate_linkedi
 
 
 def validate_inputs(
-    userId: str,
-    fileName: str,
+    user_id: str,
+    cover_letter_name: str,
+    resume_name: str,
     job_description_link: str,
 ):
     """
     Validate the inputs for the cover letter tailoring request.
     """
     validate_file_name_and_userId(
-        userId=userId,
-        fileName=fileName,
+        userId=user_id,
+        fileName=cover_letter_name,
     )
+    if not resume_name:
+        raise ValueError(
+            "Missing resumeName in the request. Please provide a valid resume name."
+        )
     if not job_description_link:
         raise ValueError(
             "Missing jobDescriptionLink in the request. Please provide a valid LinkedIn job description link."
@@ -28,23 +33,29 @@ def validate_inputs(
 
 def handle_cover_letter_tailor_request(
     user_id: str,
-    file_name: str,
+    cover_letter_name: str,
+    resume_name: str,
     job_description_link: str,
 ) -> https_fn.Response:
     """
     Handle the request to tailor a cover letter.
+    - validate inputs
+    - call tailoring function
+    - handle errors and response objects
     """
 
     try:
         validate_inputs(
-            userId=user_id,
-            fileName=file_name,
+            user_id=user_id,
+            cover_letter_name=cover_letter_name,
+            resume_name=resume_name,
             job_description_link=job_description_link,
         )
 
         tailor_cover_letter(
             user_id=user_id,
-            file_name=file_name,
+            cover_letter_name=cover_letter_name,
+            resume_name=resume_name,
             job_description_link=job_description_link,
         )
 

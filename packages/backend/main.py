@@ -63,11 +63,13 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
 )
 def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
     user_id = req.args.get("userId")
-    file_name = req.args.get("fileName")
+    cover_letter_name = req.args.get("coverLetterName")
+    resume_name = req.args.get("resumeName")
     job_description_link = req.args.get("jobDescriptionLink")
 
     return handle_cover_letter_tailor_request(
         user_id=user_id,
-        file_name=file_name,
+        cover_letter_name=cover_letter_name,
+        resume_name=resume_name,
         job_description_link=job_description_link,
     )

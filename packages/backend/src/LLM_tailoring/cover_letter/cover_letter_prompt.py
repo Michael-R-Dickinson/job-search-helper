@@ -25,3 +25,33 @@ The flag should be false for things like:
 - bullet points
 Be liberal in what you preserve, it is better to err on the side of preserving.
 """
+
+
+LLM_COVER_LETTER_PROMPT_TEMPLATE = """
+Resume Text:
+{resume_rawtext}
+
+Job Description:
+{job_description}
+
+Cover Letter Text:
+{cover_letter_rawtext}
+
+Cover Letter Paragraphs:
+{paragraphs}
+
+"""
+
+
+def generate_cover_letter_prompt(
+    job_description: str,
+    resume_rawtext: str,
+    cover_letter_rawtext: str,
+    paragraphs: list,
+) -> str:
+    return LLM_COVER_LETTER_PROMPT_TEMPLATE.format(
+        resume_rawtext=resume_rawtext,
+        job_description=job_description,
+        cover_letter_rawtext=cover_letter_rawtext,
+        paragraphs=paragraphs,
+    )

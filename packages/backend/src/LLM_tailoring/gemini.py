@@ -51,7 +51,7 @@ def execute_tailoring_with_gemini(
     prompt: str,
     content_config: types.GenerateContentConfig,
     model: str,
-    chat_history: Optional[dict],
+    chat_history: Optional[dict] = None,
 ):
     cached_response = load_cached_response()
     if cached_response is not None:
