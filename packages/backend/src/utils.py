@@ -1,13 +1,7 @@
 import base64
 from datetime import datetime
-import json
 import pickle
-import re
-from typing import Optional
 import uuid
-
-from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
-from pydantic import ValidationError
 
 
 def get_time_string():

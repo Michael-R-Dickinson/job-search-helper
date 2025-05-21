@@ -1,10 +1,11 @@
 import datetime
 import os
-from util import get_time_string
+
 from firebase import init_firebase
 from firebase_admin import storage
 
-from constants import RESUMES_PATH
+from constants import COVER_LETTERS_PATH, RESUMES_PATH
+from utils import get_time_string
 
 
 def get_user_bucket_path(userId: str, tailored: bool = False) -> str:
@@ -45,17 +46,33 @@ def upload_tailored_resume(
     return download_url, public_url
 
 
-def fetch_and_download_resume(userId: str, resumeName: str):
+def fetch_and_download_file(blob_path: str, output_path: str):
+    """
+    Fetches and downloads a file from the bucket
+    """
     bucket = storage.bucket()
-    resumeFile = bucket.blob(f"resumes/{userId}/{resumeName}")
-    if not resumeFile.exists():
-        raise FileNotFoundError(f"Resume {resumeName} not found for user {userId}")
+    blob = bucket.blob(blob_path)
+    if not blob.exists():
+        raise FileNotFoundError(f"File {blob_path} not found")
 
-    os.makedirs(f"{RESUMES_PATH}/{userId}", exist_ok=True)
-    resumePath = f"{RESUMES_PATH}/{userId}/{resumeName}"
-    resumeFile.download_to_filename(resumePath)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    blob.download_to_filename(output_path)
 
-    return resumePath
+    return output_path
+
+
+def fetch_and_download_resume(userId: str, resumeName: str):
+    return fetch_and_download_file(
+        blob_path=f"resumes/{userId}/{resumeName}",
+        output_path=f"{RESUMES_PATH}/{userId}/{resumeName}",
+    )
+
+
+def fetch_and_download_cover_letter(userId: str, coverLetterName: str):
+    return fetch_and_download_file(
+        blob_path=f"cover_letters/{userId}/{coverLetterName}",
+        output_path=f"{COVER_LETTERS_PATH}/{userId}/{coverLetterName}",
+    )
 
 
 if __name__ == "__main__":

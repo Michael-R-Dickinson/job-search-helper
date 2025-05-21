@@ -2,7 +2,7 @@ import json
 from errors.data_fetching_errors import DescriptionNotFound, LinkedinError
 from firebase.realtime_db import cache_set_object
 from functions.tailoring_questions.question_generator import get_tailoring_questions
-from util import (
+from utils import (
     generate_uuid,
 )
 from firebase_functions import https_fn

@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime
 from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
-from util import pickle_object
+from utils import pickle_object
 from firebase import init_firebase
 import firebase_admin
 from firebase_admin import credentials, db

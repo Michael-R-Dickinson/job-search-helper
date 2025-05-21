@@ -2,7 +2,7 @@ import os
 
 from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
 from firebase.realtime_db import cache_get_object
-from util import get_time_string
+from utils import get_time_string
 from firebase import init_firebase
 
 from docx_functions.marshaling.serialization import (
