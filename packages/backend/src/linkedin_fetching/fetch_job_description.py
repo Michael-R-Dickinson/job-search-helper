@@ -1,5 +1,5 @@
 import os
-from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
+from errors.data_fetching_errors import DescriptionNotFound, LinkedinError
 from linkedin_fetching.fetch_html import fetch_job_html
 
 from bs4 import BeautifulSoup

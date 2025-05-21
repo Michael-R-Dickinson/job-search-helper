@@ -5,10 +5,10 @@ from docx_functions.modifications import (
     clean_heading_text,
     merge_identical_runs,
 )
-from backend.segmentation.heading_classification import (
+from docx_functions.segmentation.heading_classification import (
     is_header_text,
 )
-from backend.segmentation.heading_recognition import (
+from docx_functions.segmentation.heading_recognition import (
     is_likely_heading,
 )
 

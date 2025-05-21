@@ -1,7 +1,7 @@
 import json
 import re
 
-from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
 from pydantic import ValidationError
 
 

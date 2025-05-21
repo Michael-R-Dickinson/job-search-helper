@@ -1,5 +1,5 @@
 import json
-from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
 
 
 LLM_SYSTEM_INSTRUCTIONS = """

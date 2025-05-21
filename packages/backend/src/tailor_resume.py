@@ -1,27 +1,30 @@
 import os
 
-from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
 from firebase.realtime_db import cache_get_object
 from util import get_time_string
 from firebase import init_firebase
 
 from linkedin_fetching.fetch_job_description import fetch_job_description_markdown
-from backend.LLM_tailoring.serialization import serialize_raw_resume, serialize_sections
-from backend.LLM_tailoring.LLM_prompt import (
+from docx_functions.marshaling.serialization import (
+    serialize_raw_resume,
+    serialize_sections,
+)
+from LLM_tailoring.LLM_prompt import (
     generate_questions_llm_prompt,
     generate_tailoring_llm_prompt,
 )
-from backend.LLM_tailoring.gemini import (
+from LLM_tailoring.gemini import (
     execute_tailoring_with_gemini,
     generate_questions_with_llm,
 )
 from constants import RESUMES_PATH
 
-from backend.segmentation.segment_resume import (
+from docx_functions.segmentation.segment_resume import (
     parse_resume_for_sections,
 )
 from firebase.buckets import fetch_and_download_resume
-from backend.deserialization.update_resume import (
+from docx_functions.marshaling.deserialization import (
     update_resume_section,
 )
 

@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from backend.LLM_tailoring.schema import (
+from LLM_tailoring.schema import (
     ResponseSchema,
     ResumeContent,
     ResumeTailoringQuestions,
 )
 from constants import CACHE_PATH
-from backend.LLM_tailoring.LLM_prompt import (
+from LLM_tailoring.LLM_prompt import (
     LLM_SYSTEM_INSTRUCTIONS,
 )
 

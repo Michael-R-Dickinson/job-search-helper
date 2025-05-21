@@ -6,7 +6,7 @@ import re
 from typing import Optional
 import uuid
 
-from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
 from pydantic import ValidationError
 
 
