@@ -1,6 +1,6 @@
 'use client'
-import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import React, { useState } from 'react'
 import ResumeUploadTile from './ResumeUploadTile'
 import LinkedinLinkPaste from './LinkedinLinkPaste'
 import TailoredResumeHandler from './TailoredResumeHandler'

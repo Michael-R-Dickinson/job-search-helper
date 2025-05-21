@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import React, { useLayoutEffect, useState } from 'react'
+import React from 'react'
 import { UpdateResumeDetails } from './TryForFreeCarouselForm'
 import { getTailoringQuestions } from '@/lib/api'
 import SelectSkillsDisplay from './SelectSkillsDisplay'
