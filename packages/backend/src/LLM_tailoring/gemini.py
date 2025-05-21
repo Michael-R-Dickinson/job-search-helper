@@ -10,7 +10,7 @@ from LLM_tailoring.schema import (
     ResumeTailoringQuestions,
 )
 from constants import CACHE_PATH
-from LLM_tailoring.LLM_prompt import (
+from LLM_tailoring.resume_LLM_prompt import (
     LLM_SYSTEM_INSTRUCTIONS,
 )
 

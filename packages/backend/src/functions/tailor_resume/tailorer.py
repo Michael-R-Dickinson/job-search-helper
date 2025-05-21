@@ -8,7 +8,7 @@ from firebase import init_firebase
 from docx_functions.marshaling.serialization import (
     serialize_sections,
 )
-from LLM_tailoring.LLM_prompt import (
+from LLM_tailoring.resume_LLM_prompt import (
     generate_tailoring_llm_prompt,
 )
 from LLM_tailoring.gemini import (

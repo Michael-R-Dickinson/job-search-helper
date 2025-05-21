@@ -22,3 +22,17 @@ def print_sections(sections: dict[str, list[Paragraph]]):
         for paragraph in content:
             print(paragraph.text)
         print("\n")
+
+
+def load_docx(file_path: str) -> Document:
+    """
+    Load a .docx file and return the Document object.
+    """
+    return Document(file_path)
+
+
+def get_paragraphs(doc: Document) -> list[Paragraph]:
+    """
+    Get all paragraphs from the document.
+    """
+    return list(iter_doc_paragraphs(doc))

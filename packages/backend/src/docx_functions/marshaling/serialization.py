@@ -58,7 +58,7 @@ def serialize_sections(sections) -> dict:
 
 
 # TODO: Handle the serialization to markdown without this external library
-def serialize_raw_resume(doc_path):
+def serialize_raw_docx(doc_path):
     """
     Serialize the raw resume to markdown.
     """
