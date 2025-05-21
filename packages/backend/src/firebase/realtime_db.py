@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime
-from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from LLM_tailoring.resume.schema import AnsweredResumeTailoringQuestions
 from utils import pickle_object
 from firebase import init_firebase
 import firebase_admin

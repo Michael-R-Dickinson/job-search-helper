@@ -1,5 +1,5 @@
 import json
-from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from LLM_tailoring.resume.schema import AnsweredResumeTailoringQuestions
 from docx_to_pdf import convert_docx_to_pdf
 from firebase.buckets import upload_tailored_resume
 from functions.tailor_resume.tailorer import tailor_resume

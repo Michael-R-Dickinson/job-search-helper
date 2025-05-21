@@ -1,8 +1,8 @@
 import os
 
 from LLM_tailoring.resume.execute_tailoring import tailor_resume_with_llm
-from LLM_tailoring.resume.prompt import generate_tailoring_llm_prompt
-from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
+from LLM_tailoring.resume.resume_prompt import generate_tailoring_llm_prompt
+from LLM_tailoring.resume.schema import AnsweredResumeTailoringQuestions
 from firebase.realtime_db import cache_get_object
 from utils import get_time_string
 from firebase import init_firebase

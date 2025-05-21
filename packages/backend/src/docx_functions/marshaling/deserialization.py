@@ -7,7 +7,7 @@ from docx_functions.modifications import (
     delete_paragraph,
     set_list_indent_level,
 )
-from LLM_tailoring.schema import SerializedParagraph
+from LLM_tailoring.resume.schema import SerializedParagraph
 
 
 def is_anchor_paragraph(para: Paragraph, anchor_lookup: set[str]) -> bool:

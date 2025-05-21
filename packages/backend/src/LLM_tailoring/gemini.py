@@ -1,12 +1,12 @@
 import os
 from typing import Optional
-from LLM_tailoring.resume.prompt import LLM_SYSTEM_INSTRUCTIONS
+from LLM_tailoring.resume.resume_prompt import LLM_SYSTEM_INSTRUCTIONS
 from dotenv import load_dotenv
 
 from google import genai
 from google.genai import types
 
-from LLM_tailoring.schema import (
+from LLM_tailoring.resume.schema import (
     ResumeContent,
     ResumeResponseSchema,
     ResumeTailoringQuestions,

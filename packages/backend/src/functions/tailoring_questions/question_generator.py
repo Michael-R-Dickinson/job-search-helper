@@ -1,5 +1,5 @@
 from LLM_tailoring.resume.execute_tailoring import generate_questions_with_llm
-from LLM_tailoring.resume.prompt import generate_questions_llm_prompt
+from LLM_tailoring.resume.resume_prompt import generate_questions_llm_prompt
 from firebase.buckets import fetch_and_download_resume
 from linkedin_fetching.fetch_job_description import fetch_job_description_markdown
 from docx_functions.marshaling.serialization import serialize_raw_docx

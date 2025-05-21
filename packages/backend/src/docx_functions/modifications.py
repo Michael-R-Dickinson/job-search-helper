@@ -9,7 +9,7 @@ from docx.table import Table
 from docx.oxml.shared import OxmlElement
 from docx.shared import Inches
 
-from LLM_tailoring.schema import SerializedRun
+from LLM_tailoring.resume.schema import SerializedRun
 from docx_functions.paragraph_info import get_list_indent_level
 
 
