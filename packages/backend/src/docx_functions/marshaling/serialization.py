@@ -42,6 +42,14 @@ def json_serialize_paragraph(paragraph: Paragraph):
     return serialized_paragraph
 
 
+def json_serialize_paragraphs(paragraphs: list[Paragraph]) -> list[dict]:
+    serialized_paragraphs = []
+    for paragraph in paragraphs:
+        serialized_paragraphs.append(json_serialize_paragraph(paragraph))
+
+    return serialized_paragraphs
+
+
 def serialize_sections(sections) -> dict:
     """
     Format the sections for the LLM.

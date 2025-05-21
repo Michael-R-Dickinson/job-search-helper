@@ -4,7 +4,10 @@ from LLM_tailoring.cover_letter.execute_tailoring import tailor_cover_letter_wit
 from constants import COVER_LETTERS_PATH
 from docx_functions.general import get_paragraphs, load_docx
 from docx_functions.marshaling.deserialization import update_resume_section
-from docx_functions.marshaling.serialization import serialize_raw_docx
+from docx_functions.marshaling.serialization import (
+    json_serialize_paragraphs,
+    serialize_raw_docx,
+)
 from firebase.buckets import fetch_and_download_cover_letter, fetch_and_download_resume
 from firebase_functions import https_fn
 from linkedin_fetching.fetch_job_description import fetch_job_description_markdown
@@ -35,7 +38,7 @@ def tailor_cover_letter(
         job_description=job_description,
         resume_rawtext=resume_rawtext,
         cover_letter_rawtext=cover_letter_rawtext,
-        paragraphs=paragraphs,
+        paragraphs=json_serialize_paragraphs(paragraphs),
     )
     tailored_cover_letter = tailor_cover_letter_with_llm(prompt)
 
