@@ -1,9 +1,8 @@
 from LLM_tailoring.cover_letter.cover_letter_prompt import LLM_SYSTEM_INSTRUCTIONS
 from LLM_tailoring.gemini import execute_tailoring_with_gemini
-from LLM_tailoring.resume.schema import SerializedParagraph
+from LLM_tailoring.resume.schema import CoverLetterSchema, SerializedParagraph
 from google.genai import types
-
-CoverLetterSchema = list[SerializedParagraph]
+from pydantic import BaseModel
 
 
 def get_content_config() -> types.GenerateContentConfig:
@@ -19,7 +18,7 @@ def get_content_config() -> types.GenerateContentConfig:
     return content_config
 
 
-def tailor_cover_letter_with_llm(prompt: str):
+def tailor_cover_letter_with_llm(prompt: str) -> CoverLetterSchema:
     return execute_tailoring_with_gemini(
         prompt=prompt,
         content_config=get_content_config(),

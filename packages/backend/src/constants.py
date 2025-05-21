@@ -1,4 +1,4 @@
-CACHE_PATH = "llm_output_cache.json"
+CACHE_PATH = "llm_output_cache"
 RESUMES_PATH = "resumes"
 COVER_LETTERS_PATH = "cover_letters"
 

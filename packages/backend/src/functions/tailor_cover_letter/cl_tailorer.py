@@ -42,7 +42,7 @@ def tailor_cover_letter(
     # Using the resume function, but with the whole cover letter as a single "resume" section
     update_resume_section(
         section_content=paragraphs,
-        new_paragraphs=tailored_cover_letter,
+        new_paragraphs=tailored_cover_letter.content,
     )
 
     save_path = f"{COVER_LETTERS_PATH}/outputs/{user_id}/{cover_letter_name}-{get_time_string()}.docx"

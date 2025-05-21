@@ -33,8 +33,11 @@ class ResumeTailoringQuestions(BaseModel):
         }
 
 
-ResumeResponseSchema = Union[ResumeTailoringQuestions, ResumeContent]
+class CoverLetterSchema(BaseModel):
+    content: list[SerializedParagraph]
 
+
+ResumeResponseSchema = Union[ResumeTailoringQuestions, ResumeContent]
 
 QuestionAnswers = dict[str, bool]
 

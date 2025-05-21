@@ -1,6 +1,11 @@
+from typing import Union
 from LLM_tailoring.resume.resume_prompt import LLM_SYSTEM_INSTRUCTIONS
 from google.genai import types
-from LLM_tailoring.resume.schema import ResumeResponseSchema, ResumeTailoringQuestions
+from LLM_tailoring.resume.schema import (
+    ResumeContent,
+    ResumeResponseSchema,
+    ResumeTailoringQuestions,
+)
 from LLM_tailoring.gemini import execute_tailoring_with_gemini, get_chat
 from google.genai import types
 

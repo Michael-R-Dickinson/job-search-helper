@@ -1,36 +1,61 @@
+import json
 import os
 from typing import Optional
-from LLM_tailoring.resume.resume_prompt import LLM_SYSTEM_INSTRUCTIONS
+
+from LLM_tailoring.resume.schema import CoverLetterSchema, ResumeResponseSchema
 from dotenv import load_dotenv
 
 from google import genai
 from google.genai import types
 
-from LLM_tailoring.resume.schema import (
-    ResumeContent,
-    ResumeResponseSchema,
-    ResumeTailoringQuestions,
-)
 from constants import CACHE_PATH
+from utils import delete_top_level_files, get_objects_hash
+
+AVAILABLE_SCHEMAS = [ResumeResponseSchema, CoverLetterSchema]
 
 
-def load_cached_response():
+def get_cache_name(args):
+    # Generate a unique cache path based on the input parameters
+    hash_string = get_objects_hash(*args)
+    cache_name = f"cache-{hash_string}.json"
+    return cache_name
+
+
+def load_cached_response(*args):
     if not (os.environ["CACHE_LLM_RESPONSES"] == "True"):
         return None
-    if not (os.path.exists(CACHE_PATH)):
+
+    cache_name = get_cache_name(args)
+    cache_path = os.path.join(CACHE_PATH, cache_name)
+
+    if not (os.path.exists(cache_path)):
         return None
 
-    print(f"Loading cached response from {CACHE_PATH}")
-    with open(CACHE_PATH, "r") as f:
+    print(f"Loading cached response from {cache_path}")
+    with open(cache_path, "r") as f:
         raw = f.read()
+
     # parse back into Pydantic model
-    return ResumeContent.parse_raw(raw)
+    # a very hacky way to handle the fact that we cache multiple types, but as this is just for debugging
+    # it is fine for now
+    for model in AVAILABLE_SCHEMAS:
+        try:
+            return model.parse_raw(raw)
+        except Exception:
+            pass
 
 
-def cache_response(response: ResumeContent):
+def cache_response(*args, response):
+    # Get rid of old cache files
+    get_objects_hash(response)
+    os.makedirs(CACHE_PATH, exist_ok=True)
+    delete_top_level_files(CACHE_PATH)
+
     # We always cache the response, even if we don't load it later
     # This is because we want to be able to debug the response if needed
-    with open(CACHE_PATH, "w") as f:
+    cache_name = get_cache_name(args)
+    cache_path = os.path.join(CACHE_PATH, cache_name)
+    with open(cache_path, "w") as f:
         f.write(response.json())
 
 
@@ -53,7 +78,7 @@ def execute_tailoring_with_gemini(
     model: str,
     chat_history: Optional[dict] = None,
 ):
-    cached_response = load_cached_response()
+    cached_response = load_cached_response(prompt, chat_history, model, content_config)
     if cached_response is not None:
         return cached_response
 
@@ -63,7 +88,15 @@ def execute_tailoring_with_gemini(
         prompt,
     )
 
-    tailored_resume_raw: ResumeContent = response.parsed
+    tailored_resume_raw = response.parsed
+
+    cache_response(
+        prompt,
+        chat_history,
+        model,
+        content_config,
+        response=tailored_resume_raw,
+    )
 
     return tailored_resume_raw
 
