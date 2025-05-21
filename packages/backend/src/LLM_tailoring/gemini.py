@@ -1,18 +1,17 @@
 import os
+from typing import Optional
+from LLM_tailoring.resume.prompt import LLM_SYSTEM_INSTRUCTIONS
 from dotenv import load_dotenv
 
 from google import genai
 from google.genai import types
 
 from LLM_tailoring.schema import (
-    ResponseSchema,
     ResumeContent,
+    ResumeResponseSchema,
     ResumeTailoringQuestions,
 )
 from constants import CACHE_PATH
-from LLM_tailoring.resume_LLM_prompt import (
-    LLM_SYSTEM_INSTRUCTIONS,
-)
 
 
 def load_cached_response():
@@ -35,45 +34,31 @@ def cache_response(response: ResumeContent):
         f.write(response.json())
 
 
-def get_chat(**kwargs):
+def get_chat(content_config: types.GenerateContentConfig, **kwargs):
     load_dotenv()
     api_key = os.environ.get("GCP_AI_API_KEY")
     client = genai.Client(api_key=api_key)
 
     chat = client.chats.create(
-        config=types.GenerateContentConfig(
-            system_instruction=LLM_SYSTEM_INSTRUCTIONS,
-            response_mime_type="application/json",
-            response_schema=ResponseSchema,
-            thinking_config=types.ThinkingConfig(
-                # Disable thinking
-                thinking_budget=0
-            ),
-        ),
-        model="gemini-2.5-flash-preview-04-17",
+        config=content_config,
         **kwargs,
     )
 
     return chat
 
 
-def generate_questions_with_llm(prompt: str):
-    chat = get_chat()
-    response = chat.send_message(prompt)
-    chat_history = chat.get_history()
-
-    questions_raw: ResumeTailoringQuestions = response.parsed
-
-    return questions_raw, chat_history
-
-
-def execute_tailoring_with_gemini(prompt: str, chat_history: dict) -> ResumeContent:
+def execute_tailoring_with_gemini(
+    prompt: str,
+    content_config: types.GenerateContentConfig,
+    model: str,
+    chat_history: Optional[dict],
+):
     cached_response = load_cached_response()
     if cached_response is not None:
         return cached_response
 
     # Bring back chat history which includes the resume and job description
-    chat = get_chat(history=chat_history)
+    chat = get_chat(content_config=content_config, model=model, history=chat_history)
     response = chat.send_message(
         prompt,
     )

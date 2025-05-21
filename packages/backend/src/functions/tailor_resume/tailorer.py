@@ -1,5 +1,7 @@
 import os
 
+from LLM_tailoring.resume.execute_tailoring import tailor_resume_with_llm
+from LLM_tailoring.resume.prompt import generate_tailoring_llm_prompt
 from LLM_tailoring.schema import AnsweredResumeTailoringQuestions
 from firebase.realtime_db import cache_get_object
 from utils import get_time_string
@@ -8,12 +10,8 @@ from firebase import init_firebase
 from docx_functions.marshaling.serialization import (
     serialize_sections,
 )
-from LLM_tailoring.resume_LLM_prompt import (
-    generate_tailoring_llm_prompt,
-)
-from LLM_tailoring.gemini import (
-    execute_tailoring_with_gemini,
-)
+
+
 from constants import RESUMES_PATH
 
 from docx_functions.segmentation.segment_resume import (
@@ -43,8 +41,8 @@ def tailor_resume(
 
     # ChatID allows us to pull in the chat history object
     chat_history = cache_get_object(chat_id)
-    updated_resume_data = execute_tailoring_with_gemini(
-        resume_tailoring_prompt, chat_history
+    updated_resume_data = tailor_resume_with_llm(
+        prompt=resume_tailoring_prompt, chat_history=chat_history
     )
 
     update_resume_section(

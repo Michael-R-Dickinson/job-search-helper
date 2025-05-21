@@ -33,7 +33,7 @@ class ResumeTailoringQuestions(BaseModel):
         }
 
 
-ResponseSchema = Union[ResumeTailoringQuestions, ResumeContent]
+ResumeResponseSchema = Union[ResumeTailoringQuestions, ResumeContent]
 
 
 QuestionAnswers = dict[str, bool]
