@@ -70,7 +70,7 @@ const TryForFreeCarouselForm = () => {
           onQuestionsAnsweredCallback={() => next()}
         />
       ),
-      height: 'fit-content',
+      height: '500px',
       width: '600px',
     },
     {
@@ -105,14 +105,24 @@ const TryForFreeCarouselForm = () => {
       {/* This inner AnimatePresence and motion.div deals with switching the slide */}
       <AnimatePresence initial={false} mode="wait">
         <motion.div
-          layout="position"
+          layout="size"
           key={step}
           initial={{ x: 300, opacity: 0, transition: { duration: 0.35 } }}
           animate={{ x: 0, opacity: 1, transition: { duration: 0.35, delay: 0.2 } }}
           exit={{ opacity: 0 }}
-          className="h-full w-full"
+          // className="h-full w-full"
         >
-          <>{slides[step].component}</>
+          <>
+            {slides[step].component}
+            <div
+              className="absolute cursor-pointer"
+              onClick={() => {
+                setStep(step - 1)
+              }}
+            >
+              back
+            </div>
+          </>
         </motion.div>
       </AnimatePresence>
     </motion.div>

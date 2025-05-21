@@ -6,7 +6,7 @@ import SelectSkillsDisplay from './SelectSkillsDisplay'
 import GenericLoader from '../GenericLoader'
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-[400px]">{children}</div>
+  <div className="min-h-[400px] h-[400px]">{children}</div>
 )
 
 interface SelectSkillsHandlerProps {
@@ -34,12 +34,7 @@ const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
     enabled: Boolean(fileName && linkedInJobUrl),
   })
 
-  if (!data || isLoading)
-    return (
-      <Wrapper>
-        <GenericLoader size={45} />
-      </Wrapper>
-    )
+  if (!data || isLoading) return <GenericLoader size={45} />
   if (error) {
     console.error('Error fetching skills:', error)
     return <div>Error: {error.message}</div>
@@ -47,14 +42,12 @@ const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
   const { json } = data
 
   return (
-    <Wrapper>
-      <SelectSkillsDisplay
-        skillsToAdd={json.questions.skills_to_add}
-        experienceQuestions={json.questions.experience_questions}
-        setResumeDetail={setResumeDetail}
-        onQuestionsAnsweredCallback={onQuestionsAnsweredCallback}
-      />
-    </Wrapper>
+    <SelectSkillsDisplay
+      skillsToAdd={json.questions.skills_to_add}
+      experienceQuestions={json.questions.experience_questions}
+      setResumeDetail={setResumeDetail}
+      onQuestionsAnsweredCallback={onQuestionsAnsweredCallback}
+    />
   )
 }
 
