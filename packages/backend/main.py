@@ -2,6 +2,9 @@ import json
 
 from firebase import init_firebase
 from firebase_functions import https_fn, options
+from functions.tailor_cover_letter.request_handler import (
+    handle_cover_letter_tailor_request,
+)
 from functions.tailor_resume.request_handler import handle_resume_tailor_request
 from functions.tailoring_questions.request_handler import (
     handle_resume_questions_request,
@@ -52,19 +55,19 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
         )
 
 
-# @https_fn.on_request(
-#     cors=options.CorsOptions(
-#         cors_origins=["*"],
-#         cors_methods=["GET", "POST", "OPTIONS"],
-#     )
-# )
-# def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
-#     userId = req.args.get("userId")
-#     fileName = req.args.get("fileName")
-#     jobDescriptionLink = (req.args.get("jobDescriptionLink"),)
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
+        cors_methods=["GET", "POST", "OPTIONS"],
+    )
+)
+def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
+    user_id = req.args.get("userId")
+    file_name = req.args.get("fileName")
+    job_description_link = req.args.get("jobDescriptionLink")
 
-#     get_tailored_cover_letter(
-#         userId=userId,
-#         fileName=fileName,
-#         jobDescriptionLink=jobDescriptionLink,
-#     )
+    return handle_cover_letter_tailor_request(
+        user_id=user_id,
+        file_name=file_name,
+        job_description_link=job_description_link,
+    )
