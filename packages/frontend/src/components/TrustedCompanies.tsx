@@ -20,7 +20,7 @@ const stats = [
   { value: "98%", label: "ATS Pass Rate" },
   { value: "4.9/5", label: "User Rating" },
 ];
-// YASH - COMEBACK TO MAKE ANIMATED 
+// YASH - COMEBACK TO MAKE ANIMATED
 const TrustedCompanies = () => {
   return (
     <section className="py-16 bg-gray-50">
