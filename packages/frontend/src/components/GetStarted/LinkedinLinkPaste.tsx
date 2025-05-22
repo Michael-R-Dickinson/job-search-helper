@@ -9,7 +9,7 @@ const LinkedinLinkPaste: React.FC<LinkedinLinkPasteProps> = ({ onLinkInputted })
   const [link, setLink] = useState('')
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800">Paste your LinkedIn profile URL</h1>
+      <h1 className="text-xl font-bold text-gray-800">Enter the LinkedIn job posting URL</h1>
       <p className="text-gray-600">We&apos;ll use this to automatically fill out your profile.</p>
       <div className="flex items-center my-4">
         <Linkedin className="w-8 h-8 text-blue-500 mx-3" />

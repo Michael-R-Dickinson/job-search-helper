@@ -1,8 +1,10 @@
 import os
 from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
-from dotenv import load_dotenv
+from dotenv import load_dotenv # type: ignore
 import requests
 import random
+import re
+from urllib.parse import urlparse, parse_qs
 
 from bs4 import BeautifulSoup
 from typing import List, Tuple
@@ -47,6 +49,24 @@ USER_AGENTS = [
     # Brave on macOS
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.198 Safari/537.36 Brave/114.0.5735.198",
 ]
+
+# --- NEW: LinkedIn job ID extraction and canonicalization ---
+def extract_linkedin_job_id(url: str) -> str | None:
+    match = re.search(r'/jobs/view/(\d+)', url)
+    if match:
+        return match.group(1)
+    parsed = urlparse(url)
+    qs = parse_qs(parsed.query)
+    if 'currentJobId' in qs:
+        return qs['currentJobId'][0]
+    return None
+
+def get_canonical_linkedin_job_url(url: str) -> str | None:
+    job_id = extract_linkedin_job_id(url)
+    if job_id:
+        return f"https://www.linkedin.com/jobs/view/{job_id}/"
+    return None
+# ----------------------------------------------------------
 
 
 def get_proxies() -> str:
@@ -139,7 +159,10 @@ def to_markdown(blocks: List[Tuple[str, str]]) -> str:
 
 
 def fetch_job_description_markdown(url: str) -> str:
-    html = fetch_job_html(url)
+    canonical_url = get_canonical_linkedin_job_url(url)
+    if not canonical_url:
+        raise LinkedinError("Could not extract job ID from LinkedIn URL. Please provide a valid job link.")
+    html = fetch_job_html(canonical_url)
     blocks = parse_job_description(html)
     return to_markdown(blocks)
 
