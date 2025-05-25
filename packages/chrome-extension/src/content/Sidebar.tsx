@@ -1,4 +1,8 @@
+import { useInputElements } from "./hooks/useInputElements"
+
 const Sidebar = () => {
+  const elements = useInputElements()
+  console.log("Input elements:", elements)
   return (
     <div
       style={{
