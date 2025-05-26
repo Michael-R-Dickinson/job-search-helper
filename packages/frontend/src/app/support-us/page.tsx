@@ -28,7 +28,7 @@ const SupportUsPage = () => {
             ❤️
           </span>
           Find us the Huzz! YASH loves the huzz :) 😛😛😛
-          <p>Daddy's hungry</p>
+          <p>{"Daddy's hungry"}</p>
         </a>
       </div>
     </div>
