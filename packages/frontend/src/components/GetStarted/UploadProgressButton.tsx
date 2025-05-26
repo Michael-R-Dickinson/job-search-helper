@@ -1,8 +1,9 @@
 import { UploadCloud } from 'lucide-react'
 import React, { useState } from 'react'
-import { auth, storage } from '../../../firebase'
+import { storage } from '../../../firebase'
 import { ref, uploadBytesResumable } from 'firebase/storage'
 import { getUserBucketPath } from '@/lib/utils'
+import useAuth from '@/hooks/useAuth'
 
 interface UploadButtonProgressProps {
   resumeFile: File | null
@@ -13,13 +14,14 @@ const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
   resumeFile,
   onUploadComplete,
 }) => {
+  const { user: currentUser, loading } = useAuth()
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   const handleUpload = () => {
-    if (!resumeFile || !auth.currentUser) return
+    if (!resumeFile || loading) return
 
-    const path = `${getUserBucketPath(auth.currentUser.uid, false)}/${resumeFile.name}`
+    const path = `${getUserBucketPath(currentUser.uid, false)}/${resumeFile.name}`
     const storageRef = ref(storage, path)
     const uploadTask = uploadBytesResumable(storageRef, resumeFile)
 

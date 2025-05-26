@@ -4,9 +4,9 @@ import React, { useState } from 'react'
 import ResumeUploadTile from './ResumeUploadTile'
 import LinkedinLinkPaste from './LinkedinLinkPaste'
 import TailoredResumeHandler from './TailoredResumeHandler'
-import { auth } from '../../../firebase'
 import SelectSkillsHandler from './SelectSkillsHandler'
 import { QuestionAnswers } from '@/lib/api'
+import useAuth from '@/hooks/useAuth'
 
 export type ResumeTailoringDetails = {
   fileName?: string
@@ -28,6 +28,7 @@ export type UpdateResumeDetails = (
 
 const TryForFreeCarouselForm = () => {
   const [resumeDetails, setResumeDetails] = useState<ResumeTailoringDetails>({})
+  const { user: currentUser } = useAuth()
   const updateResumeDetail: UpdateResumeDetails = (key, value) =>
     void setResumeDetails((prev) => ({ ...prev, [key]: value }))
 
@@ -63,7 +64,7 @@ const TryForFreeCarouselForm = () => {
     {
       component: (
         <SelectSkillsHandler
-          userId={auth.currentUser.uid}
+          userId={currentUser.uid}
           fileName={resumeDetails.fileName}
           linkedInJobUrl={resumeDetails.linkedInJobUrl}
           setResumeDetail={updateResumeDetail}
@@ -76,7 +77,7 @@ const TryForFreeCarouselForm = () => {
     {
       component: (
         <TailoredResumeHandler
-          userId={auth.currentUser.uid}
+          userId={currentUser.uid}
           fileName={resumeDetails.fileName}
           chatId={resumeDetails.chatId}
           questionAnswers={resumeDetails.questionAnswers}

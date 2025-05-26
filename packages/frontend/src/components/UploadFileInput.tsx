@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { auth, storage } from '../../firebase'
+import { storage } from '../../firebase'
 import { ref, uploadBytesResumable } from 'firebase/storage'
 import { UploadCloud } from 'lucide-react'
+import useAuth from '@/hooks/useAuth'
 
 const UploadFileInput = () => {
+  const { user: currentUser, loading } = useAuth()
   const [file, setFile] = useState<File | null>(null)
   const [progress, setProgress] = useState(0)
 
@@ -16,9 +18,9 @@ const UploadFileInput = () => {
   }
 
   const handleUpload = () => {
-    if (!file || !auth.currentUser) return
+    if (!file || loading) return
 
-    const path = `resumes/${auth.currentUser.uid}/${file.name}`
+    const path = `resumes/${currentUser.uid}/${file.name}`
     const storageRef = ref(storage, path)
     const uploadTask = uploadBytesResumable(storageRef, file)
 
