@@ -1,4 +1,3 @@
-import os
 from errors.data_fetching_errors import DescriptionNotFound, LinkedinError
 from linkedin_fetching.fetch_html import fetch_job_html
 
@@ -84,12 +83,14 @@ def fetch_job_description_markdown(url: str) -> str:
             "Could not extract job ID from LinkedIn URL. Please provide a valid job link."
         )
 
-    html = fetch_job_html(url)
+    html = fetch_job_html(canonical_url)
     blocks = parse_job_description(html)
     return to_markdown(blocks)
 
 
 if __name__ == "__main__":
-    url = "https://www.linkedin.com/jobs/view/4189842654/?alternateChannel=search"
+    url = (
+        "https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4223055571"
+    )
     markdown = fetch_job_description_markdown(url)
     print(markdown)

@@ -1,7 +1,7 @@
 import os
 import random
 
-from linkedin_fetching.fetch_job_description import LinkedinError
+from errors.data_fetching_errors import LinkedinError
 import requests
 from dotenv import load_dotenv
 
