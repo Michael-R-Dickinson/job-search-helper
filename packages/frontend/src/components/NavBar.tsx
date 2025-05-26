@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from './BasicButton'
 import Link from 'next/link'
 import DashboardButton from './DashboardButton'
+import SignInButton from './SignInButton'
 
 const NavBar = () => {
   return (
@@ -37,6 +38,7 @@ const NavBar = () => {
             How it Works
           </a>
           <DashboardButton />
+          <SignInButton />
         </div>
         <div className="md:hidden">
           <Button variant="ghost" className="text-perfectify-primary">

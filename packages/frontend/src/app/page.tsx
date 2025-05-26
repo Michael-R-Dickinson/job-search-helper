@@ -10,8 +10,6 @@ export default function Home() {
       <ValueProposition />
       <TrustedCompanies />
       <CallToAction />
-      
-
     </main>
   )
 }
