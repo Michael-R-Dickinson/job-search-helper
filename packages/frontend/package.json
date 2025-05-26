@@ -16,7 +16,6 @@
     "lucide-react": "^0.507.0",
     "motion": "^12.10.4",
     "next": "15.3.2",
-    "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-doc-viewer": "^0.1.14",
     "react-dom": "^19.0.0",
@@ -24,6 +23,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "prettier": "^3.5.3",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
