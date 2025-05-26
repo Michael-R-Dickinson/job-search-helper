@@ -4,9 +4,18 @@ import re
 def validate_linkedin_url(url: str) -> bool:
     """
     Validates the LinkedIn URL
+
+    should be in one of the following formats:
+    - https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4223055571
+    - https://www.linkedin.com/jobs/view/4223055571/?alternateChannel=search
     """
     pattern = re.compile(
-        r"^(https?://)?(www\.)?(linkedin\.com)/jobs/view/\d+/\?alternateChannel=search"
+        r"^https://www\.linkedin\.com/jobs/"
+        r"(?:"
+        r"collections/recommended/\?currentJobId=\d+"
+        r"|"
+        r"view/\d+/\?alternateChannel=[^/]+"
+        r")$"
     )
     return bool(pattern.match(url))
 
