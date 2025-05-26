@@ -33,7 +33,10 @@ const SignInButton = () => {
 
   return (
     <div>
-      <button className="btn" onClick={signIn}>
+      <button   className="btn rounded-lg"
+        onClick={signIn}
+
+      >
         Sign in
       </button>
     </div>
