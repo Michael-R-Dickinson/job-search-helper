@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getStorage } from 'firebase/storage'
+import { browserLocalPersistence, getAuth, GoogleAuthProvider, setPersistence } from 'firebase/auth'
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -11,13 +12,18 @@ export const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID!,
 }
 
-const app = initializeApp(firebaseConfig)
+export const app = initializeApp(firebaseConfig)
 
 // export const analytics = getAnalytics(app)
+
+export const authProvider = new GoogleAuthProvider()
+export const auth = getAuth(app)
+setPersistence(auth, browserLocalPersistence) // Set persistence to local
+
 export const storage = getStorage(app)
 
-export const auth = {
-  currentUser: {
-    uid: 'testUserId',
-  },
-}
+// export const auth = {
+//   currentUser: {
+//     uid: 'testUserId',
+//   },
+// }

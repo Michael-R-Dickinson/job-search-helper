@@ -1,21 +1,13 @@
 import json
 
-from backend.LLM_tailoring.schema import AnsweredResumeTailoringQuestions
-from backend.docx_to_pdf import convert_docx_to_pdf
+from firebase import init_firebase
 from firebase_functions import https_fn, options
-from firebase_admin import initialize_app
-
-from backend.errors.data_fetching_errors import DescriptionNotFound, LinkedinError
-from backend.firebase import cache_set_object, init_firebase
-from backend.tailor_resume import (
-    get_tailoring_questions,
-    tailor_resume,
-    upload_tailored_resume,
+from functions.tailor_cover_letter.request_handler import (
+    handle_cover_letter_tailor_request,
 )
-from backend.util import (
-    generate_uuid,
-    validate_inputs_questions,
-    validate_inputs_tailoring,
+from functions.tailor_resume.request_handler import handle_resume_tailor_request
+from functions.tailoring_questions.request_handler import (
+    handle_resume_questions_request,
 )
 
 init_firebase()
@@ -63,116 +55,21 @@ def on_request(req: https_fn.Request) -> https_fn.Response:
         )
 
 
-def handle_resume_questions_request(
-    user_id: str, file_name: str, job_description_link: str
-):
-    try:
-        validate_inputs_questions(
-            userId=user_id,
-            fileName=file_name,
-            job_description_link=job_description_link,
-        )
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
+        cors_methods=["GET", "POST", "OPTIONS"],
+    )
+)
+def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
+    user_id = req.args.get("userId")
+    cover_letter_name = req.args.get("coverLetterName")
+    resume_name = req.args.get("resumeName")
+    job_description_link = req.args.get("jobDescriptionLink")
 
-        questions, chat_history = get_tailoring_questions(
-            user_id=user_id,
-            resume_name=file_name,
-            linkedin_url=job_description_link,
-        )
-
-        chat_id = generate_uuid()
-        cache_set_object(
-            id=chat_id,
-            obj=chat_history,
-        )
-
-        return https_fn.Response(
-            json.dumps(
-                {
-                    "message": "Tailoring questions generated",
-                    "questions": questions.to_dict(),
-                    "chat_id": chat_id,
-                }
-            ),
-            status=200,
-        )
-
-    except ValueError as e:
-        print(f"Invalid inputs: {e}")
-        return https_fn.Response(
-            json.dumps({"message": f"Invalid inputs, {e}"}),
-            status=400,
-        )
-    except DescriptionNotFound as e:
-        print(f"Error fetching job description: {e}")
-        return https_fn.Response(
-            json.dumps({"message": f"Error fetching job description, {e}"}),
-            status=500,
-        )
-    except LinkedinError as e:
-        print(f"Error parsing job description: {e}")
-        return https_fn.Response(
-            json.dumps({"message": f"Error parsing job description, {e}"}),
-            status=500,
-        )
-    except Exception as e:
-        print(f"Error generating questions resume: {e}")
-        return https_fn.Response(
-            json.dumps({"message": f"Error generating questions resume, {e}"}),
-            status=500,
-        )
-
-
-def handle_resume_tailor_request(
-    user_id: str, file_name: str, chat_id: str, question_answers: str
-):
-    """
-    This is only called after the questions request has been made, thus it has a chat to pull in the chat
-    History object with the context of the resume, and job description
-    """
-    try:
-        validate_inputs_tailoring(
-            userId=user_id,
-            fileName=file_name,
-            chat_id=chat_id,
-            question_answers=question_answers,
-        )
-
-        question_responses = json.loads(question_answers)
-        question_responses = AnsweredResumeTailoringQuestions(**question_responses)
-        print("QUESTION RESPONSES", question_responses)
-        resume_path = tailor_resume(
-            user_id=user_id,
-            resume_name=file_name,
-            chat_id=chat_id,
-            question_responses=question_responses,
-        )
-
-        pdf_url = convert_docx_to_pdf(resume_path)
-
-        docx_download_url, public_url = upload_tailored_resume(
-            resume_path, user_id, file_name[:-5], extension=".docx", public=True
-        )
-
-        return https_fn.Response(
-            json.dumps(
-                {
-                    "message": "Tailored resume uploaded to firebase",
-                    "docx_download_url": docx_download_url,
-                    "public_url": public_url,
-                    "pdf_url": pdf_url,
-                }
-            ),
-            status=200,
-        )
-    except ValueError as e:
-        print(f"Invalid inputs: {e}")
-        return https_fn.Response(
-            json.dumps({"message": f"Invalid inputs, {e}"}),
-            status=400,
-        )
-    except Exception as e:
-        print(f"Error tailoring resume: {e}")
-        return https_fn.Response(
-            json.dumps({"message": f"Error tailoring resume, {e}"}),
-            status=500,
-        )
+    return handle_cover_letter_tailor_request(
+        user_id=user_id,
+        cover_letter_name=cover_letter_name,
+        resume_name=resume_name,
+        job_description_link=job_description_link,
+    )

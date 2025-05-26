@@ -1,7 +1,12 @@
-/firebase_admin_creds.json
-resumes/**/*
 __pycache__/
+
 .env
-llm_output_cache.json
+
+/firebase_admin_creds.json
+
+resumes/**/*
+cover_letters/**/*
+
+llm_output_cache/**/*
 
 requirements.txt
