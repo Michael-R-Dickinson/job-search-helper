@@ -101,7 +101,7 @@ const TryForFreeCarouselForm = () => {
         height: slides[step].height,
         width: slides[step].width || 'var(--container-md)',
       }}
-      className="mt-[33vh] bg-white px-8 py-12 rounded-2xl shadow-lg text-center space-y-6"
+      className="mt-[33vh] bg-white px-8 py-9 rounded-2xl shadow-lg text-center space-y-6"
     >
       {/* This inner AnimatePresence and motion.div deals with switching the slide */}
       <AnimatePresence initial={false} mode="wait">

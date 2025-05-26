@@ -37,6 +37,12 @@ const NavBar = () => {
           >
             How it Works
           </a>
+          <a
+            href="/support-us"
+            className="text-perfectify-dark hover:text-perfectify-primary transition-colors"
+          >
+            Support Us
+          </a>
           <DashboardButton />
           <SignInButton />
         </div>

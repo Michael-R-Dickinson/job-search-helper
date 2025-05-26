@@ -1,9 +1,11 @@
-import os
 from errors.data_fetching_errors import DescriptionNotFound, LinkedinError
 from linkedin_fetching.fetch_html import fetch_job_html
 
 from bs4 import BeautifulSoup
 from typing import List, Tuple
+
+import re
+from urllib.parse import parse_qs, urlparse
 
 
 def parse_job_description(html: str) -> List[Tuple[str, str]]:
@@ -56,13 +58,39 @@ def to_markdown(blocks: List[Tuple[str, str]]) -> str:
     return "\n".join(md_lines).strip()
 
 
+def extract_linkedin_job_id(url: str) -> str | None:
+    match = re.search(r"/jobs/view/(\d+)", url)
+    if match:
+        return match.group(1)
+    parsed = urlparse(url)
+    qs = parse_qs(parsed.query)
+    if "currentJobId" in qs:
+        return qs["currentJobId"][0]
+    return None
+
+
+def get_canonical_linkedin_job_url(url: str) -> str | None:
+    job_id = extract_linkedin_job_id(url)
+    if job_id:
+        return f"https://www.linkedin.com/jobs/view/{job_id}/"
+    return None
+
+
 def fetch_job_description_markdown(url: str) -> str:
-    html = fetch_job_html(url)
+    canonical_url = get_canonical_linkedin_job_url(url)
+    if not canonical_url:
+        raise LinkedinError(
+            "Could not extract job ID from LinkedIn URL. Please provide a valid job link."
+        )
+
+    html = fetch_job_html(canonical_url)
     blocks = parse_job_description(html)
     return to_markdown(blocks)
 
 
 if __name__ == "__main__":
-    url = "https://www.linkedin.com/jobs/view/4189842654/?alternateChannel=search"
+    url = (
+        "https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4223055571"
+    )
     markdown = fetch_job_description_markdown(url)
     print(markdown)

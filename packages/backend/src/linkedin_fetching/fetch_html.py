@@ -1,7 +1,7 @@
 import os
 import random
 
-from linkedin_fetching.fetch_job_description import LinkedinError
+from errors.data_fetching_errors import LinkedinError
 import requests
 from dotenv import load_dotenv
 
@@ -59,7 +59,6 @@ def get_proxies() -> str:
 
 
 def fetch_job_html(url: str) -> str:
-
     headers = {
         "User-Agent": random.choice(USER_AGENTS),
         "Accept": "text/html,application/xhtml+xml",

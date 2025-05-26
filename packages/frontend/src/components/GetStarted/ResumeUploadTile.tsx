@@ -12,7 +12,7 @@ const ResumeUploadTile: React.FC<{ onUploadComplete: (fileName: string) => void 
     <div>
       <h1 className="text-2xl font-bold text-gray-800">Upload Your Resume</h1>
       <p className="text-gray-600">
-        Drag &amp; drop your resume here, or click below to choose a file.
+        Drag &amp; drop your resume here, or click below to choose a file that is in a <strong className="text-perfectify-purple">word or doc file.</strong>
       </p>
 
       <UploadResumeInput resumeFile={resumeFile} setResumeFile={setResumeFile} />
