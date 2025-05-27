@@ -3,10 +3,10 @@ import reactLogo from "./assets/react.svg"
 import viteLogo from "/vite.svg"
 import "./App.css"
 import beginAuthenticationFlow from "./content/beginAuthenticationFlow"
+import { signOut } from "firebase/auth"
+import { auth } from "./extensionFirebase"
 
 function ActionPopup() {
-  const [count, setCount] = useState(0)
-
   return (
     <div>
       <div>
@@ -22,8 +22,9 @@ function ActionPopup() {
         <button onClick={() => {
           beginAuthenticationFlow()
         }}>
-          count is {count}
+        Sign In
         </button>
+        <button onClick={()=> signOut(auth)}>Sign Out</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
