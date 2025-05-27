@@ -2,7 +2,7 @@ import { useState } from "react"
 import reactLogo from "./assets/react.svg"
 import viteLogo from "/vite.svg"
 import "./App.css"
-import authenticate from "./auth"
+import beginAuthenticationFlow from "./content/beginAuthenticationFlow"
 
 function ActionPopup() {
   const [count, setCount] = useState(0)
@@ -20,7 +20,7 @@ function ActionPopup() {
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => {
-          authenticate()
+          beginAuthenticationFlow()
         }}>
           count is {count}
         </button>

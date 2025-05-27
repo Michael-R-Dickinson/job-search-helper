@@ -13,10 +13,17 @@ const app = initializeApp({
 
 const auth = getAuth(app)
 
-function openAuthWindow() {
+async function openAuthWindow() {
+  const win = await chrome.windows.create({
+    url: 'http://localhost:8080/extensionAuth',
+    type: 'popup',
+    width: 800,
+    height: 600,
+  })
+
   console.log('Opening auth window for extension')
   const AUTH_WINDOW = 'http://localhost:8080/extensionAuth'
-  const w = window.open(AUTH_WINDOW, 'ExtensionAuth', 'width=500,height=600')
+  const w = window.open(AUTH_WINDOW, 'ExtensionAuth', 'width=800,height=600')
 
   window.addEventListener('message', (evt) => {
     if (evt.origin !== 'http://localhost:8080') return
