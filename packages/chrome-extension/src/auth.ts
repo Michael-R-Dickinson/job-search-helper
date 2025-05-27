@@ -21,19 +21,15 @@ function openAuthWindow() {
   window.addEventListener('message', (evt) => {
     if (evt.origin !== 'http://localhost:8080') return
     const data = evt.data
-    // const firebaseAuth = JSON.parse(data.firebaseAuth)
-    // const idToken = data.idToken
     const accessToken = data.accessToken
-    // const { accessToken, refreshToken } = firebaseAuth.stsTokenManager
 
     const cred = GoogleAuthProvider.credential(null, accessToken)
 
     try {
-      console.log('Signing in with credential:', cred)
       signInWithCredential(auth, cred)
         .then(() => console.log('✅ Firebase Auth in extension done'))
         .catch(console.error)
-      // .finally(() => w?.close())
+        .finally(() => w?.close())
     } catch (error) {
       console.error('Error signing in with credential:', error)
     }
