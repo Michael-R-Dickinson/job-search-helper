@@ -18,5 +18,10 @@
       "resources": ["assets/*"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "permissions": [
+    "offscreen", "identity", "tabs"
+  ],
+  "host_permissions": ["http://localhost:8080/*"]
+
 }

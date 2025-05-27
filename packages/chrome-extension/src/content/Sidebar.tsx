@@ -1,8 +1,9 @@
 import { useInputElements } from "./hooks/useInputElements"
+import { injectAuthFrame } from "./injectAuthIframe"
+
 
 const Sidebar = () => {
   const elements = useInputElements()
-  console.log("Input elements:", elements)
   return (
     <div
       style={{
@@ -16,6 +17,10 @@ const Sidebar = () => {
       }}
     >
       TEST
+      <button onClick={()=> {
+        console.log("Injecting iframe")
+        injectAuthFrame()
+      }}>Inject Iframe</button>
     </div>
   )
 }
