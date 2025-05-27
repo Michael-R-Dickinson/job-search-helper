@@ -1,5 +1,28 @@
 import { UploadCloud } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
+
+const CenteredAbsoluteDiv: React.FC<{
+  children: ReactNode
+  centerWidth?: boolean
+  centerHeight?: boolean
+  className: string
+}> = ({ children, className, centerHeight = false, centerWidth = false }) => {
+  const widthTranslation = centerWidth ? '-50%' : '0'
+  const heightTranslation = centerHeight ? '-50%' : '0'
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: centerHeight ? '50%' : undefined,
+        left: centerWidth ? '50%' : undefined,
+        transform: `translate(${widthTranslation}, ${heightTranslation})`,
+      }}
+      className={className}
+    >
+      {children}
+    </div>
+  )
+}
 
 interface UploadResumeButtonProps {
   resumeFile: File | null
@@ -17,17 +40,14 @@ const UploadResumeInput: React.FC<UploadResumeButtonProps> = ({ resumeFile, setR
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       ]
       const fileName = file.name.toLowerCase()
-      const validExtensions = [
-        '.doc',
-        '.docx',
-      ]
-      const hasValidExtension = validExtensions.some(ext => fileName.endsWith(ext))
+      const validExtensions = ['.doc', '.docx']
+      const hasValidExtension = validExtensions.some((ext) => fileName.endsWith(ext))
       if (validTypes.includes(file.type) || hasValidExtension) {
         setResumeFile(file)
         setError(null)
       } else {
         setResumeFile(null)
-        setError('Please upload Word (doc, docx) files only.')   
+        setError('Please upload Document (.docx) files only.')
       }
     }
   }
@@ -39,14 +59,21 @@ const UploadResumeInput: React.FC<UploadResumeButtonProps> = ({ resumeFile, setR
           {resumeFile ? (
             <span className="text-gray-700 font-medium truncate px-4">{resumeFile.name}</span>
           ) : (
-            <span className="text-gray-500">Select a file to upload</span>
+            <div className="relative">
+              <span className="text-gray-500">Select a file to upload</span>
+              {error && (
+                <CenteredAbsoluteDiv
+                  centerWidth
+                  className="text-red-500 text-sm px-4 py-2 absolute w-max opacity-80"
+                >
+                  {error}
+                </CenteredAbsoluteDiv>
+              )}
+            </div>
           )}
         </div>
         <input type="file" onChange={handleChange} className="hidden" />
       </label>
-      <div className="min-h-[28px]">
-        {error && <div className="text-red-500 text-sm px-4 py-2">{error}</div>}
-      </div>
     </>
   )
 }
