@@ -1,5 +1,16 @@
 import type { InputInfo } from '../content/hooks/useInputElements'
 
+import {
+  isNameInput,
+  isEmailInput,
+  isGenderInput,
+  isVeteranStatusInput,
+  isRaceEthnicityInput,
+  isDisabilityInput,
+  isPhoneInput,
+  isCountryInput,
+} from './inputCategories'
+
 // Constants
 export const INPUT_TYPES = {
   TEXT: 'text',
@@ -16,18 +27,6 @@ export const INPUT_TYPES = {
 } as const
 
 type InputType = (typeof INPUT_TYPES)[keyof typeof INPUT_TYPES]
-
-// Input type detection functions
-import {
-  isNameInput,
-  isEmailInput,
-  isGenderInput,
-  isVeteranStatusInput,
-  isRaceEthnicityInput,
-  isDisabilityInput,
-  isPhoneInput,
-  isCountryInput,
-} from './inputCategories'
 
 // Types
 interface ProcessedInput {
@@ -74,28 +73,56 @@ const getFieldType = (
   return INPUT_TYPES.TEXT
 }
 
-const preprocessInputs = (inputs: InputInfo[]) => {
-  return inputs
-    .map((input) => {
-      const label = input.label?.trim().toLowerCase() || ''
-      const element = input.element as HTMLInputElement
-      const fieldType = getFieldType(element)
+const preprocessInputs = (inputs: InputInfo[]): ProcessedInput[] => {
+  return inputs.map((inputInfo) => {
+    const { element, label: rawLabel } = inputInfo
+    const processedLabel = rawLabel?.trim().toLowerCase() || ''
+    const fieldType = getFieldType(element)
 
-      return {
-        ...input,
-        label,
-        fieldType,
-        name: element.name || '',
-        type: element.type || 'text',
-        placeholder: element.placeholder || '',
-        autocomplete: element.autocomplete || '',
-        id: element.id || '',
-        className: element.className || '',
-        value: element.value || '',
-        required: element.required || false,
-      } as const
-    })
-    .filter(({ label }) => Boolean(label)) // Ensure we only keep inputs with non-empty labels
+    let specificElementType = 'text' // Default for inputs, or general type
+    const tagName = element.tagName.toLowerCase()
+
+    if (tagName === 'input') {
+      specificElementType = (element as HTMLInputElement).type?.toLowerCase() || 'text'
+    } else if (tagName === 'select') {
+      specificElementType = (element as HTMLSelectElement).type // e.g., "select-one", "select-multiple"
+    } else if (tagName === 'textarea') {
+      specificElementType = 'textarea'
+    }
+
+    // Common properties accessible on all three types
+    const name = element.name || ''
+    const id = element.id || ''
+    const className = element.className || ''
+    const value = element.value || ''
+    const required = element.required || false
+
+    // Properties that might not exist on all types, handle carefully
+    let placeholder = ''
+    if ('placeholder' in element) {
+      placeholder = (element as HTMLInputElement | HTMLTextAreaElement).placeholder || ''
+    }
+
+    let autocomplete = ''
+    if ('autocomplete' in element) {
+      autocomplete =
+        (element as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).autocomplete || ''
+    }
+
+    return {
+      element, // Original element
+      label: processedLabel,
+      fieldType,
+      name,
+      type: specificElementType, // Use the derived specific element type
+      placeholder,
+      autocomplete,
+      id,
+      className,
+      value,
+      required,
+    } as ProcessedInput // Assert as ProcessedInput, ensure fields match
+  })
 }
 
 const categorizeInputs = (inputs: InputInfo[]): CategorizedInput[] => {
