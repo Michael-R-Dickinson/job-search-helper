@@ -8,11 +8,13 @@ import useAuth from '@/hooks/useAuth'
 interface UploadButtonProgressProps {
   resumeFile: File | null
   onUploadComplete: () => void
+  disabled?: boolean
 }
 
 const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
   resumeFile,
   onUploadComplete,
+  disabled,
 }) => {
   const { user: currentUser, loading } = useAuth()
   const [progress, setProgress] = useState(0)
@@ -58,10 +60,10 @@ const PublishResumeProgressButton: React.FC<UploadButtonProgressProps> = ({
     <div>
       <button
         onClick={handleUpload}
-        disabled={!resumeFile || (progress > 0 && progress < 100)}
+        disabled={disabled || !resumeFile || (progress > 0 && progress < 100)}
         className={`text-indigo-500 relative w-full h-12 overflow-hidden rounded-full border-2 cursor-pointer hover:bg-purple-100 ${resumeFile ? 'border-perfectify-primary' : 'border-gray-300 opacity-60 cursor-not-allowed'}`}
         style={{
-          pointerEvents: !resumeFile || (progress > 0 && progress < 100) ? 'none' : 'auto',
+          pointerEvents: disabled || !resumeFile || (progress > 0 && progress < 100) ? 'none' : 'auto',
         }}
       >
         <div
