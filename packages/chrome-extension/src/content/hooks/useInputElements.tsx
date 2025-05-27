@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 
+export type ElementInfo = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 export interface InputInfo {
-  element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  element: ElementInfo
   label: string | null
 }
 

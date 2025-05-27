@@ -1,4 +1,4 @@
-import type { InputInfo } from '../content/hooks/useInputElements'
+import type { ElementInfo, InputInfo } from '../content/hooks/useInputElements'
 
 import {
   isNameInput,
@@ -54,13 +54,12 @@ type InputCategory =
   | 'country'
   | 'unknown'
 
-interface CategorizedInput extends ProcessedInput {
+interface CategorizedInput {
+  element: ElementInfo
   category: InputCategory
 }
 
-const getFieldType = (
-  el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
-): InputType => {
+const getFieldType = (el: ElementInfo): InputType => {
   const tag = el.tagName.toLowerCase()
   if (tag === 'select') return INPUT_TYPES.SELECT
   if (tag === 'textarea') return INPUT_TYPES.TEXTBOX
@@ -100,13 +99,12 @@ const preprocessInputs = (inputs: InputInfo[]): ProcessedInput[] => {
     // Properties that might not exist on all types, handle carefully
     let placeholder = ''
     if ('placeholder' in element) {
-      placeholder = (element as HTMLInputElement | HTMLTextAreaElement).placeholder || ''
+      placeholder = element.placeholder || ''
     }
 
     let autocomplete = ''
     if ('autocomplete' in element) {
-      autocomplete =
-        (element as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).autocomplete || ''
+      autocomplete = element.autocomplete || ''
     }
 
     return {
@@ -127,15 +125,16 @@ const preprocessInputs = (inputs: InputInfo[]): ProcessedInput[] => {
 
 const categorizeInputs = (inputs: InputInfo[]): CategorizedInput[] => {
   return preprocessInputs(inputs).map((input) => {
-    if (isNameInput(input)) return { ...input, category: 'name' as const }
-    if (isEmailInput(input)) return { ...input, category: 'email' as const }
-    if (isGenderInput(input)) return { ...input, category: 'gender' as const }
-    if (isVeteranStatusInput(input)) return { ...input, category: 'veteran' as const }
-    if (isRaceEthnicityInput(input)) return { ...input, category: 'race_ethnicity' as const }
-    if (isDisabilityInput(input)) return { ...input, category: 'disability' as const }
-    if (isPhoneInput(input)) return { ...input, category: 'phone' as const }
-    if (isCountryInput(input)) return { ...input, category: 'country' as const }
-    return { ...input, category: 'unknown' as const }
+    if (isNameInput(input)) return { element: input.element, category: 'name' as const }
+    if (isEmailInput(input)) return { element: input.element, category: 'email' as const }
+    if (isGenderInput(input)) return { element: input.element, category: 'gender' as const }
+    if (isVeteranStatusInput(input)) return { element: input.element, category: 'veteran' as const }
+    if (isRaceEthnicityInput(input))
+      return { element: input.element, category: 'race_ethnicity' as const }
+    if (isDisabilityInput(input)) return { element: input.element, category: 'disability' as const }
+    if (isPhoneInput(input)) return { element: input.element, category: 'phone' as const }
+    if (isCountryInput(input)) return { element: input.element, category: 'country' as const }
+    return { element: input.element, category: 'unknown' as const }
   })
 }
 
