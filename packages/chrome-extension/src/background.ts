@@ -1,5 +1,5 @@
 import { eventTypes } from './events'
-import authenticate from './background/auth'
+import authenticate from './auth/background'
 
 console.log('Background script loaded')
 
