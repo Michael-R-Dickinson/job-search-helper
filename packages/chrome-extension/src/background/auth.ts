@@ -19,7 +19,7 @@ function makeNonce(length = 16) {
   return n
 }
 
-const backgroundAuthenticate = async () => {
+const authenticateWithWebflow = async () => {
   const CLIENT_ID = '979682135581-6i1h455suorolvf4q94q42jdqcsn7u10.apps.googleusercontent.com'
   const REDIRECT_URI = chrome.identity.getRedirectURL()
   console.log('Redirect URI:', REDIRECT_URI)
@@ -60,7 +60,7 @@ const authenticate = () => {
     console.log('User already authenticated:', user)
     return true // Keep the message channel open for sendResponse
   }
-  backgroundAuthenticate()
+  authenticateWithWebflow()
 }
 
 // Live user state
