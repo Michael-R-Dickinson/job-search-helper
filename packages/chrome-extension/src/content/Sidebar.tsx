@@ -1,7 +1,9 @@
+import getAutofillValues from '../autofillEngine/getAutofillValues'
 import { useInputElements } from './hooks/useInputElements'
 
 const Sidebar = () => {
   const elements = useInputElements()
+
   return (
     <div
       style={{
