@@ -56,17 +56,19 @@ const authenticateWithWebflow = async () => {
 }
 
 const authenticate = () => {
-  if (user) {
-    console.log('User already authenticated:', user)
+  if (currentUser) {
+    console.log('User already authenticated:', currentUser)
     return true // Keep the message channel open for sendResponse
   }
   authenticateWithWebflow()
 }
 
 // Live user state
-let user: User | null = null
+let currentUser: User | null = null
 onAuthStateChanged(auth, (u) => {
-  user = u
+  currentUser = u
 })
+
+export { currentUser }
 
 export default authenticate
