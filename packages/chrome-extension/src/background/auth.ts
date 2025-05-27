@@ -5,6 +5,7 @@ import {
   type User,
 } from 'firebase/auth/web-extension'
 import { auth } from '../extensionFirebase'
+
 // Single use big number
 // Nonce generation by LLM - tested and working for OAuth2
 function makeNonce(length = 16) {

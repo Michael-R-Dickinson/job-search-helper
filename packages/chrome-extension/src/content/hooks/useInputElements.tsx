@@ -38,19 +38,21 @@ export function useInputElements(): InputInfo[] {
       >('input, textarea, select')
 
       const filtered: InputInfo[] = Array.from(nodeList)
-        .filter(el => {
+        .filter((el) => {
           const tag = el.tagName.toLowerCase()
 
           // 1) Exclude aria-hidden or invisible styles
           if (el.getAttribute('aria-hidden') === 'true') return false
           const style = window.getComputedStyle(el)
-          if (style.opacity === '0' || style.visibility === 'hidden' || style.display === 'none') return false
+          if (style.opacity === '0' || style.visibility === 'hidden' || style.display === 'none')
+            return false
 
           // 2) Exclude captchas by id/name/class
           const id = el.id?.toLowerCase() ?? ''
           const name = el.getAttribute('name')?.toLowerCase() ?? ''
           const cls = el.className?.toString().toLowerCase() ?? ''
-          if (id.includes('captcha') || name.includes('captcha') || cls.includes('captcha')) return false
+          if (id.includes('captcha') || name.includes('captcha') || cls.includes('captcha'))
+            return false
 
           // 3) Exclude controls that aren’t meant for text entry
           if (tag === 'input') {
@@ -69,7 +71,7 @@ export function useInputElements(): InputInfo[] {
 
           return true
         })
-        .map(el => ({
+        .map((el) => ({
           element: el,
           label: getLabelText(el as HTMLElement),
         }))
