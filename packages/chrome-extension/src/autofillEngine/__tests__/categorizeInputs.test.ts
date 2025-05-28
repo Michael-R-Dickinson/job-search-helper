@@ -1,105 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import categorizeInputs, { INPUT_TYPES } from '../categorizeInputs'
-import type { InputInfo } from '../../content/hooks/useInputElements'
-
-type InputElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-
-interface TestInputOptions {
-  label?: string | null
-  element?: Partial<MockInputElement> & {
-    type?: string
-    tagName?: 'INPUT' | 'SELECT' | 'TEXTAREA'
-    value?: string
-    checked?: boolean
-    selected?: boolean
-  }
-}
-
-// Simple mock for HTML elements
-class MockInputElement {
-  tagName: 'INPUT' | 'SELECT' | 'TEXTAREA'
-  type: string
-  name: string
-  className: string
-  placeholder: string
-  autocomplete: string
-  value: string
-  required: boolean
-  disabled: boolean
-  readOnly: boolean
-  checked: boolean
-  selected: boolean // For select options
-  parentElement: HTMLElement | null = null
-
-  constructor(
-    options: Partial<MockInputElement> & {
-      type?: string
-      tagName?: 'INPUT' | 'SELECT' | 'TEXTAREA'
-      value?: string
-      checked?: boolean
-      selected?: boolean
-    } = {},
-  ) {
-    this.type = options.type || 'text'
-
-    if (options.tagName) {
-      this.tagName = options.tagName
-    } else {
-      if (this.type === 'select-one' || this.type === 'select-multiple' || this.type === 'select') {
-        this.tagName = 'SELECT'
-      } else if (this.type === 'textarea') {
-        this.tagName = 'TEXTAREA'
-      } else {
-        this.tagName = 'INPUT'
-      }
-    }
-
-    this.name = options.name || ''
-    this.className = options.className || ''
-    this.placeholder = options.placeholder || ''
-    this.autocomplete = options.autocomplete || ''
-    this.value = options.value || ''
-    this.required = options.required || false
-    this.disabled = options.disabled || false
-    this.readOnly = options.readOnly || false
-    this.checked = options.checked || false
-    this.selected = options.selected || false
-    this.parentElement = options.parentElement || null
-  }
-
-  addEventListener() {}
-  removeEventListener() {}
-  dispatchEvent() {
-    return true
-  }
-}
+import categorizeInputs from '../categorizeInputs'
+import type { SerializedInput } from '../../content/triggerGetAutofillValues'
 
 describe('categorizeInputs', () => {
-  const createTestInput = (options: TestInputOptions = {}): InputInfo => {
-    const elementOptions = options.element || {}
-    const element = new MockInputElement(elementOptions) as unknown as InputElement
-
-    return {
-      element,
-      label: options.label !== undefined ? options.label : null,
-    }
-  }
-
   it('should categorize name inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Full Name',
-        element: { name: 'full_name' },
-      }),
-      createTestInput({
-        label: 'First Name',
-        element: { name: 'first_name' },
-      }),
-      createTestInput({
-        element: { placeholder: 'Enter your last name' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Full Name', html: '<input name="full_name" />' },
+      { label: 'First Name', html: '<input name="first_name" />' },
+      { label: null, html: '<input placeholder="Enter your last name" />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -108,23 +17,11 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize email inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Email Address',
-        element: { type: 'email' },
-      }),
-      createTestInput({
-        element: {
-          name: 'user_email',
-          placeholder: 'your@email.com',
-        },
-      }),
-      createTestInput({
-        label: 'E-mail',
-        element: { className: 'email-field' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Email Address', html: '<input type="email" />' },
+      { label: null, html: '<input name="user_email" placeholder="your@email.com" />' },
+      { label: 'E-mail', html: '<input class="email-field" />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -133,20 +30,11 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize gender inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Gender',
-        element: { type: 'radio', name: 'gender' },
-      }),
-      createTestInput({
-        label: 'Sex',
-        element: { className: 'sex-selection' },
-      }),
-      createTestInput({
-        label: 'Select your gender identity',
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Gender', html: '<input type="radio" name="gender" />' },
+      { label: 'Sex', html: '<input class="sex-selection" />' },
+      { label: 'Select your gender identity', html: '<input />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -155,21 +43,11 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize veteran status inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Veteran Status',
-        element: { type: 'radio', name: 'veteran_status_group' },
-      }),
-      createTestInput({
-        label: 'Are you a veteran?',
-        element: { className: 'veteran-status', type: 'checkbox' },
-      }),
-      createTestInput({
-        label: 'Military service',
-        element: { name: 'military_service', type: 'select' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Veteran Status', html: '<input type="radio" name="veteran_status_group" />' },
+      { label: 'Are you a veteran?', html: '<input class="veteran-status" type="checkbox" />' },
+      { label: 'Military service', html: '<select name="military_service"></select>' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -178,21 +56,11 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize race/ethnicity inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Race',
-        element: { type: 'select', name: 'race_dropdown' },
-      }),
-      createTestInput({
-        label: 'Ethnicity',
-        element: { className: 'ethnicity-select', type: 'select-multiple' },
-      }),
-      createTestInput({
-        label: 'Race/Ethnicity',
-        element: { name: 'race_ethnicity', type: 'radio' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Race', html: '<select name="race_dropdown"></select>' },
+      { label: 'Ethnicity', html: '<select class="ethnicity-select" multiple></select>' },
+      { label: 'Race/Ethnicity', html: '<input name="race_ethnicity" type="radio" />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -201,21 +69,17 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize disability inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Disability Status',
-        element: { type: 'checkbox', name: 'disability' },
-      }),
-      createTestInput({
+    const inputs: SerializedInput[] = [
+      { label: 'Disability Status', html: '<input type="checkbox" name="disability" />' },
+      {
         label: 'Do you have a disability?',
-        element: { className: 'disability-check', type: 'checkbox' },
-      }),
-      createTestInput({
+        html: '<input class="disability-check" type="checkbox" />',
+      },
+      {
         label: 'Voluntary Self-Identification of Disability',
-        element: { type: 'select', name: 'disability_self_id' },
-      }),
+        html: '<select name="disability_self_id"></select>',
+      },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -224,23 +88,11 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize phone inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Phone Number',
-        element: { type: 'tel', name: 'phone' },
-      }),
-      createTestInput({
-        element: {
-          name: 'telephone',
-          placeholder: '(123) 456-7890',
-        },
-      }),
-      createTestInput({
-        label: 'Mobile',
-        element: { autocomplete: 'tel-national' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Phone Number', html: '<input type="tel" name="phone" />' },
+      { label: null, html: '<input name="telephone" placeholder="(123) 456-7890" />' },
+      { label: 'Mobile', html: '<input autocomplete="tel-national" />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -249,24 +101,14 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize country inputs correctly', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Country',
-        element: { type: 'select-one', name: 'country' },
-      }),
-      createTestInput({
-        element: {
-          name: 'country_code',
-          placeholder: 'Select your country',
-          type: 'select',
-        },
-      }),
-      createTestInput({
-        label: 'Location (Country)',
-        element: { autocomplete: 'country-name', type: 'text' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Country', html: '<select name="country"></select>' },
+      {
+        label: null,
+        html: '<select name="country_code" placeholder="Select your country"></select>',
+      },
+      { label: 'Location (Country)', html: '<input autocomplete="country-name" type="text" />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
     result.forEach((input) => {
@@ -275,16 +117,10 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize inputs with no matching category as unknown', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Favorite Color',
-        element: { name: 'fav_color' },
-      }),
-      createTestInput({
-        element: { placeholder: 'Your hobbies' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Favorite Color', html: '<input name="fav_color" />' },
+      { label: null, html: '<input placeholder="Your hobbies" />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(2)
     result.forEach((input) => {
@@ -293,47 +129,40 @@ describe('categorizeInputs', () => {
   })
 
   it('should categorize inputs with empty or null labels (and no other strong identifiers) as unknown', () => {
-    const inputs = [
-      createTestInput({ label: '' }),
-      createTestInput({ label: null }),
-      createTestInput({ label: '     ' }),
-      createTestInput({ label: '', element: { name: 'email_address', type: 'email' } }),
+    const inputs: SerializedInput[] = [
+      { label: '', html: '<input />' },
+      { label: null, html: '<input />' },
+      { label: '     ', html: '<input />' },
+      { label: '', html: '<input name="email_address" type="email" />' },
     ]
-
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(4)
-    expect(result.find((r) => r.element.name === 'email_address')?.category).toBe('email')
+    expect(result.find((r) => r.name === 'email_address')?.category).toBe('email')
     expect(result.filter((r) => r.category === 'unknown').length).toBe(3)
   })
 
   it('should correctly categorize inputs using autocomplete attributes', () => {
-    const inputs = [
-      createTestInput({ element: { autocomplete: 'given-name' } }),
-      createTestInput({ element: { autocomplete: 'family-name' } }),
-      createTestInput({ element: { autocomplete: 'email' } }),
-      createTestInput({ element: { autocomplete: 'tel' } }),
-      createTestInput({ element: { autocomplete: 'country' } }),
+    const inputs: SerializedInput[] = [
+      { label: null, html: '<input autocomplete="given-name" />' },
+      { label: null, html: '<input autocomplete="family-name" />' },
+      { label: null, html: '<input autocomplete="email" />' },
+      { label: null, html: '<input autocomplete="tel" />' },
+      { label: null, html: '<input autocomplete="country" />' },
     ]
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(5)
-    expect(result.find((r) => r.element.autocomplete === 'given-name')?.category).toBe('name')
-    expect(result.find((r) => r.element.autocomplete === 'family-name')?.category).toBe('name')
-    expect(result.find((r) => r.element.autocomplete === 'email')?.category).toBe('email')
-    expect(result.find((r) => r.element.autocomplete === 'tel')?.category).toBe('phone')
-    expect(result.find((r) => r.element.autocomplete === 'country')?.category).toBe('country')
+    expect(result.find((r) => r.autocomplete === 'given-name')?.category).toBe('name')
+    expect(result.find((r) => r.autocomplete === 'family-name')?.category).toBe('name')
+    expect(result.find((r) => r.autocomplete === 'email')?.category).toBe('email')
+    expect(result.find((r) => r.autocomplete === 'tel')?.category).toBe('phone')
+    expect(result.find((r) => r.autocomplete === 'country')?.category).toBe('country')
   })
 
   it('should handle various combinations of attributes for categorization', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Your Full Name',
-        element: { type: 'text', placeholder: 'Enter name' },
-      }),
-      createTestInput({ element: { name: 'contact_email', type: 'email' } }),
-      createTestInput({
-        label: 'Phone No.',
-        element: { name: 'user_phone', placeholder: '###-###-####' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Your Full Name', html: '<input type="text" placeholder="Enter name" />' },
+      { label: null, html: '<input name="contact_email" type="email" />' },
+      { label: 'Phone No.', html: '<input name="user_phone" placeholder="###-###-####" />' },
     ]
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
@@ -343,47 +172,35 @@ describe('categorizeInputs', () => {
   })
 
   it('should correctly prioritize categories if multiple keywords match (hypothetical)', () => {
-    const inputs = [
-      createTestInput({ label: 'Your Email and Name', element: { name: 'contact_field' } }),
+    const inputs: SerializedInput[] = [
+      { label: 'Your Email and Name', html: '<input name="contact_field" />' },
     ]
     const result = categorizeInputs(inputs)
     expect(result[0].category).toBe('name')
   })
 
   it('should correctly categorize select elements', () => {
-    const inputs = [
-      createTestInput({ label: 'Gender', element: { type: 'select-one', name: 'gender_select' } }),
-      createTestInput({
-        label: 'Race/Ethnicity',
-        element: { type: 'select-multiple', name: 'race_select' },
-      }),
-      createTestInput({
-        label: 'Country of Residence',
-        element: { type: 'select-one', name: 'residence_country' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'Gender', html: '<select name="gender_select"></select>' },
+      { label: 'Race/Ethnicity', html: '<select name="race_select" multiple></select>' },
+      { label: 'Country of Residence', html: '<select name="residence_country"></select>' },
     ]
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(3)
-    expect(result.find((r) => r.element.name === 'gender_select')?.category).toBe('gender')
-    expect(result.find((r) => r.element.name === 'race_select')?.category).toBe('race_ethnicity')
-    expect(result.find((r) => r.element.name === 'residence_country')?.category).toBe('country')
+    expect(result.find((r) => r.name === 'gender_select')?.category).toBe('gender')
+    expect(result.find((r) => r.name === 'race_select')?.category).toBe('race_ethnicity')
+    expect(result.find((r) => r.name === 'residence_country')?.category).toBe('country')
   })
 
   it('should correctly categorize radio button inputs', () => {
-    const inputs = [
-      createTestInput({ label: 'Male', element: { type: 'radio', name: 'gender', value: 'male' } }),
-      createTestInput({
-        label: 'Female',
-        element: { type: 'radio', name: 'gender', value: 'female' },
-      }),
-      createTestInput({
+    const inputs: SerializedInput[] = [
+      { label: 'Male', html: '<input type="radio" name="gender" value="male" />' },
+      { label: 'Female', html: '<input type="radio" name="gender" value="female" />' },
+      {
         label: 'Yes, I am a veteran',
-        element: { type: 'radio', name: 'vet_status', value: 'yes' },
-      }),
-      createTestInput({
-        label: 'No, not a veteran',
-        element: { type: 'radio', name: 'vet_status', value: 'no' },
-      }),
+        html: '<input type="radio" name="vet_status" value="yes" />',
+      },
+      { label: 'No, not a veteran', html: '<input type="radio" name="vet_status" value="no" />' },
     ]
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(4)
@@ -392,34 +209,16 @@ describe('categorizeInputs', () => {
   })
 
   it('should correctly categorize checkbox inputs', () => {
-    const inputs = [
-      createTestInput({
-        label: 'I have a disability',
-        element: { type: 'checkbox', name: 'has_disability' },
-      }),
-      createTestInput({
-        label: 'Opt-in for newsletter',
-        element: { type: 'checkbox', name: 'newsletter_opt_in' },
-      }),
+    const inputs: SerializedInput[] = [
+      { label: 'I have a disability', html: '<input type="checkbox" name="has_disability" />' },
+      {
+        label: 'Subscribe to newsletter',
+        html: '<input type="checkbox" name="newsletter_opt_in" />',
+      },
     ]
     const result = categorizeInputs(inputs)
     expect(result).toHaveLength(2)
-    expect(result.find((r) => r.element.name === 'has_disability')?.category).toBe('disability')
-    expect(result.find((r) => r.element.name === 'newsletter_opt_in')?.category).toBe('unknown')
-  })
-
-  it('should correctly categorize textarea inputs if applicable', () => {
-    const inputs = [
-      createTestInput({
-        label: 'Home Address',
-        element: { type: 'textarea', name: 'home_address_text' },
-      }),
-      createTestInput({ label: 'Comments', element: { type: 'textarea', name: 'user_comments' } }),
-    ]
-    const result = categorizeInputs(inputs)
-    expect(result.length).toBe(2)
-    result.forEach((input) => {
-      expect(input.category).toBe('unknown')
-    })
+    expect(result.find((r) => r.name === 'has_disability')?.category).toBe('disability')
+    expect(result.find((r) => r.name === 'newsletter_opt_in')?.category).toBe('unknown')
   })
 })

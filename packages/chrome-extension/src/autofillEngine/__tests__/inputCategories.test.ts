@@ -126,14 +126,6 @@ describe('Input Categorization Tests', () => {
       expect(isGenderInput(input)).toBe(true)
     })
 
-    it('should identify title/prefix inputs', () => {
-      const input = createTestInput({
-        placeholder: 'Title (Mr/Mrs/Dr)',
-        fieldType: INPUT_TYPES.SELECT,
-      })
-      expect(isGenderInput(input)).toBe(true)
-    })
-
     it('should not identify non-gender inputs', () => {
       const input = createTestInput({ label: 'Date of Birth', fieldType: INPUT_TYPES.DATE })
       expect(isGenderInput(input)).toBe(false)

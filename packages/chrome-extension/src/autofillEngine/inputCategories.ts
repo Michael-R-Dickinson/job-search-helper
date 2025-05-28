@@ -24,22 +24,27 @@ const isNameInput = (input: ProcessedInput): boolean => {
     'given name', // given name
     'family name', // family name
     'surname', // surname
-    'middle name', 'middle initial', // middle name/initial
+    'middle name',
+    'middle initial', // middle name/initial
     /^mi$/i, // common abbreviation for middle initial
     // Patterns for autocomplete values
-    'honorific-prefix', 'honorific-suffix',
-    'nickname'
+    'honorific-prefix',
+    'honorific-suffix',
+    'nickname',
   ]
 
   const autocompletePatterns: Pattern[] = [
     /^name$/i, // Exact match for 'name'
-    'honorific-prefix', 'given-name', 
-    'additional-name', 'family-name', 'honorific-suffix',
-    'nickname'
+    'honorific-prefix',
+    'given-name',
+    'additional-name',
+    'family-name',
+    'honorific-suffix',
+    'nickname',
   ]
 
   return (
-    matchesPattern(input.label, namePatterns) ||
+    matchesPattern(input.label ?? undefined, namePatterns) ||
     matchesPattern(input.name, namePatterns) ||
     matchesPattern(input.placeholder, namePatterns) ||
     matchesPattern(input.autocomplete, autocompletePatterns)
@@ -60,7 +65,7 @@ const isEmailInput = (input: ProcessedInput): boolean => {
 
   return (
     input.type === 'email' ||
-    matchesPattern(input.label, emailPatterns) ||
+    matchesPattern(input.label ?? undefined, emailPatterns) ||
     matchesPattern(input.name, emailPatterns) ||
     matchesPattern(input.placeholder, emailPatterns) ||
     matchesPattern(input.autocomplete, ['email'])
@@ -75,16 +80,12 @@ const isGenderInput = (input: ProcessedInput): boolean => {
   )
     return false
 
-  const genderPatterns: Pattern[] = [
-    'gender',
-    'sex',
-    'gender identity'
-  ]
+  const genderPatterns: Pattern[] = ['gender', 'sex', 'gender identity']
 
   const autocompletePatterns: Pattern[] = ['sex', 'gender']
 
   return (
-    matchesPattern(input.label, genderPatterns) ||
+    matchesPattern(input.label ?? undefined, genderPatterns) ||
     matchesPattern(input.name, genderPatterns) ||
     matchesPattern(input.placeholder, genderPatterns) ||
     matchesPattern(input.autocomplete, autocompletePatterns)
@@ -110,7 +111,7 @@ const isVeteranStatusInput = (input: ProcessedInput): boolean => {
   ]
 
   return (
-    matchesPattern(input.label, veteranPatterns) ||
+    matchesPattern(input.label ?? undefined, veteranPatterns) ||
     matchesPattern(input.name, veteranPatterns) ||
     matchesPattern(input.placeholder, veteranPatterns) ||
     matchesPattern(input.autocomplete, ['veteran', 'military_status'])
@@ -142,7 +143,7 @@ const isRaceEthnicityInput = (input: ProcessedInput): boolean => {
   ]
 
   return (
-    matchesPattern(input.label, racePatterns) ||
+    matchesPattern(input.label ?? undefined, racePatterns) ||
     matchesPattern(input.name, racePatterns) ||
     matchesPattern(input.placeholder, racePatterns) ||
     matchesPattern(input.autocomplete, ['race', 'ethnicity'])
@@ -172,7 +173,7 @@ const isDisabilityInput = (input: ProcessedInput): boolean => {
   ]
 
   return (
-    matchesPattern(input.label, disabilityPatterns) ||
+    matchesPattern(input.label ?? undefined, disabilityPatterns) ||
     matchesPattern(input.name, disabilityPatterns) ||
     matchesPattern(input.placeholder, disabilityPatterns) ||
     matchesPattern(input.autocomplete, ['disability', 'handicap_status'])
@@ -201,7 +202,7 @@ const isPhoneInput = (input: ProcessedInput): boolean => {
   return (
     input.type === 'tel' ||
     (input.type ? matchesPattern(input.type, ['tel', 'phone']) : false) ||
-    matchesPattern(input.label, phonePatterns) ||
+    matchesPattern(input.label ?? undefined, phonePatterns) ||
     matchesPattern(input.name, phonePatterns) ||
     matchesPattern(input.placeholder, phonePatterns) ||
     matchesPattern(input.autocomplete, ['tel', 'tel-'])
@@ -216,13 +217,13 @@ const isCountryInput = (input: ProcessedInput): boolean => {
     'nation',
     'location (country)', // More specific label
     'country of residence',
-    'nationality'
+    'nationality',
   ]
 
   const autocompletePatterns: Pattern[] = ['country', 'country-name']
 
   return (
-    matchesPattern(input.label, countryPatterns) ||
+    matchesPattern(input.label ?? undefined, countryPatterns) ||
     matchesPattern(input.name, countryPatterns) ||
     matchesPattern(input.placeholder, countryPatterns) ||
     matchesPattern(input.autocomplete, autocompletePatterns)
