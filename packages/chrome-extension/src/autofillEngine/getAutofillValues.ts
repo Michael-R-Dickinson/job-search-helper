@@ -1,6 +1,8 @@
+import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
+import type { CategorizedInput } from './schema'
+import { SerializedHtmlInputSchema } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
-import categorizeInputs, { type CategorizedInput } from './categorizeInputs'
-import type { SerializedHtmlInput } from './schema'
+import { categorizeInputs } from './categorizeInputs'
 
 export interface AutofillReadyInput extends CategorizedInput {
   autofillValue: string | null
@@ -10,10 +12,14 @@ const getAutofillValues = async (
   inputs: SerializedHtmlInput[],
   userId: string,
 ): Promise<AutofillReadyInput[] | null> => {
+  // Validate all inputs using Zod
+  const parseResult = SerializedHtmlInputSchema.array().safeParse(inputs)
+  if (!parseResult.success) {
+    throw new Error('Invalid input payload: ' + JSON.stringify(parseResult.error.format()))
+  }
+
   const categorizedInputs = categorizeInputs(inputs)
-  console.log('categorizedInputs', categorizedInputs)
   const userAutofillPreferences = await getUserAutofillValues(userId)
-  console.log('userAutofillPreferences', userAutofillPreferences)
 
   if (!userAutofillPreferences) return null
 

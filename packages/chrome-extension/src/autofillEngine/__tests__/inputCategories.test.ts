@@ -9,7 +9,7 @@ import {
   isPhoneInput,
   isCountryInput,
 } from '../inputCategoryPredicates'
-import { INPUT_TYPES } from '../categorizeInputs'
+import { INPUT_ELEMENT_TYPES } from '../schema'
 
 // Simple mock for HTMLInputElement
 class MockInputElement {
@@ -44,7 +44,7 @@ describe('Input Categorization Tests', () => {
     }
 
     return {
-      fieldType: INPUT_TYPES.TEXT,
+      fieldType: INPUT_ELEMENT_TYPES.TEXT,
       label: '',
       name: '',
       type: 'text',
@@ -117,17 +117,17 @@ describe('Input Categorization Tests', () => {
 
   describe('isGenderInput', () => {
     it('should identify gender inputs by label', () => {
-      const input = createTestInput({ label: 'Gender', fieldType: INPUT_TYPES.SELECT })
+      const input = createTestInput({ label: 'Gender', fieldType: INPUT_ELEMENT_TYPES.SELECT })
       expect(isGenderInput(input)).toBe(true)
     })
 
     it('should identify sex inputs by name', () => {
-      const input = createTestInput({ name: 'sex', fieldType: INPUT_TYPES.RADIO })
+      const input = createTestInput({ name: 'sex', fieldType: INPUT_ELEMENT_TYPES.RADIO })
       expect(isGenderInput(input)).toBe(true)
     })
 
     it('should not identify non-gender inputs', () => {
-      const input = createTestInput({ label: 'Date of Birth', fieldType: INPUT_TYPES.DATE })
+      const input = createTestInput({ label: 'Date of Birth', fieldType: INPUT_ELEMENT_TYPES.DATE })
       expect(isGenderInput(input)).toBe(false)
     })
   })
@@ -136,7 +136,7 @@ describe('Input Categorization Tests', () => {
     it('should identify veteran status inputs by label', () => {
       const input = createTestInput({
         label: 'Are you a veteran?',
-        fieldType: INPUT_TYPES.RADIO,
+        fieldType: INPUT_ELEMENT_TYPES.RADIO,
       })
       expect(isVeteranStatusInput(input)).toBe(true)
     })
@@ -144,7 +144,7 @@ describe('Input Categorization Tests', () => {
     it('should identify military service inputs by name', () => {
       const input = createTestInput({
         name: 'military_service',
-        fieldType: INPUT_TYPES.SELECT,
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
       })
       expect(isVeteranStatusInput(input)).toBe(true)
     })
@@ -152,7 +152,7 @@ describe('Input Categorization Tests', () => {
     it('should identify veteran preference inputs', () => {
       const input = createTestInput({
         placeholder: 'Veteran Preference',
-        fieldType: INPUT_TYPES.CHECKBOX,
+        fieldType: INPUT_ELEMENT_TYPES.CHECKBOX,
       })
       expect(isVeteranStatusInput(input)).toBe(true)
     })
@@ -162,7 +162,7 @@ describe('Input Categorization Tests', () => {
     it('should identify race/ethnicity inputs by label', () => {
       const input = createTestInput({
         label: 'Race/Ethnicity',
-        fieldType: INPUT_TYPES.SELECT,
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
       })
       expect(isRaceEthnicityInput(input)).toBe(true)
     })
@@ -170,7 +170,7 @@ describe('Input Categorization Tests', () => {
     it('should identify ethnicity inputs by name', () => {
       const input = createTestInput({
         name: 'ethnic_background',
-        fieldType: INPUT_TYPES.CHECKBOX,
+        fieldType: INPUT_ELEMENT_TYPES.CHECKBOX,
       })
       expect(isRaceEthnicityInput(input)).toBe(true)
     })
@@ -178,7 +178,7 @@ describe('Input Categorization Tests', () => {
     it('should identify multi-race selection inputs', () => {
       const input = createTestInput({
         label: 'Select all that apply (race/ethnicity)',
-        fieldType: INPUT_TYPES.CHECKBOX,
+        fieldType: INPUT_ELEMENT_TYPES.CHECKBOX,
       })
       expect(isRaceEthnicityInput(input)).toBe(true)
     })
@@ -188,7 +188,7 @@ describe('Input Categorization Tests', () => {
     it('should identify disability status inputs', () => {
       const input = createTestInput({
         label: 'Do you have a disability?',
-        fieldType: INPUT_TYPES.RADIO,
+        fieldType: INPUT_ELEMENT_TYPES.RADIO,
       })
       expect(isDisabilityInput(input)).toBe(true)
     })
@@ -196,7 +196,7 @@ describe('Input Categorization Tests', () => {
     it('should identify accommodation request inputs', () => {
       const input = createTestInput({
         label: 'Request accommodation',
-        fieldType: INPUT_TYPES.CHECKBOX,
+        fieldType: INPUT_ELEMENT_TYPES.CHECKBOX,
       })
       expect(isDisabilityInput(input)).toBe(true)
     })
@@ -204,7 +204,7 @@ describe('Input Categorization Tests', () => {
     it('should identify disability type inputs', () => {
       const input = createTestInput({
         name: 'disability_type',
-        fieldType: INPUT_TYPES.SELECT,
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
       })
       expect(isDisabilityInput(input)).toBe(true)
     })
@@ -236,7 +236,7 @@ describe('Input Categorization Tests', () => {
     it('should identify country inputs by label', () => {
       const input = createTestInput({
         label: 'Country of Residence',
-        fieldType: INPUT_TYPES.SELECT,
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
       })
       expect(isCountryInput(input)).toBe(true)
     })
@@ -244,7 +244,7 @@ describe('Input Categorization Tests', () => {
     it('should identify nationality inputs', () => {
       const input = createTestInput({
         name: 'nationality',
-        fieldType: INPUT_TYPES.SELECT,
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
       })
       expect(isCountryInput(input)).toBe(true)
     })
@@ -252,7 +252,7 @@ describe('Input Categorization Tests', () => {
     it('should identify country inputs by autocomplete', () => {
       const input = createTestInput({
         autocomplete: 'country',
-        fieldType: INPUT_TYPES.TEXT,
+        fieldType: INPUT_ELEMENT_TYPES.TEXT,
       })
       expect(isCountryInput(input)).toBe(true)
     })

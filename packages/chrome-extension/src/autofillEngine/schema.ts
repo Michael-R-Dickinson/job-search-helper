@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 // Constants
 export const INPUT_ELEMENT_TYPES = {
   TEXT: 'text',
@@ -13,39 +15,25 @@ export const INPUT_ELEMENT_TYPES = {
   URL: 'url',
 } as const
 
-type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_ELEMENT_TYPES]
+export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_ELEMENT_TYPES]
 
-// This matches the ProcessedInput type in categorizeInputs.ts
-interface SerializedHtmlInput {
-  label: string | null
-  html: string
-  fieldType: string
-  name: string
-  type: string
-  placeholder: string
-  autocomplete: string
-  id: string
-  className: string
-  value: string
-  required: boolean
-}
+export const SerializedHtmlInputSchema = z.object({
+  label: z.string().nullable(),
+  html: z.string(),
+  fieldType: z.string(),
+  name: z.string(),
+  type: z.string(),
+  placeholder: z.string(),
+  autocomplete: z.string(),
+  id: z.string(),
+  className: z.string(),
+  value: z.string(),
+  required: z.boolean(),
+})
 
-// Types
-interface ProcessedInput {
-  label: string | null
-  html: string
-  fieldType: InputElementType
-  name: string
-  type: string
-  placeholder: string
-  autocomplete: string
-  id: string
-  className: string
-  value: string
-  required: boolean
-}
+export type SerializedHtmlInput = z.infer<typeof SerializedHtmlInputSchema>
 
-type InputCategory =
+export type InputCategory =
   | 'name'
   | 'email'
   | 'gender'
@@ -56,23 +44,16 @@ type InputCategory =
   | 'country'
   | 'unknown'
 
-interface CategorizedInput {
-  category: InputCategory
-  label: string | null
-  element: ProcessedInput
-}
+export const CategorizedInputSchema = z.object({
+  category: z.custom<InputCategory>(),
+  label: z.string().nullable(),
+  element: SerializedHtmlInputSchema,
+})
 
-type AutofillInstruction = {
+export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
+
+export type AutofillInstruction = {
   action: string
   value: string | undefined
   id: string
-}
-
-export type {
-  InputElementType,
-  InputCategory,
-  SerializedHtmlInput,
-  ProcessedInput,
-  CategorizedInput,
-  AutofillInstruction,
 }

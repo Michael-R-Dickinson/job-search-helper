@@ -8,15 +8,10 @@ import {
   isPhoneInput,
   isCountryInput,
 } from './inputCategoryPredicates'
-import type { SerializedHtmlInput, ProcessedInput, CategorizedInput, InputCategory } from './schema'
-
-// No need to parse HTML, just cast
-const preprocessInputs = (inputs: SerializedHtmlInput[]): ProcessedInput[] => {
-  return inputs.map((input) => input as ProcessedInput)
-}
+import type { SerializedHtmlInput, CategorizedInput, InputCategory } from './schema'
 
 const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => {
-  return preprocessInputs(inputs).map((input) => {
+  return inputs.map((input) => {
     let category: InputCategory = 'unknown'
     if (isNameInput(input)) category = 'name'
     else if (isEmailInput(input)) category = 'email'
@@ -30,16 +25,4 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
   })
 }
 
-export type { ProcessedInput, InputCategory, CategorizedInput }
-
-export {
-  categorizeInputs as default,
-  isNameInput,
-  isEmailInput,
-  isGenderInput,
-  isVeteranStatusInput,
-  isRaceEthnicityInput,
-  isDisabilityInput,
-  isPhoneInput,
-  isCountryInput,
-}
+export { categorizeInputs }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import categorizeInputs from '../categorizeInputs'
+import { categorizeInputs } from '../categorizeInputs'
 import type { InputInfo } from '../../content/hooks/useInputElements'
 import { serializeInputsHtml } from '../../content/serializeInputsHtml'
 
@@ -164,7 +164,7 @@ describe('categorizeInputs', () => {
     const parsed = serializeInputsHtml(inputs)
     const result = categorizeInputs(parsed)
     expect(result).toHaveLength(4)
-    expect(result.find((r) => r.name === 'email_address')?.category).toBe('email')
+    expect(result.find((r) => r.element.name === 'email_address')?.category).toBe('email')
     expect(result.filter((r) => r.category === 'unknown').length).toBe(3)
   })
 
@@ -179,11 +179,11 @@ describe('categorizeInputs', () => {
     const parsed = serializeInputsHtml(inputs)
     const result = categorizeInputs(parsed)
     expect(result).toHaveLength(5)
-    expect(result.find((r) => r.autocomplete === 'given-name')?.category).toBe('name')
-    expect(result.find((r) => r.autocomplete === 'family-name')?.category).toBe('name')
-    expect(result.find((r) => r.autocomplete === 'email')?.category).toBe('email')
-    expect(result.find((r) => r.autocomplete === 'tel')?.category).toBe('phone')
-    expect(result.find((r) => r.autocomplete === 'country')?.category).toBe('country')
+    expect(result.find((r) => r.element.autocomplete === 'given-name')?.category).toBe('name')
+    expect(result.find((r) => r.element.autocomplete === 'family-name')?.category).toBe('name')
+    expect(result.find((r) => r.element.autocomplete === 'email')?.category).toBe('email')
+    expect(result.find((r) => r.element.autocomplete === 'tel')?.category).toBe('phone')
+    expect(result.find((r) => r.element.autocomplete === 'country')?.category).toBe('country')
   })
 
   it('should handle various combinations of attributes for categorization', () => {
@@ -218,9 +218,9 @@ describe('categorizeInputs', () => {
     const parsed = serializeInputsHtml(inputs)
     const result = categorizeInputs(parsed)
     expect(result).toHaveLength(3)
-    expect(result.find((r) => r.name === 'gender_select')?.category).toBe('gender')
-    expect(result.find((r) => r.name === 'race_select')?.category).toBe('race_ethnicity')
-    expect(result.find((r) => r.name === 'residence_country')?.category).toBe('country')
+    expect(result.find((r) => r.element.name === 'gender_select')?.category).toBe('gender')
+    expect(result.find((r) => r.element.name === 'race_select')?.category).toBe('race_ethnicity')
+    expect(result.find((r) => r.element.name === 'residence_country')?.category).toBe('country')
   })
 
   it('should correctly categorize radio button inputs', () => {
@@ -253,7 +253,7 @@ describe('categorizeInputs', () => {
     const parsed = serializeInputsHtml(inputs)
     const result = categorizeInputs(parsed)
     expect(result).toHaveLength(2)
-    expect(result.find((r) => r.name === 'has_disability')?.category).toBe('disability')
-    expect(result.find((r) => r.name === 'newsletter_opt_in')?.category).toBe('unknown')
+    expect(result.find((r) => r.element.name === 'has_disability')?.category).toBe('disability')
+    expect(result.find((r) => r.element.name === 'newsletter_opt_in')?.category).toBe('unknown')
   })
 })

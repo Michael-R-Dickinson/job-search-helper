@@ -1,4 +1,4 @@
-import type { InputCategory, ProcessedInput } from './categorizeInputs'
+import type { InputCategory, SerializedHtmlInput } from './schema'
 import { z } from 'zod'
 import type { AutofillInstruction } from './schema'
 
@@ -8,7 +8,10 @@ const nameAutofillPreference = z.object({
 })
 
 // Determine if the input field is a first or last name, then use the userAutofillValue to fill the input
-const nameHandler = (input: ProcessedInput, userAutofillValue: object): AutofillInstruction => {
+const nameHandler = (
+  input: SerializedHtmlInput,
+  userAutofillValue: object,
+): AutofillInstruction => {
   const nameAutofill = nameAutofillPreference.parse(userAutofillValue)
 
   const firstName = nameAutofill.first_name
@@ -35,7 +38,12 @@ const nameHandler = (input: ProcessedInput, userAutofillValue: object): Autofill
 // }
 
 const inputTypeHandlers: Partial<
-  Record<InputCategory, (input: ProcessedInput, userAutofillValue: object) => AutofillInstruction>
+  Record<
+    InputCategory,
+    (input: SerializedHtmlInput, userAutofillValue: object) => AutofillInstruction
+  >
 > = {
   name: nameHandler,
 }
+
+export { inputTypeHandlers }

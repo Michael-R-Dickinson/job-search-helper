@@ -1,6 +1,8 @@
 import { INPUT_ELEMENT_TYPES, type SerializedHtmlInput } from '../autofillEngine/schema'
 import type { InputInfo } from './hooks/useInputElements'
 
+export type { SerializedHtmlInput } from '../autofillEngine/schema'
+
 function getFieldType(el: Element): string {
   const tag = el.tagName.toLowerCase()
   if (tag === 'select') return INPUT_ELEMENT_TYPES.SELECT
