@@ -54,8 +54,10 @@ type InputCategory =
   | 'country'
   | 'unknown'
 
-interface CategorizedInput extends ProcessedInput {
+interface CategorizedInput {
   category: InputCategory
+  label: string | null
+  element: ProcessedInput
 }
 
 // No need to parse HTML, just cast
@@ -74,7 +76,7 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isDisabilityInput(input)) category = 'disability'
     else if (isPhoneInput(input)) category = 'phone'
     else if (isCountryInput(input)) category = 'country'
-    return { ...input, category }
+    return { element: input, category, label: input.label }
   })
 }
 

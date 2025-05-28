@@ -11,7 +11,9 @@ const getAutofillValues = async (
   userId: string,
 ): Promise<AutofillReadyInput[] | null> => {
   const categorizedInputs = categorizeInputs(inputs)
+  console.log('categorizedInputs', categorizedInputs)
   const userAutofillPreferences = await getUserAutofillValues(userId)
+  console.log('userAutofillPreferences', userAutofillPreferences)
 
   if (!userAutofillPreferences) return null
 
