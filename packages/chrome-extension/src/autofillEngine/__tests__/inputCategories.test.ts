@@ -8,7 +8,7 @@ import {
   isDisabilityInput,
   isPhoneInput,
   isCountryInput,
-} from '../inputCategories'
+} from '../inputCategoryPredicates'
 import { INPUT_TYPES } from '../categorizeInputs'
 
 // Simple mock for HTMLInputElement

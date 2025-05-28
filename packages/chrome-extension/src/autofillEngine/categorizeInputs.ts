@@ -9,7 +9,7 @@ import {
   isDisabilityInput,
   isPhoneInput,
   isCountryInput,
-} from './inputCategories'
+} from './inputCategoryPredicates'
 
 // Constants
 export const INPUT_TYPES = {
