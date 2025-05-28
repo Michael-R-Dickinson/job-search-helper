@@ -4,10 +4,12 @@ import type { InputCategory } from '../autofillEngine/categorizeInputs'
 
 type UserAutofillFieldsData = Partial<Record<InputCategory, string>>
 
+const getUserAutofillPreferencesPath = (userId: string) => `users/${userId}/autofill`
+
 export const getUserAutofillValues = async (
   userId: string,
 ): Promise<UserAutofillFieldsData | null> => {
-  const userAutofillBucketRef = ref(database, `users/${userId}/autofill`)
+  const userAutofillBucketRef = ref(database, getUserAutofillPreferencesPath(userId))
   const snapshot = await get(userAutofillBucketRef)
 
   if (!snapshot.exists()) return null
