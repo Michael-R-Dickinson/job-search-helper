@@ -47,7 +47,7 @@ const TryForFreeCarouselForm = () => {
           key="upload"
         />
       ),
-      height: '400px',
+      height: '410px',
     },
     {
       component: (
