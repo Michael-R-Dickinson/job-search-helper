@@ -52,8 +52,25 @@ export const CategorizedInputSchema = z.object({
 
 export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
 
-export type AutofillInstruction = {
-  action: string
-  value: string | undefined
-  id: string
-}
+export const UserAutofillPreferencesSchema = z.object({
+  name: z.object({
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
+  }),
+  email: z.string().optional(),
+  gender: z.string().optional(),
+  veteran: z.string().optional(),
+  race_ethnicity: z.string().optional(),
+  disability: z.string().optional(),
+  phone: z.string().optional(),
+})
+export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
+
+const AutofillActionSchema = z.enum(['fill', 'clear'])
+export const AutofillInstructionSchema = z.object({
+  action: AutofillActionSchema,
+  value: z.string().optional(),
+  id: z.string(),
+})
+
+export type AutofillInstruction = z.infer<typeof AutofillInstructionSchema>
