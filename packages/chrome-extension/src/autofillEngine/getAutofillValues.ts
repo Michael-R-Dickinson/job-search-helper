@@ -1,17 +1,13 @@
 import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
-import type { CategorizedInput } from './schema'
-import { SerializedHtmlInputSchema } from './schema'
+import { SerializedHtmlInputSchema, type AutofillInstruction } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import { categorizeInputs } from './categorizeInputs'
-
-export interface AutofillReadyInput extends CategorizedInput {
-  autofillValue: string | null
-}
+import inputCategoryHandler from './inputTypeHandlers'
 
 const getAutofillValues = async (
   inputs: SerializedHtmlInput[],
   userId: string,
-): Promise<AutofillReadyInput[] | null> => {
+): Promise<AutofillInstruction[] | null> => {
   // Validate all inputs using Zod
   const parseResult = SerializedHtmlInputSchema.array().safeParse(inputs)
   if (!parseResult.success) {
@@ -24,11 +20,13 @@ const getAutofillValues = async (
   if (!userAutofillPreferences) return null
 
   return categorizedInputs.map((input) => {
-    const value = userAutofillPreferences[input.category]
-    return {
-      ...input,
-      autofillValue: value || null,
-    }
+    const handler = inputCategoryHandler[input.category]
+    if (!handler)
+      return {
+        action: 'skip',
+        id: input.element.elementReferenceId,
+      }
+    return handler(input, userAutofillPreferences)
   })
 }
 

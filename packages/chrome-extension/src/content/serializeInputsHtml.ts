@@ -41,6 +41,7 @@ export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] 
       className: el.className || '',
       value: (el as any).value || '',
       required: !!(el as any).required,
+      elementReferenceId: input.elementReferenceId,
     }
   })
 }

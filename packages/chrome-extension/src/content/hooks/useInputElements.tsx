@@ -4,6 +4,12 @@ export type ElementInfo = HTMLInputElement | HTMLTextAreaElement | HTMLSelectEle
 export interface InputInfo {
   element: ElementInfo
   label: string | null
+  elementReferenceId: string
+}
+
+function generateUniqueId() {
+  // e.g. "af-3f2504e0-4f89-11d3-9a0c-0305e82c3301"
+  return `af-${crypto.randomUUID()}`
 }
 
 /**
@@ -72,10 +78,15 @@ export function useInputElements(): InputInfo[] {
 
           return true
         })
-        .map((el) => ({
-          element: el,
-          label: getLabelText(el as HTMLElement),
-        }))
+        .map((el) => {
+          const elementReferenceId = generateUniqueId()
+          el.setAttribute('data-autofill-id', elementReferenceId)
+          return {
+            element: el,
+            elementReferenceId,
+            label: getLabelText(el as HTMLElement),
+          }
+        })
 
       setInputs(filtered)
     }

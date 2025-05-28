@@ -29,6 +29,9 @@ export const SerializedHtmlInputSchema = z.object({
   className: z.string(),
   value: z.string(),
   required: z.boolean(),
+  // A unique identifier we give to the input element to identify it in the DOM
+  // This is used to match the input element to the autofill instruction in the frontend
+  elementReferenceId: z.string(),
 })
 
 export type SerializedHtmlInput = z.infer<typeof SerializedHtmlInputSchema>
@@ -66,7 +69,7 @@ export const UserAutofillPreferencesSchema = z.object({
 })
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
 
-const AutofillActionSchema = z.enum(['fill', 'clear'])
+const AutofillActionSchema = z.enum(['fill', 'clear', 'skip'])
 export const AutofillInstructionSchema = z.object({
   action: AutofillActionSchema,
   value: z.string().optional(),

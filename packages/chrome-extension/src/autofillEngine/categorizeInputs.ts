@@ -21,7 +21,12 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isDisabilityInput(input)) category = 'disability'
     else if (isPhoneInput(input)) category = 'phone'
     else if (isCountryInput(input)) category = 'country'
-    return { element: input, category, label: input.label }
+    return {
+      element: input,
+      category,
+      label: input.label,
+      elementReferenceId: input.elementReferenceId,
+    }
   })
 }
 

@@ -1,14 +1,12 @@
 import { get, ref } from 'firebase/database'
 import { database } from '../extensionFirebase'
-import type { InputCategory } from '../autofillEngine/categorizeInputs'
-
-type UserAutofillFieldsData = Partial<Record<InputCategory, string>>
+import type { UserAutofillPreferences } from '../autofillEngine/schema'
 
 const getUserAutofillPreferencesPath = (userId: string) => `users/${userId}/autofill`
 
 export const getUserAutofillValues = async (
   userId: string,
-): Promise<UserAutofillFieldsData | null> => {
+): Promise<UserAutofillPreferences | null> => {
   const userAutofillBucketRef = ref(database, getUserAutofillPreferencesPath(userId))
   const snapshot = await get(userAutofillBucketRef)
 
