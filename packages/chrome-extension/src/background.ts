@@ -16,6 +16,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!userId) throw new Error('No user ID found')
 
     console.log('Received GET_AUTOFILL_VALUES message', message.payload)
-    return getAutofillValues(message.payload, userId)
+    return getAutofillValues(message.payload, userId).then((autofillInstructions) => {
+      console.log('autofillInstructions', autofillInstructions)
+      return autofillInstructions
+    })
   }
 })

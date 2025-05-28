@@ -20,7 +20,7 @@ export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_E
 export const SerializedHtmlInputSchema = z.object({
   label: z.string().nullable(),
   html: z.string(),
-  fieldType: z.string(),
+  fieldType: z.nativeEnum(INPUT_ELEMENT_TYPES),
   name: z.string(),
   type: z.string(),
   placeholder: z.string(),

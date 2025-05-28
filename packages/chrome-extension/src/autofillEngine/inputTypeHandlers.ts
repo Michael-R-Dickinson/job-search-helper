@@ -9,16 +9,16 @@ const nameHandler = (
   const firstName = userAutofillValue.name?.first_name
   const lastName = userAutofillValue.name?.last_name
 
-  if (input.element.type === 'text' && input.element.name === 'first_name') {
-    return { action: 'fill', value: firstName, id: input.element.id }
+  if (input.element.fieldType === 'text' && input.label?.includes('first')) {
+    return { action: 'fill', value: firstName, id: input.element.elementReferenceId }
   }
 
-  if (input.element.type === 'text' && input.element.name === 'last_name') {
-    return { action: 'fill', value: lastName, id: input.element.id }
+  if (input.element.fieldType === 'text' && input.label?.includes('last')) {
+    return { action: 'fill', value: lastName, id: input.element.elementReferenceId }
   }
 
   // no change
-  return { action: 'skip', id: input.element.id }
+  return { action: 'skip', id: input.element.elementReferenceId }
 }
 
 const inputCategoryHandler: Partial<

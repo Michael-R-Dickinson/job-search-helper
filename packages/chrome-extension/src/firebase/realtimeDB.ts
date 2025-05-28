@@ -7,8 +7,8 @@ const getUserAutofillPreferencesPath = (userId: string) => `users/${userId}/auto
 export const getUserAutofillValues = async (
   userId: string,
 ): Promise<UserAutofillPreferences | null> => {
-  const userAutofillBucketRef = ref(database, getUserAutofillPreferencesPath(userId))
-  const snapshot = await get(userAutofillBucketRef)
+  const userAutofillDataRef = ref(database, getUserAutofillPreferencesPath(userId))
+  const snapshot = await get(userAutofillDataRef)
 
   if (!snapshot.exists()) return null
 

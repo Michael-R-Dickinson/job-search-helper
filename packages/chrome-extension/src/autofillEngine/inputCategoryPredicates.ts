@@ -1,5 +1,4 @@
-import { type ProcessedInput } from './categorizeInputs'
-import { INPUT_ELEMENT_TYPES } from './schema'
+import { INPUT_ELEMENT_TYPES, type SerializedHtmlInput } from './schema'
 
 type Pattern = string | RegExp
 
@@ -12,7 +11,7 @@ const matchesPattern = (str: string | undefined, patterns: Pattern[]): boolean =
   )
 }
 
-const isNameInput = (input: ProcessedInput): boolean => {
+const isNameInput = (input: SerializedHtmlInput): boolean => {
   // Allow TEXT, and potentially other field types if they behave like text inputs for names.
   // For now, keeping TEXT as the primary, but autocomplete can override.
   if (input.fieldType !== INPUT_ELEMENT_TYPES.TEXT && !input.autocomplete) return false
@@ -52,7 +51,7 @@ const isNameInput = (input: ProcessedInput): boolean => {
   )
 }
 
-const isEmailInput = (input: ProcessedInput): boolean => {
+const isEmailInput = (input: SerializedHtmlInput): boolean => {
   if (input.fieldType !== INPUT_ELEMENT_TYPES.EMAIL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
     return false
 
@@ -74,7 +73,7 @@ const isEmailInput = (input: ProcessedInput): boolean => {
   )
 }
 
-const isGenderInput = (input: ProcessedInput): boolean => {
+const isGenderInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
@@ -94,7 +93,7 @@ const isGenderInput = (input: ProcessedInput): boolean => {
   )
 }
 
-const isVeteranStatusInput = (input: ProcessedInput): boolean => {
+const isVeteranStatusInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
@@ -120,7 +119,7 @@ const isVeteranStatusInput = (input: ProcessedInput): boolean => {
   )
 }
 
-const isRaceEthnicityInput = (input: ProcessedInput): boolean => {
+const isRaceEthnicityInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
@@ -152,7 +151,7 @@ const isRaceEthnicityInput = (input: ProcessedInput): boolean => {
   )
 }
 
-const isDisabilityInput = (input: ProcessedInput): boolean => {
+const isDisabilityInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
@@ -182,7 +181,7 @@ const isDisabilityInput = (input: ProcessedInput): boolean => {
   )
 }
 
-const isPhoneInput = (input: ProcessedInput): boolean => {
+const isPhoneInput = (input: SerializedHtmlInput): boolean => {
   if (input.fieldType !== INPUT_ELEMENT_TYPES.TEL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
     return false
 
@@ -212,7 +211,7 @@ const isPhoneInput = (input: ProcessedInput): boolean => {
   )
 }
 
-const isCountryInput = (input: ProcessedInput): boolean => {
+const isCountryInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.TEXT
