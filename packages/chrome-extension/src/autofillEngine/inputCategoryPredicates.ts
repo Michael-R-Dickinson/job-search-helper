@@ -97,24 +97,30 @@ const isVeteranStatusInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
-    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX
+    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT
   )
     return false
 
-  const veteranPatterns: Pattern[] = [
+  const patterns: Pattern[] = [
     'veteran',
+    'veteran status',
     'military',
     'armed forces',
     'service status',
-    'veteran status',
     'military status',
     'veteran preference',
+    'us military',
+    'prior military',
+    'former military',
+    'veteran classification',
+    'veteran question',
+    'veteran self-identification',
   ]
-
   return (
-    matchesPattern(input.label ?? undefined, veteranPatterns) ||
-    matchesPattern(input.name, veteranPatterns) ||
-    matchesPattern(input.placeholder, veteranPatterns) ||
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
     matchesPattern(input.autocomplete, ['veteran', 'military_status'])
   )
 }
@@ -123,11 +129,12 @@ const isRaceEthnicityInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
-    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX
+    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT
   )
     return false
 
-  const racePatterns: Pattern[] = [
+  const patterns: Pattern[] = [
     'race',
     'ethnicity',
     'hispanic',
@@ -141,13 +148,19 @@ const isRaceEthnicityInput = (input: SerializedHtmlInput): boolean => {
     'race & ethnicity',
     'ethnic background',
     'racial background',
+    'are you hispanic/latino',
+    'hispanic or latino',
+    'ethnicity/hispanic',
+    'ethnicity/latino',
+    'ethnicity (hispanic or latino)',
+    'ethnicity (hispanic)',
+    'ethnicity (latino)',
   ]
-
   return (
-    matchesPattern(input.label ?? undefined, racePatterns) ||
-    matchesPattern(input.name, racePatterns) ||
-    matchesPattern(input.placeholder, racePatterns) ||
-    matchesPattern(input.autocomplete, ['race', 'ethnicity'])
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, ['race', 'ethnicity', 'hispanic', 'latino'])
   )
 }
 
@@ -155,28 +168,30 @@ const isDisabilityInput = (input: SerializedHtmlInput): boolean => {
   if (
     input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
     input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
-    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX
+    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT
   )
     return false
 
-  const disabilityPatterns: Pattern[] = [
+  const patterns: Pattern[] = [
     'disability',
     'disabilities',
     'disabled',
-    'handicap',
     'ada',
-    'americans with disabilities',
     'disability status',
     'disclose disability',
     'disability disclosure',
     'accommodation',
     'assistance needed',
+    'voluntary self-identification of disability',
+    'disability question',
+    'disability self-identification',
+    'disability self id',
   ]
-
   return (
-    matchesPattern(input.label ?? undefined, disabilityPatterns) ||
-    matchesPattern(input.name, disabilityPatterns) ||
-    matchesPattern(input.placeholder, disabilityPatterns) ||
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
     matchesPattern(input.autocomplete, ['disability', 'handicap_status'])
   )
 }
@@ -236,6 +251,113 @@ const isCountryInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
+const isAuthorizationInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = [
+    'authorized to work',
+    'legally authorized',
+    'work in the us',
+    'work authorization',
+    'are you legally authorized to work in the us',
+    'authorization',
+    'work_authorization',
+    'legal_authorization',
+  ]
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
+const isSponsorshipInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = [
+    'require sponsorship',
+    'future require sponsorship',
+    'do you now or in the future require sponsorship',
+    'sponsorship',
+    'require_sponsorship',
+  ]
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
+const isMailingAddressInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = [
+    'mailing address',
+    'current mailing address',
+    'address',
+    'mailing_address',
+    'current_address',
+  ]
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
+const isSchoolInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = ['school', 'university', 'college', 'institution']
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
+const isDegreeInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = ['degree', 'qualification', 'credential']
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
+const isDisciplineInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = ['discipline', 'major', 'field of study', 'concentration', 'field']
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
+const isEndDateYearInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = [
+    'end date year',
+    'graduation year',
+    'year completed',
+    'end year',
+    'end_year',
+    'graduation_year',
+    'year_completed',
+  ]
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
+const isLinkedInProfileInput = (input: SerializedHtmlInput): boolean => {
+  const patterns: Pattern[] = [
+    'linkedin',
+    'linkedin profile',
+    'linkedin url',
+    'linkedin_profile',
+    'linkedin_url',
+  ]
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns)
+  )
+}
+
 export {
   isNameInput,
   isEmailInput,
@@ -245,4 +367,12 @@ export {
   isDisabilityInput,
   isPhoneInput,
   isCountryInput,
+  isAuthorizationInput,
+  isSponsorshipInput,
+  isMailingAddressInput,
+  isSchoolInput,
+  isDegreeInput,
+  isDisciplineInput,
+  isEndDateYearInput,
+  isLinkedInProfileInput,
 }

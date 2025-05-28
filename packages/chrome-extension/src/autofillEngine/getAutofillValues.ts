@@ -29,6 +29,7 @@ const getAutofillValues = async (
 
   const preprocessedInputs = preprocessInputs(inputs)
   const categorizedInputs = categorizeInputs(preprocessedInputs)
+  console.log('categorized inputs:', categorizedInputs)
   const userAutofillPreferences = await getUserAutofillValues(userId)
 
   console.log('user autofill preferences:', userAutofillPreferences)

@@ -45,6 +45,14 @@ export type InputCategory =
   | 'disability'
   | 'phone'
   | 'country'
+  | 'authorization'
+  | 'sponsorship'
+  | 'mailing_address'
+  | 'school'
+  | 'degree'
+  | 'discipline'
+  | 'end_date_year'
+  | 'linkedin_profile'
   | 'unknown'
 
 export const CategorizedInputSchema = z.object({

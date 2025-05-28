@@ -8,6 +8,14 @@ import {
   isDisabilityInput,
   isPhoneInput,
   isCountryInput,
+  isAuthorizationInput,
+  isSponsorshipInput,
+  isMailingAddressInput,
+  isSchoolInput,
+  isDegreeInput,
+  isDisciplineInput,
+  isEndDateYearInput,
+  isLinkedInProfileInput,
 } from '../inputCategoryPredicates'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 
@@ -268,6 +276,70 @@ describe('Input Categorization Tests', () => {
         placeholder: 'Enter phone number',
       })
       expect(isPhoneInput(complexInput)).toBe(true)
+    })
+  })
+
+  describe('isAuthorizationInput', () => {
+    it('should identify authorization to work in the US', () => {
+      const input = createTestInput({ label: 'Are you legally authorized to work in the US?' })
+      expect(isAuthorizationInput(input)).toBe(true)
+    })
+    it('should identify work authorization by name', () => {
+      const input = createTestInput({ name: 'work_authorization' })
+      expect(isAuthorizationInput(input)).toBe(true)
+    })
+  })
+
+  describe('isSponsorshipInput', () => {
+    it('should identify sponsorship requirement', () => {
+      const input = createTestInput({ label: 'Do you now or in the future require sponsorship?' })
+      expect(isSponsorshipInput(input)).toBe(true)
+    })
+  })
+
+  describe('isMailingAddressInput', () => {
+    it('should identify current mailing address', () => {
+      const input = createTestInput({ label: 'Current mailing address*' })
+      expect(isMailingAddressInput(input)).toBe(true)
+    })
+  })
+
+  describe('isSchoolInput', () => {
+    it('should identify school/university', () => {
+      const input = createTestInput({ label: 'School' })
+      expect(isSchoolInput(input)).toBe(true)
+      const input2 = createTestInput({ label: 'University' })
+      expect(isSchoolInput(input2)).toBe(true)
+    })
+  })
+
+  describe('isDegreeInput', () => {
+    it('should identify degree', () => {
+      const input = createTestInput({ label: 'Degree' })
+      expect(isDegreeInput(input)).toBe(true)
+    })
+  })
+
+  describe('isDisciplineInput', () => {
+    it('should identify discipline/major', () => {
+      const input = createTestInput({ label: 'Discipline' })
+      expect(isDisciplineInput(input)).toBe(true)
+      const input2 = createTestInput({ label: 'Major' })
+      expect(isDisciplineInput(input2)).toBe(true)
+    })
+  })
+
+  describe('isEndDateYearInput', () => {
+    it('should identify end date year', () => {
+      const input = createTestInput({ label: 'End date year' })
+      expect(isEndDateYearInput(input)).toBe(true)
+    })
+  })
+
+  describe('isLinkedInProfileInput', () => {
+    it('should identify LinkedIn profile', () => {
+      const input = createTestInput({ label: 'LinkedIn profile' })
+      expect(isLinkedInProfileInput(input)).toBe(true)
     })
   })
 })
