@@ -1,5 +1,3 @@
-import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
-
 import {
   isNameInput,
   isEmailInput,
@@ -10,55 +8,7 @@ import {
   isPhoneInput,
   isCountryInput,
 } from './inputCategoryPredicates'
-
-// Constants
-export const INPUT_TYPES = {
-  TEXT: 'text',
-  SELECT: 'select',
-  TEXTBOX: 'textbox',
-  EMAIL: 'email',
-  TEL: 'tel',
-  RADIO: 'radio',
-  CHECKBOX: 'checkbox',
-  NUMBER: 'number',
-  DATE: 'date',
-  PASSWORD: 'password',
-  URL: 'url',
-} as const
-
-type InputType = (typeof INPUT_TYPES)[keyof typeof INPUT_TYPES]
-
-// Types
-interface ProcessedInput {
-  label: string | null
-  html: string
-  fieldType: InputType
-  name: string
-  type: string
-  placeholder: string
-  autocomplete: string
-  id: string
-  className: string
-  value: string
-  required: boolean
-}
-
-type InputCategory =
-  | 'name'
-  | 'email'
-  | 'gender'
-  | 'veteran'
-  | 'race_ethnicity'
-  | 'disability'
-  | 'phone'
-  | 'country'
-  | 'unknown'
-
-interface CategorizedInput {
-  category: InputCategory
-  label: string | null
-  element: ProcessedInput
-}
+import type { SerializedHtmlInput, ProcessedInput, CategorizedInput, InputCategory } from './schema'
 
 // No need to parse HTML, just cast
 const preprocessInputs = (inputs: SerializedHtmlInput[]): ProcessedInput[] => {

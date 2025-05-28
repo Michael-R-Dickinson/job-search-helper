@@ -1,4 +1,5 @@
-import { INPUT_TYPES, type ProcessedInput } from './categorizeInputs'
+import { type ProcessedInput } from './categorizeInputs'
+import { INPUT_ELEMENT_TYPES } from './schema'
 
 type Pattern = string | RegExp
 
@@ -14,7 +15,7 @@ const matchesPattern = (str: string | undefined, patterns: Pattern[]): boolean =
 const isNameInput = (input: ProcessedInput): boolean => {
   // Allow TEXT, and potentially other field types if they behave like text inputs for names.
   // For now, keeping TEXT as the primary, but autocomplete can override.
-  if (input.fieldType !== INPUT_TYPES.TEXT && !input.autocomplete) return false
+  if (input.fieldType !== INPUT_ELEMENT_TYPES.TEXT && !input.autocomplete) return false
 
   const namePatterns: Pattern[] = [
     'name', // General name
@@ -52,7 +53,8 @@ const isNameInput = (input: ProcessedInput): boolean => {
 }
 
 const isEmailInput = (input: ProcessedInput): boolean => {
-  if (input.fieldType !== INPUT_TYPES.EMAIL && input.fieldType !== INPUT_TYPES.TEXT) return false
+  if (input.fieldType !== INPUT_ELEMENT_TYPES.EMAIL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
+    return false
 
   const emailPatterns: Pattern[] = [
     'email',
@@ -74,9 +76,9 @@ const isEmailInput = (input: ProcessedInput): boolean => {
 
 const isGenderInput = (input: ProcessedInput): boolean => {
   if (
-    input.fieldType !== INPUT_TYPES.SELECT &&
-    input.fieldType !== INPUT_TYPES.RADIO &&
-    input.fieldType !== INPUT_TYPES.TEXT
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT
   )
     return false
 
@@ -94,9 +96,9 @@ const isGenderInput = (input: ProcessedInput): boolean => {
 
 const isVeteranStatusInput = (input: ProcessedInput): boolean => {
   if (
-    input.fieldType !== INPUT_TYPES.SELECT &&
-    input.fieldType !== INPUT_TYPES.RADIO &&
-    input.fieldType !== INPUT_TYPES.CHECKBOX
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX
   )
     return false
 
@@ -120,9 +122,9 @@ const isVeteranStatusInput = (input: ProcessedInput): boolean => {
 
 const isRaceEthnicityInput = (input: ProcessedInput): boolean => {
   if (
-    input.fieldType !== INPUT_TYPES.SELECT &&
-    input.fieldType !== INPUT_TYPES.RADIO &&
-    input.fieldType !== INPUT_TYPES.CHECKBOX
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX
   )
     return false
 
@@ -152,9 +154,9 @@ const isRaceEthnicityInput = (input: ProcessedInput): boolean => {
 
 const isDisabilityInput = (input: ProcessedInput): boolean => {
   if (
-    input.fieldType !== INPUT_TYPES.SELECT &&
-    input.fieldType !== INPUT_TYPES.RADIO &&
-    input.fieldType !== INPUT_TYPES.CHECKBOX
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.RADIO &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.CHECKBOX
   )
     return false
 
@@ -181,7 +183,8 @@ const isDisabilityInput = (input: ProcessedInput): boolean => {
 }
 
 const isPhoneInput = (input: ProcessedInput): boolean => {
-  if (input.fieldType !== INPUT_TYPES.TEL && input.fieldType !== INPUT_TYPES.TEXT) return false
+  if (input.fieldType !== INPUT_ELEMENT_TYPES.TEL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
+    return false
 
   const phonePatterns: Pattern[] = [
     'phone',
@@ -210,7 +213,11 @@ const isPhoneInput = (input: ProcessedInput): boolean => {
 }
 
 const isCountryInput = (input: ProcessedInput): boolean => {
-  if (input.fieldType !== INPUT_TYPES.SELECT && input.fieldType !== INPUT_TYPES.TEXT) return false
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT
+  )
+    return false
 
   const countryPatterns: Pattern[] = [
     'country',

@@ -1,32 +1,17 @@
+import { INPUT_ELEMENT_TYPES, type SerializedHtmlInput } from '../autofillEngine/schema'
 import type { InputInfo } from './hooks/useInputElements'
-import { INPUT_TYPES } from '../autofillEngine/categorizeInputs'
-
-// This matches the ProcessedInput type in categorizeInputs.ts
-export interface SerializedHtmlInput {
-  label: string | null
-  html: string
-  fieldType: string
-  name: string
-  type: string
-  placeholder: string
-  autocomplete: string
-  id: string
-  className: string
-  value: string
-  required: boolean
-}
 
 function getFieldType(el: Element): string {
   const tag = el.tagName.toLowerCase()
-  if (tag === 'select') return INPUT_TYPES.SELECT
-  if (tag === 'textarea') return INPUT_TYPES.TEXTBOX
+  if (tag === 'select') return INPUT_ELEMENT_TYPES.SELECT
+  if (tag === 'textarea') return INPUT_ELEMENT_TYPES.TEXTBOX
   if (tag === 'input') {
     const type = (el as HTMLInputElement).type?.toLowerCase()
-    if (type && Object.values(INPUT_TYPES).includes(type as any)) {
+    if (type && Object.values(INPUT_ELEMENT_TYPES).includes(type as any)) {
       return type
     }
   }
-  return INPUT_TYPES.TEXT
+  return INPUT_ELEMENT_TYPES.TEXT
 }
 
 export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] {

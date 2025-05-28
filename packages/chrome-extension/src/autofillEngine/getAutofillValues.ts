@@ -1,6 +1,6 @@
-import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import categorizeInputs, { type CategorizedInput } from './categorizeInputs'
+import type { SerializedHtmlInput } from './schema'
 
 export interface AutofillReadyInput extends CategorizedInput {
   autofillValue: string | null
