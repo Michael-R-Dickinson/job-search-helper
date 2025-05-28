@@ -1,4 +1,4 @@
-import type { SerializedInput } from '../content/triggerGetAutofillValues'
+import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import categorizeInputs, { type CategorizedInput } from './categorizeInputs'
 
@@ -7,7 +7,7 @@ export interface AutofillReadyInput extends CategorizedInput {
 }
 
 const getAutofillValues = async (
-  inputs: SerializedInput[],
+  inputs: SerializedHtmlInput[],
   userId: string,
 ): Promise<AutofillReadyInput[] | null> => {
   const categorizedInputs = categorizeInputs(inputs)

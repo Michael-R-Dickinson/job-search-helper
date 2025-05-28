@@ -1,21 +1,11 @@
 import { eventTypes } from '../events'
 import type { InputInfo } from './hooks/useInputElements'
-
-export type SerializedInput = {
-  label: string | null
-  html: string
-}
-
-const serializeInputs = (inputs: InputInfo[]): SerializedInput[] => {
-  return inputs.map((input) => ({
-    label: input.label,
-    html: input.element.outerHTML,
-  }))
-}
+import { serializeInputsHtml } from './serializeInputsHtml'
+import type { SerializedHtmlInput } from './serializeInputsHtml'
 
 const triggerGetAutofillValues = (inputs: InputInfo[]) => {
-  const serializedInputs = serializeInputs(inputs)
-  chrome.runtime.sendMessage({ type: eventTypes.GET_AUTOFILL_VALUES, payload: serializedInputs })
+  const parsedInputs: SerializedHtmlInput[] = serializeInputsHtml(inputs)
+  chrome.runtime.sendMessage({ type: eventTypes.GET_AUTOFILL_VALUES, payload: parsedInputs })
 }
 
 export default triggerGetAutofillValues

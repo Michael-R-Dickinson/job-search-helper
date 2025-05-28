@@ -1,4 +1,4 @@
-import type { SerializedInput } from '../content/triggerGetAutofillValues'
+import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
 
 import {
   isNameInput,
@@ -58,59 +58,12 @@ interface CategorizedInput extends ProcessedInput {
   category: InputCategory
 }
 
-// Helper to parse html string and extract attributes
-const parseHtmlInput = (input: SerializedInput): ProcessedInput => {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(input.html, 'text/html')
-  const el = doc.body.firstElementChild as HTMLElement | null
-  // Defaults
-  let fieldType: InputType = INPUT_TYPES.TEXT
-  let name = ''
-  let type = ''
-  let placeholder = ''
-  let autocomplete = ''
-  let id = ''
-  let className = ''
-  let value = ''
-  let required = false
-  if (el) {
-    const tag = el.tagName.toLowerCase()
-    if (tag === 'select') fieldType = INPUT_TYPES.SELECT
-    else if (tag === 'textarea') fieldType = INPUT_TYPES.TEXTBOX
-    else if (tag === 'input') {
-      type = (el.getAttribute('type') || 'text').toLowerCase()
-      if (Object.values(INPUT_TYPES).includes(type as InputType)) {
-        fieldType = type as InputType
-      }
-    }
-    name = el.getAttribute('name') || ''
-    id = el.getAttribute('id') || ''
-    className = el.getAttribute('class') || ''
-    value = el.getAttribute('value') || ''
-    required = el.hasAttribute('required')
-    placeholder = el.getAttribute('placeholder') || ''
-    autocomplete = el.getAttribute('autocomplete') || ''
-  }
-  return {
-    label: input.label,
-    html: input.html,
-    fieldType,
-    name,
-    type,
-    placeholder,
-    autocomplete,
-    id,
-    className,
-    value,
-    required,
-  }
+// No need to parse HTML, just cast
+const preprocessInputs = (inputs: SerializedHtmlInput[]): ProcessedInput[] => {
+  return inputs.map((input) => input as ProcessedInput)
 }
 
-const preprocessInputs = (inputs: SerializedInput[]): ProcessedInput[] => {
-  return inputs.map(parseHtmlInput)
-}
-
-const categorizeInputs = (inputs: SerializedInput[]): CategorizedInput[] => {
+const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => {
   return preprocessInputs(inputs).map((input) => {
     let category: InputCategory = 'unknown'
     if (isNameInput(input)) category = 'name'

@@ -1,8 +1,9 @@
-import getAutofillValues from '../autofillEngine/getAutofillValues'
 import { useInputElements } from './hooks/useInputElements'
+import triggerGetAutofillValues from './triggerGetAutofillValues'
 
 const Sidebar = () => {
   const elements = useInputElements()
+  console.log('ements', elements)
 
   return (
     <div
@@ -16,13 +17,12 @@ const Sidebar = () => {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
       }}
     >
-      TEST
       <button
         onClick={() => {
-          console.log('Injecting iframe')
+          triggerGetAutofillValues(elements)
         }}
       >
-        Inject Iframe
+        Begin Autofill Sequence
       </button>
     </div>
   )
