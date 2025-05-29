@@ -5,7 +5,11 @@ import { serializeInputsHtml } from './serializeInputsHtml'
 
 const triggerGetAutofillValues = (inputs: InputInfo[]) => {
   const parsedInputs: SerializedHtmlInput[] = serializeInputsHtml(inputs)
-  chrome.runtime.sendMessage({ type: eventTypes.GET_AUTOFILL_VALUES, payload: parsedInputs })
+  chrome.runtime
+    .sendMessage({ type: eventTypes.GET_AUTOFILL_VALUES, payload: parsedInputs })
+    .then((response) => {
+      console.log('response', response)
+    })
 }
 
 export default triggerGetAutofillValues

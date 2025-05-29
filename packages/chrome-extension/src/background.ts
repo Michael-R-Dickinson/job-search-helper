@@ -1,6 +1,7 @@
 import { eventTypes } from './events'
 import authenticate, { currentUser } from './auth/background'
 import getAutofillValues from './autofillEngine/getAutofillValues'
+import saveAutofillValues from './autofillEngine/saveAutofillValues'
 
 console.log('Background script loaded')
 
@@ -10,15 +11,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === eventTypes.GET_AUTOFILL_VALUES) {
-    if (!message.payload) throw new Error('No payload provided')
-
     const userId = currentUser?.uid
-    if (!userId) throw new Error('No user ID found')
+    if (!message.payload) throw new Error('No payload provided')
+    if (!userId) throw new Error('No user found')
 
-    console.log('Received GET_AUTOFILL_VALUES message', message.payload)
     return getAutofillValues(message.payload, userId).then((autofillInstructions) => {
       console.log('autofillInstructions', autofillInstructions)
       return autofillInstructions
     })
+  }
+
+  if (message.type === eventTypes.SAVE_AUTOFILL_VALUES) {
+    const userId = currentUser?.uid
+    if (!message.payload) throw new Error('No payload provided')
+    if (!userId) throw new Error('No user found')
+
+    return saveAutofillValues(message.payload, userId)
   }
 })
