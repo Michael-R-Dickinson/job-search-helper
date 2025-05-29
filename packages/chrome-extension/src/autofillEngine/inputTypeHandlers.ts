@@ -52,9 +52,7 @@ class EmailHandler extends InputCategoryHandler {
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): void {
-    if (input.element.fieldType === 'email') {
-      saveUserAutofillValue(userId, 'email', input.element.value)
-    }
+    saveUserAutofillValue(userId, 'email', input.element.value)
   }
 }
 
@@ -312,6 +310,7 @@ class SchoolHandler extends InputCategoryHandler {
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): void {
+    console.log('saving school', input.element)
     saveUserAutofillValue(userId, 'school', input.element.value)
   }
 }
