@@ -42,6 +42,7 @@ export type InputCategory =
   | 'gender'
   | 'veteran'
   | 'race_ethnicity'
+  | 'hispanic_latino'
   | 'disability'
   | 'phone'
   | 'country'
@@ -63,6 +64,24 @@ export const CategorizedInputSchema = z.object({
 
 export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
 
+export const GenderEnum = z.enum(['male', 'female', 'non_binary', 'other', 'prefer_not_to_say'])
+export const VeteranStatusEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
+export const RaceEthnicityEnum = z.enum([
+  'asian',
+  'black',
+  'hispanic',
+  'white',
+  'native_american',
+  'pacific_islander',
+  'two_or_more',
+  'other',
+  'prefer_not_to_say',
+])
+export const HispanicLatinoEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
+export const DisabilityStatusEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
+export const AuthorizationStatusEnum = z.enum(['yes', 'no'])
+export const SponsorshipStatusEnum = z.enum(['yes', 'no'])
+
 export const UserAutofillPreferencesSchema = z.object({
   name: z
     .object({
@@ -71,11 +90,21 @@ export const UserAutofillPreferencesSchema = z.object({
     })
     .optional(),
   email: z.string().optional(),
-  gender: z.string().optional(),
-  veteran: z.string().optional(),
-  race_ethnicity: z.string().optional(),
-  disability: z.string().optional(),
+  gender: GenderEnum.optional(),
+  veteran: VeteranStatusEnum.optional(),
+  race_ethnicity: RaceEthnicityEnum.optional(),
+  hispanic_latino: HispanicLatinoEnum.optional(),
+  disability: DisabilityStatusEnum.optional(),
   phone: z.string().optional(),
+  country: z.string().optional(),
+  authorization: AuthorizationStatusEnum.optional(),
+  sponsorship: SponsorshipStatusEnum.optional(),
+  mailing_address: z.string().optional(),
+  school: z.string().optional(),
+  degree: z.string().optional(),
+  discipline: z.string().optional(),
+  end_date_year: z.string().optional(),
+  linkedin_profile: z.string().optional(),
 })
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
 
