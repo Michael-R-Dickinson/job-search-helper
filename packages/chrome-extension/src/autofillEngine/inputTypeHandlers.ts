@@ -19,19 +19,21 @@ class NameHandler extends InputCategoryHandler {
     this.savedLastName = userAutofillPreferences.name?.last_name
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (input.element.fieldType === 'text' && input.label?.includes('first')) {
+    const label = input.label?.toLowerCase() || ''
+    if (input.element.fieldType === 'text' && label.includes('first')) {
       return { action: 'fill', value: this.savedFirstName, id: input.element.elementReferenceId }
     }
-    if (input.element.fieldType === 'text' && input.label?.includes('last')) {
+    if (input.element.fieldType === 'text' && label.includes('last')) {
       return { action: 'fill', value: this.savedLastName, id: input.element.elementReferenceId }
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): void {
-    if (input.element.fieldType === 'text' && input.label?.includes('first')) {
+    const label = input.label?.toLowerCase() || ''
+    if (input.element.fieldType === 'text' && label.includes('first')) {
       saveUserAutofillValue(userId, 'name/first_name', input.element.value)
     }
-    if (input.element.fieldType === 'text' && input.label?.includes('last')) {
+    if (input.element.fieldType === 'text' && label.includes('last')) {
       saveUserAutofillValue(userId, 'name/last_name', input.element.value)
     }
   }
