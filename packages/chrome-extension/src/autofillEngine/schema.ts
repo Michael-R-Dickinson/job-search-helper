@@ -64,10 +64,12 @@ export const CategorizedInputSchema = z.object({
 export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
 
 export const UserAutofillPreferencesSchema = z.object({
-  name: z.object({
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
-  }),
+  name: z
+    .object({
+      first_name: z.string().optional(),
+      last_name: z.string().optional(),
+    })
+    .optional(),
   email: z.string().optional(),
   gender: z.string().optional(),
   veteran: z.string().optional(),
