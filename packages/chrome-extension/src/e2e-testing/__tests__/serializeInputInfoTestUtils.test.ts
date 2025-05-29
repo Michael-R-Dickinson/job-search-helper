@@ -3,8 +3,8 @@ import {
   serializeInputInfosForTest,
   resurrectInputInfosFromTest,
   SerializedInputInfoArraySchema,
-} from './serializeInputInfoTestUtils'
-import type { InputInfo } from './hooks/useInputElements'
+} from '../saveInputInfosForTests'
+import type { InputInfo } from '../../content/hooks/useInputElements'
 
 function createMockInput(
   tag: 'input' | 'textarea' | 'select',

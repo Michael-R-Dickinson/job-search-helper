@@ -1,4 +1,4 @@
-import type { InputInfo, ElementInfo } from './hooks/useInputElements'
+import type { InputInfo, ElementInfo } from '../content/hooks/useInputElements'
 import { z } from 'zod'
 
 // Schema for the serialized format
