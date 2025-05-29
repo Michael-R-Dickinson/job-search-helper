@@ -1,10 +1,9 @@
-import { useInputElements } from './hooks/useInputElements'
+import { autofillInputElements, useInputElements } from './hooks/useInputElements'
 import triggerGetAutofillValues from './triggerGetAutofillValues'
 import triggerSaveFilledValues from './triggerSaveFilledValues'
 
 const Sidebar = () => {
   const elements = useInputElements()
-  console.log('ements', elements)
 
   return (
     <div
@@ -19,15 +18,16 @@ const Sidebar = () => {
       }}
     >
       <button
-        onClick={() => {
-          console.log('test', triggerGetAutofillValues(elements))
+        onClick={async () => {
+          const response = await triggerGetAutofillValues(elements)
+          autofillInputElements(response)
         }}
       >
         Begin Autofill Sequence
       </button>
       <button
         onClick={() => {
-          console.log('test', triggerSaveFilledValues(elements))
+          triggerSaveFilledValues(elements)
         }}
       >
         Save Autofill Values

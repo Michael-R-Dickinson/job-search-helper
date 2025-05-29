@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import type { AutofillInstruction } from '../../autofillEngine/schema'
 
 export type ElementInfo = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 export interface InputInfo {
@@ -17,7 +18,7 @@ function generateUniqueId() {
  * plus their labels, excluding:
  * - aria-hidden or opacity:0
  * - disabled or readOnly
- * - input types that aren’t text-entry (button, hidden, submit, etc.)
+ * - input types that aren't text-entry (button, hidden, submit, etc.)
  * - elements whose id/name/class contains "captcha"
  */
 export function useInputElements(): InputInfo[] {
@@ -61,7 +62,7 @@ export function useInputElements(): InputInfo[] {
           if (id.includes('captcha') || name.includes('captcha') || cls.includes('captcha'))
             return false
 
-          // 3) Exclude controls that aren’t meant for text entry
+          // 3) Exclude controls that aren't meant for text entry
           if (tag === 'input') {
             const inp = el as HTMLInputElement
             // no hidden/buttons/etc.
@@ -98,4 +99,32 @@ export function useInputElements(): InputInfo[] {
   }, [])
 
   return inputs
+}
+
+export const autofillInputElements = (autofillInstructions: AutofillInstruction[]) => {
+  autofillInstructions.forEach((instruction) => {
+    const el = document.querySelector<HTMLElement>(`[data-autofill-id="${instruction.id}"]`)
+    if (!el) return
+
+    // Handle action
+    if (instruction.action === 'skip') return
+
+    // Fill or clear
+    if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+      const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
+      // Only set if value is different
+      if (el.value !== value) {
+        el.value = value
+        // For React etc., fire input and change events
+        el.dispatchEvent(new Event('input', { bubbles: true }))
+        el.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+    } else if (el instanceof HTMLSelectElement) {
+      const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
+      if (el.value !== value) {
+        el.value = value
+        el.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+    }
+  })
 }
