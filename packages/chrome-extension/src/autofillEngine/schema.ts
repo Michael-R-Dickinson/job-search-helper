@@ -95,10 +95,21 @@ export const UserAutofillPreferencesSchema = z.object({
   race_ethnicity: RaceEthnicityEnum.optional(),
   hispanic_latino: HispanicLatinoEnum.optional(),
   disability: DisabilityStatusEnum.optional(),
-  phone: z.string().optional(),
+  phone: z
+    .object({
+      phoneNum: z.number().optional(),
+      extension: z.string().optional(),
+      type: z.enum(['mobile', 'landline']).optional(),
+    })
+    .optional(),
   country: z.string().optional(),
   authorization: AuthorizationStatusEnum.optional(),
-  sponsorship: SponsorshipStatusEnum.optional(),
+  sponsorship: z
+    .object({
+      text: z.string().optional(),
+      yesNoAnswer: z.boolean().optional(),
+    })
+    .optional(),
   mailing_address: z.string().optional(),
   school: z.string().optional(),
   degree: z.string().optional(),

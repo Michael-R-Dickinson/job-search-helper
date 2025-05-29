@@ -193,19 +193,78 @@ class DisabilityHandler extends InputCategoryHandler {
 }
 
 class PhoneHandler extends InputCategoryHandler {
-  value: string | undefined
+  phoneNum: number | undefined
+  extension: string | undefined
+  phoneType: 'mobile' | 'landline' | undefined
   constructor(userAutofillPreferences: UserAutofillPreferences) {
     super(userAutofillPreferences)
-    this.value = userAutofillPreferences.phone
+    this.phoneNum = userAutofillPreferences.phone?.phoneNum
+    this.extension = userAutofillPreferences.phone?.extension
+    this.phoneType = userAutofillPreferences.phone?.type
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (this.value) {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    const label = input.label?.toLowerCase() || ''
+    const name = input.element.name?.toLowerCase() || ''
+    const placeholder = input.element.placeholder?.toLowerCase() || ''
+
+    // Detect extension field
+    if (label.includes('ext') || name.includes('ext') || placeholder.includes('ext')) {
+      if (this.extension) {
+        return { action: 'fill', value: this.extension, id: input.element.elementReferenceId }
+      }
+      return { action: 'skip', id: input.element.elementReferenceId }
+    }
+
+    // Detect phone type field
+    if (
+      label.includes('type') ||
+      name.includes('type') ||
+      placeholder.includes('type') ||
+      input.element.fieldType === 'select' ||
+      input.element.fieldType === 'radio'
+    ) {
+      if (this.phoneType) {
+        return { action: 'fill', value: this.phoneType, id: input.element.elementReferenceId }
+      }
+      return { action: 'skip', id: input.element.elementReferenceId }
+    }
+
+    // Default: phone number field
+    if (typeof this.phoneNum === 'number') {
+      return { action: 'fill', value: String(this.phoneNum), id: input.element.elementReferenceId }
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'phone', input.element.value)
+    const label = input.label?.toLowerCase() || ''
+    const name = input.element.name?.toLowerCase() || ''
+    const placeholder = input.element.placeholder?.toLowerCase() || ''
+
+    // Detect extension field
+    if (label.includes('ext') || name.includes('ext') || placeholder.includes('ext')) {
+      saveUserAutofillValue(userId, 'phone/extension', input.element.value)
+      return
+    }
+
+    // Detect phone type field
+    if (
+      label.includes('type') ||
+      name.includes('type') ||
+      placeholder.includes('type') ||
+      input.element.fieldType === 'select' ||
+      input.element.fieldType === 'radio'
+    ) {
+      // Only save if value is 'mobile' or 'landline'
+      if (input.element.value === 'mobile' || input.element.value === 'landline') {
+        saveUserAutofillValue(userId, 'phone/type', input.element.value)
+      }
+      return
+    }
+
+    // Default: phone number field
+    // Remove all non-digit characters
+    const digitsOnly = input.element.value.replace(/\D/g, '')
+    saveUserAutofillValue(userId, 'phone/phoneNum', digitsOnly)
   }
 }
 
