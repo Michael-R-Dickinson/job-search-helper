@@ -1,16 +1,23 @@
-import { INPUT_ELEMENT_TYPES, type SerializedHtmlInput } from '../autofillEngine/schema'
+import {
+  INPUT_ELEMENT_TYPES,
+  type InputElementType,
+  type SerializedHtmlInput,
+} from '../autofillEngine/schema'
 import type { InputInfo } from './hooks/useInputElements'
 
 export type { SerializedHtmlInput } from '../autofillEngine/schema'
 
-function getFieldType(el: Element): string {
+function getFieldType(el: Element): InputElementType {
   const tag = el.tagName.toLowerCase()
   if (tag === 'select') return INPUT_ELEMENT_TYPES.SELECT
   if (tag === 'textarea') return INPUT_ELEMENT_TYPES.TEXTBOX
   if (tag === 'input') {
     const type = (el as HTMLInputElement).type?.toLowerCase()
-    if (type && Object.values(INPUT_ELEMENT_TYPES).includes(type as any)) {
-      return type
+    if (type) {
+      const validTypes = Object.values(INPUT_ELEMENT_TYPES)
+      if (validTypes.includes(type as any)) {
+        return validTypes.find((t) => t === type) as InputElementType
+      }
     }
   }
   return INPUT_ELEMENT_TYPES.TEXT
