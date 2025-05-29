@@ -1,9 +1,11 @@
+import { copyInputInfosToClipboard } from '../e2e-testing/saveInputInfosForTests'
 import { autofillInputElements, useInputElements } from './hooks/useInputElements'
 import triggerGetAutofillValues from './triggerGetAutofillValues'
 import triggerSaveFilledValues from './triggerSaveFilledValues'
 
 const Sidebar = () => {
   const elements = useInputElements()
+  console.log('elements', elements)
 
   return (
     <div
@@ -31,6 +33,14 @@ const Sidebar = () => {
         }}
       >
         Save Autofill Values
+      </button>
+      <button
+        onClick={() => {
+          const serialized = copyInputInfosToClipboard(elements, window.location.href)
+          console.log('serialized', serialized)
+        }}
+      >
+        Save Inputs For Testing
       </button>
     </div>
   )
