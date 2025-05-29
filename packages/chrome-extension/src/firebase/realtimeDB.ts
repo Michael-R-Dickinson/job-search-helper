@@ -1,4 +1,4 @@
-import { get, ref } from 'firebase/database'
+import { get, ref, set } from 'firebase/database'
 import { database } from '../extensionFirebase'
 import type { UserAutofillPreferences } from '../autofillEngine/schema'
 
@@ -13,4 +13,16 @@ export const getUserAutofillValues = async (
   if (!snapshot.exists()) return null
 
   return snapshot.val()
+}
+
+export const saveUserAutofillValue = async (
+  userId: string,
+  valuePath: string,
+  value: string | boolean,
+) => {
+  const userAutofillDataRef = ref(
+    database,
+    `${getUserAutofillPreferencesPath(userId)}/${valuePath}`,
+  )
+  await set(userAutofillDataRef, value)
 }
