@@ -191,7 +191,7 @@ describe('InputTypeHandlers', () => {
     })
     expect(handler.getAutofillInstruction(input)).toEqual({ action: 'fill', id: 'af-12' })
     const handler2 = getHandlerForInputCategory('sponsorship', {
-      sponsorship: SponsorshipStatusEnum.enum.no,
+      sponsorship: { yesNoAnswer: false },
     })
     const input2 = baseInput({
       category: 'sponsorship',
@@ -200,9 +200,23 @@ describe('InputTypeHandlers', () => {
     expect(handler2.getAutofillInstruction(input2)).toEqual({ action: 'clear', id: 'af-13' })
   })
 
-  it('handles phone, country, mailing_address, school, degree, discipline, end_date_year, linkedin_profile', () => {
+  it('handles phone', () => {
+    const handler = getHandlerForInputCategory('phone', { phone: { phoneNum: 5551234 } })
+    const input = baseInput({
+      category: 'phone',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-14' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: '5551234',
+      id: 'af-14',
+    })
+    handler.saveAutofillValue(input, 'user2')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user2', 'phone/phoneNum', '')
+  })
+
+  it('handles country, mailing_address, school, degree, discipline, end_date_year, linkedin_profile', () => {
     const fields = [
-      { cat: 'phone', val: '555-1234' },
       { cat: 'country', val: 'USA' },
       { cat: 'mailing_address', val: '123 Main St' },
       { cat: 'school', val: 'Test University' },
