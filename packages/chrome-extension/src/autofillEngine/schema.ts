@@ -85,5 +85,6 @@ export const AutofillInstructionSchema = z.object({
   value: z.string().optional(),
   id: z.string(),
 })
+export const AutofillInstructionsSchema = z.array(AutofillInstructionSchema)
 
 export type AutofillInstruction = z.infer<typeof AutofillInstructionSchema>

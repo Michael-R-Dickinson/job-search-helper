@@ -15,10 +15,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message.payload) throw new Error('No payload provided')
     if (!userId) throw new Error('No user found')
 
-    return getAutofillValues(message.payload, userId).then((autofillInstructions) => {
-      console.log('autofillInstructions', autofillInstructions)
-      return autofillInstructions
+    getAutofillValues(message.payload, userId).then((autofillInstructions) => {
+      console.log(
+        'autofillInstructions, before handing off to content script',
+        autofillInstructions,
+      )
+      sendResponse(autofillInstructions)
     })
+    return true
   }
 
   if (message.type === eventTypes.SAVE_AUTOFILL_VALUES) {
