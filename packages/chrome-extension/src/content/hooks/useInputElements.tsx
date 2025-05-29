@@ -52,8 +52,7 @@ export function useInputElements(): InputInfo[] {
           // 1) Exclude aria-hidden or invisible styles
           if (el.getAttribute('aria-hidden') === 'true') return false
           const style = window.getComputedStyle(el)
-          if (style.opacity === '0' || style.visibility === 'hidden' || style.display === 'none')
-            return false
+          if (style.visibility === 'hidden' || style.display === 'none') return false
 
           // 2) Exclude captchas by id/name/class
           const id = el.id?.toLowerCase() ?? ''
