@@ -254,29 +254,51 @@ class AuthorizationHandler extends InputCategoryHandler {
 }
 
 class SponsorshipHandler extends InputCategoryHandler {
-  value: string | undefined
+  sponsorshipYesNo: boolean | undefined
+  sponsorshipText: string | undefined
   constructor(userAutofillPreferences: UserAutofillPreferences) {
     super(userAutofillPreferences)
-    this.value = userAutofillPreferences.sponsorship
+    this.sponsorshipYesNo = userAutofillPreferences.sponsorship?.yesNoAnswer
+    this.sponsorshipText = userAutofillPreferences.sponsorship?.text
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (!this.value) return { action: 'skip', id: input.element.elementReferenceId }
-    if (input.element.fieldType === 'select' || input.element.fieldType === 'radio') {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
-    }
-    if (input.element.fieldType === 'checkbox') {
+    if (
+      input.element.fieldType === 'select' ||
+      input.element.fieldType === 'radio' ||
+      input.element.fieldType === 'checkbox'
+    ) {
+      if (typeof this.sponsorshipYesNo !== 'boolean')
+        return { action: 'skip', id: input.element.elementReferenceId }
       return {
-        action: this.value === 'yes' ? 'fill' : 'clear',
+        action:
+          input.element.fieldType === 'checkbox'
+            ? this.sponsorshipYesNo
+              ? 'fill'
+              : 'clear'
+            : 'fill',
+        value: input.element.fieldType !== 'checkbox' ? String(this.sponsorshipYesNo) : undefined,
         id: input.element.elementReferenceId,
       }
     }
     if (input.element.fieldType === 'text') {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+      if (!this.sponsorshipText) return { action: 'skip', id: input.element.elementReferenceId }
+      return { action: 'fill', value: this.sponsorshipText, id: input.element.elementReferenceId }
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'sponsorship', input.element.value)
+    if (
+      input.element.fieldType === 'select' ||
+      input.element.fieldType === 'radio' ||
+      input.element.fieldType === 'checkbox'
+    ) {
+      // Save to yesNoAnswer field (convert value to boolean)
+      const boolValue = input.element.value === 'yes' || input.element.value === 'true'
+      saveUserAutofillValue(userId, 'sponsorship/yesNoAnswer', boolValue)
+    } else if (input.element.fieldType === 'text') {
+      // Save to text field
+      saveUserAutofillValue(userId, 'sponsorship/text', input.element.value)
+    }
   }
 }
 
