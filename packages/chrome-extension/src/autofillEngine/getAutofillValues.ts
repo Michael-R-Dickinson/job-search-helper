@@ -2,9 +2,9 @@ import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
 import { SerializedHtmlInputSchema, type AutofillInstruction } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import { categorizeInputs } from './categorizeInputs'
-import inputCategoryHandler from './inputTypeHandlers'
+import getHandlerForInputCategory from './inputTypeHandlers'
 
-const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlInput[] => {
+export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlInput[] => {
   return inputs.map((input) => {
     return {
       ...input,
@@ -37,14 +37,8 @@ const getAutofillValues = async (
   if (!userAutofillPreferences) return null
 
   return categorizedInputs.map((input) => {
-    const handler = inputCategoryHandler[input.category]
-    if (!handler) {
-      return {
-        action: 'skip',
-        id: input.element.elementReferenceId,
-      }
-    }
-    return handler(input, userAutofillPreferences)
+    const handler = getHandlerForInputCategory(input.category, userAutofillPreferences)
+    return handler.getAutofillInstruction(input)
   })
 }
 
