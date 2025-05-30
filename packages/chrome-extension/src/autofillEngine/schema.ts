@@ -54,6 +54,7 @@ export type InputCategory =
   | 'discipline'
   | 'end_date_year'
   | 'linkedin_profile'
+  | 'website'
   | 'unknown'
 
 export const CategorizedInputSchema = z.object({
@@ -116,6 +117,7 @@ export const UserAutofillPreferencesSchema = z.object({
   discipline: z.string().optional(),
   end_date_year: z.string().optional(),
   linkedin_profile: z.string().optional(),
+  website: z.string().optional(),
 })
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
 

@@ -2,7 +2,7 @@ import { type SerializedHtmlInput } from './schema'
 import { SerializedHtmlInputSchema } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import { categorizeInputs } from './categorizeInputs'
-import getHandlerForInputCategory from './inputTypeHandlers'
+import getHandlerForInputCategory, { NoValueHandler } from './inputTypeHandlers'
 import { preprocessInputs } from './getAutofillValues'
 
 const saveAutofillValues = async (inputs: SerializedHtmlInput[], userId: string) => {
@@ -19,6 +19,9 @@ const saveAutofillValues = async (inputs: SerializedHtmlInput[], userId: string)
 
   const results = await Promise.all(
     categorizedInputs.map((input) => {
+      if (!input.element.value) {
+        return new NoValueHandler(userAutofillPreferences || {}).saveAutofillValue(input, userId)
+      }
       const handler = getHandlerForInputCategory(input.category, userAutofillPreferences || {})
       return handler.saveAutofillValue(input, userId)
     }),

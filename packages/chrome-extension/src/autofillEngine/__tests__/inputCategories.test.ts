@@ -16,6 +16,7 @@ import {
   isDisciplineInput,
   isEndDateYearInput,
   isLinkedInProfileInput,
+  isWebsiteInput,
 } from '../inputCategoryPredicates'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 
@@ -340,6 +341,33 @@ describe('Input Categorization Tests', () => {
     it('should identify LinkedIn profile', () => {
       const input = createTestInput({ label: 'LinkedIn profile' })
       expect(isLinkedInProfileInput(input)).toBe(true)
+    })
+  })
+
+  describe('isWebsiteInput', () => {
+    it('should identify website inputs by type', () => {
+      const input = createTestInput({ type: 'url', fieldType: INPUT_ELEMENT_TYPES.URL })
+      expect(isWebsiteInput(input)).toBe(true)
+    })
+    it('should identify website inputs by label', () => {
+      const input = createTestInput({ label: 'Personal Website' })
+      expect(isWebsiteInput(input)).toBe(true)
+    })
+    it('should identify website inputs by name', () => {
+      const input = createTestInput({ name: 'portfolio_url' })
+      expect(isWebsiteInput(input)).toBe(true)
+    })
+    it('should identify website inputs by placeholder', () => {
+      const input = createTestInput({ placeholder: 'Enter your homepage' })
+      expect(isWebsiteInput(input)).toBe(true)
+    })
+    it('should identify website inputs by autocomplete', () => {
+      const input = createTestInput({ autocomplete: 'url' })
+      expect(isWebsiteInput(input)).toBe(true)
+    })
+    it('should not identify non-website inputs', () => {
+      const input = createTestInput({ label: 'Email Address' })
+      expect(isWebsiteInput(input)).toBe(false)
     })
   })
 })

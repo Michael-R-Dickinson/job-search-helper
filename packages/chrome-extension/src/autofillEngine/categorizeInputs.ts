@@ -15,6 +15,7 @@ import {
   isDisciplineInput,
   isEndDateYearInput,
   isLinkedInProfileInput,
+  isWebsiteInput,
 } from './inputCategoryPredicates'
 import type { SerializedHtmlInput, CategorizedInput, InputCategory } from './schema'
 
@@ -36,6 +37,7 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isDisciplineInput(input)) category = 'discipline'
     else if (isEndDateYearInput(input)) category = 'end_date_year'
     else if (isLinkedInProfileInput(input)) category = 'linkedin_profile'
+    else if (isWebsiteInput(input)) category = 'website'
     else if (isCountryInput(input)) category = 'country'
     return {
       element: input,

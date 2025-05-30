@@ -241,6 +241,21 @@ describe('InputTypeHandlers', () => {
     }
   })
 
+  it('handles website', () => {
+    const handler = getHandlerForInputCategory('website', { website: 'https://my.site' })
+    const input = baseInput({
+      category: 'website',
+      element: { ...baseElement({ fieldType: 'url', elementReferenceId: 'af-website' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'https://my.site',
+      id: 'af-website',
+    })
+    handler.saveAutofillValue(input, 'user3')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user3', 'website', '')
+  })
+
   it('skips if no value is present', () => {
     const handler = getHandlerForInputCategory('gender', {})
     const input = baseInput({

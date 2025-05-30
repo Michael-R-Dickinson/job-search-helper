@@ -358,6 +358,48 @@ const isLinkedInProfileInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
+const isWebsiteInput = (input: SerializedHtmlInput): boolean => {
+  // Accept URL type or text fields with website patterns
+  if (input.fieldType !== INPUT_ELEMENT_TYPES.URL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
+    return false
+
+  const websitePatterns: Pattern[] = [
+    'website',
+    'web site',
+    'personal website',
+    'portfolio',
+    'site',
+    'homepage',
+    'home page',
+    'url',
+    'webpage',
+    'web page',
+    'company website',
+    'company url',
+    'business website',
+    'business url',
+    'profile url',
+    'profile link',
+    'website address',
+    'web address',
+    'site url',
+    'site link',
+    'website link',
+    'personal url',
+    'portfolio url',
+    'portfolio site',
+    'portfolio website',
+  ]
+  const autocompletePatterns: Pattern[] = ['url', 'website', 'homepage']
+  return (
+    input.type === 'url' ||
+    matchesPattern(input.label ?? undefined, websitePatterns) ||
+    matchesPattern(input.name, websitePatterns) ||
+    matchesPattern(input.placeholder, websitePatterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
 export {
   isNameInput,
   isEmailInput,
@@ -375,4 +417,5 @@ export {
   isDisciplineInput,
   isEndDateYearInput,
   isLinkedInProfileInput,
+  isWebsiteInput,
 }

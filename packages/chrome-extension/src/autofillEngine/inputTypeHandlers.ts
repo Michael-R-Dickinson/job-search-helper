@@ -477,6 +477,23 @@ class LinkedinProfileHandler extends InputCategoryHandler {
   }
 }
 
+class WebsiteHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.website
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'website', input.element.value)
+  }
+}
+
 // Restore DefaultHandler for fallback
 class DefaultHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
@@ -487,6 +504,15 @@ class DefaultHandler extends InputCategoryHandler {
       status: 'error',
       error: 'Unknown input category',
     })
+  }
+}
+
+export class NoValueHandler extends InputCategoryHandler {
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return Promise.resolve({ status: 'error', error: 'element value is empty' })
   }
 }
 
@@ -513,6 +539,7 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   discipline: DisciplineHandler,
   end_date_year: EndDateYearHandler,
   linkedin_profile: LinkedinProfileHandler,
+  website: WebsiteHandler,
   unknown: DefaultHandler,
 }
 

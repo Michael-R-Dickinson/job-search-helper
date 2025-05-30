@@ -18,7 +18,12 @@ describe('categorizeInputs', () => {
         el.setAttribute(k, v)
       }
     })
-    return { element: el as any, label }
+    return {
+      element: el as any,
+      label,
+      elementReferenceId:
+        opts.elementReferenceId || 'test-id-' + Math.random().toString(36).slice(2),
+    }
   }
 
   it('should categorize name inputs correctly', () => {
@@ -138,6 +143,21 @@ describe('categorizeInputs', () => {
     expect(result).toHaveLength(3)
     result.forEach((input) => {
       expect(input.category).toBe('country')
+    })
+  })
+
+  it('should categorize website inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { type: 'url', name: 'website', fieldType: 'url' }, 'Website'),
+      makeInput('input', { name: 'portfolio_url' }, 'Portfolio'),
+      makeInput('input', { placeholder: 'Enter your homepage' }, 'Homepage'),
+      makeInput('input', { autocomplete: 'url' }, 'Personal Site'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(4)
+    result.forEach((input) => {
+      expect(input.category).toBe('website')
     })
   })
 
