@@ -1,5 +1,6 @@
 'use client'
 import UploadFileInput from '@/components/UploadFileInput'
+import useAuth from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -7,10 +8,11 @@ const TEST_RESUME_URL =
   'https://us-east.storage.cloudconvert.com/tasks/9ff1bb85-be05-4d23-933c-13829bf04785/output.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cloudconvert-production%2F20250517%2Fva%2Fs3%2Faws4_request&X-Amz-Date=20250517T045450Z&X-Amz-Expires=86400&X-Amz-Signature=ab70291aea981868ee6017c3816d1fbd3d68d43e4d58874e9f8ceae6a31b10d3&X-Amz-SignedHeaders=host&response-content-disposition=inline%3B%20filename%3D%22output.pdf%22&response-content-type=application%2Fpdf&x-id=GetObject'
 const Dashboard = () => {
   const router = useRouter()
+  const { user } = useAuth()
   return (
     <main className="grow mt-16">
       <div className="min-h-screen p-8">
-        <h1 className="mb-6 text-3xl font-bold">Dashboard</h1>
+        <h1 className="mb-6 text-3xl font-bold">Dashboard - Hello {user.displayName}</h1>
 
         <div className="md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1 gap-6">
           <div className="p-6 bg-white rounded-lg shadow">
