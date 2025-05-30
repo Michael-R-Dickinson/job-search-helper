@@ -12,6 +12,29 @@ const matchesPattern = (str: string | undefined, patterns: Pattern[]): boolean =
 }
 
 const isNameInput = (input: SerializedHtmlInput): boolean => {
+  // Exclude company/employer/org fields
+  const companyPatterns = [
+    'employer',
+    'company',
+    'organization',
+    'org',
+    'workplace',
+    'employer_name',
+    'company_name',
+    'org_name',
+    'organization_name',
+    'work_company',
+    'work_employer',
+    'work_org',
+    'work_organization',
+  ]
+  if (
+    matchesPattern(input.label ?? undefined, companyPatterns) ||
+    matchesPattern(input.name, companyPatterns) ||
+    matchesPattern(input.placeholder, companyPatterns)
+  ) {
+    return false
+  }
   // Allow TEXT, and potentially other field types if they behave like text inputs for names.
   // For now, keeping TEXT as the primary, but autocomplete can override.
   if (input.fieldType !== INPUT_ELEMENT_TYPES.TEXT && !input.autocomplete) return false
@@ -400,6 +423,159 @@ const isWebsiteInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
+const isTwitterUrlInput = (input: SerializedHtmlInput): boolean => {
+  if (input.fieldType !== INPUT_ELEMENT_TYPES.URL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
+    return false
+  const patterns: Pattern[] = [
+    'twitter',
+    'twitter url',
+    'twitter handle',
+    'twitter profile',
+    'twitter link',
+    'twitter_username',
+    'twitter_user',
+    'twitter_profile',
+    'twitter_handle',
+    'twitteraccount',
+    'twitter-account',
+    'twitteruser',
+    'twitter-user',
+    'twitteraddress',
+    'twitter address',
+    'twitterid',
+    'twitter id',
+    '@twitter',
+    'twitter.com',
+    'twitter profile url',
+    'twitter page',
+  ]
+  const autocompletePatterns: Pattern[] = ['twitter', 'twitter-url']
+  return !!(
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns) ||
+    (input.type === 'url' &&
+      ((input.name && input.name.toLowerCase().includes('twitter')) ||
+        (input.label && input.label.toLowerCase().includes('twitter'))))
+  )
+}
+
+const isGithubUrlInput = (input: SerializedHtmlInput): boolean => {
+  if (input.fieldType !== INPUT_ELEMENT_TYPES.URL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
+    return false
+  const patterns: Pattern[] = [
+    'github',
+    'github url',
+    'github handle',
+    'github profile',
+    'github link',
+    'github_username',
+    'github_user',
+    'github_profile',
+    'github_handle',
+    'githubaccount',
+    'github-account',
+    'githubuser',
+    'github-user',
+    'githubaddress',
+    'github address',
+    'githubid',
+    'github id',
+    'github.com',
+    'github profile url',
+    'github page',
+  ]
+  const autocompletePatterns: Pattern[] = ['github', 'github-url']
+  return !!(
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns) ||
+    (input.type === 'url' &&
+      ((input.name && input.name.toLowerCase().includes('github')) ||
+        (input.label && input.label.toLowerCase().includes('github'))))
+  )
+}
+
+const isCurrentCompanyInput = (input: SerializedHtmlInput): boolean => {
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT
+  )
+    return false
+  const patterns: Pattern[] = [
+    'current company',
+    'current employer',
+    'employer',
+    'company',
+    'company name',
+    'present employer',
+    'present company',
+    'workplace',
+    'organization',
+    'current workplace',
+    'current organization',
+    'current org',
+    'employer name',
+    'company (current)',
+    'employer (current)',
+    'company_name',
+    'employer_name',
+    'work company',
+    'work employer',
+    'work org',
+    'work organization',
+  ]
+  const autocompletePatterns: Pattern[] = ['organization', 'company', 'employer']
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
+const isCurrentLocationInput = (input: SerializedHtmlInput): boolean => {
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT
+  )
+    return false
+  const patterns: Pattern[] = [
+    'current location',
+    'location',
+    'city',
+    'city/town',
+    'city or town',
+    'current city',
+    'current town',
+    'present location',
+    'present city',
+    'present town',
+    'where do you live',
+    'where are you based',
+    'where are you located',
+    'residence',
+    'residing city',
+    'residing location',
+    'home city',
+    'home location',
+    'city of residence',
+    'location (current)',
+    'current_residence',
+    'current_city',
+    'current_location',
+  ]
+  const autocompletePatterns: Pattern[] = ['address-level2', 'city', 'location', 'residence']
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
 export {
   isNameInput,
   isEmailInput,
@@ -418,4 +594,8 @@ export {
   isEndDateYearInput,
   isLinkedInProfileInput,
   isWebsiteInput,
+  isTwitterUrlInput,
+  isGithubUrlInput,
+  isCurrentCompanyInput,
+  isCurrentLocationInput,
 }

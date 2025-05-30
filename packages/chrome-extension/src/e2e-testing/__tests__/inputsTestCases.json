@@ -229,5 +229,304 @@
         "id": "af-b8360130-9e31-4579-a86e-5ce870722a89"
       }
     ]
+  },
+  {
+    "sourceURL": "https://jobs.lever.co/WealthFinancialTechnologies/66cae68b-14e4-45a9-910a-91d1f66a7d83/apply?source=LinkedIn",
+    "inputsData": [
+      {
+        "label": "Full name✱",
+        "html": "<input type=\"text\" data-qa=\"name-input\" name=\"name\" required=\"\" data-autofill-id=\"af-f40f156a-a71d-4fde-9058-279460df24f4\">",
+        "fieldType": "",
+        "name": "name",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "Michael R Dickinson",
+        "required": true,
+        "elementReferenceId": "af-f40f156a-a71d-4fde-9058-279460df24f4",
+        "selectedText": ""
+      },
+      {
+        "label": "Email✱",
+        "html": "<input name=\"email\" data-qa=\"email-input\" type=\"email\" pattern=\"[a-zA-Z0-9.#$%&amp;'*+\\/=?^_`{|}~][a-zA-Z0-9.!#$%&amp;'*+\\/=?^_`{|}~-]*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\" required=\"\" data-autofill-id=\"af-6bc6d501-2a8b-479c-a5c7-dab29e6f00bf\">",
+        "fieldType": "",
+        "name": "email",
+        "type": "email",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "michael.dickinson3949@gmail.com",
+        "required": true,
+        "elementReferenceId": "af-6bc6d501-2a8b-479c-a5c7-dab29e6f00bf",
+        "selectedText": ""
+      },
+      {
+        "label": "Phone ✱",
+        "html": "<input type=\"text\" data-qa=\"phone-input\" name=\"phone\" required=\"\" data-autofill-id=\"af-3e6f5293-6af9-49b1-844d-d9a73f41b882\">",
+        "fieldType": "",
+        "name": "phone",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "5415136290",
+        "required": true,
+        "elementReferenceId": "af-3e6f5293-6af9-49b1-844d-d9a73f41b882",
+        "selectedText": ""
+      },
+      {
+        "label": "Current location No location found. Try entering a different locationLoading",
+        "html": "<input class=\"location-input\" data-qa=\"location-input\" id=\"location-input\" type=\"text\" maxlength=\"100\" name=\"location\" data-autofill-id=\"af-0f31936b-ae7a-4488-a344-ce25a45f3aed\">",
+        "fieldType": "",
+        "name": "location",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "location-input",
+        "className": "location-input",
+        "value": "No location found. Try entering a different locationLoading",
+        "required": false,
+        "elementReferenceId": "af-0f31936b-ae7a-4488-a344-ce25a45f3aed",
+        "selectedText": ""
+      },
+      {
+        "label": "Current company",
+        "html": "<input type=\"text\" data-qa=\"org-input\" name=\"org\" data-autofill-id=\"af-4c4ef8de-a670-4e21-980f-32277034b7ce\">",
+        "fieldType": "",
+        "name": "org",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-4c4ef8de-a670-4e21-980f-32277034b7ce",
+        "selectedText": ""
+      },
+      {
+        "label": "LinkedIn URL",
+        "html": "<input type=\"text\" name=\"urls[LinkedIn]\" data-autofill-id=\"af-56a6eceb-4050-4688-9b47-f1a77d7bc7f5\">",
+        "fieldType": "",
+        "name": "urls[LinkedIn]",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "likniedk.com",
+        "required": false,
+        "elementReferenceId": "af-56a6eceb-4050-4688-9b47-f1a77d7bc7f5",
+        "selectedText": ""
+      },
+      {
+        "label": "Twitter URL",
+        "html": "<input type=\"text\" name=\"urls[Twitter]\" data-autofill-id=\"af-5fc37dcb-6b68-4d5a-9227-3ceb70c12481\">",
+        "fieldType": "",
+        "name": "urls[Twitter]",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "wtweitter.com",
+        "required": false,
+        "elementReferenceId": "af-5fc37dcb-6b68-4d5a-9227-3ceb70c12481",
+        "selectedText": ""
+      },
+      {
+        "label": "GitHub URL",
+        "html": "<input type=\"text\" name=\"urls[GitHub]\" data-autofill-id=\"af-096eedef-7708-4a46-b5ad-fcb7d8a5ac4a\">",
+        "fieldType": "",
+        "name": "urls[GitHub]",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "githee",
+        "required": false,
+        "elementReferenceId": "af-096eedef-7708-4a46-b5ad-fcb7d8a5ac4a",
+        "selectedText": ""
+      },
+      {
+        "label": "Portfolio URL",
+        "html": "<input type=\"text\" name=\"urls[Portfolio]\" data-autofill-id=\"af-172ad3ab-8685-4910-8779-90be4fcebc96\">",
+        "fieldType": "",
+        "name": "urls[Portfolio]",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "34234adsfadf",
+        "required": false,
+        "elementReferenceId": "af-172ad3ab-8685-4910-8779-90be4fcebc96",
+        "selectedText": ""
+      },
+      {
+        "label": "Other website",
+        "html": "<input type=\"text\" name=\"urls[Other]\" data-autofill-id=\"af-2227891d-a58a-422c-82fe-c033b6a0676f\">",
+        "fieldType": "",
+        "name": "urls[Other]",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-2227891d-a58a-422c-82fe-c033b6a0676f",
+        "selectedText": ""
+      },
+      {
+        "label": null,
+        "html": "<textarea class=\"card-field-input\" name=\"cards[4e0c5714-46fa-4682-ac15-2b2a2517038d][field0]\" required=\"required\" data-autofill-id=\"af-d1648ec1-3108-45fc-b246-5d47a66216d3\"></textarea>",
+        "fieldType": "",
+        "name": "cards[4e0c5714-46fa-4682-ac15-2b2a2517038d][field0]",
+        "type": "textarea",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "",
+        "className": "card-field-input",
+        "value": "I am so authorized",
+        "required": true,
+        "elementReferenceId": "af-d1648ec1-3108-45fc-b246-5d47a66216d3",
+        "selectedText": ""
+      },
+      {
+        "label": "Additional information",
+        "html": "<textarea placeholder=\"Add a cover letter or anything else you want to share.\" name=\"comments\" id=\"additional-information\" data-autofill-id=\"af-266f7657-1d67-41bb-bf61-bc479fbcbc17\"></textarea>",
+        "fieldType": "",
+        "name": "comments",
+        "type": "textarea",
+        "placeholder": "Add a cover letter or anything else you want to share.",
+        "autocomplete": "",
+        "id": "additional-information",
+        "className": "",
+        "value": "additional",
+        "required": false,
+        "elementReferenceId": "af-266f7657-1d67-41bb-bf61-bc479fbcbc17",
+        "selectedText": ""
+      }
+    ],
+    "saveFilledInputsResponse": [
+      {
+        "status": "error",
+        "error": "Failed to save name autofill value"
+      },
+      {
+        "status": "success",
+        "valuePath": "email",
+        "value": "michael.dickinson3949@gmail.com"
+      },
+      {
+        "status": "success",
+        "valuePath": "phone/phoneNum",
+        "value": "5415136290"
+      },
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "success",
+        "valuePath": "linkedin_profile",
+        "value": "likniedk.com"
+      },
+      {
+        "status": "success",
+        "valuePath": "website",
+        "value": "wtweitter.com"
+      },
+      {
+        "status": "success",
+        "valuePath": "website",
+        "value": "githee"
+      },
+      {
+        "status": "success",
+        "valuePath": "website",
+        "value": "34234adsfadf"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "success",
+        "valuePath": "discipline",
+        "value": "I am so authorized"
+      },
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      }
+    ],
+    "autofillInstructionsResponse": [
+      {
+        "action": "skip",
+        "id": "af-f40f156a-a71d-4fde-9058-279460df24f4"
+      },
+      {
+        "action": "fill",
+        "value": "michael.dickinson3949@gmail.com",
+        "id": "af-6bc6d501-2a8b-479c-a5c7-dab29e6f00bf"
+      },
+      {
+        "action": "skip",
+        "id": "af-3e6f5293-6af9-49b1-844d-d9a73f41b882"
+      },
+      {
+        "action": "skip",
+        "id": "af-0f31936b-ae7a-4488-a344-ce25a45f3aed"
+      },
+      {
+        "action": "skip",
+        "id": "af-4c4ef8de-a670-4e21-980f-32277034b7ce"
+      },
+      {
+        "action": "fill",
+        "value": "likniedk.com",
+        "id": "af-56a6eceb-4050-4688-9b47-f1a77d7bc7f5"
+      },
+      {
+        "action": "fill",
+        "value": "34234adsfadf",
+        "id": "af-5fc37dcb-6b68-4d5a-9227-3ceb70c12481"
+      },
+      {
+        "action": "fill",
+        "value": "34234adsfadf",
+        "id": "af-096eedef-7708-4a46-b5ad-fcb7d8a5ac4a"
+      },
+      {
+        "action": "fill",
+        "value": "34234adsfadf",
+        "id": "af-172ad3ab-8685-4910-8779-90be4fcebc96"
+      },
+      {
+        "action": "fill",
+        "value": "34234adsfadf",
+        "id": "af-2227891d-a58a-422c-82fe-c033b6a0676f"
+      },
+      {
+        "action": "fill",
+        "value": "I am so authorized",
+        "id": "af-d1648ec1-3108-45fc-b246-5d47a66216d3"
+      },
+      {
+        "action": "skip",
+        "id": "af-266f7657-1d67-41bb-bf61-bc479fbcbc17"
+      }
+    ]
   }
 ]

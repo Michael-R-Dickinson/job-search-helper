@@ -494,6 +494,74 @@ class WebsiteHandler extends InputCategoryHandler {
   }
 }
 
+class TwitterUrlHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.twitter_url
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'twitter_url', input.element.value)
+  }
+}
+
+class GithubUrlHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.github_url
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'github_url', input.element.value)
+  }
+}
+
+class CurrentCompanyHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.current_company
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'current_company', input.element.value)
+  }
+}
+
+class CurrentLocationHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.current_location
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'current_location', input.element.value)
+  }
+}
+
 // Restore DefaultHandler for fallback
 class DefaultHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
@@ -540,6 +608,10 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   end_date_year: EndDateYearHandler,
   linkedin_profile: LinkedinProfileHandler,
   website: WebsiteHandler,
+  twitter_url: TwitterUrlHandler,
+  github_url: GithubUrlHandler,
+  current_company: CurrentCompanyHandler,
+  current_location: CurrentLocationHandler,
   unknown: DefaultHandler,
 }
 

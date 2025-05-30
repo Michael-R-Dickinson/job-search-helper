@@ -276,4 +276,64 @@ describe('categorizeInputs', () => {
     expect(result.find((r) => r.element.name === 'has_disability')?.category).toBe('disability')
     expect(result.find((r) => r.element.name === 'newsletter_opt_in')?.category).toBe('unknown')
   })
+
+  it('should categorize twitter url inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { type: 'url', name: 'twitter', fieldType: 'url' }, 'Twitter'),
+      makeInput('input', { name: 'twitter_handle' }, 'Twitter Handle'),
+      makeInput('input', { placeholder: 'Enter your Twitter profile' }, 'Twitter Profile'),
+      makeInput('input', { autocomplete: 'twitter' }, 'Twitter'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(4)
+    result.forEach((input) => {
+      expect(input.category).toBe('twitter_url')
+    })
+  })
+
+  it('should categorize github url inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { type: 'url', name: 'github', fieldType: 'url' }, 'GitHub'),
+      makeInput('input', { name: 'github_profile' }, 'GitHub Profile'),
+      makeInput('input', { placeholder: 'Enter your GitHub handle' }, 'GitHub Handle'),
+      makeInput('input', { autocomplete: 'github-url' }, 'GitHub'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(4)
+    result.forEach((input) => {
+      expect(input.category).toBe('github_url')
+    })
+  })
+
+  it('should categorize current company inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { name: 'current_company' }, 'Current Company'),
+      makeInput('input', { name: 'employer_name' }, 'Employer Name'),
+      makeInput('input', { placeholder: 'Enter your present employer' }, 'Present Employer'),
+      makeInput('input', { autocomplete: 'organization' }, 'Organization'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(4)
+    result.forEach((input) => {
+      expect(input.category).toBe('current_company')
+    })
+  })
+
+  it('should categorize current location inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { name: 'current_location' }, 'Current Location'),
+      makeInput('input', { name: 'current_city' }, 'Current City'),
+      makeInput('input', { placeholder: 'Where do you live?' }, 'Residence'),
+      makeInput('input', { autocomplete: 'city' }, 'City'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(4)
+    result.forEach((input) => {
+      expect(input.category).toBe('current_location')
+    })
+  })
 })

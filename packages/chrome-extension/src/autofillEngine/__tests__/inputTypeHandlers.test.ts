@@ -256,6 +256,72 @@ describe('InputTypeHandlers', () => {
     expect(saveUserAutofillValue).toHaveBeenCalledWith('user3', 'website', '')
   })
 
+  it('handles twitter_url', () => {
+    const handler = getHandlerForInputCategory('twitter_url', {
+      twitter_url: 'https://twitter.com/user',
+    })
+    const input = baseInput({
+      category: 'twitter_url',
+      element: { ...baseElement({ fieldType: 'url', elementReferenceId: 'af-twitter' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'https://twitter.com/user',
+      id: 'af-twitter',
+    })
+    handler.saveAutofillValue(input, 'user4')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user4', 'twitter_url', '')
+  })
+
+  it('handles github_url', () => {
+    const handler = getHandlerForInputCategory('github_url', {
+      github_url: 'https://github.com/user',
+    })
+    const input = baseInput({
+      category: 'github_url',
+      element: { ...baseElement({ fieldType: 'url', elementReferenceId: 'af-github' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'https://github.com/user',
+      id: 'af-github',
+    })
+    handler.saveAutofillValue(input, 'user5')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user5', 'github_url', '')
+  })
+
+  it('handles current_company', () => {
+    const handler = getHandlerForInputCategory('current_company', { current_company: 'Acme Corp' })
+    const input = baseInput({
+      category: 'current_company',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-company' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'Acme Corp',
+      id: 'af-company',
+    })
+    handler.saveAutofillValue(input, 'user6')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user6', 'current_company', '')
+  })
+
+  it('handles current_location', () => {
+    const handler = getHandlerForInputCategory('current_location', {
+      current_location: 'San Francisco',
+    })
+    const input = baseInput({
+      category: 'current_location',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-location' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'San Francisco',
+      id: 'af-location',
+    })
+    handler.saveAutofillValue(input, 'user7')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user7', 'current_location', '')
+  })
+
   it('skips if no value is present', () => {
     const handler = getHandlerForInputCategory('gender', {})
     const input = baseInput({

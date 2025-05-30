@@ -17,6 +17,10 @@ import {
   isEndDateYearInput,
   isLinkedInProfileInput,
   isWebsiteInput,
+  isTwitterUrlInput,
+  isGithubUrlInput,
+  isCurrentCompanyInput,
+  isCurrentLocationInput,
 } from '../inputCategoryPredicates'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 
@@ -368,6 +372,106 @@ describe('Input Categorization Tests', () => {
     it('should not identify non-website inputs', () => {
       const input = createTestInput({ label: 'Email Address' })
       expect(isWebsiteInput(input)).toBe(false)
+    })
+  })
+
+  describe('isTwitterUrlInput', () => {
+    it('should identify twitter url by label', () => {
+      const input = createTestInput({ label: 'Twitter URL' })
+      expect(isTwitterUrlInput(input)).toBe(true)
+    })
+    it('should identify twitter url by name', () => {
+      const input = createTestInput({ name: 'twitter_handle' })
+      expect(isTwitterUrlInput(input)).toBe(true)
+    })
+    it('should identify twitter url by placeholder', () => {
+      const input = createTestInput({ placeholder: 'Enter your Twitter profile' })
+      expect(isTwitterUrlInput(input)).toBe(true)
+    })
+    it('should identify twitter url by autocomplete', () => {
+      const input = createTestInput({ autocomplete: 'twitter' })
+      expect(isTwitterUrlInput(input)).toBe(true)
+    })
+    it('should identify twitter url by type and name', () => {
+      const input = createTestInput({ type: 'url', name: 'twitter' })
+      expect(isTwitterUrlInput(input)).toBe(true)
+    })
+    it('should not identify non-twitter fields', () => {
+      const input = createTestInput({ label: 'LinkedIn' })
+      expect(isTwitterUrlInput(input)).toBe(false)
+    })
+  })
+
+  describe('isGithubUrlInput', () => {
+    it('should identify github url by label', () => {
+      const input = createTestInput({ label: 'GitHub URL' })
+      expect(isGithubUrlInput(input)).toBe(true)
+    })
+    it('should identify github url by name', () => {
+      const input = createTestInput({ name: 'github_profile' })
+      expect(isGithubUrlInput(input)).toBe(true)
+    })
+    it('should identify github url by placeholder', () => {
+      const input = createTestInput({ placeholder: 'Enter your GitHub handle' })
+      expect(isGithubUrlInput(input)).toBe(true)
+    })
+    it('should identify github url by autocomplete', () => {
+      const input = createTestInput({ autocomplete: 'github-url' })
+      expect(isGithubUrlInput(input)).toBe(true)
+    })
+    it('should identify github url by type and name', () => {
+      const input = createTestInput({ type: 'url', name: 'github' })
+      expect(isGithubUrlInput(input)).toBe(true)
+    })
+    it('should not identify non-github fields', () => {
+      const input = createTestInput({ label: 'Portfolio' })
+      expect(isGithubUrlInput(input)).toBe(false)
+    })
+  })
+
+  describe('isCurrentCompanyInput', () => {
+    it('should identify current company by label', () => {
+      const input = createTestInput({ label: 'Current Company' })
+      expect(isCurrentCompanyInput(input)).toBe(true)
+    })
+    it('should identify current company by name', () => {
+      const input = createTestInput({ name: 'employer_name' })
+      expect(isCurrentCompanyInput(input)).toBe(true)
+    })
+    it('should identify current company by placeholder', () => {
+      const input = createTestInput({ placeholder: 'Enter your present employer' })
+      expect(isCurrentCompanyInput(input)).toBe(true)
+    })
+    it('should identify current company by autocomplete', () => {
+      const input = createTestInput({ autocomplete: 'organization' })
+      expect(isCurrentCompanyInput(input)).toBe(true)
+    })
+    it('should not identify non-company fields', () => {
+      const input = createTestInput({ label: 'School' })
+      expect(isCurrentCompanyInput(input)).toBe(false)
+    })
+  })
+
+  describe('isCurrentLocationInput', () => {
+    it('should identify current location by label', () => {
+      const input = createTestInput({ label: 'Current Location' })
+      expect(isCurrentLocationInput(input)).toBe(true)
+    })
+    it('should identify current location by name', () => {
+      const input = createTestInput({ name: 'current_city' })
+      expect(isCurrentLocationInput(input)).toBe(true)
+    })
+    it('should identify current location by placeholder', () => {
+      const input = createTestInput({ placeholder: 'Where do you live?' })
+      expect(isCurrentLocationInput(input)).toBe(true)
+    })
+    it('should identify current location by autocomplete', () => {
+      const input = createTestInput({ autocomplete: 'city' })
+      expect(isCurrentLocationInput(input)).toBe(true)
+    })
+    it('should not identify non-location fields', () => {
+      const input = createTestInput({ label: 'Mailing Address' })
+      expect(isCurrentLocationInput(input)).toBe(false)
     })
   })
 })
