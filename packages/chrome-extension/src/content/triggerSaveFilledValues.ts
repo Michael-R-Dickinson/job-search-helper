@@ -4,7 +4,10 @@ import { serializeInputsHtml } from './serializeInputsHtml'
 
 const triggerSaveFilledValues = (inputs: InputInfo[]) => {
   const serializedInputs = serializeInputsHtml(inputs)
-  chrome.runtime.sendMessage({ type: eventTypes.SAVE_AUTOFILL_VALUES, payload: serializedInputs })
+  return chrome.runtime.sendMessage({
+    type: eventTypes.SAVE_AUTOFILL_VALUES,
+    payload: serializedInputs,
+  })
 }
 
 export default triggerSaveFilledValues

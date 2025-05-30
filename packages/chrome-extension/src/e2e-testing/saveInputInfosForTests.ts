@@ -1,6 +1,6 @@
 import type { InputInfo, ElementInfo } from '../content/hooks/useInputElements'
 import { z } from 'zod'
-const SAVED_INPUT_INFOS_PATH = 'inputsTestCases.json'
+export const SAVED_INPUT_INFOS_PATH = 'inputsTestCases.json'
 
 // Schema for the serialized format
 export const SerializedInputInfoSchema = z.object({
@@ -19,7 +19,7 @@ export const InputInfosTestCaseSchema = z.object({
 })
 export type InputInfosTestCase = z.infer<typeof InputInfosTestCaseSchema>
 
-// Serialize InputInfo[] to a serializable array
+// Serialize InputInfo to a serializable array
 export function serializeInputInfosForTest(inputInfos: InputInfo[]): SerializedInputInfo[] {
   return inputInfos.map((info) => ({
     label: info.label,
@@ -28,21 +28,7 @@ export function serializeInputInfosForTest(inputInfos: InputInfo[]): SerializedI
   }))
 }
 
-// Copy a single test case to clipboard as JSON
-// Usage: call from your extension/content script with inputInfos and (optionally) sourceURL
-export async function copyInputInfosToClipboard(inputInfos: InputInfo[], sourceURL?: string) {
-  const serialized = serializeInputInfosForTest(inputInfos)
-  const testCase = { sourceURL, inputData: serialized }
-  const json = JSON.stringify(testCase, null, 2)
-  try {
-    await navigator.clipboard.writeText(json)
-    alert('InputInfos copied to clipboard!')
-  } catch (e) {
-    alert('Failed to copy InputInfos to clipboard.')
-  }
-}
-
-// Resurrect InputInfo[] from serialized array (for use in tests)
+// Resurrect InputInfo from serialized array (for use in tests)
 export function resurrectInputInfosFromTest(serialized: SerializedInputInfo[]): InputInfo[] {
   return serialized.map((item) => {
     const wrapper = document.createElement('div')

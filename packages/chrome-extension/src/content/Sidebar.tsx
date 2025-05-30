@@ -1,4 +1,4 @@
-import { copyInputInfosToClipboard } from '../e2e-testing/saveInputInfosForTests'
+import { serializeInputInfosForTest } from '../e2e-testing/saveInputInfosForTests'
 import { autofillInputElements, useInputElements } from './hooks/useInputElements'
 import triggerGetAutofillValues from './triggerGetAutofillValues'
 import triggerSaveFilledValues from './triggerSaveFilledValues'
@@ -6,6 +6,26 @@ import triggerSaveFilledValues from './triggerSaveFilledValues'
 const Sidebar = () => {
   const elements = useInputElements()
   console.log('elements', elements)
+
+  // For testing
+  // Collects all test data and copies to clipboard as JSON
+  const getTestingJson = async () => {
+    const saveFilledInputsResponse = await triggerSaveFilledValues(elements)
+    const autofillInstructionsResponse = await triggerGetAutofillValues(elements)
+    const inputsData = serializeInputInfosForTest(elements)
+    const testCase = {
+      sourceURL: window.location.href,
+      inputsData,
+      saveFilledInputsResponse,
+      autofillInstructionsResponse,
+    }
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(testCase, null, 2))
+      alert('Test case copied to clipboard!')
+    } catch (e) {
+      alert('Failed to copy test case to clipboard.')
+    }
+  }
 
   return (
     <div
@@ -28,20 +48,14 @@ const Sidebar = () => {
         Begin Autofill Sequence
       </button>
       <button
-        onClick={() => {
-          triggerSaveFilledValues(elements)
+        onClick={async () => {
+          const response = await triggerSaveFilledValues(elements)
+          console.log('saveAutofillValues response', response)
         }}
       >
         Save Autofill Values
       </button>
-      <button
-        onClick={() => {
-          const serialized = copyInputInfosToClipboard(elements, window.location.href)
-          console.log('serialized', serialized)
-        }}
-      >
-        Save Inputs For Testing
-      </button>
+      <button onClick={getTestingJson}>Save Inputs For Testing</button>
     </div>
   )
 }
