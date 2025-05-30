@@ -4,7 +4,7 @@
     "inputsData": [
       {
         "label": "First Name*",
-        "html": "<input id=\"first_name\" class=\"input input__single-line\" aria-label=\"First Name\" aria-describedby=\"first_name-description first_name-error first_name-help\" aria-invalid=\"false\" aria-errormessage=\"first_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"given-name\" value=\"\" data-autofill-id=\"af-18198ceb-1599-4901-b8c9-c57d5b2ddcf5\">",
+        "html": "<input id=\"first_name\" class=\"input input__single-line\" aria-label=\"First Name\" aria-describedby=\"first_name-description first_name-error first_name-help\" aria-invalid=\"false\" aria-errormessage=\"first_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"given-name\" value=\"Michael\" data-autofill-id=\"af-bece3e2c-4039-4b9c-836c-32c36d4d6174\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -12,14 +12,14 @@
         "autocomplete": "given-name",
         "id": "first_name",
         "className": "input input__single-line",
-        "value": "",
+        "value": "Michael",
         "required": false,
-        "elementReferenceId": "af-18198ceb-1599-4901-b8c9-c57d5b2ddcf5",
+        "elementReferenceId": "af-bece3e2c-4039-4b9c-836c-32c36d4d6174",
         "selectedText": ""
       },
       {
         "label": "Last Name*",
-        "html": "<input id=\"last_name\" class=\"input input__single-line\" aria-label=\"Last Name\" aria-describedby=\"last_name-description last_name-error last_name-help\" aria-invalid=\"false\" aria-errormessage=\"last_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"family-name\" value=\"\" data-autofill-id=\"af-24985620-c2c0-4361-800f-0e7e6c14923a\">",
+        "html": "<input id=\"last_name\" class=\"input input__single-line\" aria-label=\"Last Name\" aria-describedby=\"last_name-description last_name-error last_name-help\" aria-invalid=\"false\" aria-errormessage=\"last_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"family-name\" value=\"Dickinson\" data-autofill-id=\"af-0161021a-0ff9-460b-9118-a2cdd89f7601\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -27,14 +27,14 @@
         "autocomplete": "family-name",
         "id": "last_name",
         "className": "input input__single-line",
-        "value": "",
+        "value": "Dickinson",
         "required": false,
-        "elementReferenceId": "af-24985620-c2c0-4361-800f-0e7e6c14923a",
+        "elementReferenceId": "af-0161021a-0ff9-460b-9118-a2cdd89f7601",
         "selectedText": ""
       },
       {
         "label": "Email*",
-        "html": "<input id=\"email\" class=\"input input__single-line\" aria-label=\"Email\" aria-describedby=\"email-description email-error email-help\" aria-invalid=\"false\" aria-errormessage=\"email-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"email\" value=\"\" data-autofill-id=\"af-aabc870f-91a6-4dbb-90bc-d22eb9ef0741\">",
+        "html": "<input id=\"email\" class=\"input input__single-line\" aria-label=\"Email\" aria-describedby=\"email-description email-error email-help\" aria-invalid=\"false\" aria-errormessage=\"email-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"email\" value=\"michael.dickinson3949@gmail.com\" data-autofill-id=\"af-802a5265-5a6d-490c-8f90-fe75029da523\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -42,14 +42,14 @@
         "autocomplete": "email",
         "id": "email",
         "className": "input input__single-line",
-        "value": "",
+        "value": "michael.dickinson3949@gmail.com",
         "required": false,
-        "elementReferenceId": "af-aabc870f-91a6-4dbb-90bc-d22eb9ef0741",
+        "elementReferenceId": "af-802a5265-5a6d-490c-8f90-fe75029da523",
         "selectedText": ""
       },
       {
         "label": "Phone",
-        "html": "<input id=\"phone\" class=\"input input__single-line\" aria-label=\"Phone\" aria-describedby=\"phone-description phone-error phone-help\" aria-invalid=\"false\" aria-errormessage=\"phone-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" autocomplete=\"tel\" value=\"\" data-autofill-id=\"af-7e966f69-a78d-4e7f-ac7a-f3a724f953e0\">",
+        "html": "<input id=\"phone\" class=\"input input__single-line\" aria-label=\"Phone\" aria-describedby=\"phone-description phone-error phone-help\" aria-invalid=\"false\" aria-errormessage=\"phone-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" autocomplete=\"tel\" value=\"5415136290\" data-autofill-id=\"af-9e4f82fe-bcd8-4613-98ef-743936eded51\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -57,14 +57,14 @@
         "autocomplete": "tel",
         "id": "phone",
         "className": "input input__single-line",
-        "value": "",
+        "value": "5415136290",
         "required": false,
-        "elementReferenceId": "af-7e966f69-a78d-4e7f-ac7a-f3a724f953e0",
+        "elementReferenceId": "af-9e4f82fe-bcd8-4613-98ef-743936eded51",
         "selectedText": ""
       },
       {
         "label": "LinkedIn Profile",
-        "html": "<input id=\"question_10521322008\" class=\"input input__single-line\" aria-label=\"LinkedIn Profile\" aria-describedby=\"question_10521322008-description question_10521322008-error question_10521322008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521322008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"\" data-autofill-id=\"af-40c30bb4-5ae9-428d-bcad-61056f8473c6\">",
+        "html": "<input id=\"question_10521322008\" class=\"input input__single-line\" aria-label=\"LinkedIn Profile\" aria-describedby=\"question_10521322008-description question_10521322008-error question_10521322008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521322008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"linkedinprofile\" data-autofill-id=\"af-848f91ec-8388-4dc3-8336-94d9338b1543\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -72,14 +72,14 @@
         "autocomplete": "",
         "id": "question_10521322008",
         "className": "input input__single-line",
-        "value": "",
+        "value": "linkedinprofile",
         "required": false,
-        "elementReferenceId": "af-40c30bb4-5ae9-428d-bcad-61056f8473c6",
+        "elementReferenceId": "af-848f91ec-8388-4dc3-8336-94d9338b1543",
         "selectedText": ""
       },
       {
         "label": "Website",
-        "html": "<input id=\"question_10521323008\" class=\"input input__single-line\" aria-label=\"Website\" aria-describedby=\"question_10521323008-description question_10521323008-error question_10521323008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521323008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"\" data-autofill-id=\"af-85e64c2f-2ce9-4c93-8e0b-adfb279bbb23\">",
+        "html": "<input id=\"question_10521323008\" class=\"input input__single-line\" aria-label=\"Website\" aria-describedby=\"question_10521323008-description question_10521323008-error question_10521323008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521323008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"asdfadfsasdf\" data-autofill-id=\"af-44bd44cc-3ed9-46c8-b8e2-8bcad028a7f7\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -87,14 +87,14 @@
         "autocomplete": "",
         "id": "question_10521323008",
         "className": "input input__single-line",
-        "value": "",
+        "value": "asdfadfsasdf",
         "required": false,
-        "elementReferenceId": "af-85e64c2f-2ce9-4c93-8e0b-adfb279bbb23",
+        "elementReferenceId": "af-44bd44cc-3ed9-46c8-b8e2-8bcad028a7f7",
         "selectedText": ""
       },
       {
         "label": "Do you currently reside in or will you be relocating to any of the following states?*",
-        "html": "<input class=\"select__input\" style=\"label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10521999008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10521999008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10521999008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" aria-describedby=\"react-select-question_10521999008-placeholder question_10521999008-error\" enterkeyhint=\"done\" value=\"\" data-autofill-id=\"af-e07fde30-fa77-40af-bd42-91a08b3bec3d\">",
+        "html": "<input class=\"select__input\" style=\"label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10521999008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10521999008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10521999008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" aria-describedby=\"react-select-question_10521999008-placeholder question_10521999008-error\" enterkeyhint=\"done\" value=\"\" data-autofill-id=\"af-84244fc8-4ad8-4bcb-a7ac-bbf3ffe6bb94\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -104,12 +104,12 @@
         "className": "select__input",
         "value": "",
         "required": false,
-        "elementReferenceId": "af-e07fde30-fa77-40af-bd42-91a08b3bec3d",
+        "elementReferenceId": "af-84244fc8-4ad8-4bcb-a7ac-bbf3ffe6bb94",
         "selectedText": ""
       },
       {
         "label": "Are you legally authorized to work in United States?*",
-        "html": "<input class=\"select__input\" style=\"label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10522000008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10522000008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10522000008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" aria-describedby=\"react-select-question_10522000008-placeholder question_10522000008-error\" enterkeyhint=\"done\" value=\"\" data-autofill-id=\"af-22cc1355-e793-496e-b25a-09a43bfa10c5\">",
+        "html": "<input class=\"select__input\" style=\"color: inherit; background: 0px center; opacity: 0; width: 100%; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; outline: 0px; padding: 0px;\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10522000008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10522000008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10522000008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" enterkeyhint=\"done\" value=\"\" data-autofill-id=\"af-864bb824-973c-4d2e-9606-c9c374d36135\" aria-describedby=\"question_10522000008-error\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -117,14 +117,14 @@
         "autocomplete": "off",
         "id": "question_10522000008",
         "className": "select__input",
-        "value": "",
+        "value": "No",
         "required": false,
-        "elementReferenceId": "af-22cc1355-e793-496e-b25a-09a43bfa10c5",
+        "elementReferenceId": "af-864bb824-973c-4d2e-9606-c9c374d36135",
         "selectedText": ""
       },
       {
         "label": "Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.*",
-        "html": "<input id=\"question_10522001008\" class=\"input input__single-line\" aria-label=\"Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.\" aria-describedby=\"question_10522001008-description question_10522001008-error question_10522001008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10522001008-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" value=\"\" data-autofill-id=\"af-b57a6883-72bd-4f30-a8fd-2d5ca45115e1\">",
+        "html": "<input id=\"question_10522001008\" class=\"input input__single-line\" aria-label=\"Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.\" aria-describedby=\"question_10522001008-description question_10522001008-error question_10522001008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10522001008-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" value=\"sponsorship and shit\" data-autofill-id=\"af-b8360130-9e31-4579-a86e-5ce870722a89\">",
         "fieldType": "",
         "name": "",
         "type": "text",
@@ -132,9 +132,9 @@
         "autocomplete": "",
         "id": "question_10522001008",
         "className": "input input__single-line",
-        "value": "",
+        "value": "sponsorship and shit",
         "required": false,
-        "elementReferenceId": "af-b57a6883-72bd-4f30-a8fd-2d5ca45115e1",
+        "elementReferenceId": "af-b8360130-9e31-4579-a86e-5ce870722a89",
         "selectedText": ""
       }
     ],
@@ -142,85 +142,91 @@
       {
         "status": "success",
         "valuePath": "name/first_name",
-        "value": ""
+        "value": "Michael"
       },
       {
         "status": "success",
         "valuePath": "name/last_name",
-        "value": ""
+        "value": "Dickinson"
       },
       {
         "status": "success",
         "valuePath": "email",
-        "value": ""
+        "value": "michael.dickinson3949@gmail.com"
       },
       {
         "status": "success",
         "valuePath": "phone/phoneNum",
-        "value": ""
+        "value": "5415136290"
       },
       {
         "status": "success",
         "valuePath": "linkedin_profile",
-        "value": ""
+        "value": "linkedinprofile"
+      },
+      {
+        "status": "success",
+        "valuePath": "website",
+        "value": "asdfadfsasdf"
       },
       {
         "status": "error",
-        "error": "Unknown input category"
-      },
-      {
-        "status": "error",
-        "error": "Unknown input category"
+        "error": "element value is empty"
       },
       {
         "status": "success",
         "valuePath": "authorization",
-        "value": ""
+        "value": "No"
       },
       {
         "status": "success",
         "valuePath": "sponsorship/text",
-        "value": ""
+        "value": "sponsorship and shit"
       }
     ],
     "autofillInstructionsResponse": [
       {
         "action": "fill",
-        "value": "",
-        "id": "af-18198ceb-1599-4901-b8c9-c57d5b2ddcf5"
+        "value": "Michael",
+        "id": "af-bece3e2c-4039-4b9c-836c-32c36d4d6174"
       },
       {
         "action": "fill",
-        "value": "",
-        "id": "af-24985620-c2c0-4361-800f-0e7e6c14923a"
+        "value": "Dickinson",
+        "id": "af-0161021a-0ff9-460b-9118-a2cdd89f7601"
+      },
+      {
+        "action": "fill",
+        "value": "michael.dickinson3949@gmail.com",
+        "id": "af-802a5265-5a6d-490c-8f90-fe75029da523"
       },
       {
         "action": "skip",
-        "id": "af-aabc870f-91a6-4dbb-90bc-d22eb9ef0741"
+        "id": "af-9e4f82fe-bcd8-4613-98ef-743936eded51"
+      },
+      {
+        "action": "fill",
+        "value": "linkedinprofile",
+        "id": "af-848f91ec-8388-4dc3-8336-94d9338b1543"
+      },
+      {
+        "action": "fill",
+        "value": "asdfadfsasdf",
+        "id": "af-44bd44cc-3ed9-46c8-b8e2-8bcad028a7f7"
       },
       {
         "action": "skip",
-        "id": "af-7e966f69-a78d-4e7f-ac7a-f3a724f953e0"
+        "id": "af-84244fc8-4ad8-4bcb-a7ac-bbf3ffe6bb94"
       },
       {
-        "action": "skip",
-        "id": "af-40c30bb4-5ae9-428d-bcad-61056f8473c6"
+        "action": "fill",
+        "value": "No",
+        "id": "af-864bb824-973c-4d2e-9606-c9c374d36135"
       },
       {
-        "action": "skip",
-        "id": "af-85e64c2f-2ce9-4c93-8e0b-adfb279bbb23"
-      },
-      {
-        "action": "skip",
-        "id": "af-e07fde30-fa77-40af-bd42-91a08b3bec3d"
-      },
-      {
-        "action": "skip",
-        "id": "af-22cc1355-e793-496e-b25a-09a43bfa10c5"
-      },
-      {
-        "action": "skip",
-        "id": "af-b57a6883-72bd-4f30-a8fd-2d5ca45115e1"
+        "action": "fill",
+        "value": "sponsorship and shit",
+        "id": "af-b8360130-9e31-4579-a86e-5ce870722a89"
       }
     ]
   }
