@@ -10,9 +10,9 @@ const Sidebar = () => {
   // For testing
   // Collects all test data and copies to clipboard as JSON
   const getTestingJson = async () => {
+    const inputsData = serializeInputInfosForTest(elements)
     const saveFilledInputsResponse = await triggerSaveFilledValues(elements)
     const autofillInstructionsResponse = await triggerGetAutofillValues(elements)
-    const inputsData = serializeInputInfosForTest(elements)
     const testCase = {
       sourceURL: window.location.href,
       inputsData,

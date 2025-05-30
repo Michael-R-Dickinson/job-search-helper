@@ -289,6 +289,7 @@ class CountryHandler extends InputCategoryHandler {
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    console.log('saving country', input.element)
     return saveUserAutofillValue(userId, 'country', input.element.value)
   }
 }

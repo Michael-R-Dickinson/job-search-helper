@@ -1,0 +1,227 @@
+[
+  {
+    "sourceURL": "https://job-boards.greenhouse.io/gametimeunited/jobs/4670879008?source=Linkedin",
+    "inputsData": [
+      {
+        "label": "First Name*",
+        "html": "<input id=\"first_name\" class=\"input input__single-line\" aria-label=\"First Name\" aria-describedby=\"first_name-description first_name-error first_name-help\" aria-invalid=\"false\" aria-errormessage=\"first_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"given-name\" value=\"\" data-autofill-id=\"af-18198ceb-1599-4901-b8c9-c57d5b2ddcf5\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "given-name",
+        "id": "first_name",
+        "className": "input input__single-line",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-18198ceb-1599-4901-b8c9-c57d5b2ddcf5",
+        "selectedText": ""
+      },
+      {
+        "label": "Last Name*",
+        "html": "<input id=\"last_name\" class=\"input input__single-line\" aria-label=\"Last Name\" aria-describedby=\"last_name-description last_name-error last_name-help\" aria-invalid=\"false\" aria-errormessage=\"last_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"family-name\" value=\"\" data-autofill-id=\"af-24985620-c2c0-4361-800f-0e7e6c14923a\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "family-name",
+        "id": "last_name",
+        "className": "input input__single-line",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-24985620-c2c0-4361-800f-0e7e6c14923a",
+        "selectedText": ""
+      },
+      {
+        "label": "Email*",
+        "html": "<input id=\"email\" class=\"input input__single-line\" aria-label=\"Email\" aria-describedby=\"email-description email-error email-help\" aria-invalid=\"false\" aria-errormessage=\"email-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"email\" value=\"\" data-autofill-id=\"af-aabc870f-91a6-4dbb-90bc-d22eb9ef0741\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "email",
+        "id": "email",
+        "className": "input input__single-line",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-aabc870f-91a6-4dbb-90bc-d22eb9ef0741",
+        "selectedText": ""
+      },
+      {
+        "label": "Phone",
+        "html": "<input id=\"phone\" class=\"input input__single-line\" aria-label=\"Phone\" aria-describedby=\"phone-description phone-error phone-help\" aria-invalid=\"false\" aria-errormessage=\"phone-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" autocomplete=\"tel\" value=\"\" data-autofill-id=\"af-7e966f69-a78d-4e7f-ac7a-f3a724f953e0\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "tel",
+        "id": "phone",
+        "className": "input input__single-line",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-7e966f69-a78d-4e7f-ac7a-f3a724f953e0",
+        "selectedText": ""
+      },
+      {
+        "label": "LinkedIn Profile",
+        "html": "<input id=\"question_10521322008\" class=\"input input__single-line\" aria-label=\"LinkedIn Profile\" aria-describedby=\"question_10521322008-description question_10521322008-error question_10521322008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521322008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"\" data-autofill-id=\"af-40c30bb4-5ae9-428d-bcad-61056f8473c6\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "question_10521322008",
+        "className": "input input__single-line",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-40c30bb4-5ae9-428d-bcad-61056f8473c6",
+        "selectedText": ""
+      },
+      {
+        "label": "Website",
+        "html": "<input id=\"question_10521323008\" class=\"input input__single-line\" aria-label=\"Website\" aria-describedby=\"question_10521323008-description question_10521323008-error question_10521323008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521323008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"\" data-autofill-id=\"af-85e64c2f-2ce9-4c93-8e0b-adfb279bbb23\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "question_10521323008",
+        "className": "input input__single-line",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-85e64c2f-2ce9-4c93-8e0b-adfb279bbb23",
+        "selectedText": ""
+      },
+      {
+        "label": "Do you currently reside in or will you be relocating to any of the following states?*",
+        "html": "<input class=\"select__input\" style=\"label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10521999008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10521999008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10521999008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" aria-describedby=\"react-select-question_10521999008-placeholder question_10521999008-error\" enterkeyhint=\"done\" value=\"\" data-autofill-id=\"af-e07fde30-fa77-40af-bd42-91a08b3bec3d\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "off",
+        "id": "question_10521999008",
+        "className": "select__input",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-e07fde30-fa77-40af-bd42-91a08b3bec3d",
+        "selectedText": ""
+      },
+      {
+        "label": "Are you legally authorized to work in United States?*",
+        "html": "<input class=\"select__input\" style=\"label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10522000008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10522000008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10522000008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" aria-describedby=\"react-select-question_10522000008-placeholder question_10522000008-error\" enterkeyhint=\"done\" value=\"\" data-autofill-id=\"af-22cc1355-e793-496e-b25a-09a43bfa10c5\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "off",
+        "id": "question_10522000008",
+        "className": "select__input",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-22cc1355-e793-496e-b25a-09a43bfa10c5",
+        "selectedText": ""
+      },
+      {
+        "label": "Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.*",
+        "html": "<input id=\"question_10522001008\" class=\"input input__single-line\" aria-label=\"Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.\" aria-describedby=\"question_10522001008-description question_10522001008-error question_10522001008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10522001008-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" value=\"\" data-autofill-id=\"af-b57a6883-72bd-4f30-a8fd-2d5ca45115e1\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "question_10522001008",
+        "className": "input input__single-line",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-b57a6883-72bd-4f30-a8fd-2d5ca45115e1",
+        "selectedText": ""
+      }
+    ],
+    "saveFilledInputsResponse": [
+      {
+        "status": "success",
+        "valuePath": "name/first_name",
+        "value": ""
+      },
+      {
+        "status": "success",
+        "valuePath": "name/last_name",
+        "value": ""
+      },
+      {
+        "status": "success",
+        "valuePath": "email",
+        "value": ""
+      },
+      {
+        "status": "success",
+        "valuePath": "phone/phoneNum",
+        "value": ""
+      },
+      {
+        "status": "success",
+        "valuePath": "linkedin_profile",
+        "value": ""
+      },
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      },
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      },
+      {
+        "status": "success",
+        "valuePath": "authorization",
+        "value": ""
+      },
+      {
+        "status": "success",
+        "valuePath": "sponsorship/text",
+        "value": ""
+      }
+    ],
+    "autofillInstructionsResponse": [
+      {
+        "action": "fill",
+        "value": "",
+        "id": "af-18198ceb-1599-4901-b8c9-c57d5b2ddcf5"
+      },
+      {
+        "action": "fill",
+        "value": "",
+        "id": "af-24985620-c2c0-4361-800f-0e7e6c14923a"
+      },
+      {
+        "action": "skip",
+        "id": "af-aabc870f-91a6-4dbb-90bc-d22eb9ef0741"
+      },
+      {
+        "action": "skip",
+        "id": "af-7e966f69-a78d-4e7f-ac7a-f3a724f953e0"
+      },
+      {
+        "action": "skip",
+        "id": "af-40c30bb4-5ae9-428d-bcad-61056f8473c6"
+      },
+      {
+        "action": "skip",
+        "id": "af-85e64c2f-2ce9-4c93-8e0b-adfb279bbb23"
+      },
+      {
+        "action": "skip",
+        "id": "af-e07fde30-fa77-40af-bd42-91a08b3bec3d"
+      },
+      {
+        "action": "skip",
+        "id": "af-22cc1355-e793-496e-b25a-09a43bfa10c5"
+      },
+      {
+        "action": "skip",
+        "id": "af-b57a6883-72bd-4f30-a8fd-2d5ca45115e1"
+      }
+    ]
+  }
+]
