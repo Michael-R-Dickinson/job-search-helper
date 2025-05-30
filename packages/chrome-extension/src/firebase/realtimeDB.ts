@@ -1,6 +1,6 @@
 import { get, ref, set } from 'firebase/database'
 import { database } from '../extensionFirebase'
-import type { UserAutofillPreferences } from '../autofillEngine/schema'
+import type { RealtimeDbSaveResult, UserAutofillPreferences } from '../autofillEngine/schema'
 
 const getUserAutofillPreferencesPath = (userId: string) => `users/${userId}/autofill`
 
@@ -19,10 +19,16 @@ export const saveUserAutofillValue = async (
   userId: string,
   valuePath: string,
   value: string | boolean,
-) => {
+): Promise<RealtimeDbSaveResult> => {
   const userAutofillDataRef = ref(
     database,
     `${getUserAutofillPreferencesPath(userId)}/${valuePath}`,
   )
   await set(userAutofillDataRef, value)
+
+  return {
+    status: 'success',
+    valuePath,
+    value,
+  }
 }

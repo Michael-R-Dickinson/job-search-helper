@@ -30,6 +30,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message.payload) throw new Error('No payload provided')
     if (!userId) throw new Error('No user found')
 
-    return saveAutofillValues(message.payload, userId)
+    saveAutofillValues(message.payload, userId).then((results) => {
+      sendResponse(results)
+    })
+    return true
   }
 })

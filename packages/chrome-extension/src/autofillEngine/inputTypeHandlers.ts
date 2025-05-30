@@ -1,12 +1,17 @@
 import { saveUserAutofillValue } from '../firebase/realtimeDB'
-import type { CategorizedInput, InputCategory, UserAutofillPreferences } from './schema'
+import type {
+  CategorizedInput,
+  InputCategory,
+  RealtimeDbSaveResult,
+  UserAutofillPreferences,
+} from './schema'
 import type { AutofillInstruction } from './schema'
 
 export abstract class InputCategoryHandler {
   constructor(userAutofillPreferences: UserAutofillPreferences) {}
 
   abstract getAutofillInstruction(input: CategorizedInput): AutofillInstruction
-  abstract saveAutofillValue(input: CategorizedInput, userId: string): void
+  abstract saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult>
 }
 
 class NameHandler extends InputCategoryHandler {
@@ -18,6 +23,7 @@ class NameHandler extends InputCategoryHandler {
     this.savedFirstName = userAutofillPreferences.name?.first_name
     this.savedLastName = userAutofillPreferences.name?.last_name
   }
+
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     const label = input.label?.toLowerCase() || ''
     if (input.element.fieldType === 'text' && label.includes('first')) {
@@ -28,14 +34,18 @@ class NameHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
     const label = input.label?.toLowerCase() || ''
     if (input.element.fieldType === 'text' && label.includes('first')) {
-      saveUserAutofillValue(userId, 'name/first_name', input.element.value)
+      return saveUserAutofillValue(userId, 'name/first_name', input.element.value)
     }
     if (input.element.fieldType === 'text' && label.includes('last')) {
-      saveUserAutofillValue(userId, 'name/last_name', input.element.value)
+      return saveUserAutofillValue(userId, 'name/last_name', input.element.value)
     }
+    return Promise.resolve({
+      status: 'error',
+      error: 'Failed to save name autofill value',
+    })
   }
 }
 
@@ -51,8 +61,8 @@ class EmailHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'email', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'email', input.element.value)
   }
 }
 
@@ -79,8 +89,8 @@ class GenderHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'gender', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'gender', input.element.value)
   }
 }
 
@@ -106,8 +116,8 @@ class VeteranHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'veteran', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'veteran', input.element.value)
   }
 }
 
@@ -133,8 +143,8 @@ class RaceEthnicityHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'race_ethnicity', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'race_ethnicity', input.element.value)
   }
 }
 
@@ -160,8 +170,8 @@ class HispanicLatinoHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'hispanic_latino', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'hispanic_latino', input.element.value)
   }
 }
 
@@ -187,8 +197,8 @@ class DisabilityHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'disability', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'disability', input.element.value)
   }
 }
 
@@ -235,15 +245,14 @@ class PhoneHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
     const label = input.label?.toLowerCase() || ''
     const name = input.element.name?.toLowerCase() || ''
     const placeholder = input.element.placeholder?.toLowerCase() || ''
 
     // Detect extension field
     if (label.includes('ext') || name.includes('ext') || placeholder.includes('ext')) {
-      saveUserAutofillValue(userId, 'phone/extension', input.element.value)
-      return
+      return saveUserAutofillValue(userId, 'phone/extension', input.element.value)
     }
 
     // Detect phone type field
@@ -256,15 +265,14 @@ class PhoneHandler extends InputCategoryHandler {
     ) {
       // Only save if value is 'mobile' or 'landline'
       if (input.element.value === 'mobile' || input.element.value === 'landline') {
-        saveUserAutofillValue(userId, 'phone/type', input.element.value)
+        return saveUserAutofillValue(userId, 'phone/type', input.element.value)
       }
-      return
     }
 
     // Default: phone number field
     // Remove all non-digit characters
     const digitsOnly = input.element.value.replace(/\D/g, '')
-    saveUserAutofillValue(userId, 'phone/phoneNum', digitsOnly)
+    return saveUserAutofillValue(userId, 'phone/phoneNum', digitsOnly)
   }
 }
 
@@ -280,8 +288,8 @@ class CountryHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'country', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'country', input.element.value)
   }
 }
 
@@ -307,8 +315,8 @@ class AuthorizationHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'authorization', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'authorization', input.element.value)
   }
 }
 
@@ -345,7 +353,7 @@ class SponsorshipHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
     if (
       input.element.fieldType === 'select' ||
       input.element.fieldType === 'radio' ||
@@ -353,11 +361,15 @@ class SponsorshipHandler extends InputCategoryHandler {
     ) {
       // Save to yesNoAnswer field (convert value to boolean)
       const boolValue = input.element.value === 'yes' || input.element.value === 'true'
-      saveUserAutofillValue(userId, 'sponsorship/yesNoAnswer', boolValue)
+      return saveUserAutofillValue(userId, 'sponsorship/yesNoAnswer', boolValue)
     } else if (input.element.fieldType === 'text') {
       // Save to text field
-      saveUserAutofillValue(userId, 'sponsorship/text', input.element.value)
+      return saveUserAutofillValue(userId, 'sponsorship/text', input.element.value)
     }
+    return Promise.resolve({
+      status: 'error',
+      error: 'Failed to save sponsorship autofill value',
+    })
   }
 }
 
@@ -373,8 +385,8 @@ class MailingAddressHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'mailing_address', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'mailing_address', input.element.value)
   }
 }
 
@@ -390,9 +402,9 @@ class SchoolHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
     console.log('saving school', input.element)
-    saveUserAutofillValue(userId, 'school', input.element.value)
+    return saveUserAutofillValue(userId, 'school', input.element.value)
   }
 }
 
@@ -408,8 +420,8 @@ class DegreeHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'degree', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'degree', input.element.value)
   }
 }
 
@@ -425,8 +437,8 @@ class DisciplineHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'discipline', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'discipline', input.element.value)
   }
 }
 
@@ -442,8 +454,8 @@ class EndDateYearHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'end_date_year', input.element.value)
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'end_date_year', input.element.value)
   }
 }
 
@@ -459,18 +471,8 @@ class LinkedinProfileHandler extends InputCategoryHandler {
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    saveUserAutofillValue(userId, 'linkedin_profile', input.element.value)
-  }
-}
-
-// Add this handler for unknown
-class UnknownHandler extends InputCategoryHandler {
-  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    return { action: 'skip', id: input.element.elementReferenceId }
-  }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    return
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'linkedin_profile', input.element.value)
   }
 }
 
@@ -479,8 +481,11 @@ class DefaultHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     return { action: 'skip', id: input.element.elementReferenceId }
   }
-  saveAutofillValue(input: CategorizedInput, userId: string): void {
-    return
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return Promise.resolve({
+      status: 'error',
+      error: 'Unknown input category',
+    })
   }
 }
 
@@ -507,7 +512,7 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   discipline: DisciplineHandler,
   end_date_year: EndDateYearHandler,
   linkedin_profile: LinkedinProfileHandler,
-  unknown: UnknownHandler,
+  unknown: DefaultHandler,
 }
 
 export default function getHandlerForInputCategory(

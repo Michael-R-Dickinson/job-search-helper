@@ -128,3 +128,14 @@ export const AutofillInstructionSchema = z.object({
 export const AutofillInstructionsSchema = z.array(AutofillInstructionSchema)
 
 export type AutofillInstruction = z.infer<typeof AutofillInstructionSchema>
+
+export type RealtimeDbSaveResult =
+  | {
+      status: 'success'
+      valuePath: string
+      value: string | boolean
+    }
+  | {
+      status: 'error'
+      error: string
+    }

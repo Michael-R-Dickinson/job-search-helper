@@ -15,11 +15,16 @@ const saveAutofillValues = async (inputs: SerializedHtmlInput[], userId: string)
   const preprocessedInputs = preprocessInputs(inputs)
   const categorizedInputs = categorizeInputs(preprocessedInputs)
   const userAutofillPreferences = await getUserAutofillValues(userId)
+  console.log('categorizedInputs', categorizedInputs)
 
-  return categorizedInputs.map((input) => {
-    const handler = getHandlerForInputCategory(input.category, userAutofillPreferences || {})
-    return handler.saveAutofillValue(input, userId)
-  })
+  const results = await Promise.all(
+    categorizedInputs.map((input) => {
+      const handler = getHandlerForInputCategory(input.category, userAutofillPreferences || {})
+      return handler.saveAutofillValue(input, userId)
+    }),
+  )
+
+  return results
 }
 
 export default saveAutofillValues
