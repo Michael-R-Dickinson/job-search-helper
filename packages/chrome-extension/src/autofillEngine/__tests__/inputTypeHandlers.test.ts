@@ -7,15 +7,14 @@ import {
   HispanicLatinoEnum,
   DisabilityStatusEnum,
   AuthorizationStatusEnum,
-  SponsorshipStatusEnum,
 } from '../schema'
 import getHandlerForInputCategory from '../inputTypeHandlers'
+import { saveUserAutofillValue } from '../../firebase/realtimeDB'
 
 // Mock saveUserAutofillValue
 vi.mock('../../firebase/realtimeDB', () => ({
   saveUserAutofillValue: vi.fn(),
 }))
-import { saveUserAutofillValue } from '../../firebase/realtimeDB'
 
 const baseElement = (
   overrides: Partial<CategorizedInput['element']> = {},
@@ -365,6 +364,437 @@ describe('InputTypeHandlers', () => {
     })
     handler.saveAutofillValue(input, 'user7')
     expect(saveUserAutofillValue).toHaveBeenCalledWith('user7', 'other_website', '')
+  })
+
+  it('handles salary_expectations', () => {
+    const handler = getHandlerForInputCategory('salary_expectations', {
+      salary_expectations: '$80,000 - $100,000',
+    })
+    const input = baseInput({
+      category: 'salary_expectations',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-salary' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: '$80,000 - $100,000',
+      id: 'af-salary',
+    })
+    handler.saveAutofillValue(input, 'user8')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user8', 'salary_expectations', '')
+  })
+
+  it('handles salary_expectations with different field types', () => {
+    const testCases = [
+      { fieldType: 'text', value: '75000' },
+      { fieldType: 'number', value: '90000' },
+      { fieldType: 'select', value: '$70k-$90k' },
+    ]
+
+    testCases.forEach(({ fieldType, value }, index) => {
+      const handler = getHandlerForInputCategory('salary_expectations', {
+        salary_expectations: value,
+      })
+      const input = baseInput({
+        category: 'salary_expectations',
+        element: {
+          ...baseElement({ fieldType: fieldType as any, elementReferenceId: `af-salary-${index}` }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-salary-${index}`,
+      })
+    })
+  })
+
+  it('handles position_discovery_source', () => {
+    const handler = getHandlerForInputCategory('position_discovery_source', {
+      position_discovery_source: 'LinkedIn job posting',
+    })
+    const input = baseInput({
+      category: 'position_discovery_source',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-discovery' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'LinkedIn job posting',
+      id: 'af-discovery',
+    })
+    handler.saveAutofillValue(input, 'user9')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user9', 'position_discovery_source', '')
+  })
+
+  it('handles position_discovery_source with different field types', () => {
+    const testCases = [
+      { fieldType: 'text', value: 'Indeed job board' },
+      { fieldType: 'select', value: 'Company website' },
+      { fieldType: 'textbox', value: 'Referral from friend' },
+    ]
+
+    testCases.forEach(({ fieldType, value }, index) => {
+      const handler = getHandlerForInputCategory('position_discovery_source', {
+        position_discovery_source: value,
+      })
+      const input = baseInput({
+        category: 'position_discovery_source',
+        element: {
+          ...baseElement({
+            fieldType: fieldType as any,
+            elementReferenceId: `af-discovery-${index}`,
+          }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-discovery-${index}`,
+      })
+    })
+  })
+
+  it('handles current_job_title', () => {
+    const handler = getHandlerForInputCategory('current_job_title', {
+      current_job_title: 'Senior Software Engineer',
+    })
+    const input = baseInput({
+      category: 'current_job_title',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-title' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'Senior Software Engineer',
+      id: 'af-title',
+    })
+    handler.saveAutofillValue(input, 'user10')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user10', 'current_job_title', '')
+  })
+
+  it('handles current_job_title with different field types', () => {
+    const testCases = [
+      { fieldType: 'text', value: 'Product Manager' },
+      { fieldType: 'select', value: 'Data Scientist' },
+    ]
+
+    testCases.forEach(({ fieldType, value }, index) => {
+      const handler = getHandlerForInputCategory('current_job_title', {
+        current_job_title: value,
+      })
+      const input = baseInput({
+        category: 'current_job_title',
+        element: {
+          ...baseElement({ fieldType: fieldType as any, elementReferenceId: `af-title-${index}` }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-title-${index}`,
+      })
+    })
+  })
+
+  it('handles referral_source', () => {
+    const handler = getHandlerForInputCategory('referral_source', {
+      referral_source: 'John Doe',
+    })
+    const input = baseInput({
+      category: 'referral_source',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-referral' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'John Doe',
+      id: 'af-referral',
+    })
+    handler.saveAutofillValue(input, 'user11')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user11', 'referral_source', '')
+  })
+
+  it('handles referral_source with different field types', () => {
+    const testCases = [
+      { fieldType: 'text', value: 'Jane Smith - Engineering Team' },
+      { fieldType: 'select', value: 'Bob Johnson' },
+      { fieldType: 'textbox', value: 'Alice Brown from the marketing department' },
+    ]
+
+    testCases.forEach(({ fieldType, value }, index) => {
+      const handler = getHandlerForInputCategory('referral_source', {
+        referral_source: value,
+      })
+      const input = baseInput({
+        category: 'referral_source',
+        element: {
+          ...baseElement({
+            fieldType: fieldType as any,
+            elementReferenceId: `af-referral-${index}`,
+          }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-referral-${index}`,
+      })
+    })
+  })
+
+  it('handles pronouns', () => {
+    const handler = getHandlerForInputCategory('pronouns', {
+      pronouns: 'they/them',
+    })
+    const input = baseInput({
+      category: 'pronouns',
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-pronouns' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'they/them',
+      id: 'af-pronouns',
+    })
+    handler.saveAutofillValue(input, 'user12')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user12', 'pronouns', '')
+  })
+
+  it('handles pronouns with different field types', () => {
+    const testCases = [
+      { fieldType: 'text', value: 'she/her' },
+      { fieldType: 'select', value: 'he/him' },
+      { fieldType: 'radio', value: 'they/them' },
+    ]
+
+    testCases.forEach(({ fieldType, value }, index) => {
+      const handler = getHandlerForInputCategory('pronouns', {
+        pronouns: value,
+      })
+      const input = baseInput({
+        category: 'pronouns',
+        element: {
+          ...baseElement({
+            fieldType: fieldType as any,
+            elementReferenceId: `af-pronouns-${index}`,
+          }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-pronouns-${index}`,
+      })
+    })
+  })
+
+  it('handles complex salary expectations values', () => {
+    const complexValues = [
+      '$60,000 - $80,000 annually',
+      '90k',
+      '35-40 per hour',
+      'Competitive salary based on experience',
+      '120000',
+    ]
+
+    complexValues.forEach((value, index) => {
+      const handler = getHandlerForInputCategory('salary_expectations', {
+        salary_expectations: value,
+      })
+      const input = baseInput({
+        category: 'salary_expectations',
+        element: {
+          ...baseElement({ fieldType: 'text', elementReferenceId: `af-complex-salary-${index}` }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-complex-salary-${index}`,
+      })
+    })
+  })
+
+  it('handles complex position discovery source values', () => {
+    const complexValues = [
+      'Found the job posting on Indeed through a Google search',
+      'Company career page',
+      'Referred by a former colleague',
+      'University career fair',
+      'Professional networking event',
+    ]
+
+    complexValues.forEach((value, index) => {
+      const handler = getHandlerForInputCategory('position_discovery_source', {
+        position_discovery_source: value,
+      })
+      const input = baseInput({
+        category: 'position_discovery_source',
+        element: {
+          ...baseElement({
+            fieldType: 'textbox',
+            elementReferenceId: `af-complex-discovery-${index}`,
+          }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-complex-discovery-${index}`,
+      })
+    })
+  })
+
+  it('handles complex job title values', () => {
+    const complexValues = [
+      'Senior Full Stack Developer',
+      'VP of Engineering',
+      'Lead UX/UI Designer',
+      'Principal Data Scientist - AI/ML',
+      'Software Engineering Manager',
+    ]
+
+    complexValues.forEach((value, index) => {
+      const handler = getHandlerForInputCategory('current_job_title', {
+        current_job_title: value,
+      })
+      const input = baseInput({
+        category: 'current_job_title',
+        element: {
+          ...baseElement({ fieldType: 'text', elementReferenceId: `af-complex-title-${index}` }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-complex-title-${index}`,
+      })
+    })
+  })
+
+  it('handles complex referral source values', () => {
+    const complexValues = [
+      'Sarah Johnson - Senior Engineer on the Backend Team',
+      'Michael Chen',
+      'Dr. Lisa Rodriguez - Chief Technology Officer',
+      'Alex Thompson from the HR Department',
+      'Jamie Park - former colleague now at the company',
+    ]
+
+    complexValues.forEach((value, index) => {
+      const handler = getHandlerForInputCategory('referral_source', {
+        referral_source: value,
+      })
+      const input = baseInput({
+        category: 'referral_source',
+        element: {
+          ...baseElement({
+            fieldType: 'textbox',
+            elementReferenceId: `af-complex-referral-${index}`,
+          }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-complex-referral-${index}`,
+      })
+    })
+  })
+
+  it('handles various pronoun values', () => {
+    const pronounValues = [
+      'she/her',
+      'he/him',
+      'they/them',
+      'she/they',
+      'he/they',
+      'xe/xir',
+      'prefer not to specify',
+    ]
+
+    pronounValues.forEach((value, index) => {
+      const handler = getHandlerForInputCategory('pronouns', {
+        pronouns: value,
+      })
+      const input = baseInput({
+        category: 'pronouns',
+        element: {
+          ...baseElement({ fieldType: 'select', elementReferenceId: `af-pronoun-${index}` }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'fill',
+        value: value,
+        id: `af-pronoun-${index}`,
+      })
+    })
+  })
+
+  it('skips new handlers if no value is present', () => {
+    const newCategories = [
+      'salary_expectations',
+      'position_discovery_source',
+      'current_job_title',
+      'referral_source',
+      'pronouns',
+    ]
+
+    newCategories.forEach((category, index) => {
+      const handler = getHandlerForInputCategory(category as any, {})
+      const input = baseInput({
+        category: category as any,
+        element: {
+          ...baseElement({ fieldType: 'text', elementReferenceId: `af-no-value-${index}` }),
+        },
+      })
+      expect(handler.getAutofillInstruction(input)).toEqual({
+        action: 'skip',
+        id: `af-no-value-${index}`,
+      })
+    })
+  })
+
+  it('saves autofill values for all new handlers', () => {
+    const testCases = [
+      {
+        category: 'salary_expectations',
+        value: 'test-salary',
+        path: 'salary_expectations',
+      },
+      {
+        category: 'position_discovery_source',
+        value: 'test-discovery',
+        path: 'position_discovery_source',
+      },
+      {
+        category: 'current_job_title',
+        value: 'test-title',
+        path: 'current_job_title',
+      },
+      {
+        category: 'referral_source',
+        value: 'test-referral',
+        path: 'referral_source',
+      },
+      {
+        category: 'pronouns',
+        value: 'test-pronouns',
+        path: 'pronouns',
+      },
+    ]
+
+    testCases.forEach(({ category, value, path }, index) => {
+      const handler = getHandlerForInputCategory(category as any, { [category]: value })
+      const input = baseInput({
+        category: category as any,
+        element: {
+          ...baseElement({
+            fieldType: 'text',
+            elementReferenceId: `af-save-${index}`,
+            value: 'filled-value',
+          }),
+        },
+      })
+      handler.saveAutofillValue(input, `user-${index}`)
+      expect(saveUserAutofillValue).toHaveBeenCalledWith(`user-${index}`, path, 'filled-value')
+    })
   })
 
   it('skips if no value is present', () => {

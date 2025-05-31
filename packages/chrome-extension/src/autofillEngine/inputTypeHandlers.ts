@@ -696,6 +696,91 @@ class CurrentCompanyHandler extends InputCategoryHandler {
   }
 }
 
+class SalaryExpectationsHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.salary_expectations
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'salary_expectations', input.element.value)
+  }
+}
+
+class PositionDiscoverySourceHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.position_discovery_source
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'position_discovery_source', input.element.value)
+  }
+}
+
+class CurrentJobTitleHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.current_job_title
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'current_job_title', input.element.value)
+  }
+}
+
+class ReferralSourceHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.referral_source
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'referral_source', input.element.value)
+  }
+}
+
+class PronounsHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.pronouns
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'pronouns', input.element.value)
+  }
+}
+
 // Restore DefaultHandler for fallback
 class DefaultHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
@@ -745,6 +830,11 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   twitter_url: TwitterUrlHandler,
   github_url: GithubUrlHandler,
   current_company: CurrentCompanyHandler,
+  salary_expectations: SalaryExpectationsHandler,
+  position_discovery_source: PositionDiscoverySourceHandler,
+  current_job_title: CurrentJobTitleHandler,
+  referral_source: ReferralSourceHandler,
+  pronouns: PronounsHandler,
   unknown: DefaultHandler,
 }
 
