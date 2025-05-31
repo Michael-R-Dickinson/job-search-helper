@@ -409,20 +409,33 @@ describe('InputTypeHandlers', () => {
   })
 
   it('handles position_discovery_source', async () => {
-    // Test with no saved preferences - should still fill with "linkedin"
+    // Test with no saved preferences - should still fill with "linkedin" for text
     const handler = getHandlerForInputCategory('position_discovery_source', {})
-    const input = baseInput({
+    const textInput = baseInput({
       category: 'position_discovery_source',
-      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-discovery' }) },
+      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-discovery-text' }) },
     })
-    expect(handler.getAutofillInstruction(input)).toEqual({
+    expect(handler.getAutofillInstruction(textInput)).toEqual({
       action: 'fill',
       value: 'linkedin',
-      id: 'af-discovery',
+      id: 'af-discovery-text',
+    })
+
+    // Test with select field - should provide preference order
+    const selectInput = baseInput({
+      category: 'position_discovery_source',
+      element: {
+        ...baseElement({ fieldType: 'select', elementReferenceId: 'af-discovery-select' }),
+      },
+    })
+    expect(handler.getAutofillInstruction(selectInput)).toEqual({
+      action: 'fill',
+      value: 'linkedin|job board|online|website|internet|other',
+      id: 'af-discovery-select',
     })
 
     // Test that save always returns error
-    const saveResult = handler.saveAutofillValue(input, 'user9')
+    const saveResult = handler.saveAutofillValue(textInput, 'user9')
     await expect(saveResult).resolves.toEqual({
       status: 'error',
       error: 'Position discovery source is not saved',
@@ -430,9 +443,13 @@ describe('InputTypeHandlers', () => {
   })
 
   it('handles position_discovery_source with different field types', () => {
-    const testCases = [{ fieldType: 'text' }, { fieldType: 'select' }, { fieldType: 'textbox' }]
+    const testCases = [
+      { fieldType: 'text', expectedValue: 'linkedin' },
+      { fieldType: 'select', expectedValue: 'linkedin|job board|online|website|internet|other' },
+      { fieldType: 'textbox', expectedValue: 'linkedin' },
+    ]
 
-    testCases.forEach(({ fieldType }, index) => {
+    testCases.forEach(({ fieldType, expectedValue }, index) => {
       const handler = getHandlerForInputCategory('position_discovery_source', {})
       const input = baseInput({
         category: 'position_discovery_source',
@@ -443,10 +460,10 @@ describe('InputTypeHandlers', () => {
           }),
         },
       })
-      // Should always fill with "linkedin" regardless of field type
+      // Should fill with appropriate value based on field type
       expect(handler.getAutofillInstruction(input)).toEqual({
         action: 'fill',
-        value: 'linkedin',
+        value: expectedValue,
         id: `af-discovery-${index}`,
       })
     })

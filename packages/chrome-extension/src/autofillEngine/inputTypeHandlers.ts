@@ -721,7 +721,18 @@ class PositionDiscoverySourceHandler extends InputCategoryHandler {
     this.value = undefined
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    // Always fill with "linkedin" regardless of saved preferences
+    // For select fields, provide a value that can be used to find the closest match
+    if (input.element.fieldType === 'select') {
+      // Provide a value that indicates preference order for matching
+      // Frontend should try to match these in order: linkedin, job board, online, etc.
+      return {
+        action: 'fill',
+        value: 'linkedin|job board|online|website|internet|other',
+        id: input.element.elementReferenceId,
+      }
+    }
+
+    // For text/textbox fields, just fill with "linkedin"
     return { action: 'fill', value: 'linkedin', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {

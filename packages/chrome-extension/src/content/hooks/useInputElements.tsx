@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { AutofillInstruction } from '../../autofillEngine/schema'
+import { fillSelectElement } from '../utils/selectMatching'
 
 export type ElementInfo = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 export interface InputInfo {
@@ -120,10 +121,7 @@ export const autofillInputElements = (autofillInstructions: AutofillInstruction[
       }
     } else if (el instanceof HTMLSelectElement) {
       const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
-      if (el.value !== value) {
-        el.value = value
-        el.dispatchEvent(new Event('change', { bubbles: true }))
-      }
+      fillSelectElement(el, value)
     }
   })
 }
