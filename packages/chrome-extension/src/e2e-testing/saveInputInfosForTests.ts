@@ -17,6 +17,7 @@ export const SerializedInputInfoSchema = z.object({
   required: z.boolean(),
   elementReferenceId: z.string(),
   selectedText: z.string(),
+  wholeQuestionLabel: z.string().nullable().optional(),
 })
 
 export const SerializedInputInfoArraySchema = z.array(SerializedInputInfoSchema)
@@ -133,6 +134,7 @@ export function serializeInputInfosForTest(inputInfos: InputInfo[]): SerializedI
     }
     return {
       label: info.label,
+      wholeQuestionLabel: info.wholeQuestionLabel,
       html: el.outerHTML,
       fieldType: (el as any).fieldType || '',
       name: (el as any).name || '',
@@ -184,6 +186,7 @@ export function resurrectInputInfosFromTest(serialized: SerializedInputInfo[]): 
     }
     return {
       label: item.label,
+      wholeQuestionLabel: item.wholeQuestionLabel,
       elementReferenceId: item.elementReferenceId,
       element,
     }
