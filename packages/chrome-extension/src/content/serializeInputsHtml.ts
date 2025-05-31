@@ -108,6 +108,11 @@ function extractDisplayedValue(el: Element, placeholder: string = '', label: str
   return ''
 }
 
+const removeValuePrefixes = (value: string) => {
+  // Remove prefixes like "string:" or "number:"
+  return value.replace(/^string:|number:/, '')
+}
+
 export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] {
   return inputs.map((input) => {
     const el = input.element
@@ -124,7 +129,7 @@ export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] 
     const placeholder = (el as any).placeholder || ''
     let value = (el as any).value || ''
     if (!value) {
-      value = extractDisplayedValue(el, placeholder, input.label || '')
+      value = removeValuePrefixes(extractDisplayedValue(el, placeholder, input.label || ''))
     }
     return {
       label: input.label,
