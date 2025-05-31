@@ -741,7 +741,7 @@ class PositionDiscoverySourceHandler extends InputCategoryHandler {
       // Frontend should try to match these in order: linkedin, job board, online, etc.
       return {
         action: 'fill',
-        value: 'linkedin|job board|online|website|internet|other',
+        value: 'job board|linkedin|online|website|internet|other',
         id: input.element.elementReferenceId,
       }
     }
