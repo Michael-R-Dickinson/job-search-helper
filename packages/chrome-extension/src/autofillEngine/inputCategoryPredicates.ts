@@ -259,7 +259,6 @@ const isLocationInput = (input: SerializedHtmlInput): boolean => {
     'nationality',
     'mailing address',
     'current mailing address',
-    'address',
     'mailing_address',
     'current_address',
     'city',
@@ -310,11 +309,28 @@ const isLocationInput = (input: SerializedHtmlInput): boolean => {
     'location',
     'residence',
   ]
+  // Special handling for 'address' to avoid matching 'Email Address' or similar
+  const isAddressField = (str: string | undefined) => {
+    if (!str) return false
+    const s = str.trim().toLowerCase()
+    // Only match if it's exactly 'address', starts with 'address ' (not as a suffix), or is a known location phrase
+    return (
+      s === 'address' ||
+      s.startsWith('address ') ||
+      s === 'mailing address' ||
+      s === 'street address' ||
+      s === 'home address' ||
+      s === 'current address'
+    )
+  }
   return (
     matchesPattern(input.label ?? undefined, patterns) ||
     matchesPattern(input.name, patterns) ||
     matchesPattern(input.placeholder, patterns) ||
-    matchesPattern(input.autocomplete, autocompletePatterns)
+    matchesPattern(input.autocomplete, autocompletePatterns) ||
+    isAddressField(input.label ?? undefined) ||
+    isAddressField(input.name) ||
+    isAddressField(input.placeholder)
   )
 }
 

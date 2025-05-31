@@ -8,7 +8,7 @@ export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlI
   return inputs.map((input) => {
     return {
       ...input,
-      label: input.label?.toLowerCase().trim() || null,
+      label: input.label?.toLowerCase().trim().replace(/\*$/, '') || null,
     }
   })
 }
@@ -29,6 +29,7 @@ const getAutofillInstructions = async (
 
   if (!userAutofillPreferences) return null
 
+  console.log('categorizedInputs', categorizedInputs)
   return categorizedInputs.map((input) => {
     const handler = getHandlerForInputCategory(input.category, userAutofillPreferences)
     return handler.getAutofillInstruction(input)

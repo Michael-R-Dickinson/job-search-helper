@@ -283,12 +283,10 @@ class LocationHandler extends InputCategoryHandler {
     this.location = userAutofillPreferences.location || {}
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    // Try to match which subfield this input is for
     const label = input.label?.toLowerCase() || ''
     const name = input.element.name?.toLowerCase() || ''
     const placeholder = input.element.placeholder?.toLowerCase() || ''
     const autocomplete = input.element.autocomplete?.toLowerCase() || ''
-    // Heuristics for subfields
     if (
       label.includes('country') ||
       name.includes('country') ||
@@ -301,6 +299,7 @@ class LocationHandler extends InputCategoryHandler {
           value: this.location.country,
           id: input.element.elementReferenceId,
         }
+      return { action: 'skip', id: input.element.elementReferenceId }
     }
     if (
       label.includes('city') ||
@@ -310,6 +309,7 @@ class LocationHandler extends InputCategoryHandler {
     ) {
       if (this.location?.city)
         return { action: 'fill', value: this.location.city, id: input.element.elementReferenceId }
+      return { action: 'skip', id: input.element.elementReferenceId }
     }
     if (
       label.includes('state') ||
@@ -327,6 +327,7 @@ class LocationHandler extends InputCategoryHandler {
     ) {
       if (this.location?.state)
         return { action: 'fill', value: this.location.state, id: input.element.elementReferenceId }
+      return { action: 'skip', id: input.element.elementReferenceId }
     }
     if (
       label.includes('postal') ||
@@ -344,16 +345,31 @@ class LocationHandler extends InputCategoryHandler {
           value: this.location.postal_code,
           id: input.element.elementReferenceId,
         }
+      return { action: 'skip', id: input.element.elementReferenceId }
     }
+    // Only fall back to address for address-like fields
     if (
-      label.includes('address') ||
-      name.includes('address') ||
-      placeholder.includes('address') ||
-      autocomplete.includes('address') ||
-      label.includes('street') ||
-      name.includes('street') ||
-      placeholder.includes('street') ||
-      autocomplete.includes('street')
+      label === 'address' ||
+      name === 'address' ||
+      placeholder === 'address' ||
+      label.startsWith('address ') ||
+      name.startsWith('address ') ||
+      placeholder.startsWith('address ') ||
+      label.endsWith(' address') ||
+      name.endsWith(' address') ||
+      placeholder.endsWith(' address') ||
+      label.includes('mailing address') ||
+      name.includes('mailing address') ||
+      placeholder.includes('mailing address') ||
+      label.includes('street address') ||
+      name.includes('street address') ||
+      placeholder.includes('street address') ||
+      label.includes('home address') ||
+      name.includes('home address') ||
+      placeholder.includes('home address') ||
+      label.includes('current address') ||
+      name.includes('current address') ||
+      placeholder.includes('current address')
     ) {
       if (this.location?.address)
         return {
@@ -361,10 +377,8 @@ class LocationHandler extends InputCategoryHandler {
           value: this.location.address,
           id: input.element.elementReferenceId,
         }
+      return { action: 'skip', id: input.element.elementReferenceId }
     }
-    // fallback: fill with address if present
-    if (this.location?.address)
-      return { action: 'fill', value: this.location.address, id: input.element.elementReferenceId }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {

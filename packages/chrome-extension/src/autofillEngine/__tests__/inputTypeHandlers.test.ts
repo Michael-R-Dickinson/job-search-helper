@@ -227,21 +227,26 @@ describe('InputTypeHandlers', () => {
           address: '123 Main St',
         },
         subfields: [
-          { label: 'Country', expected: 'USA', path: 'location/country' },
-          { label: 'City', expected: 'New York', path: 'location/city' },
-          { label: 'State', expected: 'NY', path: 'location/state' },
-          { label: 'Postal Code', expected: '10001', path: 'location/postal_code' },
-          { label: 'Address', expected: '123 Main St', path: 'location/address' },
+          { label: 'Country', expected: 'USA', path: 'location/country', name: 'country' },
+          { label: 'City', expected: 'New York', path: 'location/city', name: 'city' },
+          { label: 'State', expected: 'NY', path: 'location/state', name: 'state' },
+          {
+            label: 'Postal Code',
+            expected: '10001',
+            path: 'location/postal_code',
+            name: 'postal_code',
+          },
+          { label: 'Address', expected: '123 Main St', path: 'location/address', name: 'address' },
         ],
       },
     ]
     for (const { cat, val, subfields } of fields) {
       const handler = getHandlerForInputCategory(cat as any, { [cat]: val })
-      for (const { label, expected, path } of subfields) {
+      for (const { label, expected, path, name } of subfields) {
         const input = baseInput({
           category: cat as any,
           element: {
-            ...baseElement({ fieldType: 'text', elementReferenceId: `af-${label}` }),
+            ...baseElement({ fieldType: 'text', elementReferenceId: `af-${label}`, name }),
             label,
           },
         })
