@@ -20,6 +20,8 @@ import {
   isCurrentCompanyInput,
   isOtherWebsiteInput,
   isLocationInput,
+  isSalaryExpectationsInput,
+  isPositionDiscoverySourceInput,
 } from '../inputCategoryPredicates'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 
@@ -491,6 +493,298 @@ describe('Input Categorization Tests', () => {
       const input = createTestInput({ label: 'Personal Website' })
       expect(isOtherWebsiteInput(input)).toBe(false)
       expect(isWebsiteInput(input)).toBe(true)
+    })
+  })
+
+  describe('isSalaryExpectationsInput', () => {
+    it('should identify salary expectations by exact label match', () => {
+      const input = createTestInput({ label: 'What are your salary expectations for this role?' })
+      expect(isSalaryExpectationsInput(input)).toBe(true)
+    })
+
+    it('should identify salary expectations with core patterns', () => {
+      const corePatterns = [
+        'Salary Expectations',
+        'Expected Salary',
+        'Desired Salary',
+        'Salary Requirements',
+        'Compensation Expectations',
+        'Pay Expectations',
+        'Wage Expectations',
+        'Salary Range',
+        'Expected Compensation',
+        'Hourly Rate',
+        'Annual Salary',
+        'Starting Salary',
+        'Target Salary',
+      ]
+
+      corePatterns.forEach((pattern) => {
+        const input = createTestInput({ label: pattern })
+        expect(isSalaryExpectationsInput(input), `Failed for pattern: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify salary expectations by name attribute', () => {
+      const namePatterns = [
+        'salary_expectations',
+        'expected_salary',
+        'desired_salary',
+        'compensation_expectations',
+        'salary-range',
+        'hourly-rate',
+        'annual-salary',
+        'starting-salary',
+      ]
+
+      namePatterns.forEach((pattern) => {
+        const input = createTestInput({ name: pattern })
+        expect(isSalaryExpectationsInput(input), `Failed for name: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify salary expectations by placeholder', () => {
+      const placeholderPatterns = [
+        'Enter your salary expectations',
+        'Expected compensation range',
+        'Desired hourly rate',
+        'Target annual salary',
+      ]
+
+      placeholderPatterns.forEach((pattern) => {
+        const input = createTestInput({ placeholder: pattern })
+        expect(isSalaryExpectationsInput(input), `Failed for placeholder: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify salary expectations by autocomplete', () => {
+      const autocompletePatterns = ['salary', 'compensation', 'wage', 'pay']
+
+      autocompletePatterns.forEach((pattern) => {
+        const input = createTestInput({ autocomplete: pattern })
+        expect(isSalaryExpectationsInput(input), `Failed for autocomplete: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should work with different field types', () => {
+      const textInput = createTestInput({
+        label: 'Salary Expectations',
+        fieldType: INPUT_ELEMENT_TYPES.TEXT,
+      })
+      const numberInput = createTestInput({
+        label: 'Expected Salary',
+        fieldType: INPUT_ELEMENT_TYPES.NUMBER,
+      })
+      const selectInput = createTestInput({
+        label: 'Salary Range',
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
+      })
+
+      expect(isSalaryExpectationsInput(textInput)).toBe(true)
+      expect(isSalaryExpectationsInput(numberInput)).toBe(true)
+      expect(isSalaryExpectationsInput(selectInput)).toBe(true)
+    })
+
+    it('should handle case insensitive matching', () => {
+      const input1 = createTestInput({ label: 'SALARY EXPECTATIONS' })
+      const input2 = createTestInput({ label: 'salary expectations' })
+      const input3 = createTestInput({ label: 'Salary Expectations' })
+
+      expect(isSalaryExpectationsInput(input1)).toBe(true)
+      expect(isSalaryExpectationsInput(input2)).toBe(true)
+      expect(isSalaryExpectationsInput(input3)).toBe(true)
+    })
+
+    it('should not identify non-salary fields', () => {
+      const nonSalaryInputs = [
+        createTestInput({ label: 'Email Address' }),
+        createTestInput({ label: 'Phone Number' }),
+        createTestInput({ label: 'Years of Experience' }),
+        createTestInput({ label: 'Previous Company' }),
+        createTestInput({ label: 'Education Level' }),
+      ]
+
+      nonSalaryInputs.forEach((input) => {
+        expect(isSalaryExpectationsInput(input)).toBe(false)
+      })
+    })
+
+    it('should not work with unsupported field types', () => {
+      const unsupportedInput = createTestInput({
+        label: 'Salary Expectations',
+        fieldType: INPUT_ELEMENT_TYPES.EMAIL,
+      })
+      expect(isSalaryExpectationsInput(unsupportedInput)).toBe(false)
+    })
+  })
+
+  describe('isPositionDiscoverySourceInput', () => {
+    it('should identify position discovery source by exact label match', () => {
+      const input1 = createTestInput({ label: 'How did you find out about this position?' })
+      const input2 = createTestInput({
+        label:
+          'List the specific source where you learned about this position (ex. Job posting on Indeed, Google search)',
+      })
+
+      expect(isPositionDiscoverySourceInput(input1)).toBe(true)
+      expect(isPositionDiscoverySourceInput(input2)).toBe(true)
+    })
+
+    it('should identify position discovery source with core question patterns', () => {
+      const questionPatterns = [
+        'How did you find out about this position?',
+        'How did you hear about this job?',
+        'How did you learn about this role?',
+        'How did you discover this opportunity?',
+        'Where did you find this position?',
+        'Where did you hear about this job?',
+        'Where did you learn about this role?',
+      ]
+
+      questionPatterns.forEach((pattern) => {
+        const input = createTestInput({ label: pattern })
+        expect(isPositionDiscoverySourceInput(input), `Failed for pattern: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify position discovery source with source-focused patterns', () => {
+      const sourcePatterns = [
+        'Source of Position',
+        'Referral Source',
+        'Job Source',
+        'Application Source',
+        'Position Source',
+        'Job Posting Source',
+        'Discovery Source',
+        'Learned about this position',
+        'Found this position',
+        'Heard about this position',
+      ]
+
+      sourcePatterns.forEach((pattern) => {
+        const input = createTestInput({ label: pattern })
+        expect(isPositionDiscoverySourceInput(input), `Failed for pattern: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify position discovery source by name attribute', () => {
+      const namePatterns = [
+        'referral_source',
+        'job_source',
+        'application_source',
+        'discovery_source',
+        'position-source',
+        'job-source',
+        'referral-source',
+      ]
+
+      namePatterns.forEach((pattern) => {
+        const input = createTestInput({ name: pattern })
+        expect(isPositionDiscoverySourceInput(input), `Failed for name: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify position discovery source by placeholder', () => {
+      const placeholderPatterns = [
+        'How did you hear about us?',
+        'Where did you find this job?',
+        'How you discovered this position',
+        'Enter how you discovered this position',
+      ]
+
+      placeholderPatterns.forEach((pattern) => {
+        const input = createTestInput({ placeholder: pattern })
+        expect(isPositionDiscoverySourceInput(input), `Failed for placeholder: ${pattern}`).toBe(
+          true,
+        )
+      })
+    })
+
+    it('should identify position discovery source by autocomplete', () => {
+      const autocompletePatterns = [
+        'referral-source',
+        'job-source',
+        'application-source',
+        'discovery-source',
+      ]
+
+      autocompletePatterns.forEach((pattern) => {
+        const input = createTestInput({ autocomplete: pattern })
+        expect(isPositionDiscoverySourceInput(input), `Failed for autocomplete: ${pattern}`).toBe(
+          true,
+        )
+      })
+    })
+
+    it('should work with different field types', () => {
+      const textInput = createTestInput({
+        label: 'How did you find out about this position?',
+        fieldType: INPUT_ELEMENT_TYPES.TEXT,
+      })
+      const selectInput = createTestInput({
+        label: 'Source of Position',
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
+      })
+      const textboxInput = createTestInput({
+        label: 'Referral Source',
+        fieldType: INPUT_ELEMENT_TYPES.TEXTBOX,
+      })
+
+      expect(isPositionDiscoverySourceInput(textInput)).toBe(true)
+      expect(isPositionDiscoverySourceInput(selectInput)).toBe(true)
+      expect(isPositionDiscoverySourceInput(textboxInput)).toBe(true)
+    })
+
+    it('should handle regex patterns for flexible matching', () => {
+      const regexTestCases = [
+        'How do you find this position?',
+        'How did you hear about the position?',
+        'How did you learn about our position?',
+        'How did you discover the available position?',
+        'Where did you learn about this position?',
+        'What source led you to this position?',
+        'Which position source brought you here?',
+      ]
+
+      regexTestCases.forEach((testCase) => {
+        const input = createTestInput({ label: testCase })
+        expect(isPositionDiscoverySourceInput(input), `Failed for regex case: ${testCase}`).toBe(
+          true,
+        )
+      })
+    })
+
+    it('should handle case insensitive matching', () => {
+      const input1 = createTestInput({ label: 'HOW DID YOU FIND OUT ABOUT THIS POSITION?' })
+      const input2 = createTestInput({ label: 'how did you find out about this position?' })
+      const input3 = createTestInput({ label: 'How Did You Find Out About This Position?' })
+
+      expect(isPositionDiscoverySourceInput(input1)).toBe(true)
+      expect(isPositionDiscoverySourceInput(input2)).toBe(true)
+      expect(isPositionDiscoverySourceInput(input3)).toBe(true)
+    })
+
+    it('should not identify non-discovery source fields', () => {
+      const nonDiscoveryInputs = [
+        createTestInput({ label: 'Email Address' }),
+        createTestInput({ label: 'Phone Number' }),
+        createTestInput({ label: 'Years of Experience' }),
+        createTestInput({ label: 'Previous Position' }),
+        createTestInput({ label: 'Education Source' }),
+        createTestInput({ label: 'Reference Source' }), // This could be ambiguous but should not match
+      ]
+
+      nonDiscoveryInputs.forEach((input) => {
+        expect(isPositionDiscoverySourceInput(input)).toBe(false)
+      })
+    })
+
+    it('should not work with unsupported field types', () => {
+      const unsupportedInput = createTestInput({
+        label: 'How did you find out about this position?',
+        fieldType: INPUT_ELEMENT_TYPES.EMAIL,
+      })
+      expect(isPositionDiscoverySourceInput(unsupportedInput)).toBe(false)
     })
   })
 })

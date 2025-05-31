@@ -19,6 +19,8 @@ import {
   isGithubUrlInput,
   isCurrentCompanyInput,
   isLocationInput,
+  isSalaryExpectationsInput,
+  isPositionDiscoverySourceInput,
 } from './inputCategoryPredicates'
 import type { SerializedHtmlInput, CategorizedInput, InputCategory } from './schema'
 
@@ -44,6 +46,8 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isGithubUrlInput(input)) category = 'github_url'
     else if (isOtherWebsiteInput(input)) category = 'other_website'
     else if (isWebsiteInput(input)) category = 'website'
+    else if (isSalaryExpectationsInput(input)) category = 'salary_expectations'
+    else if (isPositionDiscoverySourceInput(input)) category = 'position_discovery_source'
     else if (isCurrentCompanyInput(input) && !isNameInput(input)) category = 'current_company'
     return {
       element: input,

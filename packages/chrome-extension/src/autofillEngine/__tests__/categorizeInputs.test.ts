@@ -354,4 +354,49 @@ describe('categorizeInputs', () => {
       expect(input.category).toBe('location')
     })
   })
+
+  it('should categorize salary expectations inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput(
+        'input',
+        { name: 'salary_expectations' },
+        'What are your salary expectations for this role?',
+      ),
+      makeInput('input', { name: 'expected_salary' }, 'Expected Salary'),
+      makeInput(
+        'input',
+        { placeholder: 'Enter desired compensation' },
+        'Compensation Expectations',
+      ),
+      makeInput('select', { name: 'salary_range' }, 'Salary Range'),
+      makeInput('input', { type: 'number', name: 'hourly_rate' }, 'Hourly Rate'),
+      makeInput('input', { autocomplete: 'salary' }, 'Annual Salary'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(6)
+    result.forEach((input) => {
+      expect(input.category).toBe('salary_expectations')
+    })
+  })
+
+  it('should categorize position discovery source inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { name: 'discovery_source' }, 'How did you find out about this position?'),
+      makeInput(
+        'select',
+        { name: 'referral_source' },
+        'List the specific source where you learned about this position',
+      ),
+      makeInput('input', { placeholder: 'How did you hear about us?' }, 'Job Source'),
+      makeInput('textarea', { name: 'application_source' }, 'Where did you find this job posting?'),
+      makeInput('input', { autocomplete: 'referral-source' }, 'Discovery Source'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(5)
+    result.forEach((input) => {
+      expect(input.category).toBe('position_discovery_source')
+    })
+  })
 })

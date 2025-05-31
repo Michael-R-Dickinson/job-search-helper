@@ -58,6 +58,8 @@ export type InputCategory =
   | 'twitter_url'
   | 'github_url'
   | 'current_company'
+  | 'salary_expectations'
+  | 'position_discovery_source'
   | 'unknown'
 
 export const CategorizedInputSchema = z.object({
@@ -132,6 +134,8 @@ export const UserAutofillPreferencesSchema = z.object({
   twitter_url: z.string().optional(),
   github_url: z.string().optional(),
   current_company: z.string().optional(),
+  salary_expectations: z.string().optional(),
+  position_discovery_source: z.string().optional(),
 })
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
 

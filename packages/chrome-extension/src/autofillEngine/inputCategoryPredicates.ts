@@ -634,6 +634,121 @@ const isCurrentCompanyInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
+const isSalaryExpectationsInput = (input: SerializedHtmlInput): boolean => {
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.NUMBER &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT
+  )
+    return false
+
+  const patterns: Pattern[] = [
+    'salary expectations',
+    'salary expectation',
+    'expected salary',
+    'desired salary',
+    'salary requirement',
+    'salary requirements',
+    'compensation expectations',
+    'compensation expectation',
+    'pay expectations',
+    'pay expectation',
+    'wage expectations',
+    'wage expectation',
+    'salary range',
+    'expected compensation',
+    'desired compensation',
+    'salary desired',
+    'compensation desired',
+    'hourly rate',
+    'annual salary',
+    'starting salary',
+    'target salary',
+    'salary target',
+    /salary[_-]?expectations?/i,
+    /expected[_-]?salary/i,
+    /desired[_-]?salary/i,
+    /compensation[_-]?expectations?/i,
+    /pay[_-]?expectations?/i,
+    /wage[_-]?expectations?/i,
+    /salary[_-]?range/i,
+    /hourly[_-]?rate/i,
+    /annual[_-]?salary/i,
+    /starting[_-]?salary/i,
+    /target[_-]?salary/i,
+    /salary[_-]?target/i,
+  ]
+
+  const autocompletePatterns: Pattern[] = ['salary', 'compensation', 'wage', 'pay']
+
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
+const isPositionDiscoverySourceInput = (input: SerializedHtmlInput): boolean => {
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXTBOX
+  )
+    return false
+
+  const patterns: Pattern[] = [
+    'how did you find out',
+    'how did you hear about',
+    'how did you learn about',
+    'how did you discover',
+    'where did you find',
+    'where did you hear',
+    'where did you learn',
+    'source of position',
+    'learned about this position',
+    'discovered this position',
+    'found this position',
+    'heard about this position',
+    'referral source',
+    'job source',
+    'application source',
+    'position source',
+    'job posting source',
+    'discovery source',
+    'find out about',
+    'hear about',
+    'learn about',
+    'specific source',
+    'source where you learned',
+    /how.*find.*position/i,
+    /how.*hear.*position/i,
+    /how.*learn.*position/i,
+    /how.*discover.*position/i,
+    /where.*learn.*position/i,
+    /source.*position/i,
+    /position.*source/i,
+    /referral[_-]?source/i,
+    /job[_-]?source/i,
+    /application[_-]?source/i,
+    /discovery[_-]?source/i,
+  ]
+
+  const autocompletePatterns: Pattern[] = [
+    'referral-source',
+    'job-source',
+    'application-source',
+    'discovery-source',
+  ]
+
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
 export {
   isNameInput,
   isEmailInput,
@@ -655,4 +770,6 @@ export {
   isTwitterUrlInput,
   isGithubUrlInput,
   isCurrentCompanyInput,
+  isSalaryExpectationsInput,
+  isPositionDiscoverySourceInput,
 }
