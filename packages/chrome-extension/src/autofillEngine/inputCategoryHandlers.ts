@@ -467,18 +467,24 @@ class AuthorizationHandler extends InputCategoryHandler {
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     if (!this.value) return { action: 'skip', id: input.element.elementReferenceId }
-    if (input.element.fieldType === 'select' || input.element.fieldType === 'radio') {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
-    }
-    if (input.element.fieldType === 'checkbox') {
+
+    if (input.element.fieldType === 'radio' || input.element.fieldType === 'checkbox') {
+      // For radio buttons and checkboxes, use 'check' action when user preference is 'yes'
+      // and 'skip' when it's 'no' or anything else
       return {
-        action: this.value === 'yes' ? 'fill' : 'clear',
+        action: this.value === 'yes' ? 'check' : 'skip',
         id: input.element.elementReferenceId,
       }
     }
+
+    if (input.element.fieldType === 'select') {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+
     if (input.element.fieldType === 'text') {
       return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
     }
+
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
@@ -552,7 +558,6 @@ class SchoolHandler extends InputCategoryHandler {
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    console.log('saving school', input.element)
     return saveUserAutofillValue(userId, 'school', input.element.value)
   }
 }

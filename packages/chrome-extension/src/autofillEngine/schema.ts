@@ -143,7 +143,7 @@ export const UserAutofillPreferencesSchema = z.object({
 })
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
 
-const AutofillActionSchema = z.enum(['fill', 'clear', 'skip'])
+const AutofillActionSchema = z.enum(['fill', 'clear', 'skip', 'check'])
 export const AutofillInstructionSchema = z.object({
   action: AutofillActionSchema,
   value: z.string().optional(),

@@ -181,6 +181,7 @@ describe('InputTypeHandlers', () => {
   })
 
   it('handles authorization and sponsorship (no decline to answer)', () => {
+    // Test authorization checkbox with 'yes' preference
     const handler = getHandlerForInputCategory('authorization', {
       authorization: AuthorizationStatusEnum.enum.yes,
     })
@@ -188,7 +189,14 @@ describe('InputTypeHandlers', () => {
       category: 'authorization',
       element: { ...baseElement({ fieldType: 'checkbox', elementReferenceId: 'af-12' }) },
     })
-    expect(handler.getAutofillInstruction(input)).toEqual({ action: 'fill', id: 'af-12' })
+    expect(handler.getAutofillInstruction(input)).toEqual({ action: 'check', id: 'af-12' })
+
+    // Test authorization checkbox with 'no' preference
+    const handlerNo = getHandlerForInputCategory('authorization', {
+      authorization: AuthorizationStatusEnum.enum.no,
+    })
+    expect(handlerNo.getAutofillInstruction(input)).toEqual({ action: 'skip', id: 'af-12' })
+
     const handler2 = getHandlerForInputCategory('sponsorship', {
       sponsorship: { yesNoAnswer: false },
     })
@@ -197,6 +205,110 @@ describe('InputTypeHandlers', () => {
       element: { ...baseElement({ fieldType: 'checkbox', elementReferenceId: 'af-13' }) },
     })
     expect(handler2.getAutofillInstruction(input2)).toEqual({ action: 'clear', id: 'af-13' })
+  })
+
+  it('handles authorization radio buttons and checkboxes', () => {
+    // Test radio button with 'yes' preference
+    const handlerYes = getHandlerForInputCategory('authorization', {
+      authorization: AuthorizationStatusEnum.enum.yes,
+    })
+
+    const radioInput = baseInput({
+      category: 'authorization',
+      label: 'Yes',
+      element: {
+        ...baseElement({
+          fieldType: 'radio',
+          elementReferenceId: 'af-radio-yes',
+          value: 'yes',
+        }),
+      },
+    })
+    expect(handlerYes.getAutofillInstruction(radioInput)).toEqual({
+      action: 'check',
+      id: 'af-radio-yes',
+    })
+
+    // Test radio button with 'no' preference
+    const handlerNo = getHandlerForInputCategory('authorization', {
+      authorization: AuthorizationStatusEnum.enum.no,
+    })
+    expect(handlerNo.getAutofillInstruction(radioInput)).toEqual({
+      action: 'skip',
+      id: 'af-radio-yes',
+    })
+
+    // Test checkbox with 'yes' preference
+    const checkboxInput = baseInput({
+      category: 'authorization',
+      label: 'I am authorized to work in the US',
+      element: {
+        ...baseElement({
+          fieldType: 'checkbox',
+          elementReferenceId: 'af-checkbox-auth',
+          name: 'work_authorization',
+        }),
+      },
+    })
+    expect(handlerYes.getAutofillInstruction(checkboxInput)).toEqual({
+      action: 'check',
+      id: 'af-checkbox-auth',
+    })
+
+    // Test checkbox with 'no' preference
+    expect(handlerNo.getAutofillInstruction(checkboxInput)).toEqual({
+      action: 'skip',
+      id: 'af-checkbox-auth',
+    })
+
+    // Test that no preference results in skip
+    const handlerEmpty = getHandlerForInputCategory('authorization', {})
+    expect(handlerEmpty.getAutofillInstruction(radioInput)).toEqual({
+      action: 'skip',
+      id: 'af-radio-yes',
+    })
+    expect(handlerEmpty.getAutofillInstruction(checkboxInput)).toEqual({
+      action: 'skip',
+      id: 'af-checkbox-auth',
+    })
+  })
+
+  it('handles authorization select and text inputs', () => {
+    const handler = getHandlerForInputCategory('authorization', {
+      authorization: AuthorizationStatusEnum.enum.yes,
+    })
+
+    // Test select element
+    const selectInput = baseInput({
+      category: 'authorization',
+      element: {
+        ...baseElement({
+          fieldType: 'select',
+          elementReferenceId: 'af-select-auth',
+        }),
+      },
+    })
+    expect(handler.getAutofillInstruction(selectInput)).toEqual({
+      action: 'fill',
+      value: 'yes',
+      id: 'af-select-auth',
+    })
+
+    // Test text element
+    const textInput = baseInput({
+      category: 'authorization',
+      element: {
+        ...baseElement({
+          fieldType: 'text',
+          elementReferenceId: 'af-text-auth',
+        }),
+      },
+    })
+    expect(handler.getAutofillInstruction(textInput)).toEqual({
+      action: 'fill',
+      value: 'yes',
+      id: 'af-text-auth',
+    })
   })
 
   it('handles phone', () => {

@@ -128,6 +128,45 @@ const getWholeQuestionLabel = (el: HTMLElement): string | null => {
     }
   }
 
+  // Function to clean up text by removing common option words and immediate label
+  const cleanQuestionText = (text: string, immediateLabel: string | null): string => {
+    let cleaned = text
+
+    // Remove the immediate label if it exists
+    if (immediateLabel && cleaned.includes(immediateLabel)) {
+      cleaned = cleaned.replace(immediateLabel, '').trim()
+    }
+
+    // Remove common option words that often appear with radio buttons/checkboxes
+    const optionWords = ['Yes', 'No', 'yes', 'no', 'true', 'false', 'True', 'False']
+    optionWords.forEach((option) => {
+      // Remove option words at the end or with surrounding spaces
+      cleaned = cleaned.replace(new RegExp(`\\s*\\b${option}\\b\\s*`, 'g'), ' ')
+    })
+
+    // Handle concatenated option text like "NoYes", "YesNo", etc.
+    cleaned = cleaned.replace(/\b(Yes|No|yes|no|True|False|true|false){2,}\b/g, '')
+
+    // Remove common phrases that appear in labels but aren't part of the question
+    const labelPhrases = [
+      'I am authorized to work',
+      'Check if yes',
+      'Select if applicable',
+      'Click to select',
+    ]
+    labelPhrases.forEach((phrase) => {
+      cleaned = cleaned.replace(phrase, '').trim()
+    })
+
+    // Clean up extra whitespace and remove trailing punctuation that might be left
+    cleaned = cleaned
+      .replace(/\s+/g, ' ')
+      .replace(/\s*[,;]\s*$/, '')
+      .trim()
+
+    return cleaned
+  }
+
   // Look for broader question context in parent containers
   let parent: HTMLElement | null = el.parentElement
   let searchDepth = 0
@@ -141,12 +180,7 @@ const getWholeQuestionLabel = (el: HTMLElement): string | null => {
       if (textContent) {
         // Filter out the immediate label text to get the broader context
         const immediateLabel = getLabelText(el)
-        let questionText = textContent
-
-        // Remove the immediate label from the broader context if it exists
-        if (immediateLabel && textContent.includes(immediateLabel)) {
-          questionText = textContent.replace(immediateLabel, '').trim()
-        }
+        const questionText = cleanQuestionText(textContent, immediateLabel)
 
         // Check if this looks like a question (contains question mark or common question patterns)
         if (
