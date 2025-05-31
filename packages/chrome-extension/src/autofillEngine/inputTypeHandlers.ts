@@ -26,11 +26,19 @@ class NameHandler extends InputCategoryHandler {
 
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     const label = input.label?.toLowerCase() || ''
+    console.log('label', label)
     if (input.element.fieldType === 'text' && label.includes('first')) {
       return { action: 'fill', value: this.savedFirstName, id: input.element.elementReferenceId }
     }
     if (input.element.fieldType === 'text' && label.includes('last')) {
       return { action: 'fill', value: this.savedLastName, id: input.element.elementReferenceId }
+    }
+    if (input.element.fieldType === 'text' && label.includes('full')) {
+      return {
+        action: 'fill',
+        value: this.savedFirstName + ' ' + this.savedLastName,
+        id: input.element.elementReferenceId,
+      }
     }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
