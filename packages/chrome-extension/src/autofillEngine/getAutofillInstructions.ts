@@ -13,7 +13,7 @@ export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlI
   })
 }
 
-const getAutofillValues = async (
+const getAutofillInstructions = async (
   inputs: SerializedHtmlInput[],
   userId: string,
 ): Promise<AutofillInstruction[] | null> => {
@@ -35,4 +35,4 @@ const getAutofillValues = async (
   })
 }
 
-export default getAutofillValues
+export default getAutofillInstructions

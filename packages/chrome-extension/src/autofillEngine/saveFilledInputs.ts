@@ -3,9 +3,9 @@ import { SerializedHtmlInputSchema } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import { categorizeInputs } from './categorizeInputs'
 import getHandlerForInputCategory, { NoValueHandler } from './inputTypeHandlers'
-import { preprocessInputs } from './getAutofillValues'
+import { preprocessInputs } from './getAutofillInstructions'
 
-const saveAutofillValues = async (inputs: SerializedHtmlInput[], userId: string) => {
+const saveFilledInputs = async (inputs: SerializedHtmlInput[], userId: string) => {
   // Validate all inputs using Zod
   const parseResult = SerializedHtmlInputSchema.array().safeParse(inputs)
   if (!parseResult.success) {
@@ -30,4 +30,4 @@ const saveAutofillValues = async (inputs: SerializedHtmlInput[], userId: string)
   return results
 }
 
-export default saveAutofillValues
+export default saveFilledInputs

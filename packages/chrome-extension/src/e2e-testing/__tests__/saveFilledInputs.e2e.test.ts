@@ -3,7 +3,7 @@ import { resurrectInputInfosFromTest } from '../saveInputInfosForTests'
 import fs from 'fs'
 import path from 'path'
 import { serializeInputsHtml } from '../../content/serializeInputsHtml'
-import saveAutofillValues from '../../autofillEngine/saveAutofillValues'
+import saveFilledInputs from '../../autofillEngine/saveFilledInputs'
 
 // Load the test cases JSON
 export const testCasesPath = path.resolve(__dirname, 'inputsTestCases.json')
@@ -21,7 +21,7 @@ describe('End-to-end save feature', () => {
       // But manually pass it to saveAutofillValues so we don't rely on the chrome
       // sendMessage function which is not available in the test environment
       const serializedInputs = serializeInputsHtml(inputInfos)
-      const saveFilledInputsResponse = await saveAutofillValues(serializedInputs, TEST_USER_ID)
+      const saveFilledInputsResponse = await saveFilledInputs(serializedInputs, TEST_USER_ID)
 
       expect(saveFilledInputsResponse).toEqual(filledInputsExpected)
     })

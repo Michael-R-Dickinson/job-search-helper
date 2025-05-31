@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { resurrectInputInfosFromTest } from '../saveInputInfosForTests'
 import { serializeInputsHtml } from '../../content/serializeInputsHtml'
-import saveAutofillValues from '../../autofillEngine/saveAutofillValues'
+import saveFilledInputs from '../../autofillEngine/saveFilledInputs'
 import { testWebsites, TEST_USER_ID } from './saveFilledInputs.e2e.test'
-import getAutofillValues from '../../autofillEngine/getAutofillValues'
+import getAutofillInstructions from '../../autofillEngine/getAutofillInstructions'
 
 describe('End-to-end save feature', () => {
   testWebsites.forEach((websiteTestData: any) => {
@@ -14,10 +14,10 @@ describe('End-to-end save feature', () => {
       // We use the flow for saving filled values - tested in saveFilledInputs.e2e.test.ts - to load the test
       // values into the database, so when we autofill we gaurantee we're pulling from the right values
       const serializedInputs = serializeInputsHtml(inputInfos)
-      await saveAutofillValues(serializedInputs, TEST_USER_ID)
+      await saveFilledInputs(serializedInputs, TEST_USER_ID)
       // Then we take the flow from triggerGetAutofillValues and getAutofillValues to get autofill instructions
       // And these we validate as they're the final result of autofilling
-      const autofillInstructions = await getAutofillValues(serializedInputs, TEST_USER_ID)
+      const autofillInstructions = await getAutofillInstructions(serializedInputs, TEST_USER_ID)
       // We validate the autofill instructions against the test data
       expect(autofillInstructions).toEqual(autofillInstructionsExpected)
     })
