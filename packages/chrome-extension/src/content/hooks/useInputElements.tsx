@@ -21,8 +21,17 @@ function generateUniqueId(): string {
 // Helper functions for element filtering
 const isElementVisible = (el: HTMLElement): boolean => {
   if (el.getAttribute('aria-hidden') === 'true') return false
+
   const style = window.getComputedStyle(el)
-  return style.visibility !== 'hidden' && style.display !== 'none'
+  if (style.visibility === 'hidden' || style.display === 'none') return false
+
+  // const rect = el.getBoundingClientRect()
+  // if (rect.width === 0 && rect.height === 0) return false
+
+  // Check for opacity (but allow very low opacity as some forms use it for styling)
+  // if (parseFloat(style.opacity) < 0.1) return false
+
+  return true
 }
 
 const isCaptchaElement = (el: HTMLElement): boolean => {
@@ -107,6 +116,22 @@ const getLabelText = (el: HTMLElement): string | null => {
       return parent.textContent?.trim() ?? null
     }
     parent = parent.parentElement
+  }
+
+  // For radio buttons, also check for fieldset legend
+  if (el instanceof HTMLInputElement && el.type === 'radio') {
+    // Look for a fieldset ancestor
+    let ancestor: HTMLElement | null = el.parentElement
+    while (ancestor) {
+      if (ancestor.tagName.toLowerCase() === 'fieldset') {
+        const legend = ancestor.querySelector('legend')
+        if (legend) {
+          return legend.textContent?.trim() ?? null
+        }
+        break
+      }
+      ancestor = ancestor.parentElement
+    }
   }
 
   return null
