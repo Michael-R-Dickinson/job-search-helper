@@ -5,9 +5,9 @@ import saveFilledInputs from '../../autofillEngine/saveFilledInputs'
 import { testWebsites, TEST_USER_ID } from './saveFilledInputs.e2e.test'
 import getAutofillInstructions from '../../autofillEngine/getAutofillInstructions'
 
-describe('End-to-end save feature', () => {
+describe('End-to-end autofill feature', () => {
   testWebsites.forEach((websiteTestData: any) => {
-    it(`should correctly save autofill values for ${websiteTestData.sourceURL}`, async () => {
+    it(`should correctly autofill inputs for  ${websiteTestData.sourceURL}`, async () => {
       const autofillInstructionsExpected = websiteTestData.autofillInstructionsResponse
       // Ressurect inputInfos from the test data - essentially simulating the inputs from the website
       const inputInfos = resurrectInputInfosFromTest(websiteTestData.inputsData)

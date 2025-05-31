@@ -22,6 +22,9 @@ import {
   isLocationInput,
   isSalaryExpectationsInput,
   isPositionDiscoverySourceInput,
+  isCurrentJobTitleInput,
+  isReferralSourceInput,
+  isPronounsInput,
 } from '../inputCategoryPredicates'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 
@@ -785,6 +788,425 @@ describe('Input Categorization Tests', () => {
         fieldType: INPUT_ELEMENT_TYPES.EMAIL,
       })
       expect(isPositionDiscoverySourceInput(unsupportedInput)).toBe(false)
+    })
+  })
+
+  describe('isPronounsInput', () => {
+    it('should identify pronouns inputs by exact label matches', () => {
+      const input1 = createTestInput({ label: 'What are your pronouns?' })
+      const input2 = createTestInput({ label: 'Pronouns' })
+
+      expect(isPronounsInput(input1)).toBe(true)
+      expect(isPronounsInput(input2)).toBe(true)
+    })
+
+    it('should identify pronouns with core patterns', () => {
+      const corePatterns = [
+        'Pronouns',
+        'Preferred Pronouns',
+        'Your Pronouns',
+        'Personal Pronouns',
+        'Pronoun',
+        'Preferred Pronoun',
+        'Gender Pronouns',
+        'Pronouns (Optional)',
+        'Pronouns Optional',
+        'Preferred Gender Pronouns',
+        'Pronoun Preference',
+        'Pronoun Preferences',
+      ]
+
+      corePatterns.forEach((pattern) => {
+        const input = createTestInput({ label: pattern })
+        expect(isPronounsInput(input), `Failed for pattern: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify pronouns by name attribute', () => {
+      const namePatterns = [
+        'pronouns',
+        'preferred_pronouns',
+        'personal_pronouns',
+        'gender_pronouns',
+        'pronoun_preference',
+        'pronoun-preferences',
+        'preferred-pronouns',
+      ]
+
+      namePatterns.forEach((pattern) => {
+        const input = createTestInput({ name: pattern })
+        expect(isPronounsInput(input), `Failed for name: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify pronouns by placeholder', () => {
+      const placeholderPatterns = [
+        'Enter your pronouns',
+        'Your preferred pronouns',
+        'Select pronouns',
+        'Pronoun preference',
+      ]
+
+      placeholderPatterns.forEach((pattern) => {
+        const input = createTestInput({ placeholder: pattern })
+        expect(isPronounsInput(input), `Failed for placeholder: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify pronouns by autocomplete', () => {
+      const autocompletePatterns = [
+        'pronouns',
+        'preferred-pronouns',
+        'gender-pronouns',
+        'personal-pronouns',
+      ]
+
+      autocompletePatterns.forEach((pattern) => {
+        const input = createTestInput({ autocomplete: pattern })
+        expect(isPronounsInput(input), `Failed for autocomplete: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should work with different field types', () => {
+      const textInput = createTestInput({
+        label: 'Pronouns',
+        fieldType: INPUT_ELEMENT_TYPES.TEXT,
+      })
+      const selectInput = createTestInput({
+        label: 'Preferred Pronouns',
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
+      })
+      const radioInput = createTestInput({
+        label: 'Your Pronouns',
+        fieldType: INPUT_ELEMENT_TYPES.RADIO,
+      })
+
+      expect(isPronounsInput(textInput)).toBe(true)
+      expect(isPronounsInput(selectInput)).toBe(true)
+      expect(isPronounsInput(radioInput)).toBe(true)
+    })
+
+    it('should handle case insensitive matching', () => {
+      const input1 = createTestInput({ label: 'PRONOUNS' })
+      const input2 = createTestInput({ label: 'pronouns' })
+      const input3 = createTestInput({ label: 'Pronouns' })
+
+      expect(isPronounsInput(input1)).toBe(true)
+      expect(isPronounsInput(input2)).toBe(true)
+      expect(isPronounsInput(input3)).toBe(true)
+    })
+
+    it('should not identify non-pronouns fields', () => {
+      const nonPronounsInputs = [
+        createTestInput({ label: 'Email Address' }),
+        createTestInput({ label: 'Phone Number' }),
+        createTestInput({ label: 'Gender' }),
+        createTestInput({ label: 'Name' }),
+        createTestInput({ label: 'Title' }),
+      ]
+
+      nonPronounsInputs.forEach((input) => {
+        expect(isPronounsInput(input)).toBe(false)
+      })
+    })
+
+    it('should not work with unsupported field types', () => {
+      const unsupportedInput = createTestInput({
+        label: 'Pronouns',
+        fieldType: INPUT_ELEMENT_TYPES.EMAIL,
+      })
+      expect(isPronounsInput(unsupportedInput)).toBe(false)
+    })
+  })
+
+  describe('isCurrentJobTitleInput', () => {
+    it('should identify current job title by exact label matches', () => {
+      const input1 = createTestInput({ label: 'Current Title' })
+      const input2 = createTestInput({ label: 'Title' })
+
+      expect(isCurrentJobTitleInput(input1)).toBe(true)
+      expect(isCurrentJobTitleInput(input2)).toBe(true)
+    })
+
+    it('should identify job title with core patterns', () => {
+      const corePatterns = [
+        'Current Title',
+        'Job Title',
+        'Position Title',
+        'Current Position',
+        'Current Role',
+        'Role',
+        'Position',
+        'Title',
+        'Your Title',
+        'Your Current Title',
+        'Your Position',
+        'Your Role',
+        'Current Job Title',
+        'Present Title',
+        'Present Position',
+        'Present Role',
+        'Work Title',
+        'Employment Title',
+        'Professional Title',
+      ]
+
+      corePatterns.forEach((pattern) => {
+        const input = createTestInput({ label: pattern })
+        expect(isCurrentJobTitleInput(input), `Failed for pattern: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify job title by name attribute', () => {
+      const namePatterns = [
+        'current_title',
+        'job_title',
+        'position_title',
+        'current_position',
+        'current_role',
+        'current-job-title',
+        'present-title',
+        'work-title',
+        'employment-title',
+        'professional-title',
+      ]
+
+      namePatterns.forEach((pattern) => {
+        const input = createTestInput({ name: pattern })
+        expect(isCurrentJobTitleInput(input), `Failed for name: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify job title by placeholder', () => {
+      const placeholderPatterns = [
+        'Enter your current title',
+        'Your job title',
+        'Current position',
+        'What is your role?',
+      ]
+
+      placeholderPatterns.forEach((pattern) => {
+        const input = createTestInput({ placeholder: pattern })
+        expect(isCurrentJobTitleInput(input), `Failed for placeholder: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify job title by autocomplete', () => {
+      const autocompletePatterns = [
+        'job-title',
+        'position',
+        'role',
+        'title',
+        'current-title',
+        'current-position',
+      ]
+
+      autocompletePatterns.forEach((pattern) => {
+        const input = createTestInput({ autocomplete: pattern })
+        expect(isCurrentJobTitleInput(input), `Failed for autocomplete: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should work with different field types', () => {
+      const textInput = createTestInput({
+        label: 'Current Title',
+        fieldType: INPUT_ELEMENT_TYPES.TEXT,
+      })
+      const selectInput = createTestInput({
+        label: 'Job Title',
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
+      })
+
+      expect(isCurrentJobTitleInput(textInput)).toBe(true)
+      expect(isCurrentJobTitleInput(selectInput)).toBe(true)
+    })
+
+    it('should exclude non-job related titles', () => {
+      const excludedInputs = [
+        createTestInput({ label: 'Page Title' }),
+        createTestInput({ label: 'Document Title' }),
+        createTestInput({ label: 'Website Title' }),
+        createTestInput({ label: 'Article Title' }),
+        createTestInput({ label: 'Book Title' }),
+        createTestInput({ label: 'Mr.' }),
+        createTestInput({ label: 'Dr.' }),
+        createTestInput({ label: 'Honorific' }),
+      ]
+
+      excludedInputs.forEach((input) => {
+        expect(isCurrentJobTitleInput(input)).toBe(false)
+      })
+    })
+
+    it('should handle case insensitive matching', () => {
+      const input1 = createTestInput({ label: 'CURRENT TITLE' })
+      const input2 = createTestInput({ label: 'current title' })
+      const input3 = createTestInput({ label: 'Current Title' })
+
+      expect(isCurrentJobTitleInput(input1)).toBe(true)
+      expect(isCurrentJobTitleInput(input2)).toBe(true)
+      expect(isCurrentJobTitleInput(input3)).toBe(true)
+    })
+
+    it('should not work with unsupported field types', () => {
+      const unsupportedInput = createTestInput({
+        label: 'Current Title',
+        fieldType: INPUT_ELEMENT_TYPES.EMAIL,
+      })
+      expect(isCurrentJobTitleInput(unsupportedInput)).toBe(false)
+    })
+  })
+
+  describe('isReferralSourceInput', () => {
+    it('should identify referral source by exact label matches', () => {
+      const input1 = createTestInput({
+        label:
+          "If you were referred by a current employee of Ziff Davis (or one of our brands), please list the employee's full name here:",
+      })
+      const input2 = createTestInput({ label: 'Who referred you to this job' })
+
+      expect(isReferralSourceInput(input1)).toBe(true)
+      expect(isReferralSourceInput(input2)).toBe(true)
+    })
+
+    it('should identify referral source with core patterns', () => {
+      const corePatterns = [
+        'Referred By',
+        'Who Referred You',
+        'Who Referred',
+        'Referral',
+        'Referrer',
+        'Referring Employee',
+        'Employee Referral',
+        'Referred by Employee',
+        'Referred by Current Employee',
+        'Employee Who Referred',
+        'Name of Referrer',
+        'Referral Name',
+        'Referred by a Current Employee',
+        'If You Were Referred',
+        'List the Employee',
+        "Employee's Full Name",
+        'Current Employee of',
+        'Referred to This Job',
+        'Referred You to This Position',
+        'Employee Reference',
+        'Internal Referral',
+        'Staff Referral',
+        'Team Member Referral',
+      ]
+
+      corePatterns.forEach((pattern) => {
+        const input = createTestInput({ label: pattern })
+        expect(isReferralSourceInput(input), `Failed for pattern: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify referral source by name attribute', () => {
+      const namePatterns = [
+        'referred_by',
+        'who_referred',
+        'employee_referral',
+        'referral_name',
+        'referring_employee',
+        'internal_referral',
+        'staff_referral',
+        'team-member-referral',
+        'employee-reference',
+      ]
+
+      namePatterns.forEach((pattern) => {
+        const input = createTestInput({ name: pattern })
+        expect(isReferralSourceInput(input), `Failed for name: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify referral source by placeholder', () => {
+      const placeholderPatterns = [
+        'Enter name of referring employee',
+        'Who referred you?',
+        'Employee referral name',
+        'Name of person who referred you',
+      ]
+
+      placeholderPatterns.forEach((pattern) => {
+        const input = createTestInput({ placeholder: pattern })
+        expect(isReferralSourceInput(input), `Failed for placeholder: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should identify referral source by autocomplete', () => {
+      const autocompletePatterns = ['referral', 'referrer', 'employee-referral', 'referred-by']
+
+      autocompletePatterns.forEach((pattern) => {
+        const input = createTestInput({ autocomplete: pattern })
+        expect(isReferralSourceInput(input), `Failed for autocomplete: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should work with different field types', () => {
+      const textInput = createTestInput({
+        label: 'Referred By',
+        fieldType: INPUT_ELEMENT_TYPES.TEXT,
+      })
+      const selectInput = createTestInput({
+        label: 'Employee Referral',
+        fieldType: INPUT_ELEMENT_TYPES.SELECT,
+      })
+      const textboxInput = createTestInput({
+        label: 'Who Referred You',
+        fieldType: INPUT_ELEMENT_TYPES.TEXTBOX,
+      })
+
+      expect(isReferralSourceInput(textInput)).toBe(true)
+      expect(isReferralSourceInput(selectInput)).toBe(true)
+      expect(isReferralSourceInput(textboxInput)).toBe(true)
+    })
+
+    it('should handle complex referral text', () => {
+      const complexPatterns = [
+        'If you were referred by someone at our company, please provide their name',
+        'List the full name of the current employee who referred you',
+        'Please provide the name of the employee who referred you to this position',
+        'Enter the name of the team member who referred you',
+      ]
+
+      complexPatterns.forEach((pattern) => {
+        const input = createTestInput({ label: pattern })
+        expect(isReferralSourceInput(input), `Failed for complex pattern: ${pattern}`).toBe(true)
+      })
+    })
+
+    it('should handle case insensitive matching', () => {
+      const input1 = createTestInput({ label: 'REFERRED BY' })
+      const input2 = createTestInput({ label: 'referred by' })
+      const input3 = createTestInput({ label: 'Referred By' })
+
+      expect(isReferralSourceInput(input1)).toBe(true)
+      expect(isReferralSourceInput(input2)).toBe(true)
+      expect(isReferralSourceInput(input3)).toBe(true)
+    })
+
+    it('should not identify non-referral fields', () => {
+      const nonReferralInputs = [
+        createTestInput({ label: 'Email Address' }),
+        createTestInput({ label: 'Phone Number' }),
+        createTestInput({ label: 'How did you find this position?' }), // This is position discovery, not referral
+        createTestInput({ label: 'Reference Name' }), // Too generic
+        createTestInput({ label: 'Emergency Contact' }),
+      ]
+
+      nonReferralInputs.forEach((input) => {
+        expect(isReferralSourceInput(input)).toBe(false)
+      })
+    })
+
+    it('should not work with unsupported field types', () => {
+      const unsupportedInput = createTestInput({
+        label: 'Referred By',
+        fieldType: INPUT_ELEMENT_TYPES.EMAIL,
+      })
+      expect(isReferralSourceInput(unsupportedInput)).toBe(false)
     })
   })
 })

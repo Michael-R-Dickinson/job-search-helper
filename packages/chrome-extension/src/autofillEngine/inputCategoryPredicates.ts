@@ -741,6 +741,260 @@ const isPositionDiscoverySourceInput = (input: SerializedHtmlInput): boolean => 
     'discovery-source',
   ]
 
+  // Strong indicators that this is asking about HOW you found the position, not WHO referred you
+  const strongPositionDiscoveryPatterns: Pattern[] = [
+    'how did you find out about this position',
+    'how did you learn about this position',
+    'how did you hear about this position',
+    'where did you find this position',
+    'list the specific source where you learned about this position',
+    'source where you learned about this position',
+    'specific source where you learned',
+    'learned about this position',
+    'find out about this position',
+    'hear about this position',
+    'discover this position',
+    'found this position',
+  ]
+
+  // If the label clearly indicates position discovery, match it regardless of other attributes
+  if (matchesPattern(input.label ?? undefined, strongPositionDiscoveryPatterns)) {
+    return true
+  }
+
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
+const isCurrentJobTitleInput = (input: SerializedHtmlInput): boolean => {
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT
+  )
+    return false
+
+  const patterns: Pattern[] = [
+    'current title',
+    'job title',
+    'position title',
+    'current position',
+    'current role',
+    'role',
+    'position',
+    'title',
+    'your title',
+    'your current title',
+    'your position',
+    'your role',
+    'current job title',
+    'present title',
+    'present position',
+    'present role',
+    'work title',
+    'employment title',
+    'professional title',
+    /current[_-]?title/i,
+    /job[_-]?title/i,
+    /position[_-]?title/i,
+    /current[_-]?position/i,
+    /current[_-]?role/i,
+    /current[_-]?job[_-]?title/i,
+    /present[_-]?title/i,
+    /present[_-]?position/i,
+    /present[_-]?role/i,
+    /work[_-]?title/i,
+    /employment[_-]?title/i,
+    /professional[_-]?title/i,
+  ]
+
+  const autocompletePatterns: Pattern[] = [
+    'job-title',
+    'position',
+    'role',
+    'title',
+    'current-title',
+    'current-position',
+  ]
+
+  // Exclude specific phrases that indicate it's not asking for your job title
+  const excludePatterns: Pattern[] = [
+    'page title',
+    'document title',
+    'website title',
+    'site title',
+    'article title',
+    'blog title',
+    'post title',
+    'book title',
+    'movie title',
+    'song title',
+    'album title',
+    'mr.',
+    'mrs.',
+    'ms.',
+    'dr.',
+    'prof.',
+    'honorific',
+    // Exclude questions that use "position" or "role" but aren't asking for job title
+    'about this position',
+    'about this role',
+    'for this role',
+    'for this position',
+    'how did you find out about this position',
+    'how did you learn about this position',
+    'how did you hear about this position',
+    'where did you find this position',
+    'salary expectations for this role',
+    'what are your salary expectations for this role',
+    'specific source where you learned about this position',
+    'list the specific source where you learned about this position',
+  ]
+
+  const hasExcludedPattern =
+    matchesPattern(input.label ?? undefined, excludePatterns) ||
+    matchesPattern(input.name, excludePatterns) ||
+    matchesPattern(input.placeholder, excludePatterns)
+
+  if (hasExcludedPattern) return false
+
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
+const isReferralSourceInput = (input: SerializedHtmlInput): boolean => {
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXTBOX
+  )
+    return false
+
+  const patterns: Pattern[] = [
+    'referred by',
+    'who referred you',
+    'who referred',
+    'referral',
+    'referrer',
+    'referring employee',
+    'employee referral',
+    'referred by employee',
+    'referred by current employee',
+    'employee who referred',
+    'name of referrer',
+    'referral name',
+    'referred by a current employee',
+    'if you were referred',
+    'list the employee',
+    "employee's full name",
+    'full name here',
+    'current employee of',
+    'referred to this job',
+    'referred you to this position',
+    'employee reference',
+    'internal referral',
+    'staff referral',
+    'team member referral',
+    /referred[_-]?by/i,
+    /who[_-]?referred/i,
+    /employee[_-]?referral/i,
+    /referral[_-]?name/i,
+    /referring[_-]?employee/i,
+    /internal[_-]?referral/i,
+    /staff[_-]?referral/i,
+    /team[_-]?member[_-]?referral/i,
+    /employee[_-]?reference/i,
+  ]
+
+  const autocompletePatterns: Pattern[] = [
+    'referral',
+    'referrer',
+    'referred-by',
+    'employee-referral',
+    'referring-employee',
+  ]
+
+  // Exclude position discovery questions that aren't asking for WHO referred you
+  const excludePatterns: Pattern[] = [
+    'how did you find',
+    'how did you hear',
+    'how did you learn',
+    'how did you discover',
+    'where did you find',
+    'where did you hear',
+    'where did you learn',
+    'list the specific source',
+    'source where you learned',
+    'learned about this position',
+    'find out about this position',
+    'hear about this position',
+    'discover this position',
+    'found this position',
+    'job posting',
+    'job board',
+    'specific source',
+    'source of position',
+  ]
+
+  const hasExcludedPattern =
+    matchesPattern(input.label ?? undefined, excludePatterns) ||
+    matchesPattern(input.placeholder, excludePatterns) ||
+    matchesPattern(input.name, excludePatterns)
+
+  if (hasExcludedPattern) return false
+
+  return (
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
+    matchesPattern(input.autocomplete, autocompletePatterns)
+  )
+}
+
+const isPronounsInput = (input: SerializedHtmlInput): boolean => {
+  if (
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
+    input.fieldType !== INPUT_ELEMENT_TYPES.RADIO
+  )
+    return false
+
+  const patterns: Pattern[] = [
+    'pronouns',
+    'preferred pronouns',
+    'your pronouns',
+    'what are your pronouns',
+    'personal pronouns',
+    'pronoun',
+    'preferred pronoun',
+    'gender pronouns',
+    'pronouns (optional)',
+    'pronouns optional',
+    'preferred gender pronouns',
+    'pronoun preference',
+    'pronoun preferences',
+    /pronouns?/i,
+    /preferred[_-]?pronouns?/i,
+    /personal[_-]?pronouns?/i,
+    /gender[_-]?pronouns?/i,
+    /pronoun[_-]?preference/i,
+    /pronoun[_-]?preferences/i,
+  ]
+
+  const autocompletePatterns: Pattern[] = [
+    'pronouns',
+    'preferred-pronouns',
+    'gender-pronouns',
+    'personal-pronouns',
+  ]
+
   return (
     matchesPattern(input.label ?? undefined, patterns) ||
     matchesPattern(input.name, patterns) ||
@@ -772,4 +1026,7 @@ export {
   isCurrentCompanyInput,
   isSalaryExpectationsInput,
   isPositionDiscoverySourceInput,
+  isCurrentJobTitleInput,
+  isReferralSourceInput,
+  isPronounsInput,
 }

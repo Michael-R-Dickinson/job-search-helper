@@ -399,4 +399,58 @@ describe('categorizeInputs', () => {
       expect(input.category).toBe('position_discovery_source')
     })
   })
+
+  it('should categorize current job title inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { name: 'current_title' }, 'Current Title'),
+      makeInput('input', { name: 'job_title' }, 'Job Title'),
+      makeInput('select', { name: 'position_title' }, 'Position Title'),
+      makeInput('input', { placeholder: 'Enter your current role' }, 'Current Role'),
+      makeInput('input', { autocomplete: 'job-title' }, 'Professional Title'),
+      makeInput('input', { name: 'title' }, 'Title'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(6)
+    result.forEach((input) => {
+      expect(input.category).toBe('current_job_title')
+    })
+  })
+
+  it('should categorize referral source inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput(
+        'input',
+        { name: 'referred_by' },
+        "If you were referred by a current employee, please list the employee's full name here:",
+      ),
+      makeInput('input', { name: 'referrer' }, 'Who referred you to this job'),
+      makeInput('textarea', { name: 'employee_referral' }, 'Employee Referral'),
+      makeInput('select', { name: 'referring_employee' }, 'Referring Employee'),
+      makeInput('input', { autocomplete: 'referral' }, 'Referral Name'),
+      makeInput('input', { placeholder: 'Enter name of referring employee' }, 'Internal Referral'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(6)
+    result.forEach((input) => {
+      expect(input.category).toBe('referral_source')
+    })
+  })
+
+  it('should categorize pronouns inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { name: 'pronouns' }, 'What are your pronouns?'),
+      makeInput('select', { name: 'preferred_pronouns' }, 'Pronouns'),
+      makeInput('input', { placeholder: 'Enter your pronouns' }, 'Preferred Pronouns'),
+      makeInput('input', { autocomplete: 'pronouns' }, 'Personal Pronouns'),
+      makeInput('input', { type: 'radio', name: 'pronoun_preference' }, 'Gender Pronouns'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(5)
+    result.forEach((input) => {
+      expect(input.category).toBe('pronouns')
+    })
+  })
 })
