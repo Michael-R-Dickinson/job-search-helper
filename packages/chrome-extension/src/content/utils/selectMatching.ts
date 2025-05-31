@@ -59,12 +59,6 @@ export const findBestMatch = (
 
   if (results.length > 0) {
     const bestMatch = results[0]
-    console.log(
-      `Fuzzy matched "${searchValue}" to:`,
-      bestMatch.item,
-      'with score:',
-      bestMatch.score,
-    )
     return bestMatch.item
   }
 
@@ -133,7 +127,6 @@ export const fillSelectElement = (selectElement: HTMLSelectElement, value: strin
   // Check if this looks like a pipe-separated preference list
   if (value.includes('|')) {
     searchValues = parsePreferenceValues(value)
-    console.log('Parsed as preference values:', searchValues)
   } else {
     // Single value - still use intelligent matching
     searchValues = [value]
@@ -142,7 +135,6 @@ export const fillSelectElement = (selectElement: HTMLSelectElement, value: strin
   // Always attempt intelligent matching
   if (searchValues.length > 0) {
     const success = selectBestOption(selectElement, searchValues)
-    console.log('Intelligent selection success:', success)
 
     // If intelligent selection succeeded, we're done
     if (success) {
