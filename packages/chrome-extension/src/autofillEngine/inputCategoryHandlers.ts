@@ -1,9 +1,10 @@
 import { saveUserAutofillValue } from '../firebase/realtimeDB'
-import type {
-  CategorizedInput,
-  InputCategory,
-  RealtimeDbSaveResult,
-  UserAutofillPreferences,
+import {
+  AuthorizationStatusEnum,
+  type CategorizedInput,
+  type InputCategory,
+  type RealtimeDbSaveResult,
+  type UserAutofillPreferences,
 } from './schema'
 import type { AutofillInstruction } from './schema'
 
@@ -465,15 +466,35 @@ class AuthorizationHandler extends InputCategoryHandler {
     super(userAutofillPreferences)
     this.value = userAutofillPreferences.authorization
   }
+  checkIsPositiveQuestion(input: CategorizedInput): boolean {
+    // Positive question: "Yes" or "I am authorized to work" - for these we check the box if the user preference is yes
+    return (
+      input.element.label?.includes('yes') ||
+      input.element.label?.includes('i am authorized') ||
+      input.element.label?.includes('authorized to work') ||
+      false
+    )
+  }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     if (!this.value) return { action: 'skip', id: input.element.elementReferenceId }
 
     if (input.element.fieldType === 'radio' || input.element.fieldType === 'checkbox') {
-      // For radio buttons and checkboxes, use 'check' action when user preference is 'yes'
-      // and 'skip' when it's 'no' or anything else
-      return {
-        action: this.value === 'yes' ? 'check' : 'skip',
-        id: input.element.elementReferenceId,
+      console.log('this.value', this.value, AuthorizationStatusEnum.enum.yes)
+      const authorized = this.value === AuthorizationStatusEnum.enum.yes
+
+      console.log('input', input.element.label)
+      console.log('authorized', authorized)
+      const isPositiveQuestion = this.checkIsPositiveQuestion(input)
+      if (isPositiveQuestion) {
+        return {
+          action: authorized ? 'check' : 'skip',
+          id: input.element.elementReferenceId,
+        }
+      } else {
+        return {
+          action: authorized ? 'skip' : 'check',
+          id: input.element.elementReferenceId,
+        }
       }
     }
 
@@ -488,7 +509,23 @@ class AuthorizationHandler extends InputCategoryHandler {
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    return saveUserAutofillValue(userId, 'authorization', input.element.value)
+    if (input.element.fieldType === 'radio' || input.element.fieldType === 'checkbox') {
+      const isPositiveQuestion = this.checkIsPositiveQuestion(input)
+      const isChecked = input.element.checked
+      if (isPositiveQuestion && isChecked) {
+        return saveUserAutofillValue(userId, 'authorization', 'yes')
+      }
+      if (!isPositiveQuestion && isChecked) {
+        return saveUserAutofillValue(userId, 'authorization', 'no')
+      }
+
+      return Promise.resolve({
+        status: 'error',
+        error: 'Authorization value not set',
+      })
+    }
+
+    return saveUserAutofillValue(userId, 'authorization', input.element.value.toLowerCase())
   }
 }
 

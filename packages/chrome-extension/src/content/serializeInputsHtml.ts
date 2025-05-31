@@ -134,6 +134,7 @@ export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] 
     value = removeValuePrefixes(value)
     return {
       label: input.label,
+      wholeQuestionLabel: input.wholeQuestionLabel,
       html: el.outerHTML,
       fieldType,
       name: (el as any).name || '',
@@ -143,6 +144,7 @@ export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] 
       id: el.id || '',
       className: el.className || '',
       value,
+      checked: (el as any).checked || false,
       required: !!(el as any).required,
       elementReferenceId: input.elementReferenceId,
     }

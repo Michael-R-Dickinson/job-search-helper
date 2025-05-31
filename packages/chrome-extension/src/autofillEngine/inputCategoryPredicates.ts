@@ -361,6 +361,7 @@ const isAuthorizationInput = (input: SerializedHtmlInput): boolean => {
     'legal_authorization',
   ]
   return (
+    matchesPattern(input.wholeQuestionLabel ?? undefined, patterns) ||
     matchesPattern(input.label ?? undefined, patterns) ||
     matchesPattern(input.name, patterns) ||
     matchesPattern(input.placeholder, patterns)

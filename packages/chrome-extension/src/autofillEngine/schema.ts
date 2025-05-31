@@ -19,6 +19,7 @@ export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_E
 
 export const SerializedHtmlInputSchema = z.object({
   label: z.string().nullable(),
+  wholeQuestionLabel: z.string().nullable().optional(),
   html: z.string(),
   fieldType: z.nativeEnum(INPUT_ELEMENT_TYPES),
   name: z.string(),
@@ -29,6 +30,7 @@ export const SerializedHtmlInputSchema = z.object({
   className: z.string(),
   value: z.string(),
   required: z.boolean(),
+  checked: z.boolean(),
   // A unique identifier we give to the input element to identify it in the DOM
   // This is used to match the input element to the autofill instruction in the frontend
   elementReferenceId: z.string(),
