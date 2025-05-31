@@ -1,5 +1,6 @@
 import { serializeInputInfosForTest } from '../e2e-testing/saveInputInfosForTests'
-import { autofillInputElements, useInputElements } from './hooks/useInputElements'
+import { useInputElements } from './hooks/useInputElements'
+import { autofillInputElements } from './inputsManipulation/autofillInputElements'
 import triggerGetAutofillValues from './triggerGetAutofillValues'
 import triggerSaveFilledValues from './triggerSaveFilledValues'
 

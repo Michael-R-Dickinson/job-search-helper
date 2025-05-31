@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import type { AutofillInstruction } from '../../autofillEngine/schema'
-import { fillSelectElement } from '../utils/selectMatching'
 
 export type ElementInfo =
   | HTMLInputElement
@@ -11,6 +9,7 @@ export type ElementInfo =
 export interface InputInfo {
   element: ElementInfo
   label: string | null
+  wholeQuestionLabel?: string | null
   elementReferenceId: string
 }
 
@@ -100,15 +99,28 @@ const getLabelText = (el: HTMLElement): string | null => {
     parent = parent.parentElement
   }
 
-  // For radio buttons, also check for fieldset legend
-  if (el instanceof HTMLInputElement && el.type === 'radio') {
-    // Look for a fieldset ancestor
+  return null
+}
+
+const getWholeQuestionLabel = (el: HTMLElement): string | null => {
+  // Only apply to radio buttons and checkboxes
+  if (!(el instanceof HTMLInputElement) || !['radio', 'checkbox'].includes(el.type)) {
+    return null
+  }
+
+  // For radio buttons, check fieldset legend first
+  if (el.type === 'radio') {
     let ancestor: HTMLElement | null = el.parentElement
     while (ancestor) {
       if (ancestor.tagName.toLowerCase() === 'fieldset') {
         const legend = ancestor.querySelector('legend')
         if (legend) {
-          return legend.textContent?.trim() ?? null
+          const legendText = legend.textContent?.trim()
+          // Make sure the legend text is different from the immediate label
+          const immediateLabel = getLabelText(el)
+          if (legendText && legendText !== immediateLabel) {
+            return legendText
+          }
         }
         break
       }
@@ -116,7 +128,111 @@ const getLabelText = (el: HTMLElement): string | null => {
     }
   }
 
+  // Look for broader question context in parent containers
+  let parent: HTMLElement | null = el.parentElement
+  let searchDepth = 0
+  const maxSearchDepth = 5
+
+  while (parent && searchDepth < maxSearchDepth) {
+    // Skip the immediate label parent to avoid duplicating the immediate label
+    if (parent.tagName.toLowerCase() !== 'label') {
+      // Look for text content that appears to be a question
+      const textContent = parent.textContent?.trim()
+      if (textContent) {
+        // Filter out the immediate label text to get the broader context
+        const immediateLabel = getLabelText(el)
+        let questionText = textContent
+
+        // Remove the immediate label from the broader context if it exists
+        if (immediateLabel && textContent.includes(immediateLabel)) {
+          questionText = textContent.replace(immediateLabel, '').trim()
+        }
+
+        // Check if this looks like a question (contains question mark or common question patterns)
+        if (
+          questionText &&
+          (questionText.includes('?') ||
+            questionText.toLowerCase().includes('are you') ||
+            questionText.toLowerCase().includes('do you') ||
+            questionText.toLowerCase().includes('have you') ||
+            questionText.toLowerCase().includes('will you') ||
+            questionText.toLowerCase().includes('can you') ||
+            questionText.toLowerCase().includes('please select') ||
+            questionText.toLowerCase().includes('please indicate') ||
+            questionText.toLowerCase().includes('please confirm'))
+        ) {
+          return questionText
+        }
+      }
+    }
+    parent = parent.parentElement
+    searchDepth++
+  }
+
+  // Look for nearby headings or question text
+  const questionSelectors = [
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    '[role="heading"]',
+    '.question',
+    '.field-label',
+  ]
+
+  for (const selector of questionSelectors) {
+    const headings = document.querySelectorAll(selector)
+    for (const heading of headings) {
+      // Check if this heading is near our element (within reasonable DOM distance)
+      if (isElementNearby(el, heading as HTMLElement)) {
+        const headingText = heading.textContent?.trim()
+        if (
+          headingText &&
+          (headingText.includes('?') ||
+            headingText.toLowerCase().includes('are you') ||
+            headingText.toLowerCase().includes('do you') ||
+            headingText.toLowerCase().includes('have you') ||
+            headingText.toLowerCase().includes('will you') ||
+            headingText.toLowerCase().includes('can you'))
+        ) {
+          return headingText
+        }
+      }
+    }
+  }
+
   return null
+}
+
+const isElementNearby = (target: HTMLElement, candidate: HTMLElement): boolean => {
+  // Check if the candidate is within a reasonable DOM distance from target
+  let current: HTMLElement | null = target
+  let searchDepth = 0
+  const maxSearchDepth = 10
+
+  // Search upwards in the DOM tree
+  while (current && searchDepth < maxSearchDepth) {
+    if (current.contains(candidate) || candidate.contains(current)) {
+      return true
+    }
+
+    // Check siblings of current element
+    const siblings = current.parentElement?.children
+    if (siblings) {
+      for (const sibling of Array.from(siblings)) {
+        if (sibling === candidate || sibling.contains(candidate)) {
+          return true
+        }
+      }
+    }
+
+    current = current.parentElement
+    searchDepth++
+  }
+
+  return false
 }
 
 /**
@@ -141,10 +257,14 @@ export function useInputElements(): InputInfo[] {
           const elementReferenceId = generateUniqueId()
           el.setAttribute('data-autofill-id', elementReferenceId)
 
+          const label = getLabelText(el as HTMLElement)
+          const wholeQuestionLabel = getWholeQuestionLabel(el as HTMLElement)
+
           return {
             element: el,
             elementReferenceId,
-            label: getLabelText(el as HTMLElement),
+            label,
+            wholeQuestionLabel,
           }
         })
 
@@ -162,71 +282,4 @@ export function useInputElements(): InputInfo[] {
   }, [])
 
   return inputs
-}
-
-// Autofill functions
-const fillInputElement = (input: HTMLInputElement, instruction: AutofillInstruction): void => {
-  if (input.type === 'checkbox') {
-    const shouldCheck = instruction.action === 'check'
-    if (input.checked !== shouldCheck) {
-      input.checked = shouldCheck
-      input.dispatchEvent(new Event('change', { bubbles: true }))
-    }
-  } else if (input.type === 'radio') {
-    const shouldCheck = instruction.action === 'check'
-    if (shouldCheck && !input.checked) {
-      input.checked = true
-      input.dispatchEvent(new Event('change', { bubbles: true }))
-    }
-  } else if (input.type === 'button') {
-    if (instruction.action === 'check') {
-      input.click()
-    }
-  } else {
-    // Regular text inputs
-    const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
-    if (input.value !== value) {
-      input.value = value
-      input.dispatchEvent(new Event('input', { bubbles: true }))
-      input.dispatchEvent(new Event('change', { bubbles: true }))
-    }
-  }
-}
-
-const fillTextAreaElement = (
-  textarea: HTMLTextAreaElement,
-  instruction: AutofillInstruction,
-): void => {
-  const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
-  if (textarea.value !== value) {
-    textarea.value = value
-    textarea.dispatchEvent(new Event('input', { bubbles: true }))
-    textarea.dispatchEvent(new Event('change', { bubbles: true }))
-  }
-}
-
-const fillButtonElement = (button: HTMLButtonElement, instruction: AutofillInstruction): void => {
-  if (instruction.action === 'fill') {
-    button.click()
-  }
-}
-
-export const autofillInputElements = (autofillInstructions: AutofillInstruction[]): void => {
-  autofillInstructions.forEach((instruction) => {
-    if (instruction.action === 'skip') return
-
-    const element = document.querySelector<HTMLElement>(`[data-autofill-id="${instruction.id}"]`)
-    if (!element) return
-
-    if (element instanceof HTMLInputElement) {
-      fillInputElement(element, instruction)
-    } else if (element instanceof HTMLTextAreaElement) {
-      fillTextAreaElement(element, instruction)
-    } else if (element instanceof HTMLSelectElement) {
-      const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
-      fillSelectElement(element, value)
-    } else if (element instanceof HTMLButtonElement) {
-      fillButtonElement(element, instruction)
-    }
-  })
 }
