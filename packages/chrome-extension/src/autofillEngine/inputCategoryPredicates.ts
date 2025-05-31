@@ -353,13 +353,92 @@ const isAuthorizationInput = (input: SerializedHtmlInput): boolean => {
   const patterns: Pattern[] = [
     'authorized to work',
     'legally authorized',
+    'legally authorized to work',
+    'authorized to work in the us',
+    'authorized to work in the united states',
+    'legally authorized to work in the us',
+    'legally authorized to work in the united states',
+    'authorized to work indefinitely',
+    'legally authorized to work indefinitely',
+    'authorized to work in the us indefinitely',
+    'legally authorized to work in the us indefinitely',
     'work in the us',
+    'work in the united states',
     'work authorization',
+    'legal authorization to work',
     'are you legally authorized to work in the us',
+    'are you authorized to work',
+    'are you legally authorized to work',
+    'do you have authorization to work',
+    'do you have legal authorization to work',
     'authorization',
     'work_authorization',
     'legal_authorization',
+    'employment_authorization',
+    'authorized_work',
+    'right to work',
+    'eligible to work',
+    'legally eligible to work',
+    'permitted to work',
+    'legally permitted to work',
+    'work permit',
+    'work_permit',
+    'employment eligibility',
+    /authorized.*work.*us/i,
+    /authorized.*work.*united\s*states/i,
+    /legally.*authorized.*work/i,
+    /work.*authorization/i,
+    /legal.*authorization.*work/i,
+    /right.*work.*us/i,
+    /eligible.*work.*us/i,
+    /permitted.*work.*us/i,
   ]
+
+  // Exclude patterns that indicate sponsorship questions
+  const excludePatterns: Pattern[] = [
+    'require sponsorship',
+    'need sponsorship',
+    'require immigration sponsorship',
+    'need immigration sponsorship',
+    'require visa sponsorship',
+    'need visa sponsorship',
+    'future require sponsorship',
+    'will require sponsorship',
+    'will need sponsorship',
+    'now or in the future require',
+    'now or will you require',
+    'do you now or in the future require',
+    'do you now or will you in the future require',
+    'immigration sponsorship',
+    'visa sponsorship',
+    'h-1b sponsorship',
+    'h1b sponsorship',
+    // More specific regex patterns that clearly indicate sponsorship context
+    /do.*you.*now.*or.*future.*require.*sponsorship/i,
+    /do.*you.*now.*or.*will.*require.*sponsorship/i,
+    /do.*you.*now.*or.*will.*you.*in.*future.*require.*sponsorship/i,
+    /require.*immigration.*sponsorship/i,
+    /need.*immigration.*sponsorship/i,
+    /will.*require.*sponsorship/i,
+    /future.*require.*sponsorship/i,
+    /h[-_]?1b.*sponsorship/i,
+    /visa.*sponsorship/i,
+    // Only exclude "work authorization" when it's clearly in a sponsorship context
+    /require.*immigration.*sponsorship.*work.*authorization/i,
+    /need.*immigration.*sponsorship.*work.*authorization/i,
+    /sponsorship.*work.*authorization/i,
+    /immigration.*sponsorship.*work.*authorization/i,
+  ]
+
+  // Check for exclusion patterns first
+  const hasExcludedPattern =
+    matchesPattern(input.wholeQuestionLabel ?? undefined, excludePatterns) ||
+    matchesPattern(input.label ?? undefined, excludePatterns) ||
+    matchesPattern(input.name, excludePatterns) ||
+    matchesPattern(input.placeholder, excludePatterns)
+
+  if (hasExcludedPattern) return false
+
   return (
     matchesPattern(input.wholeQuestionLabel ?? undefined, patterns) ||
     matchesPattern(input.label ?? undefined, patterns) ||
@@ -371,12 +450,119 @@ const isAuthorizationInput = (input: SerializedHtmlInput): boolean => {
 const isSponsorshipInput = (input: SerializedHtmlInput): boolean => {
   const patterns: Pattern[] = [
     'require sponsorship',
+    'need sponsorship',
+    'require immigration sponsorship',
+    'need immigration sponsorship',
+    'require visa sponsorship',
+    'need visa sponsorship',
     'future require sponsorship',
+    'will require sponsorship',
+    'will need sponsorship',
     'do you now or in the future require sponsorship',
-    'sponsorship',
+    'do you now or will you in the future require sponsorship',
+    'do you require or will you require sponsorship',
+    'now or in the future require sponsorship',
+    'now or will you require sponsorship',
+    'immigration sponsorship',
+    'visa sponsorship',
+    'h-1b sponsorship',
+    'h1b sponsorship',
+    'sponsorship for work authorization',
+    'require immigration',
+    'need immigration',
     'require_sponsorship',
+    'need_sponsorship',
+    'immigration_sponsorship',
+    'visa_sponsorship',
+    'h1b',
+    'h-1b',
+    'tn visa',
+    'opt',
+    'cpt',
+    'stem opt',
+    'immigration status',
+    'work visa',
+    'employment visa',
+    'temporary work authorization',
+    // Enhanced patterns for the specific example
+    'do you now or will you in the future require immigration sponsorship',
+    'do you now, or will you in the future, require immigration sponsorship',
+    'require immigration sponsorship for work authorization',
+    'immigration sponsorship for work authorization',
+    /\brequire.*sponsorship\b/i,
+    /\bneed.*sponsorship\b/i,
+    /\bsponsorship.*work.*authorization\b/i,
+    /\bimmigration.*sponsorship\b/i,
+    /\bvisa.*sponsorship\b/i,
+    /\bfuture.*require.*sponsorship\b/i,
+    /\bfuture.*need.*sponsorship\b/i,
+    /\bwill.*require.*sponsorship\b/i,
+    /\bwill.*need.*sponsorship\b/i,
+    /\bh[-_]?1b\b/i,
+    /\brequire.*immigration\b/i,
+    /\bneed.*immigration\b/i,
+    /\bwork.*visa\b/i,
+    /\bemployment.*visa\b/i,
+    // Add specific word boundary patterns for 'sponsorship' to avoid partial matches
+    /\bsponsorship\b/i,
+    // Enhanced patterns for "now or in the future" variations
+    /\bnow.*or.*future.*require.*sponsorship\b/i,
+    /\bnow.*or.*will.*require.*sponsorship\b/i,
+    /\bdo.*you.*now.*or.*future.*require.*sponsorship\b/i,
+    /\bdo.*you.*now.*or.*will.*require.*sponsorship\b/i,
+    /\brequire.*immigration.*sponsorship.*work.*authorization\b/i,
   ]
+
+  // Exclude patterns that are clearly about current authorization, not future sponsorship
+  const excludePatterns: Pattern[] = [
+    'currently authorized',
+    'presently authorized',
+    'authorized to work indefinitely',
+    'permanent authorization',
+    'indefinite authorization',
+    'citizen',
+    'permanent resident',
+    'green card',
+    'subscribe',
+    'newsletter',
+    'subscription',
+    'opt-in',
+    'opt in',
+    'sign up',
+    'email list',
+    'mailing list',
+    'communications',
+    // Add patterns to exclude pure authorization questions
+    'are you legally authorized to work in the u.s. indefinitely',
+    'are you authorized to work in the us indefinitely',
+    'legally authorized to work indefinitely',
+    /currently.*authorized/i,
+    /presently.*authorized/i,
+    /authorized.*indefinitely/i,
+    /permanent.*authorization/i,
+    /indefinite.*authorization/i,
+    /subscribe/i,
+    /newsletter/i,
+    /subscription/i,
+    /opt[\s-]?in/i,
+    /email.*list/i,
+    /mailing.*list/i,
+    // Specific exclusion for authorization questions that don't mention sponsorship
+    /^are.*you.*legally.*authorized.*work.*indefinitely/i,
+    /^are.*you.*authorized.*work.*us.*indefinitely/i,
+  ]
+
+  // Check for exclusion patterns first
+  const hasExcludedPattern =
+    matchesPattern(input.wholeQuestionLabel ?? undefined, excludePatterns) ||
+    matchesPattern(input.label ?? undefined, excludePatterns) ||
+    matchesPattern(input.name, excludePatterns) ||
+    matchesPattern(input.placeholder, excludePatterns)
+
+  if (hasExcludedPattern) return false
+
   return (
+    matchesPattern(input.wholeQuestionLabel ?? undefined, patterns) ||
     matchesPattern(input.label ?? undefined, patterns) ||
     matchesPattern(input.name, patterns) ||
     matchesPattern(input.placeholder, patterns)

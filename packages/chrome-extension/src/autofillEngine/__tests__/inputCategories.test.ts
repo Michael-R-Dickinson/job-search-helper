@@ -297,9 +297,106 @@ describe('Input Categorization Tests', () => {
       const input = createTestInput({ label: 'Are you legally authorized to work in the US?' })
       expect(isAuthorizationInput(input)).toBe(true)
     })
+
+    it('should identify the specific user example', () => {
+      const input = createTestInput({
+        label: 'Are you legally authorized to work in the U.S. indefinitely?',
+      })
+      expect(isAuthorizationInput(input)).toBe(true)
+    })
+
     it('should identify work authorization by name', () => {
       const input = createTestInput({ name: 'work_authorization' })
       expect(isAuthorizationInput(input)).toBe(true)
+    })
+
+    it('should identify various authorization patterns by label', () => {
+      const labels = [
+        'Authorized to work',
+        'Legally authorized to work',
+        'Are you authorized to work in the United States?',
+        'Do you have authorization to work?',
+        'Legal authorization to work',
+        'Employment authorization',
+        'Right to work',
+        'Eligible to work in the US',
+        'Legally permitted to work',
+        'Work permit',
+        'Employment eligibility',
+        'Legally authorized to work indefinitely',
+        'Authorized to work in the US indefinitely',
+      ]
+
+      labels.forEach((label) => {
+        const input = createTestInput({ label })
+        expect(isAuthorizationInput(input)).toBe(true)
+      })
+    })
+
+    it('should identify authorization by name patterns', () => {
+      const names = [
+        'work_authorization',
+        'legal_authorization',
+        'employment_authorization',
+        'authorized_work',
+        'work_permit',
+      ]
+
+      names.forEach((name) => {
+        const input = createTestInput({ name })
+        expect(isAuthorizationInput(input)).toBe(true)
+      })
+    })
+
+    it('should identify authorization by placeholder', () => {
+      const placeholders = [
+        'Are you legally authorized to work?',
+        'Work authorization status',
+        'Employment eligibility',
+      ]
+
+      placeholders.forEach((placeholder) => {
+        const input = createTestInput({ placeholder })
+        expect(isAuthorizationInput(input)).toBe(true)
+      })
+    })
+
+    it('should identify authorization by wholeQuestionLabel', () => {
+      const input = createTestInput({
+        wholeQuestionLabel: 'Are you legally authorized to work in the United States indefinitely?',
+      })
+      expect(isAuthorizationInput(input)).toBe(true)
+    })
+
+    it('should not identify sponsorship questions as authorization', () => {
+      const sponsorshipLabels = [
+        'Do you now or will you in the future require sponsorship?',
+        'Require immigration sponsorship',
+        'Need visa sponsorship',
+        'H-1B sponsorship required',
+      ]
+
+      sponsorshipLabels.forEach((label) => {
+        const input = createTestInput({ label })
+        expect(isAuthorizationInput(input)).toBe(false)
+      })
+    })
+
+    it('should correctly differentiate between the specific user examples', () => {
+      // This should be categorized as 'sponsorship'
+      const sponsorshipInput = createTestInput({
+        label:
+          'Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (If hired, verification will be required consistent with federal law.)*',
+      })
+      expect(isSponsorshipInput(sponsorshipInput)).toBe(true)
+      expect(isAuthorizationInput(sponsorshipInput)).toBe(false)
+
+      // This should be categorized as 'authorization'
+      const authorizationInput = createTestInput({
+        label: 'Are you legally authorized to work in the U.S. indefinitely?*',
+      })
+      expect(isAuthorizationInput(authorizationInput)).toBe(true)
+      expect(isSponsorshipInput(authorizationInput)).toBe(false)
     })
   })
 
@@ -307,6 +404,153 @@ describe('Input Categorization Tests', () => {
     it('should identify sponsorship requirement', () => {
       const input = createTestInput({ label: 'Do you now or in the future require sponsorship?' })
       expect(isSponsorshipInput(input)).toBe(true)
+    })
+
+    it('should identify the specific user example', () => {
+      const input = createTestInput({
+        label:
+          'Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (If hired, verification will be required consistent with federal law.)*',
+      })
+      expect(isSponsorshipInput(input)).toBe(true)
+    })
+
+    it('should identify various sponsorship patterns by label', () => {
+      const labels = [
+        'Require sponsorship',
+        'Need sponsorship',
+        'Require immigration sponsorship',
+        'Need visa sponsorship',
+        'Will you require sponsorship?',
+        'Do you now or will you in the future require sponsorship?',
+        'Do you require or will you require sponsorship?',
+        'Immigration sponsorship',
+        'Visa sponsorship',
+        'H-1B sponsorship',
+        'Sponsorship for work authorization',
+        'Require immigration',
+        'Need immigration',
+        'Work visa required',
+        'Employment visa needed',
+        'Temporary work authorization',
+        'H-1B required',
+        'TN visa needed',
+        'OPT status',
+        'STEM OPT',
+      ]
+
+      labels.forEach((label) => {
+        const input = createTestInput({ label })
+        expect(isSponsorshipInput(input)).toBe(true)
+      })
+    })
+
+    it('should identify sponsorship by name patterns', () => {
+      const names = [
+        'require_sponsorship',
+        'need_sponsorship',
+        'immigration_sponsorship',
+        'visa_sponsorship',
+        'h1b_required',
+        'work_visa',
+      ]
+
+      names.forEach((name) => {
+        const input = createTestInput({ name })
+        expect(isSponsorshipInput(input)).toBe(true)
+      })
+    })
+
+    it('should identify sponsorship by placeholder', () => {
+      const placeholders = [
+        'Do you require sponsorship?',
+        'Sponsorship needed?',
+        'Immigration sponsorship required',
+      ]
+
+      placeholders.forEach((placeholder) => {
+        const input = createTestInput({ placeholder })
+        expect(isSponsorshipInput(input)).toBe(true)
+      })
+    })
+
+    it('should identify sponsorship by wholeQuestionLabel', () => {
+      const input = createTestInput({
+        wholeQuestionLabel:
+          'Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)?',
+      })
+      expect(isSponsorshipInput(input)).toBe(true)
+    })
+
+    it('should NOT identify authorization questions as sponsorship', () => {
+      const authorizationLabels = [
+        'Are you currently authorized to work?',
+        'Are you legally authorized to work indefinitely?',
+        'Authorized to work in the US indefinitely',
+        'Currently authorized to work',
+        'Presently authorized',
+        'Permanent authorization',
+        'Indefinite authorization',
+        'Are you a US citizen?',
+        'Do you have a green card?',
+        'Permanent resident status',
+      ]
+
+      authorizationLabels.forEach((label) => {
+        const input = createTestInput({ label })
+        expect(isSponsorshipInput(input)).toBe(false)
+      })
+    })
+
+    it('should handle regex patterns correctly', () => {
+      const regexTestLabels = [
+        'Will you require H-1B sponsorship?',
+        'Need H1B visa?',
+        'H_1B required',
+        'Future require sponsorship for immigration',
+        'Will need sponsorship in the future',
+        'Require immigration assistance',
+        'Need work visa support',
+      ]
+
+      regexTestLabels.forEach((label) => {
+        const input = createTestInput({ label })
+        expect(isSponsorshipInput(input)).toBe(true)
+      })
+    })
+
+    it('should exclude current authorization when checking sponsorship', () => {
+      // These should NOT be classified as sponsorship due to exclusion patterns
+      const excludedLabels = [
+        'Are you currently authorized to work and require sponsorship?', // Contains "currently authorized"
+        'You are presently authorized but will you need sponsorship?', // Contains "presently authorized"
+        'Authorized to work indefinitely or need sponsorship?', // Contains "authorized...indefinitely"
+        'Do you have permanent authorization or require sponsorship?', // Contains "permanent authorization"
+        'As a citizen, do you need sponsorship?', // Contains "citizen"
+        'Permanent resident requiring sponsorship?', // Contains "permanent resident"
+        'Green card holder needing sponsorship?', // Contains "green card"
+      ]
+
+      excludedLabels.forEach((label) => {
+        const input = createTestInput({ label })
+        expect(isSponsorshipInput(input)).toBe(false)
+      })
+    })
+
+    it('should correctly differentiate between the specific user examples', () => {
+      // This should be categorized as 'sponsorship'
+      const sponsorshipInput = createTestInput({
+        label:
+          'Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (If hired, verification will be required consistent with federal law.)*',
+      })
+      expect(isSponsorshipInput(sponsorshipInput)).toBe(true)
+      expect(isAuthorizationInput(sponsorshipInput)).toBe(false)
+
+      // This should be categorized as 'authorization'
+      const authorizationInput = createTestInput({
+        label: 'Are you legally authorized to work in the U.S. indefinitely?*',
+      })
+      expect(isAuthorizationInput(authorizationInput)).toBe(true)
+      expect(isSponsorshipInput(authorizationInput)).toBe(false)
     })
   })
 

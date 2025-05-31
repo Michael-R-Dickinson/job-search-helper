@@ -30,7 +30,7 @@ export const SerializedHtmlInputSchema = z.object({
   className: z.string(),
   value: z.string(),
   required: z.boolean(),
-  checked: z.boolean(),
+  checked: z.boolean().nullable().optional(),
   // A unique identifier we give to the input element to identify it in the DOM
   // This is used to match the input element to the autofill instruction in the frontend
   elementReferenceId: z.string(),
