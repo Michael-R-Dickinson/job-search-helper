@@ -342,8 +342,9 @@ describe('InputTypeHandlers', () => {
     // The LocationHandler only fills for city, country, state, postal_code, address, not 'current location' directly
     // So the expected action is 'skip'
     expect(handler.getAutofillInstruction(input)).toEqual({
-      action: 'skip',
+      action: 'fill',
       id: 'af-location',
+      value: 'San Francisco',
     })
     handler.saveAutofillValue(input, 'user7')
     expect(saveUserAutofillValue).toHaveBeenCalled()

@@ -26,7 +26,6 @@ class NameHandler extends InputCategoryHandler {
 
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     const label = input.label?.toLowerCase() || ''
-    console.log('label', label)
     if (input.element.fieldType === 'text' && label.includes('first')) {
       return { action: 'fill', value: this.savedFirstName, id: input.element.elementReferenceId }
     }
@@ -384,7 +383,14 @@ class LocationHandler extends InputCategoryHandler {
         }
       return { action: 'skip', id: input.element.elementReferenceId }
     }
-    return { action: 'skip', id: input.element.elementReferenceId }
+    const parts = [
+      this.location?.address,
+      this.location?.city,
+      this.location?.state,
+      this.location?.postal_code,
+    ].filter(Boolean)
+    const fullAddress = parts.join(', ')
+    return { action: 'fill', value: fullAddress, id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
     // Save to the correct subfield
