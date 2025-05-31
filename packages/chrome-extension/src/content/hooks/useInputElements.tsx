@@ -18,22 +18,6 @@ function generateUniqueId(): string {
   return `af-${crypto.randomUUID()}`
 }
 
-// Helper functions for element filtering
-const isElementVisible = (el: HTMLElement): boolean => {
-  if (el.getAttribute('aria-hidden') === 'true') return false
-
-  const style = window.getComputedStyle(el)
-  if (style.visibility === 'hidden' || style.display === 'none') return false
-
-  // const rect = el.getBoundingClientRect()
-  // if (rect.width === 0 && rect.height === 0) return false
-
-  // Check for opacity (but allow very low opacity as some forms use it for styling)
-  // if (parseFloat(style.opacity) < 0.1) return false
-
-  return true
-}
-
 const isCaptchaElement = (el: HTMLElement): boolean => {
   const id = el.id?.toLowerCase() ?? ''
   const name = el.getAttribute('name')?.toLowerCase() ?? ''
@@ -85,10 +69,8 @@ const isElementEnabled = (el: ElementInfo): boolean => {
 }
 
 const shouldIncludeElement = (el: ElementInfo): boolean => {
-  // Check visibility and captcha
-  if (!isElementVisible(el) || isCaptchaElement(el)) {
-    return false
-  }
+  // Check captcha
+  if (isCaptchaElement(el)) return false
 
   // Check element-specific rules
   const tag = el.tagName.toLowerCase()
