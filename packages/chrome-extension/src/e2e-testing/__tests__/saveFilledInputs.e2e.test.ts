@@ -9,7 +9,7 @@ import saveFilledInputs from '../../autofillEngine/saveFilledInputs'
 export const testCasesPath = path.resolve(__dirname, 'inputsTestCases.json')
 export const testWebsites = JSON.parse(fs.readFileSync(testCasesPath, 'utf-8'))
 
-export const TEST_USER_ID = 'test-user-id'
+export const TEST_USER_ID = 'e2e-test-user'
 describe('End-to-end save feature', () => {
   testWebsites.forEach((websiteTestData: any) => {
     it(`should correctly save autofill values for ${websiteTestData.sourceURL}`, async () => {
