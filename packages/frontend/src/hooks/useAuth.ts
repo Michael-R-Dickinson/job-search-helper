@@ -13,7 +13,6 @@ type AnonymousUser = {
 const COOKIE_NAME = 'perfectify-anonymous-user-id'
 const COOKIE_OPTIONS: Cookies.CookieAttributes = {
   // expire after 1 hour (tokens auto-expire in ~1h)
-  expires: 1 / 24, // 1 hour ** CHANGE this for hour
 
   // only send over HTTPS in production -- TALK ABOUT POTENTIAL BACKEND
   secure: process.env.NODE_ENV === 'production', // TO TEST LOCALLY change this to secure: false
