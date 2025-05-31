@@ -91,7 +91,6 @@ export const selectBestOption = (
     })
 
     if (exactMatch) {
-      console.log(`Exact match for "${searchValue}":`, exactMatch)
       if (selectElement.value !== exactMatch.value) {
         selectElement.value = exactMatch.value
         selectElement.dispatchEvent(new Event('change', { bubbles: true }))
@@ -110,8 +109,6 @@ export const selectBestOption = (
     }
   }
 
-  console.log('No suitable match found for search values:', searchValues)
-  console.log('Available options:', options)
   return false
 }
 
@@ -120,8 +117,6 @@ export const selectBestOption = (
  * Always attempts to find the best match, regardless of input format
  */
 export const fillSelectElement = (selectElement: HTMLSelectElement, value: string): void => {
-  console.log('Filling select element with value:', value)
-
   let searchValues: string[] = []
 
   // Check if this looks like a pipe-separated preference list
@@ -142,8 +137,6 @@ export const fillSelectElement = (selectElement: HTMLSelectElement, value: strin
     }
   }
 
-  // Final fallback: direct value assignment (only if intelligent matching completely failed)
-  console.log('Falling back to direct value assignment')
   // Only attempt to set the value if it's a valid option or if we want to force it
   const availableValues = Array.from(selectElement.options).map((o) => o.value)
   if (availableValues.includes(value) || value === '') {
