@@ -4,4 +4,4 @@ globs:
 alwaysApply: true
 ---
 When tasked with implementing or modifying new input fields/input types, or changing the autofill schema, you need to write thorough tests for all cases and lots of variants. After writing tests always run them and work until all tests pass. *Note* this does not include e2e tests - unless specifically mentioned - these are allowed to fail
-To run tests, use `pnpm run test`, and for context we use vitest so this command just maps to the `vitest` command
+To run tests, use `pnpm run test`, and for context we use vitest so this command just maps to the `vitest run` command
