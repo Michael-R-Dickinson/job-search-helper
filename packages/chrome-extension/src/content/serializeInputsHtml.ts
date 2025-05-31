@@ -129,8 +129,9 @@ export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] 
     const placeholder = (el as any).placeholder || ''
     let value = (el as any).value || ''
     if (!value) {
-      value = removeValuePrefixes(extractDisplayedValue(el, placeholder, input.label || ''))
+      value = extractDisplayedValue(el, placeholder, input.label || '')
     }
+    value = removeValuePrefixes(value)
     return {
       label: input.label,
       html: el.outerHTML,
