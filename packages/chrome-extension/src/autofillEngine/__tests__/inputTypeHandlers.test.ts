@@ -8,7 +8,7 @@ import {
   DisabilityStatusEnum,
   AuthorizationStatusEnum,
 } from '../schema'
-import getHandlerForInputCategory from '../inputTypeHandlers'
+import getHandlerForInputCategory from '../inputCategoryHandlers'
 import { saveUserAutofillValue } from '../../firebase/realtimeDB'
 
 // Mock saveUserAutofillValue

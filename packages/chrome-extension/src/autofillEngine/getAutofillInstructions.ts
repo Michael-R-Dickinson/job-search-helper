@@ -2,7 +2,7 @@ import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
 import { SerializedHtmlInputSchema, type AutofillInstruction } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import { categorizeInputs } from './categorizeInputs'
-import getHandlerForInputCategory from './inputTypeHandlers'
+import getHandlerForInputCategory from './inputCategoryHandlers'
 
 export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlInput[] => {
   return inputs.map((input) => {

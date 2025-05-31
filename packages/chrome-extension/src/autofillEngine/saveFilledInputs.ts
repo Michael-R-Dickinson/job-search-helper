@@ -2,7 +2,7 @@ import { type SerializedHtmlInput } from './schema'
 import { SerializedHtmlInputSchema } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import { categorizeInputs } from './categorizeInputs'
-import getHandlerForInputCategory, { NoValueHandler } from './inputTypeHandlers'
+import getHandlerForInputCategory, { NoValueHandler } from './inputCategoryHandlers'
 import { preprocessInputs } from './getAutofillInstructions'
 
 const saveFilledInputs = async (inputs: SerializedHtmlInput[], userId: string) => {
