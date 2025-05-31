@@ -537,25 +537,34 @@ class SponsorshipHandler extends InputCategoryHandler {
     this.sponsorshipYesNo = userAutofillPreferences.sponsorship?.yesNoAnswer
     this.sponsorshipText = userAutofillPreferences.sponsorship?.text
   }
+  checkIsPositiveQuestion(input: CategorizedInput): boolean {
+    return (
+      input.element.label?.includes('yes') ||
+      input.element.label?.includes('i require sponsorship') ||
+      input.element.label?.includes('i require immigration sponsorship') ||
+      false
+    )
+  }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     if (
       input.element.fieldType === 'select' ||
       input.element.fieldType === 'radio' ||
       input.element.fieldType === 'checkbox'
     ) {
-      if (typeof this.sponsorshipYesNo !== 'boolean')
-        return { action: 'skip', id: input.element.elementReferenceId }
-      return {
-        action:
-          input.element.fieldType === 'checkbox'
-            ? this.sponsorshipYesNo
-              ? 'fill'
-              : 'clear'
-            : 'fill',
-        value: input.element.fieldType !== 'checkbox' ? String(this.sponsorshipYesNo) : undefined,
-        id: input.element.elementReferenceId,
+      const isPositiveQuestion = this.checkIsPositiveQuestion(input)
+      if (isPositiveQuestion) {
+        return {
+          action: this.sponsorshipYesNo ? 'check' : 'skip',
+          id: input.element.elementReferenceId,
+        }
+      } else {
+        return {
+          action: this.sponsorshipYesNo ? 'skip' : 'check',
+          id: input.element.elementReferenceId,
+        }
       }
     }
+
     if (input.element.fieldType === 'text') {
       if (!this.sponsorshipText) return { action: 'skip', id: input.element.elementReferenceId }
       return { action: 'fill', value: this.sponsorshipText, id: input.element.elementReferenceId }
@@ -563,18 +572,22 @@ class SponsorshipHandler extends InputCategoryHandler {
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    if (
-      input.element.fieldType === 'select' ||
-      input.element.fieldType === 'radio' ||
-      input.element.fieldType === 'checkbox'
-    ) {
+    const fieldType = input.element.fieldType
+    if (fieldType === 'radio' || fieldType === 'checkbox') {
       // Save to yesNoAnswer field (convert value to boolean)
-      const boolValue = input.element.value === 'yes' || input.element.value === 'true'
-      return saveUserAutofillValue(userId, 'sponsorship/yesNoAnswer', boolValue)
-    } else if (input.element.fieldType === 'text') {
+      const isPositiveQuestion = this.checkIsPositiveQuestion(input)
+      const requiresSponsorship = input.element.checked
+      if (isPositiveQuestion && requiresSponsorship) {
+        return saveUserAutofillValue(userId, 'sponsorship/yesNoAnswer', true)
+      }
+      if (isPositiveQuestion && !requiresSponsorship) {
+        return saveUserAutofillValue(userId, 'sponsorship/yesNoAnswer', false)
+      }
+    } else if (fieldType === 'text' || fieldType === 'select') {
       // Save to text field
       return saveUserAutofillValue(userId, 'sponsorship/text', input.element.value)
     }
+
     return Promise.resolve({
       status: 'error',
       error: 'Failed to save sponsorship autofill value',
