@@ -14,6 +14,7 @@ const SignInButton = () => {
       if (!credential) {
         throw new Error('No credential found')
       }
+      console.log(result.user)
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         console.error('An unknown error occurred during sign-in:', error)

@@ -1,8 +1,17 @@
 import { useState, useEffect } from 'react'
+import type { AutofillInstruction } from '../../autofillEngine/schema'
+import { fillSelectElement } from '../utils/selectMatching'
 
+export type ElementInfo = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 export interface InputInfo {
-  element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  element: ElementInfo
   label: string | null
+  elementReferenceId: string
+}
+
+function generateUniqueId() {
+  // e.g. "af-3f2504e0-4f89-11d3-9a0c-0305e82c3301"
+  return `af-${crypto.randomUUID()}`
 }
 
 /**
@@ -10,7 +19,7 @@ export interface InputInfo {
  * plus their labels, excluding:
  * - aria-hidden or opacity:0
  * - disabled or readOnly
- * - input types that aren’t text-entry (button, hidden, submit, etc.)
+ * - input types that aren't text-entry (button, hidden, submit, etc.)
  * - elements whose id/name/class contains "captcha"
  */
 export function useInputElements(): InputInfo[] {
@@ -44,8 +53,7 @@ export function useInputElements(): InputInfo[] {
           // 1) Exclude aria-hidden or invisible styles
           if (el.getAttribute('aria-hidden') === 'true') return false
           const style = window.getComputedStyle(el)
-          if (style.opacity === '0' || style.visibility === 'hidden' || style.display === 'none')
-            return false
+          if (style.visibility === 'hidden' || style.display === 'none') return false
 
           // 2) Exclude captchas by id/name/class
           const id = el.id?.toLowerCase() ?? ''
@@ -54,7 +62,7 @@ export function useInputElements(): InputInfo[] {
           if (id.includes('captcha') || name.includes('captcha') || cls.includes('captcha'))
             return false
 
-          // 3) Exclude controls that aren’t meant for text entry
+          // 3) Exclude controls that aren't meant for text entry
           if (tag === 'input') {
             const inp = el as HTMLInputElement
             // no hidden/buttons/etc.
@@ -71,10 +79,15 @@ export function useInputElements(): InputInfo[] {
 
           return true
         })
-        .map((el) => ({
-          element: el,
-          label: getLabelText(el as HTMLElement),
-        }))
+        .map((el) => {
+          const elementReferenceId = generateUniqueId()
+          el.setAttribute('data-autofill-id', elementReferenceId)
+          return {
+            element: el,
+            elementReferenceId,
+            label: getLabelText(el as HTMLElement),
+          }
+        })
 
       setInputs(filtered)
     }
@@ -86,4 +99,29 @@ export function useInputElements(): InputInfo[] {
   }, [])
 
   return inputs
+}
+
+export const autofillInputElements = (autofillInstructions: AutofillInstruction[]) => {
+  autofillInstructions.forEach((instruction) => {
+    const el = document.querySelector<HTMLElement>(`[data-autofill-id="${instruction.id}"]`)
+    if (!el) return
+
+    // Handle action
+    if (instruction.action === 'skip') return
+
+    // Fill or clear
+    if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+      const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
+      // Only set if value is different
+      if (el.value !== value) {
+        el.value = value
+        // For React etc., fire input and change events
+        el.dispatchEvent(new Event('input', { bubbles: true }))
+        el.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+    } else if (el instanceof HTMLSelectElement) {
+      const value = instruction.action === 'fill' ? (instruction.value ?? '') : ''
+      fillSelectElement(el, value)
+    }
+  })
 }
