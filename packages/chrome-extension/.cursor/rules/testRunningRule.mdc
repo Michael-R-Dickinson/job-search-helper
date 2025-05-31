@@ -3,5 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
-When tasked with implementing or modifying new input fields/input types, or changing the autofill schema, you need to write thorough tests for all cases and lots of variants. After writing tests always run them and work until all tests pass. *Note* this does not include e2e tests - unless specifically mentioned - these are allowed to fail
+When tasked with implementing or modifying new input fields/input types, or changing the autofill schema, you need to write thorough tests for all cases and lots of variants. The goal is to be able to autofill job application forms of all types, whose question writing may differ siginificatly, so we want each input cateogry and handler to be able to handle all reasonable input types for that category. However this does not mean outputting a huge list of strings each with a different possible input label, instead, be as strategic as possible, ensuring that we cover a great number of application cases without compromising coding code quality. 
+After writing tests always run them and work until all tests pass. *Note* this does not include e2e tests - unless specifically mentioned - these are allowed to fail
 To run tests, use `pnpm run test`, and for context we use vitest so this command just maps to the `vitest run` command

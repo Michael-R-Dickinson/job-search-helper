@@ -1,0 +1,6 @@
+---
+description: 
+globs: *.tsx
+alwaysApply: false
+---
+Use typescript best practices and ensure high code quality across the board.
