@@ -172,7 +172,7 @@
       {
         "status": "success",
         "valuePath": "location/state",
-        "value": "string:OR"
+        "value": "OR"
       },
       {
         "status": "success",
@@ -218,7 +218,7 @@
       },
       {
         "action": "fill",
-        "value": "string:OR",
+        "value": "OR",
         "id": "af-0a584460-689f-49c5-8081-7c9de6bc24d7"
       },
       {
@@ -230,6 +230,538 @@
         "action": "fill",
         "value": "sponsorship and shit",
         "id": "af-b8639011-67cf-4ce6-9f47-175b68771a8a"
+      }
+    ]
+  },
+  {
+    "sourceURL": "https://jobs.jobvite.com/everyday-health-consumer/job/o05Uvfwe/apply",
+    "inputsData": [
+      {
+        "label": "Type or paste your Resume here",
+        "html": "<textarea id=\"jv-edit-resume-textarea0\" ng-model=\"resumeContent\" class=\"needsclick ng-pristine ng-untouched ng-valid ng-empty\" data-autofill-id=\"af-01e557e3-212e-473c-96f4-6ca9c0919828\"></textarea>",
+        "fieldType": "",
+        "name": "",
+        "type": "textarea",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "jv-edit-resume-textarea0",
+        "className": "needsclick ng-pristine ng-untouched ng-valid ng-empty",
+        "value": "Cancel\n                Save",
+        "required": false,
+        "elementReferenceId": "af-01e557e3-212e-473c-96f4-6ca9c0919828",
+        "selectedText": ""
+      },
+      {
+        "label": "First Name*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-ydSaYfwX\" name=\"input-ydSaYfwX\" autocomplete=\"given-name\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-8997d582-62f8-41ab-896c-041b4cd7df5e\">",
+        "fieldType": "",
+        "name": "input-ydSaYfwX",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "given-name",
+        "id": "jv-field-ydSaYfwX",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-8997d582-62f8-41ab-896c-041b4cd7df5e",
+        "selectedText": ""
+      },
+      {
+        "label": "Last Name*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-ycSaYfwW\" name=\"input-ycSaYfwW\" autocomplete=\"family-name\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-b028144c-eb50-4527-94bf-6e1c511f537b\">",
+        "fieldType": "",
+        "name": "input-ycSaYfwW",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "family-name",
+        "id": "jv-field-ycSaYfwW",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-b028144c-eb50-4527-94bf-6e1c511f537b",
+        "selectedText": ""
+      },
+      {
+        "label": "Preferred First Name/Nickname",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yXyiYfwv\" name=\"input-yXyiYfwv\" autocomplete=\"on\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"false\" type=\"text\" maxlength=\"\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength\" data-autofill-id=\"af-5e03028f-4f6d-4028-b610-2813ae0879ac\">",
+        "fieldType": "",
+        "name": "input-yXyiYfwv",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-yXyiYfwv",
+        "className": "ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-5e03028f-4f6d-4028-b610-2813ae0879ac",
+        "selectedText": ""
+      },
+      {
+        "label": "Pronouns",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yWm8Yfw8\" name=\"input-yWm8Yfw8\" autocomplete=\"on\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"false\" type=\"text\" maxlength=\"\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength\" data-autofill-id=\"af-cb13dd65-dc31-4fc1-8d56-209326b4ac5a\">",
+        "fieldType": "",
+        "name": "input-yWm8Yfw8",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-yWm8Yfw8",
+        "className": "ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-cb13dd65-dc31-4fc1-8d56-209326b4ac5a",
+        "selectedText": ""
+      },
+      {
+        "label": "Email*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yaSaYfwU\" name=\"input-yaSaYfwU\" autocomplete=\"email\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-0f5abd04-99ce-4878-8663-0e25dc756fb0\">",
+        "fieldType": "",
+        "name": "input-yaSaYfwU",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "email",
+        "id": "jv-field-yaSaYfwU",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-0f5abd04-99ce-4878-8663-0e25dc756fb0",
+        "selectedText": ""
+      },
+      {
+        "label": "Address*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-ygSaYfw0\" name=\"input-ygSaYfw0\" autocomplete=\"address-line1\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-cf66734b-9a98-444d-b8f2-c70a543b249c\">",
+        "fieldType": "",
+        "name": "input-ygSaYfw0",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "address-line1",
+        "id": "jv-field-ygSaYfw0",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-cf66734b-9a98-444d-b8f2-c70a543b249c",
+        "selectedText": ""
+      },
+      {
+        "label": "City*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yjSaYfw3\" name=\"input-yjSaYfw3\" autocomplete=\"address-level2\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-b0a58212-c6d4-468a-9ea2-b22bea006ce1\">",
+        "fieldType": "",
+        "name": "input-yjSaYfw3",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "address-level2",
+        "id": "jv-field-yjSaYfw3",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-b0a58212-c6d4-468a-9ea2-b22bea006ce1",
+        "selectedText": ""
+      },
+      {
+        "label": "State*",
+        "html": "<select ng-if=\"!field.multiSelect\" id=\"jv-field-yfSaYfwZ\" name=\"input-yfSaYfwZ\" autocomplete=\"address-level1\" ng-model=\"ngModel[field.viewFieldEId]\" ng-options=\"o.key as o.value  for o in field.values\" ng-required=\"field.required\" aria-required=\"true\" ng-change=\"changeCountry(field,ngModel[field.viewFieldEId])\" ng-class=\"{ 'jv-empty-select': !ngModel[field.viewFieldEId] }\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required jv-empty-select\" required=\"required\" data-autofill-id=\"af-84c93226-831b-403a-86e8-a3cf93c5bf03\"><option value=\"\" class=\"\" selected=\"selected\">Select an option...</option><option label=\"Not Applicable\" value=\"string:Not Applicable\">Not Applicable</option><option label=\"Alaska\" value=\"string:AK\">Alaska</option><option label=\"Alabama\" value=\"string:AL\">Alabama</option><option label=\"Arkansas\" value=\"string:AR\">Arkansas</option><option label=\"Arizona\" value=\"string:AZ\">Arizona</option><option label=\"California\" value=\"string:CA\">California</option><option label=\"Colorado\" value=\"string:CO\">Colorado</option><option label=\"Connecticut\" value=\"string:CT\">Connecticut</option><option label=\"District Of Columbia\" value=\"string:DC\">District Of Columbia</option><option label=\"Delaware\" value=\"string:DE\">Delaware</option><option label=\"Florida\" value=\"string:FL\">Florida</option><option label=\"Georgia\" value=\"string:GA\">Georgia</option><option label=\"Hawaii\" value=\"string:HI\">Hawaii</option><option label=\"Iowa\" value=\"string:IA\">Iowa</option><option label=\"Idaho\" value=\"string:ID\">Idaho</option><option label=\"Illinois\" value=\"string:IL\">Illinois</option><option label=\"Indiana\" value=\"string:IN\">Indiana</option><option label=\"Kansas\" value=\"string:KS\">Kansas</option><option label=\"Kentucky\" value=\"string:KY\">Kentucky</option><option label=\"Louisiana\" value=\"string:LA\">Louisiana</option><option label=\"Massachusetts\" value=\"string:MA\">Massachusetts</option><option label=\"Maryland\" value=\"string:MD\">Maryland</option><option label=\"Maine\" value=\"string:ME\">Maine</option><option label=\"Michigan\" value=\"string:MI\">Michigan</option><option label=\"Minnesota\" value=\"string:MN\">Minnesota</option><option label=\"Missouri\" value=\"string:MO\">Missouri</option><option label=\"Mississippi\" value=\"string:MS\">Mississippi</option><option label=\"Montana\" value=\"string:MT\">Montana</option><option label=\"North Carolina\" value=\"string:NC\">North Carolina</option><option label=\"North Dakota\" value=\"string:ND\">North Dakota</option><option label=\"Nebraska\" value=\"string:NE\">Nebraska</option><option label=\"New Hampshire\" value=\"string:NH\">New Hampshire</option><option label=\"New Jersey\" value=\"string:NJ\">New Jersey</option><option label=\"New Mexico\" value=\"string:NM\">New Mexico</option><option label=\"Nevada\" value=\"string:NV\">Nevada</option><option label=\"New York\" value=\"string:NY\">New York</option><option label=\"Ohio\" value=\"string:OH\">Ohio</option><option label=\"Oklahoma\" value=\"string:OK\">Oklahoma</option><option label=\"Oregon\" value=\"string:OR\">Oregon</option><option label=\"Pennsylvania\" value=\"string:PA\">Pennsylvania</option><option label=\"Rhode Island\" value=\"string:RI\">Rhode Island</option><option label=\"South Carolina\" value=\"string:SC\">South Carolina</option><option label=\"South Dakota\" value=\"string:SD\">South Dakota</option><option label=\"Tennessee\" value=\"string:TN\">Tennessee</option><option label=\"Texas\" value=\"string:TX\">Texas</option><option label=\"Utah\" value=\"string:UT\">Utah</option><option label=\"Virginia\" value=\"string:VA\">Virginia</option><option label=\"Vermont\" value=\"string:VT\">Vermont</option><option label=\"Washington\" value=\"string:WA\">Washington</option><option label=\"Wisconsin\" value=\"string:WI\">Wisconsin</option><option label=\"West Virginia\" value=\"string:WV\">West Virginia</option><option label=\"Wyoming\" value=\"string:WY\">Wyoming</option></select>",
+        "fieldType": "",
+        "name": "input-yfSaYfwZ",
+        "type": "select-one",
+        "placeholder": "",
+        "autocomplete": "address-level1",
+        "id": "jv-field-yfSaYfwZ",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required jv-empty-select",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-84c93226-831b-403a-86e8-a3cf93c5bf03",
+        "selectedText": "Select an option..."
+      },
+      {
+        "label": "Country*",
+        "html": "<select ng-if=\"!field.multiSelect\" id=\"jv-field-yeSaYfwY\" name=\"input-yeSaYfwY\" autocomplete=\"country-name\" ng-model=\"ngModel[field.viewFieldEId]\" ng-options=\"o.key as o.value  for o in field.values\" ng-required=\"field.required\" aria-required=\"true\" ng-change=\"changeCountry(field,ngModel[field.viewFieldEId])\" ng-class=\"{ 'jv-empty-select': !ngModel[field.viewFieldEId] }\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required jv-empty-select\" required=\"required\" data-autofill-id=\"af-878db9d8-3bb5-4ffb-9907-a364e72f5ad3\"><option value=\"\" class=\"\" selected=\"selected\">Select an option...</option><option label=\"United States\" value=\"string:United States\">United States</option><option label=\"Canada\" value=\"string:Canada\">Canada</option><option label=\"United Kingdom\" value=\"string:United Kingdom\">United Kingdom</option><option label=\"Aland Islands\" value=\"string:Aland Islands\">Aland Islands</option><option label=\"Afghanistan\" value=\"string:Afghanistan\">Afghanistan</option><option label=\"Albania\" value=\"string:Albania\">Albania</option><option label=\"Algeria\" value=\"string:Algeria\">Algeria</option><option label=\"American Samoa\" value=\"string:American Samoa\">American Samoa</option><option label=\"Andorra\" value=\"string:Andorra\">Andorra</option><option label=\"Angola\" value=\"string:Angola\">Angola</option><option label=\"Anguilla\" value=\"string:Anguilla\">Anguilla</option><option label=\"Antarctica\" value=\"string:Antarctica\">Antarctica</option><option label=\"Antigua And Barbuda\" value=\"string:Antigua And Barbuda\">Antigua And Barbuda</option><option label=\"Argentina\" value=\"string:Argentina\">Argentina</option><option label=\"Armenia\" value=\"string:Armenia\">Armenia</option><option label=\"Aruba\" value=\"string:Aruba\">Aruba</option><option label=\"Australia\" value=\"string:Australia\">Australia</option><option label=\"Austria\" value=\"string:Austria\">Austria</option><option label=\"Azerbaijan\" value=\"string:Azerbaijan\">Azerbaijan</option><option label=\"Bahamas\" value=\"string:Bahamas\">Bahamas</option><option label=\"Bahrain\" value=\"string:Bahrain\">Bahrain</option><option label=\"Bangladesh\" value=\"string:Bangladesh\">Bangladesh</option><option label=\"Barbados\" value=\"string:Barbados\">Barbados</option><option label=\"Belarus\" value=\"string:Belarus\">Belarus</option><option label=\"Belgium\" value=\"string:Belgium\">Belgium</option><option label=\"Belize\" value=\"string:Belize\">Belize</option><option label=\"Benin\" value=\"string:Benin\">Benin</option><option label=\"Bermuda\" value=\"string:Bermuda\">Bermuda</option><option label=\"Bhutan\" value=\"string:Bhutan\">Bhutan</option><option label=\"Bolivia (Plurinational State of)\" value=\"string:Bolivia (Plurinational State of)\">Bolivia (Plurinational State of)</option><option label=\"Bonaire, Sint Eustatius and Saba\" value=\"string:Bonaire, Sint Eustatius and Saba\">Bonaire, Sint Eustatius and Saba</option><option label=\"Bosnia and Herzegovina\" value=\"string:Bosnia and Herzegovina\">Bosnia and Herzegovina</option><option label=\"Botswana\" value=\"string:Botswana\">Botswana</option><option label=\"Bouvet Island\" value=\"string:Bouvet Island\">Bouvet Island</option><option label=\"Brazil\" value=\"string:Brazil\">Brazil</option><option label=\"British Indian Ocean Territory\" value=\"string:British Indian Ocean Territory\">British Indian Ocean Territory</option><option label=\"Brunei Darussalam\" value=\"string:Brunei Darussalam\">Brunei Darussalam</option><option label=\"Bulgaria\" value=\"string:Bulgaria\">Bulgaria</option><option label=\"Burkina Faso\" value=\"string:Burkina Faso\">Burkina Faso</option><option label=\"Burundi\" value=\"string:Burundi\">Burundi</option><option label=\"Cambodia\" value=\"string:Cambodia\">Cambodia</option><option label=\"Cameroon\" value=\"string:Cameroon\">Cameroon</option><option label=\"Cabo Verde\" value=\"string:Cabo Verde\">Cabo Verde</option><option label=\"Cayman Islands\" value=\"string:Cayman Islands\">Cayman Islands</option><option label=\"Central African Republic\" value=\"string:Central African Republic\">Central African Republic</option><option label=\"Chad\" value=\"string:Chad\">Chad</option><option label=\"Chile\" value=\"string:Chile\">Chile</option><option label=\"China\" value=\"string:China\">China</option><option label=\"Christmas Island\" value=\"string:Christmas Island\">Christmas Island</option><option label=\"Cocos (Keeling) Islands\" value=\"string:Cocos (Keeling) Islands\">Cocos (Keeling) Islands</option><option label=\"Colombia\" value=\"string:Colombia\">Colombia</option><option label=\"Comoros\" value=\"string:Comoros\">Comoros</option><option label=\"Congo (the Democratic Republic of)\" value=\"string:Congo (the Democratic Republic of)\">Congo (the Democratic Republic of)</option><option label=\"Congo\" value=\"string:Congo\">Congo</option><option label=\"Cook Islands\" value=\"string:Cook Islands\">Cook Islands</option><option label=\"Costa Rica\" value=\"string:Costa Rica\">Costa Rica</option><option label=\"Cote D'ivoire\" value=\"string:Cote D'ivoire\">Cote D'ivoire</option><option label=\"Croatia\" value=\"string:Croatia\">Croatia</option><option label=\"Cuba\" value=\"string:Cuba\">Cuba</option><option label=\"Curacao\" value=\"string:Curacao\">Curacao</option><option label=\"Cyprus\" value=\"string:Cyprus\">Cyprus</option><option label=\"Czechia\" value=\"string:Czechia\">Czechia</option><option label=\"Denmark\" value=\"string:Denmark\">Denmark</option><option label=\"Djibouti\" value=\"string:Djibouti\">Djibouti</option><option label=\"Dominica\" value=\"string:Dominica\">Dominica</option><option label=\"Dominican Republic\" value=\"string:Dominican Republic\">Dominican Republic</option><option label=\"Ecuador\" value=\"string:Ecuador\">Ecuador</option><option label=\"Egypt\" value=\"string:Egypt\">Egypt</option><option label=\"El Salvador\" value=\"string:El Salvador\">El Salvador</option><option label=\"Equatorial Guinea\" value=\"string:Equatorial Guinea\">Equatorial Guinea</option><option label=\"Eritrea\" value=\"string:Eritrea\">Eritrea</option><option label=\"Estonia\" value=\"string:Estonia\">Estonia</option><option label=\"Ethiopia\" value=\"string:Ethiopia\">Ethiopia</option><option label=\"Falkland Islands (Malvinas)\" value=\"string:Falkland Islands (Malvinas)\">Falkland Islands (Malvinas)</option><option label=\"Faroe Islands\" value=\"string:Faroe Islands\">Faroe Islands</option><option label=\"Fiji\" value=\"string:Fiji\">Fiji</option><option label=\"Finland\" value=\"string:Finland\">Finland</option><option label=\"France\" value=\"string:France\">France</option><option label=\"French Guiana\" value=\"string:French Guiana\">French Guiana</option><option label=\"French Polynesia\" value=\"string:French Polynesia\">French Polynesia</option><option label=\"French Southern Territories\" value=\"string:French Southern Territories\">French Southern Territories</option><option label=\"Gabon\" value=\"string:Gabon\">Gabon</option><option label=\"Gambia\" value=\"string:Gambia\">Gambia</option><option label=\"Georgia\" value=\"string:Georgia\">Georgia</option><option label=\"Germany\" value=\"string:Germany\">Germany</option><option label=\"Ghana\" value=\"string:Ghana\">Ghana</option><option label=\"Gibraltar\" value=\"string:Gibraltar\">Gibraltar</option><option label=\"Greece\" value=\"string:Greece\">Greece</option><option label=\"Greenland\" value=\"string:Greenland\">Greenland</option><option label=\"Grenada\" value=\"string:Grenada\">Grenada</option><option label=\"Guadeloupe\" value=\"string:Guadeloupe\">Guadeloupe</option><option label=\"Guam\" value=\"string:Guam\">Guam</option><option label=\"Guatemala\" value=\"string:Guatemala\">Guatemala</option><option label=\"Guernsey\" value=\"string:Guernsey\">Guernsey</option><option label=\"Guinea\" value=\"string:Guinea\">Guinea</option><option label=\"Guinea-Bissau\" value=\"string:Guinea-Bissau\">Guinea-Bissau</option><option label=\"Guyana\" value=\"string:Guyana\">Guyana</option><option label=\"Haiti\" value=\"string:Haiti\">Haiti</option><option label=\"Heard Island and McDonald Islands\" value=\"string:Heard Island and McDonald Islands\">Heard Island and McDonald Islands</option><option label=\"Honduras\" value=\"string:Honduras\">Honduras</option><option label=\"Hong Kong\" value=\"string:Hong Kong\">Hong Kong</option><option label=\"Hungary\" value=\"string:Hungary\">Hungary</option><option label=\"Iceland\" value=\"string:Iceland\">Iceland</option><option label=\"India\" value=\"string:India\">India</option><option label=\"Indonesia\" value=\"string:Indonesia\">Indonesia</option><option label=\"Iran (Islamic Republic Of)\" value=\"string:Iran (Islamic Republic Of)\">Iran (Islamic Republic Of)</option><option label=\"Iraq\" value=\"string:Iraq\">Iraq</option><option label=\"Ireland\" value=\"string:Ireland\">Ireland</option><option label=\"Isle of Man\" value=\"string:Isle of Man\">Isle of Man</option><option label=\"Israel\" value=\"string:Israel\">Israel</option><option label=\"Italy\" value=\"string:Italy\">Italy</option><option label=\"Jamaica\" value=\"string:Jamaica\">Jamaica</option><option label=\"Japan\" value=\"string:Japan\">Japan</option><option label=\"Jersey\" value=\"string:Jersey\">Jersey</option><option label=\"Jordan\" value=\"string:Jordan\">Jordan</option><option label=\"Kazakhstan\" value=\"string:Kazakhstan\">Kazakhstan</option><option label=\"Kenya\" value=\"string:Kenya\">Kenya</option><option label=\"Kiribati\" value=\"string:Kiribati\">Kiribati</option><option label=\"Korea (the Democratic People's Republic of)\" value=\"string:Korea (the Democratic People's Republic of)\">Korea (the Democratic People's Republic of)</option><option label=\"Korea (the Republic of)\" value=\"string:Korea (the Republic of)\">Korea (the Republic of)</option><option label=\"Kuwait\" value=\"string:Kuwait\">Kuwait</option><option label=\"Kyrgyzstan\" value=\"string:Kyrgyzstan\">Kyrgyzstan</option><option label=\"Lao People's Democratic Republic\" value=\"string:Lao People's Democratic Republic\">Lao People's Democratic Republic</option><option label=\"Latvia\" value=\"string:Latvia\">Latvia</option><option label=\"Lebanon\" value=\"string:Lebanon\">Lebanon</option><option label=\"Lesotho\" value=\"string:Lesotho\">Lesotho</option><option label=\"Liberia\" value=\"string:Liberia\">Liberia</option><option label=\"Libya\" value=\"string:Libya\">Libya</option><option label=\"Liechtenstein\" value=\"string:Liechtenstein\">Liechtenstein</option><option label=\"Lithuania\" value=\"string:Lithuania\">Lithuania</option><option label=\"Luxembourg\" value=\"string:Luxembourg\">Luxembourg</option><option label=\"Macao\" value=\"string:Macao\">Macao</option><option label=\"North Macedonia\" value=\"string:North Macedonia\">North Macedonia</option><option label=\"Madagascar\" value=\"string:Madagascar\">Madagascar</option><option label=\"Malawi\" value=\"string:Malawi\">Malawi</option><option label=\"Malaysia\" value=\"string:Malaysia\">Malaysia</option><option label=\"Maldives\" value=\"string:Maldives\">Maldives</option><option label=\"Mali\" value=\"string:Mali\">Mali</option><option label=\"Malta\" value=\"string:Malta\">Malta</option><option label=\"Marshall Islands\" value=\"string:Marshall Islands\">Marshall Islands</option><option label=\"Martinique\" value=\"string:Martinique\">Martinique</option><option label=\"Mauritania\" value=\"string:Mauritania\">Mauritania</option><option label=\"Mauritius\" value=\"string:Mauritius\">Mauritius</option><option label=\"Mayotte\" value=\"string:Mayotte\">Mayotte</option><option label=\"Mexico\" value=\"string:Mexico\">Mexico</option><option label=\"Micronesia (Federated States of)\" value=\"string:Micronesia (Federated States of)\">Micronesia (Federated States of)</option><option label=\"Moldova (the Republic of)\" value=\"string:Moldova (the Republic of)\">Moldova (the Republic of)</option><option label=\"Monaco\" value=\"string:Monaco\">Monaco</option><option label=\"Mongolia\" value=\"string:Mongolia\">Mongolia</option><option label=\"Montenegro\" value=\"string:Montenegro\">Montenegro</option><option label=\"Montserrat\" value=\"string:Montserrat\">Montserrat</option><option label=\"Morocco\" value=\"string:Morocco\">Morocco</option><option label=\"Mozambique\" value=\"string:Mozambique\">Mozambique</option><option label=\"Myanmar\" value=\"string:Myanmar\">Myanmar</option><option label=\"Namibia\" value=\"string:Namibia\">Namibia</option><option label=\"Nauru\" value=\"string:Nauru\">Nauru</option><option label=\"Nepal\" value=\"string:Nepal\">Nepal</option><option label=\"Netherlands\" value=\"string:Netherlands\">Netherlands</option><option label=\"New Caledonia\" value=\"string:New Caledonia\">New Caledonia</option><option label=\"New Zealand\" value=\"string:New Zealand\">New Zealand</option><option label=\"Nicaragua\" value=\"string:Nicaragua\">Nicaragua</option><option label=\"Niger\" value=\"string:Niger\">Niger</option><option label=\"Nigeria\" value=\"string:Nigeria\">Nigeria</option><option label=\"Niue\" value=\"string:Niue\">Niue</option><option label=\"Norfolk Island\" value=\"string:Norfolk Island\">Norfolk Island</option><option label=\"Northern Mariana Islands\" value=\"string:Northern Mariana Islands\">Northern Mariana Islands</option><option label=\"Norway\" value=\"string:Norway\">Norway</option><option label=\"Oman\" value=\"string:Oman\">Oman</option><option label=\"Pakistan\" value=\"string:Pakistan\">Pakistan</option><option label=\"Palau\" value=\"string:Palau\">Palau</option><option label=\"Palestine, State of\" value=\"string:Palestine, State of\">Palestine, State of</option><option label=\"Panama\" value=\"string:Panama\">Panama</option><option label=\"Papua New Guinea\" value=\"string:Papua New Guinea\">Papua New Guinea</option><option label=\"Paraguay\" value=\"string:Paraguay\">Paraguay</option><option label=\"Peru\" value=\"string:Peru\">Peru</option><option label=\"Philippines\" value=\"string:Philippines\">Philippines</option><option label=\"Pitcairn\" value=\"string:Pitcairn\">Pitcairn</option><option label=\"Poland\" value=\"string:Poland\">Poland</option><option label=\"Portugal\" value=\"string:Portugal\">Portugal</option><option label=\"Puerto Rico\" value=\"string:Puerto Rico\">Puerto Rico</option><option label=\"Qatar\" value=\"string:Qatar\">Qatar</option><option label=\"Reunion\" value=\"string:Reunion\">Reunion</option><option label=\"Romania\" value=\"string:Romania\">Romania</option><option label=\"Russian Federation\" value=\"string:Russian Federation\">Russian Federation</option><option label=\"Rwanda\" value=\"string:Rwanda\">Rwanda</option><option label=\"Saint Barthelemy\" value=\"string:Saint Barthelemy\">Saint Barthelemy</option><option label=\"Saint Helena, Ascension and Tristan da Cunha\" value=\"string:Saint Helena, Ascension and Tristan da Cunha\">Saint Helena, Ascension and Tristan da Cunha</option><option label=\"Saint Kitts And Nevis\" value=\"string:Saint Kitts And Nevis\">Saint Kitts And Nevis</option><option label=\"Saint Lucia\" value=\"string:Saint Lucia\">Saint Lucia</option><option label=\"Saint Martin (French part)\" value=\"string:Saint Martin (French part)\">Saint Martin (French part)</option><option label=\"Saint Pierre And Miquelon\" value=\"string:Saint Pierre And Miquelon\">Saint Pierre And Miquelon</option><option label=\"Saint Vincent And The Grenadines\" value=\"string:Saint Vincent And The Grenadines\">Saint Vincent And The Grenadines</option><option label=\"Samoa\" value=\"string:Samoa\">Samoa</option><option label=\"San Marino\" value=\"string:San Marino\">San Marino</option><option label=\"Sao Tome And Principe\" value=\"string:Sao Tome And Principe\">Sao Tome And Principe</option><option label=\"Saudi Arabia\" value=\"string:Saudi Arabia\">Saudi Arabia</option><option label=\"Senegal\" value=\"string:Senegal\">Senegal</option><option label=\"Serbia\" value=\"string:Serbia\">Serbia</option><option label=\"Seychelles\" value=\"string:Seychelles\">Seychelles</option><option label=\"Sierra Leone\" value=\"string:Sierra Leone\">Sierra Leone</option><option label=\"Singapore\" value=\"string:Singapore\">Singapore</option><option label=\"Sint Maarten (Dutch part)\" value=\"string:Sint Maarten (Dutch part)\">Sint Maarten (Dutch part)</option><option label=\"Slovakia\" value=\"string:Slovakia\">Slovakia</option><option label=\"Slovenia\" value=\"string:Slovenia\">Slovenia</option><option label=\"Solomon Islands\" value=\"string:Solomon Islands\">Solomon Islands</option><option label=\"Somalia\" value=\"string:Somalia\">Somalia</option><option label=\"South Africa\" value=\"string:South Africa\">South Africa</option><option label=\"South Georgia And The South Sandwich Islands\" value=\"string:South Georgia And The South Sandwich Islands\">South Georgia And The South Sandwich Islands</option><option label=\"South Sudan\" value=\"string:South Sudan\">South Sudan</option><option label=\"Spain\" value=\"string:Spain\">Spain</option><option label=\"Sri Lanka\" value=\"string:Sri Lanka\">Sri Lanka</option><option label=\"Sudan\" value=\"string:Sudan\">Sudan</option><option label=\"Suriname\" value=\"string:Suriname\">Suriname</option><option label=\"Svalbard and Jan Mayen\" value=\"string:Svalbard and Jan Mayen\">Svalbard and Jan Mayen</option><option label=\"Eswatini\" value=\"string:Eswatini\">Eswatini</option><option label=\"Sweden\" value=\"string:Sweden\">Sweden</option><option label=\"Switzerland\" value=\"string:Switzerland\">Switzerland</option><option label=\"Syrian Arab Republic\" value=\"string:Syrian Arab Republic\">Syrian Arab Republic</option><option label=\"Taiwan (Province of China)\" value=\"string:Taiwan (Province of China)\">Taiwan (Province of China)</option><option label=\"Tajikistan\" value=\"string:Tajikistan\">Tajikistan</option><option label=\"Tanzania, United Republic Of\" value=\"string:Tanzania, United Republic Of\">Tanzania, United Republic Of</option><option label=\"Thailand\" value=\"string:Thailand\">Thailand</option><option label=\"Timor-Leste\" value=\"string:Timor-Leste\">Timor-Leste</option><option label=\"Togo\" value=\"string:Togo\">Togo</option><option label=\"Tokelau\" value=\"string:Tokelau\">Tokelau</option><option label=\"Tonga\" value=\"string:Tonga\">Tonga</option><option label=\"Trinidad And Tobago\" value=\"string:Trinidad And Tobago\">Trinidad And Tobago</option><option label=\"Tunisia\" value=\"string:Tunisia\">Tunisia</option><option label=\"Turkey\" value=\"string:Turkey\">Turkey</option><option label=\"Turkmenistan\" value=\"string:Turkmenistan\">Turkmenistan</option><option label=\"Turks And Caicos Islands\" value=\"string:Turks And Caicos Islands\">Turks And Caicos Islands</option><option label=\"Tuvalu\" value=\"string:Tuvalu\">Tuvalu</option><option label=\"Uganda\" value=\"string:Uganda\">Uganda</option><option label=\"Ukraine\" value=\"string:Ukraine\">Ukraine</option><option label=\"United Arab Emirates\" value=\"string:United Arab Emirates\">United Arab Emirates</option><option label=\"United States Minor Outlying Islands\" value=\"string:United States Minor Outlying Islands\">United States Minor Outlying Islands</option><option label=\"Uruguay\" value=\"string:Uruguay\">Uruguay</option><option label=\"Uzbekistan\" value=\"string:Uzbekistan\">Uzbekistan</option><option label=\"Vanuatu\" value=\"string:Vanuatu\">Vanuatu</option><option label=\"Holy See\" value=\"string:Holy See\">Holy See</option><option label=\"Venezuela (Bolivarian Republic of)\" value=\"string:Venezuela (Bolivarian Republic of)\">Venezuela (Bolivarian Republic of)</option><option label=\"Viet Nam\" value=\"string:Viet Nam\">Viet Nam</option><option label=\"Virgin Islands (British)\" value=\"string:Virgin Islands (British)\">Virgin Islands (British)</option><option label=\"Virgin Islands (U.S.)\" value=\"string:Virgin Islands (U.S.)\">Virgin Islands (U.S.)</option><option label=\"Wallis and Futuna\" value=\"string:Wallis and Futuna\">Wallis and Futuna</option><option label=\"Western Sahara\" value=\"string:Western Sahara\">Western Sahara</option><option label=\"Yemen\" value=\"string:Yemen\">Yemen</option><option label=\"Zambia\" value=\"string:Zambia\">Zambia</option><option label=\"Zimbabwe\" value=\"string:Zimbabwe\">Zimbabwe</option></select>",
+        "fieldType": "",
+        "name": "input-yeSaYfwY",
+        "type": "select-one",
+        "placeholder": "",
+        "autocomplete": "country-name",
+        "id": "jv-field-yeSaYfwY",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required jv-empty-select",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-878db9d8-3bb5-4ffb-9907-a364e72f5ad3",
+        "selectedText": "Select an option..."
+      },
+      {
+        "label": "Zip/Postal Code*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yhSaYfw1\" name=\"input-yhSaYfw1\" autocomplete=\"postal-code\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-d047e41c-ad57-4f2e-b2e5-f8caee5c403f\">",
+        "fieldType": "",
+        "name": "input-yhSaYfw1",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "postal-code",
+        "id": "jv-field-yhSaYfw1",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-d047e41c-ad57-4f2e-b2e5-f8caee5c403f",
+        "selectedText": ""
+      },
+      {
+        "label": "Cell Phone",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yiSaYfw2\" name=\"input-yiSaYfw2\" autocomplete=\"tel\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"false\" type=\"tel\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength\" data-autofill-id=\"af-2cec4146-2ec8-446c-8c52-526b59a2a53c\">",
+        "fieldType": "",
+        "name": "input-yiSaYfw2",
+        "type": "tel",
+        "placeholder": "",
+        "autocomplete": "tel",
+        "id": "jv-field-yiSaYfw2",
+        "className": "ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-2cec4146-2ec8-446c-8c52-526b59a2a53c",
+        "selectedText": ""
+      },
+      {
+        "label": "Phone*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-y9SaYfwT\" name=\"input-y9SaYfwT\" autocomplete=\"tel\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"tel\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-bcc2fba3-d17c-4181-8f94-981a24de5bed\">",
+        "fieldType": "",
+        "name": "input-y9SaYfwT",
+        "type": "tel",
+        "placeholder": "",
+        "autocomplete": "tel",
+        "id": "jv-field-y9SaYfwT",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-bcc2fba3-d17c-4181-8f94-981a24de5bed",
+        "selectedText": ""
+      },
+      {
+        "label": "Current Employer",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-ywPoYfwr\" name=\"input-ywPoYfwr\" autocomplete=\"on\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"false\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength\" data-autofill-id=\"af-0cd5251c-ae02-4d3f-bbe4-1856c4065426\">",
+        "fieldType": "",
+        "name": "input-ywPoYfwr",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-ywPoYfwr",
+        "className": "ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-0cd5251c-ae02-4d3f-bbe4-1856c4065426",
+        "selectedText": ""
+      },
+      {
+        "label": "Current Title",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yxPoYfws\" name=\"input-yxPoYfws\" autocomplete=\"on\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"false\" type=\"text\" maxlength=\"100\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength\" data-autofill-id=\"af-d23030b7-6231-4252-9c6b-2e314ff1fe46\">",
+        "fieldType": "",
+        "name": "input-yxPoYfws",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-yxPoYfws",
+        "className": "ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-d23030b7-6231-4252-9c6b-2e314ff1fe46",
+        "selectedText": ""
+      },
+      {
+        "label": "What are your salary expectations for this role?*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yRMGYfw1\" name=\"input-yRMGYfw1\" autocomplete=\"on\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-65782da5-85a0-4d49-beb3-5608a83899f3\">",
+        "fieldType": "",
+        "name": "input-yRMGYfw1",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-yRMGYfw1",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-65782da5-85a0-4d49-beb3-5608a83899f3",
+        "selectedText": ""
+      },
+      {
+        "label": "If you were referred by a current employee of Ziff Davis (or one of our brands), please list the employee's full name here:",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-yOISYfw6\" name=\"input-yOISYfw6\" autocomplete=\"on\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"false\" type=\"text\" maxlength=\"\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength\" data-autofill-id=\"af-36e15ea6-7abf-41dc-905a-1440dff8b5e8\">",
+        "fieldType": "",
+        "name": "input-yOISYfw6",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-yOISYfw6",
+        "className": "ng-pristine ng-untouched ng-valid ng-scope ng-empty ng-valid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": false,
+        "elementReferenceId": "af-36e15ea6-7abf-41dc-905a-1440dff8b5e8",
+        "selectedText": ""
+      },
+      {
+        "label": "How did you find out about this position?*",
+        "html": "<select ng-if=\"!field.multiSelect\" id=\"jv-field-y3Qg1fwU\" name=\"input-y3Qg1fwU\" autocomplete=\"on\" ng-model=\"ngModel[field.viewFieldEId]\" ng-options=\"o.key as o.value  for o in field.values\" ng-required=\"field.required\" aria-required=\"true\" ng-change=\"changeCountry(field,ngModel[field.viewFieldEId])\" ng-class=\"{ 'jv-empty-select': !ngModel[field.viewFieldEId] }\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required jv-empty-select\" required=\"required\" data-autofill-id=\"af-230b6b25-1fe5-487d-812f-a6fb5839d664\"><option value=\"\" class=\"\" selected=\"selected\">Select an option...</option><option label=\"Agency\" value=\"string:Agency\">Agency</option><option label=\"Career Fair\" value=\"string:Career Fair\">Career Fair</option><option label=\"Company Website\" value=\"string:Company Website\">Company Website</option><option label=\"Directly Sourced by Recruiter\" value=\"string:Directly Sourced by Recruiter\">Directly Sourced by Recruiter</option><option label=\"Employee Referral\" value=\"string:Employee Referral\">Employee Referral</option><option label=\"Friend\" value=\"string:Friend\">Friend</option><option label=\"Internal Candidate\" value=\"string:Internal Candidate\">Internal Candidate</option><option label=\"Job Board Posting\" value=\"string:Job Board Posting\">Job Board Posting</option><option label=\"Past Employee\" value=\"string:Past Employee\">Past Employee</option><option label=\"Professional Organization\" value=\"string:Professional Organization\">Professional Organization</option><option label=\"Social Media\" value=\"string:Social Media\">Social Media</option><option label=\"Other\" value=\"string:Other\">Other</option></select>",
+        "fieldType": "",
+        "name": "input-y3Qg1fwU",
+        "type": "select-one",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-y3Qg1fwU",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required jv-empty-select",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-230b6b25-1fe5-487d-812f-a6fb5839d664",
+        "selectedText": "Select an option..."
+      },
+      {
+        "label": "List the specific source where you learned about this position (ex. Job posting on Indeed, Google search)*",
+        "html": "<input ng-switch-when=\"input\" id=\"jv-field-y4Qg1fwV\" name=\"input-y4Qg1fwV\" autocomplete=\"on\" ng-class=\"{ 'jv-form-bg-icon': field.icon }\" ng-model=\"ngModel[field.viewFieldEId]\" ng-required=\"field.required\" ng-pattern=\"[object Object]\" aria-required=\"true\" type=\"text\" maxlength=\"\" jv-clear=\"\" class=\"ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength\" required=\"required\" data-autofill-id=\"af-dcf6ac81-2e1d-4081-9e0f-31ceb08ad05e\">",
+        "fieldType": "",
+        "name": "input-y4Qg1fwV",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "on",
+        "id": "jv-field-y4Qg1fwV",
+        "className": "ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength",
+        "value": "",
+        "required": true,
+        "elementReferenceId": "af-dcf6ac81-2e1d-4081-9e0f-31ceb08ad05e",
+        "selectedText": ""
+      },
+      {
+        "label": "Type or paste your Resume here",
+        "html": "<textarea id=\"jv-paste-resume-textarea0\" ng-model=\"pastedText\" class=\"needsclick ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty\" jv-textarea-placeholder=\"Type or paste your Resume here\" placeholder=\"Type or paste your Resume here\" data-autofill-id=\"af-1017e01c-5f9c-419e-a04f-f7dd39fddd12\"></textarea>",
+        "fieldType": "",
+        "name": "",
+        "type": "textarea",
+        "placeholder": "Type or paste your Resume here",
+        "autocomplete": "",
+        "id": "jv-paste-resume-textarea0",
+        "className": "needsclick ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty",
+        "value": "Cancel\n                        Save",
+        "required": false,
+        "elementReferenceId": "af-1017e01c-5f9c-419e-a04f-f7dd39fddd12",
+        "selectedText": ""
+      },
+      {
+        "label": "Type or paste your Cover Letter here",
+        "html": "<textarea id=\"jv-paste-resume-textarea1\" ng-model=\"pastedText\" class=\"needsclick ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty\" jv-textarea-placeholder=\"Type or paste your Cover Letter here\" placeholder=\"Type or paste your Cover Letter here\" data-autofill-id=\"af-83b8ca59-c4fc-4f93-a990-5f40db28ccb8\"></textarea>",
+        "fieldType": "",
+        "name": "",
+        "type": "textarea",
+        "placeholder": "Type or paste your Cover Letter here",
+        "autocomplete": "",
+        "id": "jv-paste-resume-textarea1",
+        "className": "needsclick ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty",
+        "value": "Cancel\n                        Save",
+        "required": false,
+        "elementReferenceId": "af-83b8ca59-c4fc-4f93-a990-5f40db28ccb8",
+        "selectedText": ""
+      },
+      {
+        "label": "Type or paste your Portfolio here",
+        "html": "<textarea id=\"jv-paste-resume-textarea2\" ng-model=\"pastedText\" class=\"needsclick ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty\" jv-textarea-placeholder=\"Type or paste your Portfolio here\" placeholder=\"Type or paste your Portfolio here\" data-autofill-id=\"af-2ca2d474-5ac4-42ac-9d5d-208feb0439cc\"></textarea>",
+        "fieldType": "",
+        "name": "",
+        "type": "textarea",
+        "placeholder": "Type or paste your Portfolio here",
+        "autocomplete": "",
+        "id": "jv-paste-resume-textarea2",
+        "className": "needsclick ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty",
+        "value": "Cancel\n                        Save",
+        "required": false,
+        "elementReferenceId": "af-2ca2d474-5ac4-42ac-9d5d-208feb0439cc",
+        "selectedText": ""
+      }
+    ],
+    "saveFilledInputsResponse": [
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "element value is empty"
+      },
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      },
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      },
+      {
+        "status": "error",
+        "error": "Unknown input category"
+      }
+    ],
+    "autofillInstructionsResponse": [
+      {
+        "action": "skip",
+        "id": "af-01e557e3-212e-473c-96f4-6ca9c0919828"
+      },
+      {
+        "action": "fill",
+        "value": "Michael",
+        "id": "af-8997d582-62f8-41ab-896c-041b4cd7df5e"
+      },
+      {
+        "action": "fill",
+        "value": "Dickinson",
+        "id": "af-b028144c-eb50-4527-94bf-6e1c511f537b"
+      },
+      {
+        "action": "fill",
+        "value": "Michael",
+        "id": "af-5e03028f-4f6d-4028-b610-2813ae0879ac"
+      },
+      {
+        "action": "fill",
+        "value": "He/Him",
+        "id": "af-cb13dd65-dc31-4fc1-8d56-209326b4ac5a"
+      },
+      {
+        "action": "fill",
+        "value": "m@gmail.com",
+        "id": "af-0f5abd04-99ce-4878-8663-0e25dc756fb0"
+      },
+      {
+        "action": "fill",
+        "value": "31755 Gowdyville Road",
+        "id": "af-cf66734b-9a98-444d-b8f2-c70a543b249c"
+      },
+      {
+        "action": "fill",
+        "value": "Cottage Grove",
+        "id": "af-b0a58212-c6d4-468a-9ea2-b22bea006ce1"
+      },
+      {
+        "action": "fill",
+        "value": "OR",
+        "id": "af-84c93226-831b-403a-86e8-a3cf93c5bf03"
+      },
+      {
+        "action": "fill",
+        "value": "United States",
+        "id": "af-878db9d8-3bb5-4ffb-9907-a364e72f5ad3"
+      },
+      {
+        "action": "fill",
+        "value": "97424",
+        "id": "af-d047e41c-ad57-4f2e-b2e5-f8caee5c403f"
+      },
+      {
+        "action": "fill",
+        "value": "5415136290",
+        "id": "af-2cec4146-2ec8-446c-8c52-526b59a2a53c"
+      },
+      {
+        "action": "fill",
+        "value": "5415136290",
+        "id": "af-bcc2fba3-d17c-4181-8f94-981a24de5bed"
+      },
+      {
+        "action": "fill",
+        "value": "The boonies incorperated",
+        "id": "af-0cd5251c-ae02-4d3f-bbe4-1856c4065426"
+      },
+      {
+        "action": "fill",
+        "value": "Ooogabooga manager",
+        "id": "af-d23030b7-6231-4252-9c6b-2e314ff1fe46"
+      },
+      {
+        "action": "fill",
+        "value": "a milllion buckaroos",
+        "id": "af-65782da5-85a0-4d49-beb3-5608a83899f3"
+      },
+      {
+        "action": "skip",
+        "id": "af-36e15ea6-7abf-41dc-905a-1440dff8b5e8"
+      },
+      {
+        "action": "fill",
+        "value": "linkedin|job board|online|website|internet|other",
+        "id": "af-230b6b25-1fe5-487d-812f-a6fb5839d664"
+      },
+      {
+        "action": "fill",
+        "value": "linkedin",
+        "id": "af-dcf6ac81-2e1d-4081-9e0f-31ceb08ad05e"
+      },
+      {
+        "action": "skip",
+        "id": "af-1017e01c-5f9c-419e-a04f-f7dd39fddd12"
+      },
+      {
+        "action": "skip",
+        "id": "af-83b8ca59-c4fc-4f93-a990-5f40db28ccb8"
+      },
+      {
+        "action": "skip",
+        "id": "af-2ca2d474-5ac4-42ac-9d5d-208feb0439cc"
       }
     ]
   }
