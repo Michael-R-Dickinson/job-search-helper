@@ -8,7 +8,7 @@ export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlI
   return inputs.map((input) => {
     return {
       ...input,
-      label: input.label?.toLowerCase().trim().replace(/\*$/, '') || null,
+      label: input.label?.toLowerCase().trim().replace(/\*$/, '').trim() || null,
     }
   })
 }
