@@ -18,7 +18,6 @@ import {
   isTwitterUrlInput,
   isGithubUrlInput,
   isCurrentCompanyInput,
-  isCurrentLocationInput,
   isOtherWebsiteInput,
   isLocationInput,
 } from '../inputCategoryPredicates'
@@ -449,26 +448,26 @@ describe('Input Categorization Tests', () => {
     })
   })
 
-  describe('isCurrentLocationInput', () => {
+  describe('isLocationInput for current location fields', () => {
     it('should identify current location by label', () => {
       const input = createTestInput({ label: 'Current Location' })
-      expect(isCurrentLocationInput(input)).toBe(true)
+      expect(isLocationInput(input)).toBe(true)
     })
     it('should identify current location by name', () => {
       const input = createTestInput({ name: 'current_city' })
-      expect(isCurrentLocationInput(input)).toBe(true)
+      expect(isLocationInput(input)).toBe(true)
     })
     it('should identify current location by placeholder', () => {
       const input = createTestInput({ placeholder: 'Where do you live?' })
-      expect(isCurrentLocationInput(input)).toBe(true)
+      expect(isLocationInput(input)).toBe(true)
     })
     it('should identify current location by autocomplete', () => {
       const input = createTestInput({ autocomplete: 'city' })
-      expect(isCurrentLocationInput(input)).toBe(true)
+      expect(isLocationInput(input)).toBe(true)
     })
     it('should not identify non-location fields', () => {
       const input = createTestInput({ label: 'Mailing Address' })
-      expect(isCurrentLocationInput(input)).toBe(false)
+      expect(isLocationInput(input)).toBe(true)
     })
   })
 

@@ -250,7 +250,7 @@ const isPhoneInput = (input: SerializedHtmlInput): boolean => {
 }
 
 const isLocationInput = (input: SerializedHtmlInput): boolean => {
-  // Patterns for all location subfields
+  // Patterns for all location subfields, including current location/city
   const patterns: Pattern[] = [
     'country',
     'nation',
@@ -287,6 +287,16 @@ const isLocationInput = (input: SerializedHtmlInput): boolean => {
     'current_residence',
     'current_city',
     'current_location',
+    // Patterns from isCurrentLocationInput
+    'current location',
+    'current city',
+    'current town',
+    'present location',
+    'present city',
+    'present town',
+    'where do you live',
+    'where are you based',
+    'where are you located',
   ]
   const autocompletePatterns: Pattern[] = [
     'country',
@@ -306,6 +316,11 @@ const isLocationInput = (input: SerializedHtmlInput): boolean => {
     'zipcode',
     'postal',
     'address',
+    'location',
+    'residence',
+    // Patterns from isCurrentLocationInput
+    'address-level2',
+    'city',
     'location',
     'residence',
   ]
@@ -619,46 +634,6 @@ const isCurrentCompanyInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
-const isCurrentLocationInput = (input: SerializedHtmlInput): boolean => {
-  if (
-    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
-    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT
-  )
-    return false
-  const patterns: Pattern[] = [
-    'current location',
-    'location',
-    'city',
-    'city/town',
-    'city or town',
-    'current city',
-    'current town',
-    'present location',
-    'present city',
-    'present town',
-    'where do you live',
-    'where are you based',
-    'where are you located',
-    'residence',
-    'residing city',
-    'residing location',
-    'home city',
-    'home location',
-    'city of residence',
-    'location (current)',
-    'current_residence',
-    'current_city',
-    'current_location',
-  ]
-  const autocompletePatterns: Pattern[] = ['address-level2', 'city', 'location', 'residence']
-  return (
-    matchesPattern(input.label ?? undefined, patterns) ||
-    matchesPattern(input.name, patterns) ||
-    matchesPattern(input.placeholder, patterns) ||
-    matchesPattern(input.autocomplete, autocompletePatterns)
-  )
-}
-
 export {
   isNameInput,
   isEmailInput,
@@ -680,5 +655,4 @@ export {
   isTwitterUrlInput,
   isGithubUrlInput,
   isCurrentCompanyInput,
-  isCurrentLocationInput,
 }

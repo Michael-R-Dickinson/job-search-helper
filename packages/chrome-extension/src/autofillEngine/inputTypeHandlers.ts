@@ -699,23 +699,6 @@ class CurrentCompanyHandler extends InputCategoryHandler {
   }
 }
 
-class CurrentLocationHandler extends InputCategoryHandler {
-  value: string | undefined
-  constructor(userAutofillPreferences: UserAutofillPreferences) {
-    super(userAutofillPreferences)
-    this.value = userAutofillPreferences.current_location
-  }
-  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (this.value) {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
-    }
-    return { action: 'skip', id: input.element.elementReferenceId }
-  }
-  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    return saveUserAutofillValue(userId, 'current_location', input.element.value)
-  }
-}
-
 // Restore DefaultHandler for fallback
 class DefaultHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
@@ -765,7 +748,6 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   twitter_url: TwitterUrlHandler,
   github_url: GithubUrlHandler,
   current_company: CurrentCompanyHandler,
-  current_location: CurrentLocationHandler,
   unknown: DefaultHandler,
 }
 

@@ -18,7 +18,6 @@ import {
   isTwitterUrlInput,
   isGithubUrlInput,
   isCurrentCompanyInput,
-  isCurrentLocationInput,
   isLocationInput,
 } from './inputCategoryPredicates'
 import type { SerializedHtmlInput, CategorizedInput, InputCategory } from './schema'
@@ -46,7 +45,6 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isOtherWebsiteInput(input)) category = 'other_website'
     else if (isWebsiteInput(input)) category = 'website'
     else if (isCurrentCompanyInput(input) && !isNameInput(input)) category = 'current_company'
-    else if (isCurrentLocationInput(input) && !isLocationInput(input)) category = 'current_location'
     return {
       element: input,
       category,

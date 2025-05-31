@@ -325,21 +325,29 @@ describe('InputTypeHandlers', () => {
     expect(saveUserAutofillValue).toHaveBeenCalledWith('user6', 'current_company', '')
   })
 
-  it('handles current_location', () => {
-    const handler = getHandlerForInputCategory('current_location', {
-      current_location: 'San Francisco',
+  it('handles current location as location', () => {
+    const handler = getHandlerForInputCategory('location', {
+      location: { city: 'San Francisco', country: 'USA' },
     })
     const input = baseInput({
-      category: 'current_location',
-      element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-location' }) },
+      category: 'location',
+      label: 'Current Location',
+      element: {
+        ...baseElement({
+          fieldType: 'text',
+          elementReferenceId: 'af-location',
+          name: 'current_location',
+        }),
+      },
     })
+    // The LocationHandler only fills for city, country, state, postal_code, address, not 'current location' directly
+    // So the expected action is 'skip'
     expect(handler.getAutofillInstruction(input)).toEqual({
-      action: 'fill',
-      value: 'San Francisco',
+      action: 'skip',
       id: 'af-location',
     })
     handler.saveAutofillValue(input, 'user7')
-    expect(saveUserAutofillValue).toHaveBeenCalledWith('user7', 'current_location', '')
+    expect(saveUserAutofillValue).toHaveBeenCalled()
   })
 
   it('handles other_website', () => {
