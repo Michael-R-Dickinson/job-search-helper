@@ -161,6 +161,20 @@ describe('categorizeInputs', () => {
     })
   })
 
+  it('should categorize other website inputs correctly', () => {
+    const inputs: InputInfo[] = [
+      makeInput('input', { name: 'other_website' }, 'Other Website'),
+      makeInput('input', { name: 'secondary_website' }, 'Secondary Website'),
+      makeInput('input', { placeholder: 'Enter your alternate website' }, 'Alternate Website'),
+    ]
+    const parsed = serializeInputsHtml(inputs)
+    const result = categorizeInputs(parsed)
+    expect(result).toHaveLength(3)
+    result.forEach((input) => {
+      expect(input.category).toBe('other_website')
+    })
+  })
+
   it('should categorize inputs with no matching category as unknown', () => {
     const inputs: InputInfo[] = [
       makeInput('input', { name: 'fav_color' }, 'Favorite Color'),

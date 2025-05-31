@@ -381,7 +381,45 @@ const isLinkedInProfileInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
+const isOtherWebsiteInput = (input: SerializedHtmlInput): boolean => {
+  // Only match if the field is clearly labeled as 'other website', 'secondary website', etc.
+  const otherWebsitePatterns: Pattern[] = [
+    'other website',
+    'secondary website',
+    'alternate website',
+    'additional website',
+    'other web site',
+    'other url',
+    'secondary url',
+    'alternate url',
+    'additional url',
+    'other portfolio',
+    'secondary portfolio',
+    'alternate portfolio',
+    'additional portfolio',
+    // Regexes for underscore/dash variants
+    /other[_-]?website/i,
+    /secondary[_-]?website/i,
+    /alternate[_-]?website/i,
+    /additional[_-]?website/i,
+    /other[_-]?url/i,
+    /secondary[_-]?url/i,
+    /alternate[_-]?url/i,
+    /additional[_-]?url/i,
+    /other[_-]?portfolio/i,
+    /secondary[_-]?portfolio/i,
+    /alternate[_-]?portfolio/i,
+    /additional[_-]?portfolio/i,
+  ]
+  return (
+    matchesPattern(input.label ?? undefined, otherWebsitePatterns) ||
+    matchesPattern(input.name, otherWebsitePatterns) ||
+    matchesPattern(input.placeholder, otherWebsitePatterns)
+  )
+}
+
 const isWebsiteInput = (input: SerializedHtmlInput): boolean => {
+  if (isOtherWebsiteInput(input)) return false
   // Accept URL type or text fields with website patterns
   if (input.fieldType !== INPUT_ELEMENT_TYPES.URL && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT)
     return false
@@ -594,6 +632,7 @@ export {
   isEndDateYearInput,
   isLinkedInProfileInput,
   isWebsiteInput,
+  isOtherWebsiteInput,
   isTwitterUrlInput,
   isGithubUrlInput,
   isCurrentCompanyInput,

@@ -55,6 +55,7 @@ export type InputCategory =
   | 'end_date_year'
   | 'linkedin_profile'
   | 'website'
+  | 'other_website'
   | 'twitter_url'
   | 'github_url'
   | 'current_company'
@@ -122,6 +123,7 @@ export const UserAutofillPreferencesSchema = z.object({
   end_date_year: z.string().optional(),
   linkedin_profile: z.string().optional(),
   website: z.string().optional(),
+  other_website: z.string().optional(),
   twitter_url: z.string().optional(),
   github_url: z.string().optional(),
   current_company: z.string().optional(),

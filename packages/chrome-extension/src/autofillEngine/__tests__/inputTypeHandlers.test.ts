@@ -322,6 +322,23 @@ describe('InputTypeHandlers', () => {
     expect(saveUserAutofillValue).toHaveBeenCalledWith('user7', 'current_location', '')
   })
 
+  it('handles other_website', () => {
+    const handler = getHandlerForInputCategory('other_website', {
+      other_website: 'https://other.site',
+    })
+    const input = baseInput({
+      category: 'other_website',
+      element: { ...baseElement({ fieldType: 'url', elementReferenceId: 'af-other-website' }) },
+    })
+    expect(handler.getAutofillInstruction(input)).toEqual({
+      action: 'fill',
+      value: 'https://other.site',
+      id: 'af-other-website',
+    })
+    handler.saveAutofillValue(input, 'user7')
+    expect(saveUserAutofillValue).toHaveBeenCalledWith('user7', 'other_website', '')
+  })
+
   it('skips if no value is present', () => {
     const handler = getHandlerForInputCategory('gender', {})
     const input = baseInput({

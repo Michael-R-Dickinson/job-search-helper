@@ -16,6 +16,7 @@ import {
   isEndDateYearInput,
   isLinkedInProfileInput,
   isWebsiteInput,
+  isOtherWebsiteInput,
   isTwitterUrlInput,
   isGithubUrlInput,
   isCurrentCompanyInput,
@@ -43,6 +44,7 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isLinkedInProfileInput(input)) category = 'linkedin_profile'
     else if (isTwitterUrlInput(input)) category = 'twitter_url'
     else if (isGithubUrlInput(input)) category = 'github_url'
+    else if (isOtherWebsiteInput(input)) category = 'other_website'
     else if (isWebsiteInput(input)) category = 'website'
     else if (isCountryInput(input)) category = 'country'
     else if (isCurrentCompanyInput(input) && !isNameInput(input)) category = 'current_company'

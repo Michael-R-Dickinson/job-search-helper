@@ -235,7 +235,7 @@
     "inputsData": [
       {
         "label": "Full name✱",
-        "html": "<input type=\"text\" data-qa=\"name-input\" name=\"name\" required=\"\" data-autofill-id=\"af-f40f156a-a71d-4fde-9058-279460df24f4\">",
+        "html": "<input type=\"text\" data-qa=\"name-input\" name=\"name\" required=\"\" data-autofill-id=\"af-835f6d4d-f86d-4016-acb1-c40b54482e1d\">",
         "fieldType": "",
         "name": "name",
         "type": "text",
@@ -245,12 +245,12 @@
         "className": "",
         "value": "Michael R Dickinson",
         "required": true,
-        "elementReferenceId": "af-f40f156a-a71d-4fde-9058-279460df24f4",
+        "elementReferenceId": "af-835f6d4d-f86d-4016-acb1-c40b54482e1d",
         "selectedText": ""
       },
       {
         "label": "Email✱",
-        "html": "<input name=\"email\" data-qa=\"email-input\" type=\"email\" pattern=\"[a-zA-Z0-9.#$%&amp;'*+\\/=?^_`{|}~][a-zA-Z0-9.!#$%&amp;'*+\\/=?^_`{|}~-]*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\" required=\"\" data-autofill-id=\"af-6bc6d501-2a8b-479c-a5c7-dab29e6f00bf\">",
+        "html": "<input name=\"email\" data-qa=\"email-input\" type=\"email\" pattern=\"[a-zA-Z0-9.#$%&amp;'*+\\/=?^_`{|}~][a-zA-Z0-9.!#$%&amp;'*+\\/=?^_`{|}~-]*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\" required=\"\" data-autofill-id=\"af-460b5eb9-648e-4c33-8443-5d8f5708631c\">",
         "fieldType": "",
         "name": "email",
         "type": "email",
@@ -260,12 +260,12 @@
         "className": "",
         "value": "michael.dickinson3949@gmail.com",
         "required": true,
-        "elementReferenceId": "af-6bc6d501-2a8b-479c-a5c7-dab29e6f00bf",
+        "elementReferenceId": "af-460b5eb9-648e-4c33-8443-5d8f5708631c",
         "selectedText": ""
       },
       {
         "label": "Phone ✱",
-        "html": "<input type=\"text\" data-qa=\"phone-input\" name=\"phone\" required=\"\" data-autofill-id=\"af-3e6f5293-6af9-49b1-844d-d9a73f41b882\">",
+        "html": "<input type=\"text\" data-qa=\"phone-input\" name=\"phone\" required=\"\" data-autofill-id=\"af-5f47f3f0-e09b-4157-8650-8e8cefc85f71\">",
         "fieldType": "",
         "name": "phone",
         "type": "text",
@@ -275,12 +275,12 @@
         "className": "",
         "value": "5415136290",
         "required": true,
-        "elementReferenceId": "af-3e6f5293-6af9-49b1-844d-d9a73f41b882",
+        "elementReferenceId": "af-5f47f3f0-e09b-4157-8650-8e8cefc85f71",
         "selectedText": ""
       },
       {
         "label": "Current location No location found. Try entering a different locationLoading",
-        "html": "<input class=\"location-input\" data-qa=\"location-input\" id=\"location-input\" type=\"text\" maxlength=\"100\" name=\"location\" data-autofill-id=\"af-0f31936b-ae7a-4488-a344-ce25a45f3aed\">",
+        "html": "<input class=\"location-input\" data-qa=\"location-input\" id=\"location-input\" type=\"text\" maxlength=\"100\" name=\"location\" data-autofill-id=\"af-e69b13d4-80b3-4f30-b047-0a10d2d40b35\">",
         "fieldType": "",
         "name": "location",
         "type": "text",
@@ -288,14 +288,14 @@
         "autocomplete": "",
         "id": "location-input",
         "className": "location-input",
-        "value": "No location found. Try entering a different locationLoading",
+        "value": "Cottage Grove, OR, USA",
         "required": false,
-        "elementReferenceId": "af-0f31936b-ae7a-4488-a344-ce25a45f3aed",
+        "elementReferenceId": "af-e69b13d4-80b3-4f30-b047-0a10d2d40b35",
         "selectedText": ""
       },
       {
         "label": "Current company",
-        "html": "<input type=\"text\" data-qa=\"org-input\" name=\"org\" data-autofill-id=\"af-4c4ef8de-a670-4e21-980f-32277034b7ce\">",
+        "html": "<input type=\"text\" data-qa=\"org-input\" name=\"org\" data-autofill-id=\"af-acc8653f-1895-4622-b85e-8534a0702850\">",
         "fieldType": "",
         "name": "org",
         "type": "text",
@@ -303,14 +303,14 @@
         "autocomplete": "",
         "id": "",
         "className": "",
-        "value": "",
+        "value": "The boonies incorperated",
         "required": false,
-        "elementReferenceId": "af-4c4ef8de-a670-4e21-980f-32277034b7ce",
+        "elementReferenceId": "af-acc8653f-1895-4622-b85e-8534a0702850",
         "selectedText": ""
       },
       {
         "label": "LinkedIn URL",
-        "html": "<input type=\"text\" name=\"urls[LinkedIn]\" data-autofill-id=\"af-56a6eceb-4050-4688-9b47-f1a77d7bc7f5\">",
+        "html": "<input type=\"text\" name=\"urls[LinkedIn]\" data-autofill-id=\"af-48891c05-f8f6-458f-b92e-cea42b19a901\">",
         "fieldType": "",
         "name": "urls[LinkedIn]",
         "type": "text",
@@ -320,12 +320,12 @@
         "className": "",
         "value": "likniedk.com",
         "required": false,
-        "elementReferenceId": "af-56a6eceb-4050-4688-9b47-f1a77d7bc7f5",
+        "elementReferenceId": "af-48891c05-f8f6-458f-b92e-cea42b19a901",
         "selectedText": ""
       },
       {
         "label": "Twitter URL",
-        "html": "<input type=\"text\" name=\"urls[Twitter]\" data-autofill-id=\"af-5fc37dcb-6b68-4d5a-9227-3ceb70c12481\">",
+        "html": "<input type=\"text\" name=\"urls[Twitter]\" data-autofill-id=\"af-3173c32c-e2af-481a-90be-3df506d86f78\">",
         "fieldType": "",
         "name": "urls[Twitter]",
         "type": "text",
@@ -335,12 +335,12 @@
         "className": "",
         "value": "wtweitter.com",
         "required": false,
-        "elementReferenceId": "af-5fc37dcb-6b68-4d5a-9227-3ceb70c12481",
+        "elementReferenceId": "af-3173c32c-e2af-481a-90be-3df506d86f78",
         "selectedText": ""
       },
       {
         "label": "GitHub URL",
-        "html": "<input type=\"text\" name=\"urls[GitHub]\" data-autofill-id=\"af-096eedef-7708-4a46-b5ad-fcb7d8a5ac4a\">",
+        "html": "<input type=\"text\" name=\"urls[GitHub]\" data-autofill-id=\"af-fae5de0f-9f1c-4e8c-821b-d827afa3e55c\">",
         "fieldType": "",
         "name": "urls[GitHub]",
         "type": "text",
@@ -350,12 +350,12 @@
         "className": "",
         "value": "githee",
         "required": false,
-        "elementReferenceId": "af-096eedef-7708-4a46-b5ad-fcb7d8a5ac4a",
+        "elementReferenceId": "af-fae5de0f-9f1c-4e8c-821b-d827afa3e55c",
         "selectedText": ""
       },
       {
         "label": "Portfolio URL",
-        "html": "<input type=\"text\" name=\"urls[Portfolio]\" data-autofill-id=\"af-172ad3ab-8685-4910-8779-90be4fcebc96\">",
+        "html": "<input type=\"text\" name=\"urls[Portfolio]\" data-autofill-id=\"af-af5d6b62-b837-4cdd-9809-9d00e96572be\">",
         "fieldType": "",
         "name": "urls[Portfolio]",
         "type": "text",
@@ -363,14 +363,14 @@
         "autocomplete": "",
         "id": "",
         "className": "",
-        "value": "34234adsfadf",
+        "value": "portfolioUrl type shit",
         "required": false,
-        "elementReferenceId": "af-172ad3ab-8685-4910-8779-90be4fcebc96",
+        "elementReferenceId": "af-af5d6b62-b837-4cdd-9809-9d00e96572be",
         "selectedText": ""
       },
       {
         "label": "Other website",
-        "html": "<input type=\"text\" name=\"urls[Other]\" data-autofill-id=\"af-2227891d-a58a-422c-82fe-c033b6a0676f\">",
+        "html": "<input type=\"text\" name=\"urls[Other]\" data-autofill-id=\"af-f750762d-9b30-41c0-8e79-79bb71b37417\">",
         "fieldType": "",
         "name": "urls[Other]",
         "type": "text",
@@ -378,14 +378,14 @@
         "autocomplete": "",
         "id": "",
         "className": "",
-        "value": "",
+        "value": "other website type shit",
         "required": false,
-        "elementReferenceId": "af-2227891d-a58a-422c-82fe-c033b6a0676f",
+        "elementReferenceId": "af-f750762d-9b30-41c0-8e79-79bb71b37417",
         "selectedText": ""
       },
       {
         "label": null,
-        "html": "<textarea class=\"card-field-input\" name=\"cards[4e0c5714-46fa-4682-ac15-2b2a2517038d][field0]\" required=\"required\" data-autofill-id=\"af-d1648ec1-3108-45fc-b246-5d47a66216d3\"></textarea>",
+        "html": "<textarea class=\"card-field-input\" name=\"cards[4e0c5714-46fa-4682-ac15-2b2a2517038d][field0]\" required=\"required\" data-autofill-id=\"af-352f7d1c-5c19-4dec-82d4-e61097eb468e\"></textarea>",
         "fieldType": "",
         "name": "cards[4e0c5714-46fa-4682-ac15-2b2a2517038d][field0]",
         "type": "textarea",
@@ -393,14 +393,14 @@
         "autocomplete": "",
         "id": "",
         "className": "card-field-input",
-        "value": "I am so authorized",
+        "value": "so eligible",
         "required": true,
-        "elementReferenceId": "af-d1648ec1-3108-45fc-b246-5d47a66216d3",
+        "elementReferenceId": "af-352f7d1c-5c19-4dec-82d4-e61097eb468e",
         "selectedText": ""
       },
       {
         "label": "Additional information",
-        "html": "<textarea placeholder=\"Add a cover letter or anything else you want to share.\" name=\"comments\" id=\"additional-information\" data-autofill-id=\"af-266f7657-1d67-41bb-bf61-bc479fbcbc17\"></textarea>",
+        "html": "<textarea placeholder=\"Add a cover letter or anything else you want to share.\" name=\"comments\" id=\"additional-information\" data-autofill-id=\"af-96de35ff-714c-49ce-bd2b-357c80a36053\"></textarea>",
         "fieldType": "",
         "name": "comments",
         "type": "textarea",
@@ -408,9 +408,9 @@
         "autocomplete": "",
         "id": "additional-information",
         "className": "",
-        "value": "additional",
+        "value": "nope",
         "required": false,
-        "elementReferenceId": "af-266f7657-1d67-41bb-bf61-bc479fbcbc17",
+        "elementReferenceId": "af-96de35ff-714c-49ce-bd2b-357c80a36053",
         "selectedText": ""
       }
     ],
@@ -430,12 +430,14 @@
         "value": "5415136290"
       },
       {
-        "status": "error",
-        "error": "Unknown input category"
+        "status": "success",
+        "valuePath": "current_location",
+        "value": "Cottage Grove, OR, USA"
       },
       {
-        "status": "error",
-        "error": "element value is empty"
+        "status": "success",
+        "valuePath": "current_company",
+        "value": "The boonies incorperated"
       },
       {
         "status": "success",
@@ -444,27 +446,28 @@
       },
       {
         "status": "success",
-        "valuePath": "website",
+        "valuePath": "twitter_url",
         "value": "wtweitter.com"
       },
       {
         "status": "success",
-        "valuePath": "website",
+        "valuePath": "github_url",
         "value": "githee"
       },
       {
         "status": "success",
         "valuePath": "website",
-        "value": "34234adsfadf"
+        "value": "portfolioUrl type shit"
       },
       {
-        "status": "error",
-        "error": "element value is empty"
+        "status": "success",
+        "valuePath": "other_website",
+        "value": "other website type shit"
       },
       {
         "status": "success",
         "valuePath": "discipline",
-        "value": "I am so authorized"
+        "value": "so eligible"
       },
       {
         "status": "error",
@@ -474,58 +477,60 @@
     "autofillInstructionsResponse": [
       {
         "action": "skip",
-        "id": "af-f40f156a-a71d-4fde-9058-279460df24f4"
+        "id": "af-835f6d4d-f86d-4016-acb1-c40b54482e1d"
       },
       {
         "action": "fill",
         "value": "michael.dickinson3949@gmail.com",
-        "id": "af-6bc6d501-2a8b-479c-a5c7-dab29e6f00bf"
+        "id": "af-460b5eb9-648e-4c33-8443-5d8f5708631c"
       },
       {
         "action": "skip",
-        "id": "af-3e6f5293-6af9-49b1-844d-d9a73f41b882"
+        "id": "af-5f47f3f0-e09b-4157-8650-8e8cefc85f71"
       },
       {
-        "action": "skip",
-        "id": "af-0f31936b-ae7a-4488-a344-ce25a45f3aed"
+        "action": "fill",
+        "value": "Cottage Grove, OR, USA",
+        "id": "af-e69b13d4-80b3-4f30-b047-0a10d2d40b35"
       },
       {
-        "action": "skip",
-        "id": "af-4c4ef8de-a670-4e21-980f-32277034b7ce"
+        "action": "fill",
+        "value": "The boonies incorperated",
+        "id": "af-acc8653f-1895-4622-b85e-8534a0702850"
       },
       {
         "action": "fill",
         "value": "likniedk.com",
-        "id": "af-56a6eceb-4050-4688-9b47-f1a77d7bc7f5"
+        "id": "af-48891c05-f8f6-458f-b92e-cea42b19a901"
       },
       {
         "action": "fill",
-        "value": "34234adsfadf",
-        "id": "af-5fc37dcb-6b68-4d5a-9227-3ceb70c12481"
+        "value": "wtweitter.com",
+        "id": "af-3173c32c-e2af-481a-90be-3df506d86f78"
       },
       {
         "action": "fill",
-        "value": "34234adsfadf",
-        "id": "af-096eedef-7708-4a46-b5ad-fcb7d8a5ac4a"
+        "value": "githee",
+        "id": "af-fae5de0f-9f1c-4e8c-821b-d827afa3e55c"
       },
       {
         "action": "fill",
-        "value": "34234adsfadf",
-        "id": "af-172ad3ab-8685-4910-8779-90be4fcebc96"
+        "value": "portfolioUrl type shit",
+        "id": "af-af5d6b62-b837-4cdd-9809-9d00e96572be"
       },
       {
         "action": "fill",
-        "value": "34234adsfadf",
-        "id": "af-2227891d-a58a-422c-82fe-c033b6a0676f"
+        "value": "other website type shit",
+        "id": "af-f750762d-9b30-41c0-8e79-79bb71b37417"
       },
       {
         "action": "fill",
-        "value": "I am so authorized",
-        "id": "af-d1648ec1-3108-45fc-b246-5d47a66216d3"
+        "value": "so eligible",
+        "id": "af-352f7d1c-5c19-4dec-82d4-e61097eb468e"
       },
       {
         "action": "skip",
-        "id": "af-266f7657-1d67-41bb-bf61-bc479fbcbc17"
+        "id": "af-96de35ff-714c-49ce-bd2b-357c80a36053"
       }
     ]
   }

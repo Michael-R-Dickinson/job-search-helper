@@ -21,6 +21,7 @@ import {
   isGithubUrlInput,
   isCurrentCompanyInput,
   isCurrentLocationInput,
+  isOtherWebsiteInput,
 } from '../inputCategoryPredicates'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 
@@ -472,6 +473,29 @@ describe('Input Categorization Tests', () => {
     it('should not identify non-location fields', () => {
       const input = createTestInput({ label: 'Mailing Address' })
       expect(isCurrentLocationInput(input)).toBe(false)
+    })
+  })
+
+  describe('isOtherWebsiteInput', () => {
+    it('should identify other website by label', () => {
+      const input = createTestInput({ label: 'Other Website' })
+      expect(isOtherWebsiteInput(input)).toBe(true)
+      expect(isWebsiteInput(input)).toBe(false)
+    })
+    it('should identify other website by name', () => {
+      const input = createTestInput({ name: 'secondary_website' })
+      expect(isOtherWebsiteInput(input)).toBe(true)
+      expect(isWebsiteInput(input)).toBe(false)
+    })
+    it('should identify other website by placeholder', () => {
+      const input = createTestInput({ placeholder: 'Enter your alternate website' })
+      expect(isOtherWebsiteInput(input)).toBe(true)
+      expect(isWebsiteInput(input)).toBe(false)
+    })
+    it('should not match regular website fields', () => {
+      const input = createTestInput({ label: 'Personal Website' })
+      expect(isOtherWebsiteInput(input)).toBe(false)
+      expect(isWebsiteInput(input)).toBe(true)
     })
   })
 })

@@ -494,6 +494,23 @@ class WebsiteHandler extends InputCategoryHandler {
   }
 }
 
+class OtherWebsiteHandler extends InputCategoryHandler {
+  value: string | undefined
+  constructor(userAutofillPreferences: UserAutofillPreferences) {
+    super(userAutofillPreferences)
+    this.value = userAutofillPreferences.other_website
+  }
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    if (this.value) {
+      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    }
+    return { action: 'skip', id: input.element.elementReferenceId }
+  }
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    return saveUserAutofillValue(userId, 'other_website', input.element.value)
+  }
+}
+
 class TwitterUrlHandler extends InputCategoryHandler {
   value: string | undefined
   constructor(userAutofillPreferences: UserAutofillPreferences) {
@@ -608,6 +625,7 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   end_date_year: EndDateYearHandler,
   linkedin_profile: LinkedinProfileHandler,
   website: WebsiteHandler,
+  other_website: OtherWebsiteHandler,
   twitter_url: TwitterUrlHandler,
   github_url: GithubUrlHandler,
   current_company: CurrentCompanyHandler,
