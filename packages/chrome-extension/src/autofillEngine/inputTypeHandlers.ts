@@ -240,10 +240,7 @@ class PhoneHandler extends InputCategoryHandler {
     }
 
     // Default: phone number field
-    if (typeof this.phoneNum === 'number') {
-      return { action: 'fill', value: String(this.phoneNum), id: input.element.elementReferenceId }
-    }
-    return { action: 'skip', id: input.element.elementReferenceId }
+    return { action: 'fill', value: String(this.phoneNum), id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
     const label = input.label?.toLowerCase() || ''
