@@ -177,7 +177,7 @@
       {
         "status": "success",
         "valuePath": "authorization",
-        "value": "Yes"
+        "value": "yes"
       },
       {
         "status": "success",
@@ -223,7 +223,7 @@
       },
       {
         "action": "fill",
-        "value": "Yes",
+        "value": "yes",
         "id": "af-70bc9fd6-38cc-4192-aea4-58ad1c8aabc6"
       },
       {
