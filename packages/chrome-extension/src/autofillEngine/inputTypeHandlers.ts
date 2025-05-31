@@ -717,16 +717,19 @@ class PositionDiscoverySourceHandler extends InputCategoryHandler {
   value: string | undefined
   constructor(userAutofillPreferences: UserAutofillPreferences) {
     super(userAutofillPreferences)
-    this.value = userAutofillPreferences.position_discovery_source
+    // We don't use saved preferences for this field
+    this.value = undefined
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (this.value) {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
-    }
-    return { action: 'skip', id: input.element.elementReferenceId }
+    // Always fill with "linkedin" regardless of saved preferences
+    return { action: 'fill', value: 'linkedin', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    return saveUserAutofillValue(userId, 'position_discovery_source', input.element.value)
+    // Always skip saving for position discovery source
+    return Promise.resolve({
+      status: 'error',
+      error: 'Position discovery source is not saved',
+    })
   }
 }
 
@@ -751,16 +754,19 @@ class ReferralSourceHandler extends InputCategoryHandler {
   value: string | undefined
   constructor(userAutofillPreferences: UserAutofillPreferences) {
     super(userAutofillPreferences)
-    this.value = userAutofillPreferences.referral_source
+    // We don't use saved preferences for this field
+    this.value = undefined
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (this.value) {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
-    }
+    // Always skip autofill for referral source
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    return saveUserAutofillValue(userId, 'referral_source', input.element.value)
+    // Always skip saving for referral source
+    return Promise.resolve({
+      status: 'error',
+      error: 'Referral source is not saved',
+    })
   }
 }
 

@@ -138,9 +138,7 @@ export const UserAutofillPreferencesSchema = z.object({
   github_url: z.string().optional(),
   current_company: z.string().optional(),
   salary_expectations: z.string().optional(),
-  position_discovery_source: z.string().optional(),
   current_job_title: z.string().optional(),
-  referral_source: z.string().optional(),
   pronouns: z.string().optional(),
 })
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
