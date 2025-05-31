@@ -1,1 +1,236 @@
-[]
+[
+  {
+    "sourceURL": "https://job-boards.greenhouse.io/gametimeunited/jobs/4670879008?source=Linkedin",
+    "inputsData": [
+      {
+        "label": "First Name*",
+        "html": "<input id=\"first_name\" class=\"input input__single-line\" aria-label=\"First Name\" aria-describedby=\"first_name-description first_name-error first_name-help\" aria-invalid=\"false\" aria-errormessage=\"first_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"given-name\" value=\"Michael\" data-autofill-id=\"af-1f1e14c4-0989-4bc3-9a63-b64abd4228e7\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "given-name",
+        "id": "first_name",
+        "className": "input input__single-line",
+        "value": "Michael",
+        "required": false,
+        "elementReferenceId": "af-1f1e14c4-0989-4bc3-9a63-b64abd4228e7",
+        "selectedText": ""
+      },
+      {
+        "label": "Last Name*",
+        "html": "<input id=\"last_name\" class=\"input input__single-line\" aria-label=\"Last Name\" aria-describedby=\"last_name-description last_name-error last_name-help\" aria-invalid=\"false\" aria-errormessage=\"last_name-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"family-name\" value=\"Dickinson\" data-autofill-id=\"af-134b5b90-c840-40bd-a3ed-b4866341fa8d\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "family-name",
+        "id": "last_name",
+        "className": "input input__single-line",
+        "value": "Dickinson",
+        "required": false,
+        "elementReferenceId": "af-134b5b90-c840-40bd-a3ed-b4866341fa8d",
+        "selectedText": ""
+      },
+      {
+        "label": "Email*",
+        "html": "<input id=\"email\" class=\"input input__single-line\" aria-label=\"Email\" aria-describedby=\"email-description email-error email-help\" aria-invalid=\"false\" aria-errormessage=\"email-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" autocomplete=\"email\" value=\"m@gmail.com\" data-autofill-id=\"af-b1d6d0cf-aa27-41e2-846b-707994f0c991\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "email",
+        "id": "email",
+        "className": "input input__single-line",
+        "value": "m@gmail.com",
+        "required": false,
+        "elementReferenceId": "af-b1d6d0cf-aa27-41e2-846b-707994f0c991",
+        "selectedText": ""
+      },
+      {
+        "label": "Phone",
+        "html": "<input id=\"phone\" class=\"input input__single-line\" aria-label=\"Phone\" aria-describedby=\"phone-description phone-error phone-help\" aria-invalid=\"false\" aria-errormessage=\"phone-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" autocomplete=\"tel\" value=\"5415136290\" data-autofill-id=\"af-3157dabd-e673-46fa-95eb-f89fc9c38011\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "tel",
+        "id": "phone",
+        "className": "input input__single-line",
+        "value": "5415136290",
+        "required": false,
+        "elementReferenceId": "af-3157dabd-e673-46fa-95eb-f89fc9c38011",
+        "selectedText": ""
+      },
+      {
+        "label": "LinkedIn Profile",
+        "html": "<input id=\"question_10521322008\" class=\"input input__single-line\" aria-label=\"LinkedIn Profile\" aria-describedby=\"question_10521322008-description question_10521322008-error question_10521322008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521322008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"likniedk.com\" data-autofill-id=\"af-49ef0f67-f6cc-4079-b5f8-ee282547043a\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "question_10521322008",
+        "className": "input input__single-line",
+        "value": "likniedk.com",
+        "required": false,
+        "elementReferenceId": "af-49ef0f67-f6cc-4079-b5f8-ee282547043a",
+        "selectedText": ""
+      },
+      {
+        "label": "Website",
+        "html": "<input id=\"question_10521323008\" class=\"input input__single-line\" aria-label=\"Website\" aria-describedby=\"question_10521323008-description question_10521323008-error question_10521323008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10521323008-error\" aria-required=\"false\" type=\"text\" maxlength=\"255\" value=\"portfolioUrl type shit\" data-autofill-id=\"af-e5a225d6-b437-4b40-82a8-db1b54333cc1\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "question_10521323008",
+        "className": "input input__single-line",
+        "value": "portfolioUrl type shit",
+        "required": false,
+        "elementReferenceId": "af-e5a225d6-b437-4b40-82a8-db1b54333cc1",
+        "selectedText": ""
+      },
+      {
+        "label": "Do you currently reside in or will you be relocating to any of the following states?*",
+        "html": "<input class=\"select__input\" style=\"label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10521999008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10521999008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10521999008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" aria-describedby=\"react-select-question_10521999008-placeholder question_10521999008-error\" enterkeyhint=\"done\" value=\"string:OR\" data-autofill-id=\"af-0a584460-689f-49c5-8081-7c9de6bc24d7\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "off",
+        "id": "question_10521999008",
+        "className": "select__input",
+        "value": "string:OR",
+        "required": false,
+        "elementReferenceId": "af-0a584460-689f-49c5-8081-7c9de6bc24d7",
+        "selectedText": ""
+      },
+      {
+        "label": "Are you legally authorized to work in United States?*",
+        "html": "<input class=\"select__input\" style=\"color: inherit; background: 0px center; opacity: 1; width: 100%; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; outline: 0px; padding: 0px;\" autocapitalize=\"none\" autocomplete=\"off\" autocorrect=\"off\" id=\"question_10522000008\" spellcheck=\"false\" tabindex=\"0\" type=\"text\" aria-autocomplete=\"list\" aria-expanded=\"false\" aria-haspopup=\"true\" aria-errormessage=\"question_10522000008-error\" aria-invalid=\"false\" aria-labelledby=\"question_10522000008-label\" aria-required=\"true\" role=\"combobox\" aria-activedescendant=\"\" enterkeyhint=\"done\" value=\"Yes\" data-autofill-id=\"af-70bc9fd6-38cc-4192-aea4-58ad1c8aabc6\" aria-describedby=\"react-select-question_10522000008-placeholder question_10522000008-error\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "off",
+        "id": "question_10522000008",
+        "className": "select__input",
+        "value": "Yes",
+        "required": false,
+        "elementReferenceId": "af-70bc9fd6-38cc-4192-aea4-58ad1c8aabc6",
+        "selectedText": ""
+      },
+      {
+        "label": "Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.*",
+        "html": "<input id=\"question_10522001008\" class=\"input input__single-line\" aria-label=\"Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.\" aria-describedby=\"question_10522001008-description question_10522001008-error question_10522001008-help\" aria-invalid=\"false\" aria-errormessage=\"question_10522001008-error\" aria-required=\"true\" type=\"text\" maxlength=\"255\" value=\"sponsorship and shit\" data-autofill-id=\"af-b8639011-67cf-4ce6-9f47-175b68771a8a\">",
+        "fieldType": "",
+        "name": "",
+        "type": "text",
+        "placeholder": "",
+        "autocomplete": "",
+        "id": "question_10522001008",
+        "className": "input input__single-line",
+        "value": "sponsorship and shit",
+        "required": false,
+        "elementReferenceId": "af-b8639011-67cf-4ce6-9f47-175b68771a8a",
+        "selectedText": ""
+      }
+    ],
+    "saveFilledInputsResponse": [
+      {
+        "status": "success",
+        "valuePath": "name/first_name",
+        "value": "Michael"
+      },
+      {
+        "status": "success",
+        "valuePath": "name/last_name",
+        "value": "Dickinson"
+      },
+      {
+        "status": "success",
+        "valuePath": "email",
+        "value": "m@gmail.com"
+      },
+      {
+        "status": "success",
+        "valuePath": "phone/phoneNum",
+        "value": "5415136290"
+      },
+      {
+        "status": "success",
+        "valuePath": "linkedin_profile",
+        "value": "likniedk.com"
+      },
+      {
+        "status": "success",
+        "valuePath": "website",
+        "value": "portfolioUrl type shit"
+      },
+      {
+        "status": "success",
+        "valuePath": "location/state",
+        "value": "string:OR"
+      },
+      {
+        "status": "success",
+        "valuePath": "authorization",
+        "value": "Yes"
+      },
+      {
+        "status": "success",
+        "valuePath": "sponsorship/text",
+        "value": "sponsorship and shit"
+      }
+    ],
+    "autofillInstructionsResponse": [
+      {
+        "action": "fill",
+        "value": "Michael",
+        "id": "af-1f1e14c4-0989-4bc3-9a63-b64abd4228e7"
+      },
+      {
+        "action": "fill",
+        "value": "Dickinson",
+        "id": "af-134b5b90-c840-40bd-a3ed-b4866341fa8d"
+      },
+      {
+        "action": "fill",
+        "value": "m@gmail.com",
+        "id": "af-b1d6d0cf-aa27-41e2-846b-707994f0c991"
+      },
+      {
+        "action": "fill",
+        "value": "5415136290",
+        "id": "af-3157dabd-e673-46fa-95eb-f89fc9c38011"
+      },
+      {
+        "action": "fill",
+        "value": "likniedk.com",
+        "id": "af-49ef0f67-f6cc-4079-b5f8-ee282547043a"
+      },
+      {
+        "action": "fill",
+        "value": "portfolioUrl type shit",
+        "id": "af-e5a225d6-b437-4b40-82a8-db1b54333cc1"
+      },
+      {
+        "action": "fill",
+        "value": "string:OR",
+        "id": "af-0a584460-689f-49c5-8081-7c9de6bc24d7"
+      },
+      {
+        "action": "fill",
+        "value": "Yes",
+        "id": "af-70bc9fd6-38cc-4192-aea4-58ad1c8aabc6"
+      },
+      {
+        "action": "fill",
+        "value": "sponsorship and shit",
+        "id": "af-b8639011-67cf-4ce6-9f47-175b68771a8a"
+      }
+    ]
+  }
+]
