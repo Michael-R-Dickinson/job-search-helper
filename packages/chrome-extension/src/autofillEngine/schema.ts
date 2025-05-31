@@ -45,10 +45,9 @@ export type InputCategory =
   | 'hispanic_latino'
   | 'disability'
   | 'phone'
-  | 'country'
   | 'authorization'
   | 'sponsorship'
-  | 'mailing_address'
+  | 'location'
   | 'school'
   | 'degree'
   | 'discipline'
@@ -108,7 +107,15 @@ export const UserAutofillPreferencesSchema = z.object({
       type: z.enum(['mobile', 'landline']).optional(),
     })
     .optional(),
-  country: z.string().optional(),
+  location: z
+    .object({
+      country: z.string().optional(),
+      city: z.string().optional(),
+      state: z.string().optional(),
+      postal_code: z.string().optional(),
+      address: z.string().optional(),
+    })
+    .optional(),
   authorization: AuthorizationStatusEnum.optional(),
   sponsorship: z
     .object({
@@ -116,7 +123,6 @@ export const UserAutofillPreferencesSchema = z.object({
       yesNoAnswer: z.boolean().optional(),
     })
     .optional(),
-  mailing_address: z.string().optional(),
   school: z.string().optional(),
   degree: z.string().optional(),
   discipline: z.string().optional(),

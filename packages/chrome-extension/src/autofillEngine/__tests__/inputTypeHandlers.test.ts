@@ -215,29 +215,44 @@ describe('InputTypeHandlers', () => {
     expect(saveUserAutofillValue).toHaveBeenCalledWith('user2', 'phone/phoneNum', '')
   })
 
-  it('handles country, mailing_address, school, degree, discipline, end_date_year, linkedin_profile', () => {
+  it('handles location (country, city, state, postal_code, address)', () => {
     const fields = [
-      { cat: 'country', val: 'USA' },
-      { cat: 'mailing_address', val: '123 Main St' },
-      { cat: 'school', val: 'Test University' },
-      { cat: 'degree', val: 'BSc' },
-      { cat: 'discipline', val: 'CS' },
-      { cat: 'end_date_year', val: '2024' },
-      { cat: 'linkedin_profile', val: 'https://linkedin.com/in/test' },
+      {
+        cat: 'location',
+        val: {
+          country: 'USA',
+          city: 'New York',
+          state: 'NY',
+          postal_code: '10001',
+          address: '123 Main St',
+        },
+        subfields: [
+          { label: 'Country', expected: 'USA', path: 'location/country' },
+          { label: 'City', expected: 'New York', path: 'location/city' },
+          { label: 'State', expected: 'NY', path: 'location/state' },
+          { label: 'Postal Code', expected: '10001', path: 'location/postal_code' },
+          { label: 'Address', expected: '123 Main St', path: 'location/address' },
+        ],
+      },
     ]
-    for (const { cat, val } of fields) {
+    for (const { cat, val, subfields } of fields) {
       const handler = getHandlerForInputCategory(cat as any, { [cat]: val })
-      const input = baseInput({
-        category: cat as any,
-        element: { ...baseElement({ fieldType: 'text', elementReferenceId: 'af-14' }) },
-      })
-      expect(handler.getAutofillInstruction(input)).toEqual({
-        action: 'fill',
-        value: val,
-        id: 'af-14',
-      })
-      handler.saveAutofillValue(input, 'user2')
-      expect(saveUserAutofillValue).toHaveBeenCalledWith('user2', cat, '')
+      for (const { label, expected, path } of subfields) {
+        const input = baseInput({
+          category: cat as any,
+          element: {
+            ...baseElement({ fieldType: 'text', elementReferenceId: `af-${label}` }),
+            label,
+          },
+        })
+        expect(handler.getAutofillInstruction(input)).toEqual({
+          action: 'fill',
+          value: expected,
+          id: `af-${label}`,
+        })
+        handler.saveAutofillValue(input, 'user2')
+        expect(saveUserAutofillValue).toHaveBeenCalledWith('user2', path, '')
+      }
     }
   })
 

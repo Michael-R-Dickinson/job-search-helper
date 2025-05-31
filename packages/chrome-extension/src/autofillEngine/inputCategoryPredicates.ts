@@ -249,27 +249,71 @@ const isPhoneInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
-const isCountryInput = (input: SerializedHtmlInput): boolean => {
-  if (
-    input.fieldType !== INPUT_ELEMENT_TYPES.SELECT &&
-    input.fieldType !== INPUT_ELEMENT_TYPES.TEXT
-  )
-    return false
-
-  const countryPatterns: Pattern[] = [
+const isLocationInput = (input: SerializedHtmlInput): boolean => {
+  // Patterns for all location subfields
+  const patterns: Pattern[] = [
     'country',
     'nation',
-    'location (country)', // More specific label
+    'location (country)',
     'country of residence',
     'nationality',
+    'mailing address',
+    'current mailing address',
+    'address',
+    'mailing_address',
+    'current_address',
+    'city',
+    'state',
+    'province',
+    'region',
+    'postal code',
+    'zipcode',
+    'zip code',
+    'zip',
+    'postal',
+    'city/town',
+    'city or town',
+    'town',
+    'address line',
+    'street',
+    'street address',
+    'home address',
+    'residence',
+    'residing city',
+    'residing location',
+    'home city',
+    'home location',
+    'city of residence',
+    'location (current)',
+    'current_residence',
+    'current_city',
+    'current_location',
   ]
-
-  const autocompletePatterns: Pattern[] = ['country', 'country-name']
-
+  const autocompletePatterns: Pattern[] = [
+    'country',
+    'country-name',
+    'address-level1',
+    'address-level2',
+    'address-level3',
+    'address-line1',
+    'address-line2',
+    'address-line3',
+    'postal-code',
+    'city',
+    'state',
+    'province',
+    'region',
+    'zip',
+    'zipcode',
+    'postal',
+    'address',
+    'location',
+    'residence',
+  ]
   return (
-    matchesPattern(input.label ?? undefined, countryPatterns) ||
-    matchesPattern(input.name, countryPatterns) ||
-    matchesPattern(input.placeholder, countryPatterns) ||
+    matchesPattern(input.label ?? undefined, patterns) ||
+    matchesPattern(input.name, patterns) ||
+    matchesPattern(input.placeholder, patterns) ||
     matchesPattern(input.autocomplete, autocompletePatterns)
   )
 }
@@ -299,21 +343,6 @@ const isSponsorshipInput = (input: SerializedHtmlInput): boolean => {
     'do you now or in the future require sponsorship',
     'sponsorship',
     'require_sponsorship',
-  ]
-  return (
-    matchesPattern(input.label ?? undefined, patterns) ||
-    matchesPattern(input.name, patterns) ||
-    matchesPattern(input.placeholder, patterns)
-  )
-}
-
-const isMailingAddressInput = (input: SerializedHtmlInput): boolean => {
-  const patterns: Pattern[] = [
-    'mailing address',
-    'current mailing address',
-    'address',
-    'mailing_address',
-    'current_address',
   ]
   return (
     matchesPattern(input.label ?? undefined, patterns) ||
@@ -622,10 +651,9 @@ export {
   isRaceEthnicityInput,
   isDisabilityInput,
   isPhoneInput,
-  isCountryInput,
+  isLocationInput,
   isAuthorizationInput,
   isSponsorshipInput,
-  isMailingAddressInput,
   isSchoolInput,
   isDegreeInput,
   isDisciplineInput,

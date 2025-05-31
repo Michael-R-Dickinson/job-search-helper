@@ -5,11 +5,9 @@ import {
   isVeteranStatusInput,
   isDisabilityInput,
   isPhoneInput,
-  isCountryInput,
   isRaceEthnicityInput,
   isAuthorizationInput,
   isSponsorshipInput,
-  isMailingAddressInput,
   isSchoolInput,
   isDegreeInput,
   isDisciplineInput,
@@ -21,6 +19,7 @@ import {
   isGithubUrlInput,
   isCurrentCompanyInput,
   isCurrentLocationInput,
+  isLocationInput,
 } from './inputCategoryPredicates'
 import type { SerializedHtmlInput, CategorizedInput, InputCategory } from './schema'
 
@@ -36,7 +35,7 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isRaceEthnicityInput(input)) category = 'race_ethnicity'
     else if (isAuthorizationInput(input)) category = 'authorization'
     else if (isSponsorshipInput(input)) category = 'sponsorship'
-    else if (isMailingAddressInput(input)) category = 'mailing_address'
+    else if (isLocationInput(input)) category = 'location'
     else if (isSchoolInput(input)) category = 'school'
     else if (isDegreeInput(input)) category = 'degree'
     else if (isDisciplineInput(input)) category = 'discipline'
@@ -46,9 +45,8 @@ const categorizeInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => 
     else if (isGithubUrlInput(input)) category = 'github_url'
     else if (isOtherWebsiteInput(input)) category = 'other_website'
     else if (isWebsiteInput(input)) category = 'website'
-    else if (isCountryInput(input)) category = 'country'
     else if (isCurrentCompanyInput(input) && !isNameInput(input)) category = 'current_company'
-    else if (isCurrentLocationInput(input) && !isCountryInput(input)) category = 'current_location'
+    else if (isCurrentLocationInput(input) && !isLocationInput(input)) category = 'current_location'
     return {
       element: input,
       category,

@@ -276,21 +276,161 @@ class PhoneHandler extends InputCategoryHandler {
   }
 }
 
-class CountryHandler extends InputCategoryHandler {
-  value: string | undefined
+class LocationHandler extends InputCategoryHandler {
+  location: UserAutofillPreferences['location']
   constructor(userAutofillPreferences: UserAutofillPreferences) {
     super(userAutofillPreferences)
-    this.value = userAutofillPreferences.country
+    this.location = userAutofillPreferences.location || {}
   }
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (this.value) {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
+    // Try to match which subfield this input is for
+    const label = input.label?.toLowerCase() || ''
+    const name = input.element.name?.toLowerCase() || ''
+    const placeholder = input.element.placeholder?.toLowerCase() || ''
+    const autocomplete = input.element.autocomplete?.toLowerCase() || ''
+    // Heuristics for subfields
+    if (
+      label.includes('country') ||
+      name.includes('country') ||
+      placeholder.includes('country') ||
+      autocomplete.includes('country')
+    ) {
+      if (this.location?.country)
+        return {
+          action: 'fill',
+          value: this.location.country,
+          id: input.element.elementReferenceId,
+        }
     }
+    if (
+      label.includes('city') ||
+      name.includes('city') ||
+      placeholder.includes('city') ||
+      autocomplete.includes('city')
+    ) {
+      if (this.location?.city)
+        return { action: 'fill', value: this.location.city, id: input.element.elementReferenceId }
+    }
+    if (
+      label.includes('state') ||
+      name.includes('state') ||
+      placeholder.includes('state') ||
+      autocomplete.includes('state') ||
+      label.includes('province') ||
+      name.includes('province') ||
+      placeholder.includes('province') ||
+      autocomplete.includes('province') ||
+      label.includes('region') ||
+      name.includes('region') ||
+      placeholder.includes('region') ||
+      autocomplete.includes('region')
+    ) {
+      if (this.location?.state)
+        return { action: 'fill', value: this.location.state, id: input.element.elementReferenceId }
+    }
+    if (
+      label.includes('postal') ||
+      name.includes('postal') ||
+      placeholder.includes('postal') ||
+      autocomplete.includes('postal') ||
+      label.includes('zip') ||
+      name.includes('zip') ||
+      placeholder.includes('zip') ||
+      autocomplete.includes('zip')
+    ) {
+      if (this.location?.postal_code)
+        return {
+          action: 'fill',
+          value: this.location.postal_code,
+          id: input.element.elementReferenceId,
+        }
+    }
+    if (
+      label.includes('address') ||
+      name.includes('address') ||
+      placeholder.includes('address') ||
+      autocomplete.includes('address') ||
+      label.includes('street') ||
+      name.includes('street') ||
+      placeholder.includes('street') ||
+      autocomplete.includes('street')
+    ) {
+      if (this.location?.address)
+        return {
+          action: 'fill',
+          value: this.location.address,
+          id: input.element.elementReferenceId,
+        }
+    }
+    // fallback: fill with address if present
+    if (this.location?.address)
+      return { action: 'fill', value: this.location.address, id: input.element.elementReferenceId }
     return { action: 'skip', id: input.element.elementReferenceId }
   }
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    console.log('saving country', input.element)
-    return saveUserAutofillValue(userId, 'country', input.element.value)
+    // Save to the correct subfield
+    const label = input.label?.toLowerCase() || ''
+    const name = input.element.name?.toLowerCase() || ''
+    const placeholder = input.element.placeholder?.toLowerCase() || ''
+    const autocomplete = input.element.autocomplete?.toLowerCase() || ''
+    if (
+      label.includes('country') ||
+      name.includes('country') ||
+      placeholder.includes('country') ||
+      autocomplete.includes('country')
+    ) {
+      return saveUserAutofillValue(userId, 'location/country', input.element.value)
+    }
+    if (
+      label.includes('city') ||
+      name.includes('city') ||
+      placeholder.includes('city') ||
+      autocomplete.includes('city')
+    ) {
+      return saveUserAutofillValue(userId, 'location/city', input.element.value)
+    }
+    if (
+      label.includes('state') ||
+      name.includes('state') ||
+      placeholder.includes('state') ||
+      autocomplete.includes('state') ||
+      label.includes('province') ||
+      name.includes('province') ||
+      placeholder.includes('province') ||
+      autocomplete.includes('province') ||
+      label.includes('region') ||
+      name.includes('region') ||
+      placeholder.includes('region') ||
+      autocomplete.includes('region')
+    ) {
+      return saveUserAutofillValue(userId, 'location/state', input.element.value)
+    }
+    if (
+      label.includes('postal') ||
+      name.includes('postal') ||
+      placeholder.includes('postal') ||
+      autocomplete.includes('postal') ||
+      label.includes('zip') ||
+      name.includes('zip') ||
+      placeholder.includes('zip') ||
+      autocomplete.includes('zip')
+    ) {
+      return saveUserAutofillValue(userId, 'location/postal_code', input.element.value)
+    }
+    if (
+      label.includes('address') ||
+      name.includes('address') ||
+      placeholder.includes('address') ||
+      autocomplete.includes('address') ||
+      label.includes('street') ||
+      name.includes('street') ||
+      placeholder.includes('street') ||
+      autocomplete.includes('street')
+    ) {
+      return saveUserAutofillValue(userId, 'location/address', input.element.value)
+    }
+    // fallback: save to address
+    return saveUserAutofillValue(userId, 'location/address', input.element.value)
   }
 }
 
@@ -371,23 +511,6 @@ class SponsorshipHandler extends InputCategoryHandler {
       status: 'error',
       error: 'Failed to save sponsorship autofill value',
     })
-  }
-}
-
-class MailingAddressHandler extends InputCategoryHandler {
-  value: string | undefined
-  constructor(userAutofillPreferences: UserAutofillPreferences) {
-    super(userAutofillPreferences)
-    this.value = userAutofillPreferences.mailing_address
-  }
-  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    if (this.value) {
-      return { action: 'fill', value: this.value, id: input.element.elementReferenceId }
-    }
-    return { action: 'skip', id: input.element.elementReferenceId }
-  }
-  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
-    return saveUserAutofillValue(userId, 'mailing_address', input.element.value)
   }
 }
 
@@ -615,10 +738,9 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   hispanic_latino: HispanicLatinoHandler,
   disability: DisabilityHandler,
   phone: PhoneHandler,
-  country: CountryHandler,
   authorization: AuthorizationHandler,
   sponsorship: SponsorshipHandler,
-  mailing_address: MailingAddressHandler,
+  location: LocationHandler,
   school: SchoolHandler,
   degree: DegreeHandler,
   discipline: DisciplineHandler,

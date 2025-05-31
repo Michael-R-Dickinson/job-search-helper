@@ -132,17 +132,21 @@ describe('categorizeInputs', () => {
     })
   })
 
-  it('should categorize country inputs correctly', () => {
+  it('should categorize location inputs correctly', () => {
     const inputs: InputInfo[] = [
       makeInput('select', { name: 'country' }, 'Country'),
-      makeInput('select', { name: 'country_code', placeholder: 'Select your country' }, null),
+      makeInput('input', { name: 'city' }, 'City'),
+      makeInput('input', { name: 'state' }, 'State'),
+      makeInput('input', { name: 'postal_code' }, 'Postal Code'),
+      makeInput('input', { name: 'address' }, 'Address'),
       makeInput('input', { autocomplete: 'country-name', type: 'text' }, 'Location (Country)'),
+      makeInput('input', { autocomplete: 'address-line1', type: 'text' }, 'Street Address'),
     ]
     const parsed = serializeInputsHtml(inputs)
     const result = categorizeInputs(parsed)
-    expect(result).toHaveLength(3)
+    expect(result).toHaveLength(inputs.length)
     result.forEach((input) => {
-      expect(input.category).toBe('country')
+      expect(input.category).toBe('location')
     })
   })
 
@@ -217,7 +221,7 @@ describe('categorizeInputs', () => {
     expect(result.find((r) => r.element.autocomplete === 'family-name')?.category).toBe('name')
     expect(result.find((r) => r.element.autocomplete === 'email')?.category).toBe('email')
     expect(result.find((r) => r.element.autocomplete === 'tel')?.category).toBe('phone')
-    expect(result.find((r) => r.element.autocomplete === 'country')?.category).toBe('country')
+    expect(result.find((r) => r.element.autocomplete === 'country')?.category).toBe('location')
   })
 
   it('should handle various combinations of attributes for categorization', () => {
@@ -254,7 +258,7 @@ describe('categorizeInputs', () => {
     expect(result).toHaveLength(3)
     expect(result.find((r) => r.element.name === 'gender_select')?.category).toBe('gender')
     expect(result.find((r) => r.element.name === 'race_select')?.category).toBe('race_ethnicity')
-    expect(result.find((r) => r.element.name === 'residence_country')?.category).toBe('country')
+    expect(result.find((r) => r.element.name === 'residence_country')?.category).toBe('location')
   })
 
   it('should correctly categorize radio button inputs', () => {
@@ -347,7 +351,7 @@ describe('categorizeInputs', () => {
     const result = categorizeInputs(parsed)
     expect(result).toHaveLength(4)
     result.forEach((input) => {
-      expect(input.category).toBe('current_location')
+      expect(input.category).toBe('location')
     })
   })
 })

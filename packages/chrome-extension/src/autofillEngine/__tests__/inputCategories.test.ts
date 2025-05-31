@@ -7,10 +7,8 @@ import {
   isRaceEthnicityInput,
   isDisabilityInput,
   isPhoneInput,
-  isCountryInput,
   isAuthorizationInput,
   isSponsorshipInput,
-  isMailingAddressInput,
   isSchoolInput,
   isDegreeInput,
   isDisciplineInput,
@@ -22,6 +20,7 @@ import {
   isCurrentCompanyInput,
   isCurrentLocationInput,
   isOtherWebsiteInput,
+  isLocationInput,
 } from '../inputCategoryPredicates'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 
@@ -246,29 +245,33 @@ describe('Input Categorization Tests', () => {
     })
   })
 
-  describe('isCountryInput', () => {
-    it('should identify country inputs by label', () => {
-      const input = createTestInput({
-        label: 'Country of Residence',
-        fieldType: INPUT_ELEMENT_TYPES.SELECT,
-      })
-      expect(isCountryInput(input)).toBe(true)
-    })
-
-    it('should identify nationality inputs', () => {
-      const input = createTestInput({
-        name: 'nationality',
-        fieldType: INPUT_ELEMENT_TYPES.SELECT,
-      })
-      expect(isCountryInput(input)).toBe(true)
-    })
-
-    it('should identify country inputs by autocomplete', () => {
-      const input = createTestInput({
+  describe('isLocationInput', () => {
+    it('should identify country inputs', () => {
+      const input = createTestInput({ label: 'Country', fieldType: INPUT_ELEMENT_TYPES.SELECT })
+      expect(isLocationInput(input)).toBe(true)
+      const input2 = createTestInput({
         autocomplete: 'country',
         fieldType: INPUT_ELEMENT_TYPES.TEXT,
       })
-      expect(isCountryInput(input)).toBe(true)
+      expect(isLocationInput(input2)).toBe(true)
+    })
+    it('should identify city, state, postal code, and address inputs', () => {
+      const city = createTestInput({ label: 'City' })
+      const state = createTestInput({ label: 'State' })
+      const postal = createTestInput({ label: 'Postal Code' })
+      const address = createTestInput({ label: 'Address' })
+      expect(isLocationInput(city)).toBe(true)
+      expect(isLocationInput(state)).toBe(true)
+      expect(isLocationInput(postal)).toBe(true)
+      expect(isLocationInput(address)).toBe(true)
+    })
+    it('should identify location by autocomplete', () => {
+      const input = createTestInput({ autocomplete: 'address-line1' })
+      expect(isLocationInput(input)).toBe(true)
+    })
+    it('should not identify non-location fields', () => {
+      const input = createTestInput({ label: 'Email Address' })
+      expect(isLocationInput(input)).toBe(false)
     })
   })
 
@@ -300,13 +303,6 @@ describe('Input Categorization Tests', () => {
     it('should identify sponsorship requirement', () => {
       const input = createTestInput({ label: 'Do you now or in the future require sponsorship?' })
       expect(isSponsorshipInput(input)).toBe(true)
-    })
-  })
-
-  describe('isMailingAddressInput', () => {
-    it('should identify current mailing address', () => {
-      const input = createTestInput({ label: 'Current mailing address*' })
-      expect(isMailingAddressInput(input)).toBe(true)
     })
   })
 
