@@ -8,15 +8,16 @@ def validate_linkedin_url(url: str) -> bool:
     should be in one of the following formats:
     - https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4223055571
     - https://www.linkedin.com/jobs/view/4223055571/?alternateChannel=search
+    - https://www.linkedin.com/jobs/search/?alertAction=viewjobs&currentJobId=4072935908&origin=JOBS_HOME_JOB_ALERTS&savedSearchId=14717622332
     """
     pattern = re.compile(
         r"^https://www\.linkedin\.com/jobs/"
-        r"(?:"
-        r"collections/recommended/\?currentJobId=\d+"
-        r"|"
-        r"view/\d+/\?alternateChannel=[^/]+"
-        r")$"
+        r"(?:(?:collections/recommended/\?currentJobId=\d+)"
+        r"|(?:view/\d+/\?.+)"
+        r"|(?:search/\?.+))$"
     )
+    print("linkedin url", url)
+    print("success?", bool(pattern.match(url)))
     return bool(pattern.match(url))
 
 
