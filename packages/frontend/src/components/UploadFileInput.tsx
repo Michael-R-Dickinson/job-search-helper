@@ -18,7 +18,7 @@ const UploadFileInput = () => {
   }
 
   const handleUpload = () => {
-    if (!file || loading) return
+    if (!file || loading || !currentUser) return
 
     const path = `resumes/${currentUser.uid}/${file.name}`
     const storageRef = ref(storage, path)

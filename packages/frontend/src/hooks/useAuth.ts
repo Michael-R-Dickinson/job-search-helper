@@ -1,4 +1,3 @@
-// useAuthWithCookie.ts
 import { onAuthStateChanged, User } from 'firebase/auth'
 import { auth } from '../../firebase'
 import { useState, useEffect } from 'react'
@@ -28,6 +27,8 @@ interface AuthState {
 }
 
 function getCookie(name: string) {
+  if (typeof document === 'undefined') return null
+
   const pairs = document.cookie.split(';').map((s) => s.trim())
   for (const pair of pairs) {
     const [key, value] = pair.split('=')
@@ -55,22 +56,32 @@ const getAnonymousUser = (): AnonymousUser => {
 
   return anonymousUser
 }
-
-const useAuthWithCookie = (): AuthState => {
+const useAuth = (): AuthState => {
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | AnonymousUser | null>(null)
 
-  onAuthStateChanged(auth, (u) => {
-    setUser(u)
-    setLoading(false)
-  })
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u)
+      setLoading(false)
+    })
 
-  if (user == null) {
-    const anonymousUser = getAnonymousUser()
-    return { user: anonymousUser, loading }
+    if (user == null) {
+      const anonymousUser = getAnonymousUser()
+      setUser(anonymousUser)
+      setLoading(false)
+    }
+
+    return () => unsubscribe()
+  }, [user])
+
+  const temporaryUser: AnonymousUser = {
+    uid: 'anonymous',
+    displayName: 'Anonymous',
+    emailVerified: false,
   }
 
-  return { user, loading }
+  return { user: user || temporaryUser, loading }
 }
 
-export default useAuthWithCookie
+export default useAuth

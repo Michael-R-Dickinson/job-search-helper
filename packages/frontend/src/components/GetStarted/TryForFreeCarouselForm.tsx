@@ -36,6 +36,8 @@ const TryForFreeCarouselForm = () => {
   const maxSlides = 4
   const next = () => void setStep((prev) => (prev + 1 < maxSlides ? prev + 1 : 0))
 
+  if (!currentUser) return null
+
   const slides: SlideFormat[] = [
     {
       component: (
