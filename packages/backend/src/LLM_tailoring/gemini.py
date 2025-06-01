@@ -97,5 +97,24 @@ def execute_tailoring_with_gemini(
 if __name__ == "__main__":
     load_dotenv()
 
-    api_key = os.environ.get("GCP_AI_API_KEY")
-    print(f"API Key: {api_key}")
+    from pydantic import BaseModel
+
+    class TextGenerationSchema(BaseModel):
+        content: str
+
+    response = execute_tailoring_with_gemini(
+        prompt="Hello whats your name?",
+        content_config=types.GenerateContentConfig(
+            system_instruction="Be nice",
+            response_mime_type="application/json",
+            response_schema=TextGenerationSchema,
+            thinking_config=types.ThinkingConfig(
+                # Disable thinking
+                thinking_budget=0
+            ),
+        ),
+        model="gemini-2.5-flash-preview-04-17",
+        # model="claude-3-7-sonnet@20250219",
+    )
+
+    print(response)

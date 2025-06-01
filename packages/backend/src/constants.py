@@ -1,3 +1,6 @@
+PROJECT_ID = "jobsearchhelper-231cf"
+REGION = "us-central1"
+
 CACHE_PATH = "llm_output_cache"
 RESUMES_PATH = "resumes"
 COVER_LETTERS_PATH = "cover_letters"
