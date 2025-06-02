@@ -3,6 +3,8 @@ import json
 from firebase import init_firebase
 from firebase_functions import https_fn, options
 from functions.free_reponse.request_handler import handle_write_free_response_request
+from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
+from functions.inputs_autofill_helper.request_handler import handle_autofill_request
 from functions.tailor_cover_letter.request_handler import (
     handle_cover_letter_tailor_request,
 )
@@ -82,7 +84,7 @@ def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
         cors_methods=["GET", "POST", "OPTIONS"],
     )
 )
-def write_free_response(req: https_fn.Request) -> https_fn.Response:
+def get_autofill_instructions(req: https_fn.Request) -> https_fn.Response:
     user_id = req.args.get("userId")
     prompt = req.args.get("prompt")
     job_description_link = req.args.get("jobDescriptionLink")
@@ -94,3 +96,15 @@ def write_free_response(req: https_fn.Request) -> https_fn.Response:
         job_description_link=job_description_link,
         resume_name=resume_name,
     )
+
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
+        cors_methods=["GET", "POST", "OPTIONS"],
+    )
+)
+def get_input_autofill_instructions(req: https_fn.Request) -> https_fn.Response:
+    user_id = req.args.get("userId")
+    data = req.get_json()
+    return handle_autofill_request(user_id, data)

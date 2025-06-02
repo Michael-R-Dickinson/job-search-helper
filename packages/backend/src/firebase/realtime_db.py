@@ -52,6 +52,19 @@ def cache_get_object(id: str) -> object:
     return unpickle_object(obj)
 
 
+def get_user_values_path(user_id):
+    return f"users/{user_id}"
+
+
+def get_user_autofill_values_path(user_id):
+    return f"{get_user_values_path(user_id)}/autofill"
+
+
+def get_user_autofill_data(user_id):
+    ref = db.reference(get_user_autofill_values_path(user_id))
+    return ref.get()
+
+
 if __name__ == "__main__":
     init_firebase()
     print("Firebase initialized")
