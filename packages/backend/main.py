@@ -101,7 +101,7 @@ def get_autofill_instructions(req: https_fn.Request) -> https_fn.Response:
 @https_fn.on_request(
     cors=options.CorsOptions(
         cors_origins=["*"],
-        cors_methods=["GET", "POST", "OPTIONS"],
+        cors_methods=["POST", "OPTIONS"],
     )
 )
 def get_input_autofill_instructions(req: https_fn.Request) -> https_fn.Response:
