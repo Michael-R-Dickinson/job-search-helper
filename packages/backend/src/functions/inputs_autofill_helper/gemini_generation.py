@@ -25,7 +25,7 @@ If the result of the value at a valuePath is a boolean that is true, this will i
 You may also output the special {true} valuePath which will always evaluate to true. 
 
 Include the curly braces in your response.
-Skip and do not output any inputs that cannot be filled with the user data from the schema.
+Fill all inputs that can be filled with the user data from the schema - EVERY ONE OF THEM. For ones that absolutely cannot be filled with the user data, output an empty string. 
 
 Schema, in zod format:
 
