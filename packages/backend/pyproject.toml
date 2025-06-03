@@ -5,7 +5,7 @@ description = ""
 authors = ["MichaelDickinson20I <michael.dickinson3949@gmail.com>"]
 readme = "README.md"
 packages = [
-  { include = "backend", from = "src" }
+  { include = "*", from = "src" }
 ]
 
 
