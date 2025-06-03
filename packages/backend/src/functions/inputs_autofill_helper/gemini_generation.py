@@ -5,7 +5,12 @@ from pydantic import BaseModel
 from LLM_tailoring.gemini import get_chat
 from google.genai import types
 
-SYSTEM_INSTRUCTION = """
+from functions.inputs_autofill_helper.autofill_schema_string import (
+    AUTOFILL_SCHEMA_STRING,
+)
+
+SYSTEM_INSTRUCTION = (
+    """
 You are helping to autofill a job application form. We will pass you a number of inputs and you will map each of them to a valuePath.
 The valuePath is a path to a value in our user data. You will be given the schema of the user data to know what data is available to you. For example, if you were attempting to fill in a "first name" input, the valuePath would be {name/first_name}. You may also combine multiple inputs in a single value path, for example, to fill a "full name" input, the value path would be {name/first_name} {name/last_name}.
 
@@ -29,76 +34,9 @@ Fill all inputs that can be filled with the user data from the schema - EVERY ON
 
 Schema, in zod format:
 
-export const GenderEnum = z.enum(['male', 'female', 'non_binary', 'other', 'prefer_not_to_say'])
-export const VeteranStatusEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
-export const RaceEthnicityEnum = z.enum([
-  'asian',
-  'black',
-  'hispanic',
-  'white',
-  'native_american',
-  'pacific_islander',
-  'two_or_more',
-  'other',
-  'prefer_not_to_say',
-])
-export const HispanicLatinoEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
-export const DisabilityStatusEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
-export const AuthorizationStatusEnum = z.enum(['yes', 'no'])
-export const SponsorshipStatusEnum = z.enum(['yes', 'no'])
-
-
-export const UserAutofillPreferencesSchema = z.object({
-  name: z
-    .object({
-      first_name: z.string().optional(),
-      last_name: z.string().optional(),
-    })
-    .optional(),
-  email: z.string().optional(),
-  gender: GenderEnum.optional(),
-  veteran: VeteranStatusEnum.optional(),
-  race_ethnicity: RaceEthnicityEnum.optional(),
-  hispanic_latino: HispanicLatinoEnum.optional(),
-  disability: DisabilityStatusEnum.optional(),
-  phone: z
-    .object({
-      phoneNum: z.number().optional(),
-      extension: z.string().optional(),
-      type: z.enum(['mobile', 'landline']).optional(),
-    })
-    .optional(),
-  location: z
-    .object({
-      country: z.string().optional(),
-      city: z.string().optional(),
-      state: z.string().optional(),
-      postal_code: z.string().optional(),
-      address: z.string().optional(),
-    })
-    .optional(),
-  authorization: AuthorizationStatusEnum.optional(),
-  sponsorship: z
-    .object({
-      text: z.string().optional(),
-      yesNoAnswer: z.boolean().optional(),
-    })
-    .optional(),
-  school: z.string().optional(),
-  degree: z.string().optional(),
-  discipline: z.string().optional(),
-  end_date_year: z.string().optional(),
-  linkedin_profile: z.string().optional(),
-  website: z.string().optional(),
-  other_website: z.string().optional(),
-  twitter_url: z.string().optional(),
-  github_url: z.string().optional(),
-  current_company: z.string().optional(),
-  salary_expectations: z.string().optional(),
-  current_job_title: z.string().optional(),
-  pronouns: z.string().optional(),
-})
 """
+    + AUTOFILL_SCHEMA_STRING
+)
 
 
 class EqualsCondition(BaseModel):

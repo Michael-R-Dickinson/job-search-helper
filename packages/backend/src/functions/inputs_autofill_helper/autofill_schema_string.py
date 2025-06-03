@@ -1,80 +1,8 @@
-import { z } from 'zod'
+# Probably should be shared between the chrome extension and the backend, but for now, as its just used in the prompt
+# We just put it as a string here - THIS IS LINKED STRONGLY to the frontend schema.ts file and if both are not kept in sync,
+# The autofill will break.
 
-// Constants
-export const INPUT_ELEMENT_TYPES = {
-  TEXT: 'text',
-  SELECT: 'select',
-  TEXTBOX: 'textbox',
-  EMAIL: 'email',
-  TEL: 'tel',
-  RADIO: 'radio',
-  CHECKBOX: 'checkbox',
-  NUMBER: 'number',
-  DATE: 'date',
-  PASSWORD: 'password',
-  URL: 'url',
-} as const
-
-export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_ELEMENT_TYPES]
-
-export const SerializedHtmlInputSchema = z.object({
-  label: z.string().nullable(),
-  wholeQuestionLabel: z.string().nullable().optional(),
-  html: z.string(),
-  fieldType: z.nativeEnum(INPUT_ELEMENT_TYPES),
-  name: z.string(),
-  type: z.string(),
-  placeholder: z.string(),
-  autocomplete: z.string(),
-  id: z.string(),
-  className: z.string(),
-  value: z.string(),
-  required: z.boolean(),
-  checked: z.boolean().nullable().optional(),
-  // A unique identifier we give to the input element to identify it in the DOM
-  // This is used to match the input element to the autofill instruction in the frontend
-  elementReferenceId: z.string(),
-})
-
-export type SerializedHtmlInput = z.infer<typeof SerializedHtmlInputSchema>
-
-export type InputCategory =
-  | 'name'
-  | 'email'
-  | 'gender'
-  | 'veteran'
-  | 'race_ethnicity'
-  | 'hispanic_latino'
-  | 'disability'
-  | 'phone'
-  | 'authorization'
-  | 'sponsorship'
-  | 'location'
-  | 'school'
-  | 'degree'
-  | 'discipline'
-  | 'end_date_year'
-  | 'linkedin_profile'
-  | 'website'
-  | 'other_website'
-  | 'twitter_url'
-  | 'github_url'
-  | 'current_company'
-  | 'salary_expectations'
-  | 'position_discovery_source'
-  | 'current_job_title'
-  | 'referral_source'
-  | 'pronouns'
-  | 'unknown'
-
-export const CategorizedInputSchema = z.object({
-  category: z.custom<InputCategory>(),
-  label: z.string().nullable(),
-  element: SerializedHtmlInputSchema,
-})
-
-export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
-
+AUTOFILL_SCHEMA_STRING = """
 const YesNoAbstainEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
 
 const NameSchema = z.object({
@@ -175,24 +103,4 @@ export const UserAutofillPreferencesSchema = z.object({
   location: LocationSchema.optional(),
 })
 
-export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
-
-export const AutofillInstructionSchema = z.object({
-  input_text: z.string().optional(),
-  value: z.union([z.string(), z.boolean()]),
-  input_id: z.string(),
-})
-export const AutofillInstructionsSchema = z.array(AutofillInstructionSchema)
-
-export type AutofillInstruction = z.infer<typeof AutofillInstructionSchema>
-
-export type RealtimeDbSaveResult =
-  | {
-      status: 'success'
-      valuePath: string
-      value: string | boolean
-    }
-  | {
-      status: 'error'
-      error: string
-    }
+"""
