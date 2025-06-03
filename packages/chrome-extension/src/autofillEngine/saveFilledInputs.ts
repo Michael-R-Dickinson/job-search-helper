@@ -1,9 +1,7 @@
 import { type SerializedHtmlInput } from './schema'
 import { SerializedHtmlInputSchema } from './schema'
-import { getUserAutofillValues } from '../firebase/realtimeDB'
-import { categorizeInputs } from './categorizeInputs'
-import getHandlerForInputCategory, { NoValueHandler } from './inputCategoryHandlers'
 import { preprocessInputs } from './getAutofillInstructions'
+import { saveFilledInputsQuery } from '../backendApi'
 
 const saveFilledInputs = async (inputs: SerializedHtmlInput[], userId: string) => {
   // Validate all inputs using Zod
@@ -13,21 +11,7 @@ const saveFilledInputs = async (inputs: SerializedHtmlInput[], userId: string) =
   }
 
   const preprocessedInputs = preprocessInputs(inputs)
-  const categorizedInputs = categorizeInputs(preprocessedInputs)
-  const userAutofillPreferences = await getUserAutofillValues(userId)
-  console.log('categorizedInputs', categorizedInputs)
-
-  const results = await Promise.all(
-    categorizedInputs.map((input) => {
-      if (!input.element.value) {
-        return new NoValueHandler(userAutofillPreferences || {}).saveAutofillValue(input, userId)
-      }
-      const handler = getHandlerForInputCategory(input.category, userAutofillPreferences || {})
-      return handler.saveAutofillValue(input, userId)
-    }),
-  )
-
-  return results
+  await saveFilledInputsQuery(preprocessedInputs, userId)
 }
 
 export default saveFilledInputs

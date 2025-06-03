@@ -27,3 +27,18 @@ export const autofillInstructionsQuery = async (inputs: Partial<MinifiedInput>[]
 
   return parsedData
 }
+
+export const saveFilledInputsQuery = async (inputs: Partial<MinifiedInput>[], userId: string) => {
+  const filteredInputs = inputs.filter((input) => input.label)
+  const serializedInputs = JSON.stringify(filteredInputs)
+  const queryParams = new URLSearchParams({
+    userId,
+  })
+  await fetch(`${API_URL}/save_filled_inputs?${queryParams.toString()}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: serializedInputs,
+  })
+}
