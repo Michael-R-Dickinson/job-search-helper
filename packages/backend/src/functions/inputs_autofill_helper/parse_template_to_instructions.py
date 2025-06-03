@@ -40,7 +40,7 @@ def get_value_from_path(path: str, user_data: dict):
             key = segment[1:-1]
             value = get_dict_value_by_path(key, user_data)
             if value:
-                output.append(value)
+                output.append(str(value))
         else:
             output.append(segment)
 
