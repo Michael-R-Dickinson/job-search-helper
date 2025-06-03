@@ -43,6 +43,7 @@ const Sidebar = () => {
       <button
         onClick={async () => {
           const response = await triggerGetAutofillValues(elements)
+          console.log('response', response)
           autofillInputElements(response)
         }}
       >

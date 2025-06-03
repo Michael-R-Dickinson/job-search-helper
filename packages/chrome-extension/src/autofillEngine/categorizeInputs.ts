@@ -1,3 +1,4 @@
+import geminiCategorizeInputs from './geminiCategorizeInputs'
 import {
   isNameInput,
   isEmailInput,

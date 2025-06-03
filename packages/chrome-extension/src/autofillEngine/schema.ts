@@ -143,13 +143,15 @@ export const UserAutofillPreferencesSchema = z.object({
   current_job_title: z.string().optional(),
   pronouns: z.string().optional(),
 })
+
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
 
-const AutofillActionSchema = z.enum(['fill', 'clear', 'skip', 'check'])
+// const AutofillActionSchema = z.enum(['fill', 'clear', 'skip', 'check'])
 export const AutofillInstructionSchema = z.object({
-  action: AutofillActionSchema,
-  value: z.string().optional(),
-  id: z.string(),
+  // action: AutofillActionSchema,
+  input_text: z.string().optional(),
+  value: z.union([z.string(), z.boolean()]),
+  input_id: z.string(),
 })
 export const AutofillInstructionsSchema = z.array(AutofillInstructionSchema)
 

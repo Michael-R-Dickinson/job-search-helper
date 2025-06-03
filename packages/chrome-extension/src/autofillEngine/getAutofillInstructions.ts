@@ -3,6 +3,7 @@ import { SerializedHtmlInputSchema, type AutofillInstruction } from './schema'
 import { getUserAutofillValues } from '../firebase/realtimeDB'
 import { categorizeInputs } from './categorizeInputs'
 import getHandlerForInputCategory from './inputCategoryHandlers'
+import autofillInputsWithGemini from './geminiCategorizeInputs'
 
 export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlInput[] => {
   return inputs.map((input) => {
@@ -24,16 +25,19 @@ const getAutofillInstructions = async (
   }
 
   const preprocessedInputs = preprocessInputs(inputs)
-  const categorizedInputs = categorizeInputs(preprocessedInputs)
-  const userAutofillPreferences = await getUserAutofillValues(userId)
+  // const categorizedInputs = categorizeInputs(preprocessedInputs)
+  const autofills = await autofillInputsWithGemini(inputs)
+  console.log('autofills', autofills)
+  return autofills
+  // const userAutofillPreferences = await getUserAutofillValues(userId)
 
-  if (!userAutofillPreferences) return null
+  // if (!userAutofillPreferences) return null
 
-  console.log('categorizedInputs', categorizedInputs)
-  return categorizedInputs.map((input) => {
-    const handler = getHandlerForInputCategory(input.category, userAutofillPreferences)
-    return handler.getAutofillInstruction(input)
-  })
+  // console.log('categorizedInputs', categorizedInputs)
+  // return categorizedInputs.map((input) => {
+  //   const handler = getHandlerForInputCategory(input.category, userAutofillPreferences)
+  //   return handler.getAutofillInstruction(input)
+  // })
 }
 
 export default getAutofillInstructions

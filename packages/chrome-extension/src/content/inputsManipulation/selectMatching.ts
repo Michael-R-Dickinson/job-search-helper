@@ -116,7 +116,12 @@ export const selectBestOption = (
  * Main function to handle filling a select element with intelligent matching
  * Always attempts to find the best match, regardless of input format
  */
-export const fillSelectElement = (selectElement: HTMLSelectElement, value: string): void => {
+export const fillSelectElement = (
+  selectElement: HTMLSelectElement,
+  value: string | boolean,
+): void => {
+  if (!(typeof value === 'string')) return
+
   let searchValues: string[] = []
 
   // Check if this looks like a pipe-separated preference list
