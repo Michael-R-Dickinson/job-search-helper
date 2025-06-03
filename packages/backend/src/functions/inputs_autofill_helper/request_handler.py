@@ -3,7 +3,7 @@ from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from firebase_functions import https_fn
 
 
-def validate_inputs(user_id, inputs):
+def validate_autofill_inputs(user_id, inputs):
     if not user_id:
         raise ValueError("User ID is required")
     if not inputs:
@@ -15,7 +15,7 @@ def validate_inputs(user_id, inputs):
 
 def handle_autofill_request(user_id, inputs):
     try:
-        validate_inputs(user_id, inputs)
+        validate_autofill_inputs(user_id, inputs)
         autofill_instructions = get_filled_inputs(user_id, inputs)
 
     except ValueError as e:

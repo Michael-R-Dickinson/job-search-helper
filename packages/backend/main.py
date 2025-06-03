@@ -12,6 +12,9 @@ from functions.tailor_resume.request_handler import handle_resume_tailor_request
 from functions.tailoring_questions.request_handler import (
     handle_resume_questions_request,
 )
+from src.functions.save_filled_values_helper.request_handler import (
+    handle_save_filled_values_request,
+)
 
 init_firebase()
 
@@ -108,3 +111,15 @@ def get_input_autofill_instructions(req: https_fn.Request) -> https_fn.Response:
     user_id = req.args.get("userId")
     data = req.get_json()
     return handle_autofill_request(user_id, data)
+
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
+        cors_methods=["POST", "OPTIONS"],
+    )
+)
+def save_filled_inputs(req: https_fn.Request) -> https_fn.Response:
+    user_id = req.args.get("userId")
+    data = req.get_json()
+    return handle_save_filled_values_request(user_id, inputs=data)

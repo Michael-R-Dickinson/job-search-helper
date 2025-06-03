@@ -65,6 +65,11 @@ def get_user_autofill_data(user_id):
     return ref.get()
 
 
+def save_user_autofill_data(user_id, data):
+    ref = db.reference(get_user_autofill_values_path(user_id))
+    ref.set(data)
+
+
 if __name__ == "__main__":
     init_firebase()
     print("Firebase initialized")

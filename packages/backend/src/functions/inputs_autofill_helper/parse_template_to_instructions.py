@@ -84,6 +84,7 @@ def map_autofill_template_to_instructions(
                     "value": value,
                 }
             )
+        output_instructions[-1]["input_text"] = instruction.initialLabel
 
     return output_instructions
 
