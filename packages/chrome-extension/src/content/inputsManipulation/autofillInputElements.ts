@@ -39,26 +39,28 @@ const fillTextAreaElement = (
   }
 }
 
+const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
+  const element = document.querySelector<HTMLElement>(
+    `[data-autofill-id="${instruction.input_id}"]`,
+  )
+  if (!element) return
+
+  const autofillValue = instruction.value
+
+  if (isSelectLikeElement(element)) {
+    await fillSelectLikeElement(element, autofillValue, instruction?.input_text)
+  } else if (element instanceof HTMLTextAreaElement) {
+    fillTextAreaElement(element, autofillValue)
+  } else if (element instanceof HTMLInputElement) {
+    fillInputElement(element, autofillValue)
+  }
+  return element
+}
+
 export const autofillInputElements = async (
   autofillInstructions: AutofillInstruction[],
 ): Promise<void> => {
-  autofillInstructions.forEach(async (instruction) => {
-    const element = document.querySelector<HTMLElement>(
-      `[data-autofill-id="${instruction.input_id}"]`,
-    )
-    if (!element) return
-
-    const autofillValue = instruction.value
-
-    if (isSelectLikeElement(element)) {
-      await fillSelectLikeElement(element, autofillValue, instruction?.input_text)
-    } else if (element instanceof HTMLTextAreaElement) {
-      fillTextAreaElement(element, autofillValue)
-    } else if (element instanceof HTMLInputElement) {
-      fillInputElement(element, autofillValue)
-    }
-    //  else if (element instanceof HTMLButtonElement) {
-    //   fillButtonElement(element, autofillValue)
-    // }
-  })
+  for (const instruction of autofillInstructions) {
+    await fillElementWithInstructionValue(instruction)
+  }
 }

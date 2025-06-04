@@ -206,12 +206,11 @@ export const fillSelectLikeElement = async (
   const bestMatch = pickBestOption(selectOptions, searchValues)
   if (!bestMatch?.value || element.value === bestMatch.value) return
 
-  const optionsString = selectOptions.map((o) => `${o.text}`).join(', ')
-  console.log(
-    `Instruction: ${inputText}, \n\nIdeal: ${value}, Filled: ${bestMatch.text} \noptions: ${optionsString}`,
-  )
+  // const optionsString = selectOptions.map((o) => `${o.text}`).join(', ')
+  // console.log(
+  //   `Instruction: ${inputText}, \n\nIdeal: ${value}, Filled: ${bestMatch.text} \noptions: ${optionsString}`,
+  // )
 
-  console.log(element.value, element)
   element.value = bestMatch.value
   robustlyFillSelectOrInput(element, bestMatch.value)
 }
