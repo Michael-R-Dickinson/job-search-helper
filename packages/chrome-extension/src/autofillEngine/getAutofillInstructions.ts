@@ -1,6 +1,6 @@
 import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
-import { SerializedHtmlInputSchema, type AutofillInstruction } from './schema'
-import autofillInputsWithGemini from './geminiCategorizeInputs'
+import { SerializedHtmlInputSchema, type AutofillInstruction, type MinifiedInput } from './schema'
+import { autofillInstructionsQuery } from '../backendApi'
 
 export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlInput[] => {
   return inputs.map((input) => {
@@ -9,6 +9,20 @@ export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlI
       label: input.label?.toLowerCase().trim().replace(/\*$/, '').trim() || null,
     }
   })
+}
+
+export const minifyInputs = (inputs: SerializedHtmlInput[]): MinifiedInput[] => {
+  const minifiedInputs: MinifiedInput[] = inputs.map((input) => {
+    return {
+      label: input.label,
+      name: input.name,
+      fieldType: input.fieldType,
+      wholeQuestionLabel: input.wholeQuestionLabel || null,
+      value: input.value,
+      id: input.elementReferenceId,
+    }
+  })
+  return minifiedInputs
 }
 
 const getAutofillInstructions = async (
@@ -22,7 +36,9 @@ const getAutofillInstructions = async (
   }
 
   const preprocessedInputs = preprocessInputs(inputs)
-  const autofills = await autofillInputsWithGemini(preprocessedInputs)
+  const minifiedInputs = minifyInputs(preprocessedInputs)
+
+  const autofills = await autofillInstructionsQuery(minifiedInputs, userId)
   console.log('autofills', autofills)
   return autofills
 }

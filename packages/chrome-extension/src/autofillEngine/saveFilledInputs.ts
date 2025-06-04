@@ -1,6 +1,6 @@
 import { type SerializedHtmlInput } from './schema'
 import { SerializedHtmlInputSchema } from './schema'
-import { preprocessInputs } from './getAutofillInstructions'
+import { minifyInputs, preprocessInputs } from './getAutofillInstructions'
 import { saveFilledInputsQuery } from '../backendApi'
 
 const saveFilledInputs = async (inputs: SerializedHtmlInput[], userId: string) => {
@@ -11,7 +11,8 @@ const saveFilledInputs = async (inputs: SerializedHtmlInput[], userId: string) =
   }
 
   const preprocessedInputs = preprocessInputs(inputs)
-  await saveFilledInputsQuery(preprocessedInputs, userId)
+  const minifiedInputs = minifyInputs(preprocessedInputs)
+  await saveFilledInputsQuery(minifiedInputs, userId)
 }
 
 export default saveFilledInputs

@@ -1,13 +1,15 @@
-import type { MinifiedInput } from './autofillEngine/geminiCategorizeInputs'
-import { AutofillInstructionsSchema } from './autofillEngine/schema'
+import { AutofillInstructionsSchema, type MinifiedInput } from './autofillEngine/schema'
 
 const API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1'
 
-export const autofillInstructionsQuery = async (inputs: Partial<MinifiedInput>[]) => {
+export const autofillInstructionsQuery = async (
+  inputs: Partial<MinifiedInput>[],
+  userId: string,
+) => {
   const filteredInputs = inputs.filter((input) => input.label)
   const serializedInputs = JSON.stringify(filteredInputs)
   const queryParams = new URLSearchParams({
-    userId: 'J6hCwOP0KeYUpCRPLOebTIWLA392',
+    userId,
   })
   console.log('fltered inputs', filteredInputs)
   const response = await fetch(
