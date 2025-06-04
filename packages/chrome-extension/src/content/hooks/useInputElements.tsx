@@ -288,7 +288,7 @@ export function useInputElements(): InputInfo[] {
 
       const filteredInputs: InputInfo[] = Array.from(elements)
         .filter(shouldIncludeElement)
-        .map((el, idx) => {
+        .map((el) => {
           let elementReferenceId = el.getAttribute('data-autofill-id')
           if (!elementReferenceId) {
             elementReferenceId = idCounterRef.current.toString()
