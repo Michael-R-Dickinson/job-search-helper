@@ -96,6 +96,11 @@ const getLabelText = (el: HTMLElement): string | null => {
     if (parent.tagName.toLowerCase() === 'label') {
       return parent.textContent?.trim() ?? null
     }
+    for (const child of parent.children) {
+      if (child.tagName.toLowerCase() === 'label') {
+        return child.textContent?.trim() ?? null
+      }
+    }
     parent = parent.parentElement
   }
 
@@ -307,7 +312,7 @@ export function useInputElements(): InputInfo[] {
           }
         })
 
-      // console.log('elements', filteredInputs)
+      console.log('elements', filteredInputs)
       setInputs(filteredInputs)
     }
 
