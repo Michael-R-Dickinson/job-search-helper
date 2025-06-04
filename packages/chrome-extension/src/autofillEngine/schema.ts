@@ -1,6 +1,8 @@
 import { z } from 'zod'
+import type { ValueOf } from '../utils'
 
-// Constants
+// Getting and serializing Inputs
+// -------------------------------
 export const INPUT_ELEMENT_TYPES = {
   TEXT: 'text',
   SELECT: 'select',
@@ -38,46 +40,41 @@ export const SerializedHtmlInputSchema = z.object({
 
 export type SerializedHtmlInput = z.infer<typeof SerializedHtmlInputSchema>
 
-export type InputCategory =
-  | 'name'
-  | 'email'
-  | 'gender'
-  | 'veteran'
-  | 'race_ethnicity'
-  | 'hispanic_latino'
-  | 'disability'
-  | 'phone'
-  | 'authorization'
-  | 'sponsorship'
-  | 'location'
-  | 'school'
-  | 'degree'
-  | 'discipline'
-  | 'end_date_year'
-  | 'linkedin_profile'
-  | 'website'
-  | 'other_website'
-  | 'twitter_url'
-  | 'github_url'
-  | 'current_company'
-  | 'salary_expectations'
-  | 'position_discovery_source'
-  | 'current_job_title'
-  | 'referral_source'
-  | 'pronouns'
-  | 'unknown'
+// Categorizing Simple Inputs - these are inputs that we can handle without using the LLM autofilling engine
+// -------------------------------
+
+export const SimpleInputsEnum = {
+  unknown: 'unknown',
+  name: 'name',
+  email: 'email',
+  pronouns: 'pronouns',
+  linkedin_profile: 'linkedin_profile',
+  twitter_url: 'twitter_url',
+  github_url: 'github_url',
+  salary_expectations: 'salary_expectations',
+} as const
+export type SimpleInputsEnum = ValueOf<typeof SimpleInputsEnum>
 
 export const CategorizedInputSchema = z.object({
-  category: z.custom<InputCategory>(),
-  label: z.string().nullable(),
+  category: z.custom<SimpleInputsEnum>(),
   element: SerializedHtmlInputSchema,
 })
-
 export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
 
-// ! ALL Schema values contributing to UserAutofillPreferencesSchema are strongly linked to the schema string in the backend
+export type MinifiedInput = {
+  label: string | null
+  name: string | null
+  fieldType: string | null
+  wholeQuestionLabel: string | null
+  value: string | null
+}
+
+// Getting Autofill Values - the huge schema here defines all the data we save on users in the realtime db
 // When changing these values, make sure to update the schema string in the backend as well
-// TODO: Add a script to export this schema as json and import it into the backend
+// ! ALL Schema values contributing to UserAutofillPreferencesSchema are strongly linked to the schema string in the backend
+// TODO: Add a script to export this schema as json and import it into the backend, and vice versa
+// -------------------------------
+
 const NameSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),
@@ -185,6 +182,8 @@ export const UserAutofillPreferencesSchema = z.object({
 
 export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSchema>
 
+// Autofill Instructions
+// -------------------------------
 export const AutofillInstructionSchema = z.object({
   input_text: z.string().optional(),
   value: z.union([z.string(), z.boolean()]),
@@ -193,6 +192,9 @@ export const AutofillInstructionSchema = z.object({
 export const AutofillInstructionsSchema = z.array(AutofillInstructionSchema)
 
 export type AutofillInstruction = z.infer<typeof AutofillInstructionSchema>
+
+// Realtime DB
+// -------------------------------
 
 export type RealtimeDbSaveResult =
   | {
