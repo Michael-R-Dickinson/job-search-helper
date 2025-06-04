@@ -1,7 +1,7 @@
 export type SelectOption = {
   value: string | null // Allow null for value as per normalizeOptionNode
   text: string
-  domNode?: HTMLElement // Optional domNode for reference
+  domNode: HTMLElement
 }
 
 type Framework =
