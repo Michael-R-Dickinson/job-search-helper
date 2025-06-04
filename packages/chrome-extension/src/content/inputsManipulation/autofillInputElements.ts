@@ -1,28 +1,34 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 
-const fillInputElement = (input: HTMLInputElement, instructionValue: string | boolean): void => {
-  if (input.type === 'checkbox' || input.type === 'radio') {
-    if (!(typeof instructionValue === 'boolean')) return
+const fillTextInputElement = (
+  input: HTMLInputElement,
+  instructionValue: string | boolean,
+): void => {
+  if (input.value !== instructionValue) {
+    if (!(typeof instructionValue === 'string')) return
 
-    const shouldCheck = instructionValue == true
-    if (input.checked !== shouldCheck) {
-      input.checked = shouldCheck
-      input.dispatchEvent(new Event('change', { bubbles: true }))
-    }
-  } else if (input.type === 'button') {
-    if (instructionValue == true) {
-      input.click()
-    }
-  } else {
-    // Regular text inputs
-    if (input.value !== instructionValue) {
-      if (!(typeof instructionValue === 'string')) return
+    input.value = instructionValue
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    input.dispatchEvent(new Event('change', { bubbles: true }))
+  }
+}
 
-      input.value = instructionValue
-      input.dispatchEvent(new Event('input', { bubbles: true }))
-      input.dispatchEvent(new Event('change', { bubbles: true }))
-    }
+const fillRadioOrCheckboxElement = (
+  input: HTMLInputElement,
+  instructionValue: boolean | string,
+): void => {
+  if (
+    typeof instructionValue === 'string' &&
+    (instructionValue === 'true' || instructionValue === 'false')
+  ) {
+    instructionValue = instructionValue === 'true'
+  }
+
+  const shouldCheck = instructionValue === true
+  if (input.checked !== shouldCheck) {
+    input.checked = shouldCheck
+    input.dispatchEvent(new Event('change', { bubbles: true }))
   }
 }
 
@@ -39,6 +45,15 @@ const fillTextAreaElement = (
   }
 }
 
+const isRadioOrCheckbox = (element: HTMLElement): element is HTMLInputElement => {
+  return (
+    element instanceof HTMLInputElement && (element.type === 'checkbox' || element.type === 'radio')
+  )
+}
+const isTextInput = (element: HTMLElement): element is HTMLInputElement => {
+  return element instanceof HTMLInputElement && element.type === 'text'
+}
+
 const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
   const element = document.querySelector<HTMLElement>(
     `[data-autofill-id="${instruction.input_id}"]`,
@@ -51,8 +66,10 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
     await fillSelectLikeElement(element, autofillValue, instruction?.input_text)
   } else if (element instanceof HTMLTextAreaElement) {
     fillTextAreaElement(element, autofillValue)
-  } else if (element instanceof HTMLInputElement) {
-    fillInputElement(element, autofillValue)
+  } else if (isRadioOrCheckbox(element)) {
+    fillRadioOrCheckboxElement(element, autofillValue)
+  } else if (isTextInput(element)) {
+    fillTextInputElement(element, autofillValue)
   }
   return element
 }
