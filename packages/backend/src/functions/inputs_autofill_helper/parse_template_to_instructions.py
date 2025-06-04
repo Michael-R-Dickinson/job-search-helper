@@ -50,18 +50,15 @@ def get_value_from_path(path: str, user_data: dict):
 def map_autofill_template_to_instructions(
     autofill_template_values: AutofillResponseSchema,
     user_autofill_data: dict,
+    original_inputs: list = None,
 ):
     output_instructions = []
     instructions = autofill_template_values.autofill_instructions
     for instruction in instructions:
+        autofill_value = None
         if isinstance(instruction.valuePathString, str):
             value = get_value_from_path(instruction.valuePathString, user_autofill_data)
-            output_instructions.append(
-                {
-                    "input_id": instruction.input_id,
-                    "value": value,
-                }
-            )
+            autofill_value = value
         elif isinstance(instruction.valuePathString, IfExpression):
             expression = instruction.valuePathString
 
@@ -70,21 +67,35 @@ def map_autofill_template_to_instructions(
                 condition.valuePathString, user_autofill_data
             )
             if condition_check_value == condition.value:
-                value = get_value_from_path(
+                autofill_value = get_value_from_path(
                     expression.truthyValuePathString, user_autofill_data
                 )
             else:
-                value = get_value_from_path(
+                autofill_value = get_value_from_path(
                     expression.falsyValuePathString, user_autofill_data
                 )
 
-            output_instructions.append(
-                {
-                    "input_id": instruction.input_id,
-                    "value": value,
-                }
+        else:
+            raise ValueError(
+                f"Unknown instruction type: {type(instruction.valuePathString)}"
             )
-        output_instructions[-1]["input_text"] = instruction.initialLabel
+
+        # find text text of the input with the same input_id as the instruction
+        initial_input_text = next(
+            (
+                input["label"]
+                for input in original_inputs
+                if input["id"] == instruction.input_id
+            ),
+            None,
+        )
+        output_instructions.append(
+            {
+                "input_id": instruction.input_id,
+                "value": autofill_value,
+                "input_text": initial_input_text,
+            }
+        )
 
     return output_instructions
 

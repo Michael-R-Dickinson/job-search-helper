@@ -17,7 +17,7 @@ def get_filled_inputs(user_id, inputs):
 
     autofill_template_values = generate_autofill_with_gemini(inputs)
     autofill_instructions = map_autofill_template_to_instructions(
-        autofill_template_values, user_autofill_data
+        autofill_template_values, user_autofill_data, original_inputs=inputs
     )
 
     return autofill_instructions
