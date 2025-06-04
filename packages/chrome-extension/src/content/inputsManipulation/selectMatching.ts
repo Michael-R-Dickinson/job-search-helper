@@ -73,15 +73,17 @@ export const findBestMatch = (
     threshold: 0.5, // Adjusted for stricter matching
     distance: 100,
     minMatchCharLength: 2, // Consider increasing if very short matches are an issue
-    includeScore: true,
     ignoreLocation: true, // If false, might make short string matching harder
     findAllMatches: true, // Get all matches to choose the best one
+
     shouldSort: true, // User added
+    includeScore: true,
+    includeMatches: true,
   }
-  // console.log('\n\n\nsearchValue', searchValue, 'options', options); // User added log - REMOVING
 
   const fuse = new Fuse(options, fuseOptions)
   const results = fuse.search(searchValue)
+  console.log(`searchValue: ${searchValue}, results: `, results)
 
   // Temporary logging for debugging a specific test case - REMOVING
   // if (searchValue === 'first' && options.some(o => o.value === 'optionA')) {
@@ -96,75 +98,57 @@ export const findBestMatch = (
   return null
 }
 
+export const pickBestOption = (
+  options: SelectOption[],
+  searchValues: string[],
+): SelectOption | null => {
+  for (const searchValue of searchValues) {
+    const bestMatch = findBestMatch(searchValue, options)
+    if (bestMatch) {
+      return bestMatch
+    }
+  }
+
+  return null
+}
 /**
  * Attempts to select the best option based on a single value or preference values
  * for HTMLSelectElement.
  */
-export const selectBestOption = (
-  selectElement: HTMLSelectElement,
-  searchValues: string[],
-): boolean => {
-  const options = getSelectOptions(selectElement)
-  if (options.length === 0) return false
+// export const selectBestOption = (selectElement: HTMLSelectElement, searchValues: string[]) => {}
 
-  for (const searchValue of searchValues) {
-    const exactMatch = options.find((option) => {
-      const cleanValue = option.value?.toLowerCase().replace(/^string:/, '')
-      const searchLower = searchValue.toLowerCase()
-      return (
-        option.text.toLowerCase() === searchLower ||
-        cleanValue === searchLower ||
-        option.value?.toLowerCase() === searchLower
-      )
-    })
+const fillSelectElement = (element: HTMLSelectElement, searchValues: string[]) => {
+  const options = getSelectOptions(element)
+  if (options.length === 0) return
 
-    if (exactMatch && exactMatch.value) {
-      if (selectElement.value !== exactMatch.value) {
-        selectElement.value = exactMatch.value
-        selectElement.dispatchEvent(new Event('change', { bubbles: true }))
-      }
-      return true
-    }
-
-    const fuzzyMatch = findBestMatch(searchValue, options)
-    if (fuzzyMatch && fuzzyMatch.value) {
-      if (selectElement.value !== fuzzyMatch.value) {
-        selectElement.value = fuzzyMatch.value
-        selectElement.dispatchEvent(new Event('change', { bubbles: true }))
-      }
-      return true
-    }
+  const bestMatch = pickBestOption(options, searchValues)
+  if (bestMatch?.value && element.value !== bestMatch.value) {
+    element.value = bestMatch.value
+    element.dispatchEvent(new Event('change', { bubbles: true }))
   }
-  return false
-}
 
-/**
- * Attempts intelligent option selection for custom select inputs (HTMLInputElement).
- */
-export const selectBestCustomOption = (
-  inputElement: HTMLInputElement,
-  searchValues: string[],
-  options: SelectOption[], // Options are now passed in, typically from getCustomSelectOptions
-): boolean => {
-  if (options.length === 0) return false
-
-  for (const searchValue of searchValues) {
-    const fuzzyMatch = findBestMatch(searchValue, options)
-    if (fuzzyMatch) {
-      if (inputElement.value !== fuzzyMatch.value) {
-        if (!fuzzyMatch.value) {
-          console.error('no fuzzy match found for value: ', searchValue, ', options: ', options)
-          return false
-        }
-        inputElement.value = fuzzyMatch.value
-        inputElement.dispatchEvent(new Event('input', { bubbles: true }))
-        inputElement.dispatchEvent(new Event('change', { bubbles: true }))
-        inputElement.dispatchEvent(new Event('blur', { bubbles: true }))
-      }
-      return true
-    }
-  }
-  return false
+  // // Fallback for HTMLSelectElement if direct value setting is still desired (e.g. for empty value)
+  // // or if the value is an actual option value not caught by intelligent matching (less likely)
+  // const availableValues = Array.from(element.options).map((o) => o.value)
+  // if (availableValues.includes(value) || value === '') {
+  //   // Allow setting to empty value
+  //   if (element.value !== value) {
+  //     element.value = value
+  //     element.dispatchEvent(new Event('change', { bubbles: true }))
+  //   }
+  // } else {
+  //   // If the value is not a valid option, try to set it anyway (some selects allow arbitrary values)
+  //   // This part might be controversial based on "Never default to just filling in the value"
+  //   // For standard HTMLSelectElement, this is usually safe, but for consistency, we might remove it.
+  //   // For now, keeping it as HTMLSelectElement behavior is often expected to allow setting value directly.
+  //   const originalValue = element.value
+  //   element.value = value
+  //   if (element.value === value) {
+  //     element.dispatchEvent(new Event('change', { bubbles: true }))
+  //   } else {
+  //     element.value = originalValue // Revert if not settable
+  //   }
+  // }
 }
 
 /**
@@ -182,9 +166,12 @@ const fillCustomSelectInput = async (
   if (options.length > 0) {
     // const optionsString = options.map((o) => `${o.text}`).join(', ')
     // console.log(`Instruction: ${inputText}, \t with: ${value}, \noptions: ${optionsString}`)
-    const success = selectBestCustomOption(inputElement, searchValues, options)
-    if (success) {
-      return
+    const bestMatch = pickBestOption(options, searchValues)
+    if (bestMatch?.value && inputElement.value !== bestMatch.value) {
+      inputElement.value = bestMatch.value
+      inputElement.dispatchEvent(new Event('input', { bubbles: true }))
+      inputElement.dispatchEvent(new Event('change', { bubbles: true }))
+      inputElement.dispatchEvent(new Event('blur', { bubbles: true }))
     }
   }
 
@@ -198,52 +185,37 @@ const fillCustomSelectInput = async (
  * Main function to handle filling a select-like element with intelligent matching.
  * Works with both HTMLSelectElement and custom select-like input elements (HTMLInputElement).
  */
-export const fillSelectElement = (
+export const fillSelectLikeElement = async (
   element: SelectLikeElement,
   value: string | boolean,
   inputText?: string,
-): void => {
+): Promise<void> => {
   if (!(typeof value === 'string')) return
+  // searchValues are the parsed values we want to fill, for example, for an ethnicity field, if the passed value was
+  // "Asian|East Asian" then searchValues would be ["Asian", "East Asian"]
+  const searchValues = value.includes('|') ? parsePreferenceValues(value) : [value]
+  const selectOptions =
+    element instanceof HTMLSelectElement
+      ? getSelectOptions(element)
+      : await getCustomSelectOptions(element)
 
-  let searchValues: string[] = []
-  if (value.includes('|')) {
-    searchValues = parsePreferenceValues(value)
-  } else {
-    searchValues = [value]
-  }
+  if (searchValues.length === 0) return
+  if (selectOptions.length === 0) return
 
-  // console.log('filling select-like element', element.tagName, value, 'searchValues', searchValues) // User removed log
+  const bestMatch = pickBestOption(selectOptions, searchValues)
+  if (!bestMatch?.value || element.value === bestMatch.value) return
 
+  const optionsString = selectOptions.map((o) => `${o.text}`).join(', ')
+  console.log(
+    `Ideal: ${value}, Filled: ${bestMatch.text} \nInstruction: ${inputText}, \n\noptions: ${optionsString}`,
+  )
+
+  element.value = bestMatch.value
   if (element instanceof HTMLSelectElement) {
-    if (searchValues.length > 0) {
-      const success = selectBestOption(element, searchValues)
-      if (success) {
-        return
-      }
-    }
-    // Fallback for HTMLSelectElement if direct value setting is still desired (e.g. for empty value)
-    // or if the value is an actual option value not caught by intelligent matching (less likely)
-    const availableValues = Array.from(element.options).map((o) => o.value)
-    if (availableValues.includes(value) || value === '') {
-      // Allow setting to empty value
-      if (element.value !== value) {
-        element.value = value
-        element.dispatchEvent(new Event('change', { bubbles: true }))
-      }
-    } else {
-      // If the value is not a valid option, try to set it anyway (some selects allow arbitrary values)
-      // This part might be controversial based on "Never default to just filling in the value"
-      // For standard HTMLSelectElement, this is usually safe, but for consistency, we might remove it.
-      // For now, keeping it as HTMLSelectElement behavior is often expected to allow setting value directly.
-      const originalValue = element.value
-      element.value = value
-      if (element.value === value) {
-        element.dispatchEvent(new Event('change', { bubbles: true }))
-      } else {
-        element.value = originalValue // Revert if not settable
-      }
-    }
+    element.dispatchEvent(new Event('change', { bubbles: true }))
   } else if (element instanceof HTMLInputElement) {
-    fillCustomSelectInput(element, value, searchValues, inputText)
+    element.dispatchEvent(new Event('input', { bubbles: true }))
+    element.dispatchEvent(new Event('change', { bubbles: true }))
+    element.dispatchEvent(new Event('blur', { bubbles: true }))
   }
 }

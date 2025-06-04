@@ -1,5 +1,5 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
-import { fillSelectElement, isSelectLikeElement } from './selectMatching'
+import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 
 const fillInputElement = (input: HTMLInputElement, instructionValue: string | boolean): void => {
   if (input.type === 'checkbox' || input.type === 'radio') {
@@ -49,7 +49,7 @@ export const autofillInputElements = (autofillInstructions: AutofillInstruction[
     const autofillValue = instruction.value
 
     if (isSelectLikeElement(element)) {
-      fillSelectElement(element, autofillValue, instruction?.input_text)
+      fillSelectLikeElement(element, autofillValue, instruction?.input_text)
     } else if (element instanceof HTMLTextAreaElement) {
       fillTextAreaElement(element, autofillValue)
     } else if (element instanceof HTMLInputElement) {
