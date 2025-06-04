@@ -288,8 +288,11 @@ export function useInputElements(): InputInfo[] {
       const filteredInputs: InputInfo[] = Array.from(elements)
         .filter(shouldIncludeElement)
         .map((el) => {
-          const elementReferenceId = generateUniqueId()
-          el.setAttribute('data-autofill-id', elementReferenceId)
+          let elementReferenceId = el.getAttribute('data-autofill-id')
+          if (!elementReferenceId) {
+            elementReferenceId = generateUniqueId()
+            el.setAttribute('data-autofill-id', elementReferenceId)
+          }
 
           const label = getLabelText(el as HTMLElement)
           const wholeQuestionLabel = getWholeQuestionLabel(el as HTMLElement)
@@ -302,6 +305,7 @@ export function useInputElements(): InputInfo[] {
           }
         })
 
+      // console.log('elements', filteredInputs)
       setInputs(filteredInputs)
     }
 
