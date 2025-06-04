@@ -96,12 +96,6 @@ export const findBestMatch = (
 
   const fuse = new Fuse(options, fuseOptions)
   const results = fuse.search(searchValue)
-  // console.log(`searchValue: ${searchValue}, results: `, results)
-
-  // Temporary logging for debugging a specific test case - REMOVING
-  // if (searchValue === 'first' && options.some(o => o.value === 'optionA')) {
-  //   console.log('[DEBUG] findBestMatch with searchValue "first":', JSON.stringify(results, null, 2));
-  // }
 
   if (results.length > 0) {
     const bestMatch = results[0]
@@ -124,75 +118,6 @@ export const pickBestOption = (
   }
 
   return null
-}
-/**
- * Attempts to select the best option based on a single value or preference values
- * for HTMLSelectElement.
- */
-// export const selectBestOption = (selectElement: HTMLSelectElement, searchValues: string[]) => {}
-
-const fillSelectElement = (element: HTMLSelectElement, searchValues: string[]) => {
-  const options = getSelectOptions(element)
-  if (options.length === 0) return
-
-  const bestMatch = pickBestOption(options, searchValues)
-  if (bestMatch?.value && element.value !== bestMatch.value) {
-    element.value = bestMatch.value
-    element.dispatchEvent(new Event('change', { bubbles: true }))
-  }
-
-  // // Fallback for HTMLSelectElement if direct value setting is still desired (e.g. for empty value)
-  // // or if the value is an actual option value not caught by intelligent matching (less likely)
-  // const availableValues = Array.from(element.options).map((o) => o.value)
-  // if (availableValues.includes(value) || value === '') {
-  //   // Allow setting to empty value
-  //   if (element.value !== value) {
-  //     element.value = value
-  //     element.dispatchEvent(new Event('change', { bubbles: true }))
-  //   }
-  // } else {
-  //   // If the value is not a valid option, try to set it anyway (some selects allow arbitrary values)
-  //   // This part might be controversial based on "Never default to just filling in the value"
-  //   // For standard HTMLSelectElement, this is usually safe, but for consistency, we might remove it.
-  //   // For now, keeping it as HTMLSelectElement behavior is often expected to allow setting value directly.
-  //   const originalValue = element.value
-  //   element.value = value
-  //   if (element.value === value) {
-  //     element.dispatchEvent(new Event('change', { bubbles: true }))
-  //   } else {
-  //     element.value = originalValue // Revert if not settable
-  //   }
-  // }
-}
-
-/**
- * Fills a custom select-like input element.
- * It now relies on getCustomSelectOptions (from optionExtraction.ts) to find options.
- */
-const fillCustomSelectInput = async (
-  inputElement: HTMLInputElement,
-  value: string, // Original value from instruction (single or pipe-separated)
-  searchValues: string[], // Parsed values for matching
-  inputText?: string,
-): Promise<void> => {
-  const options = await getCustomSelectOptions(inputElement) // Get options using the imported function
-
-  if (options.length > 0) {
-    // const optionsString = options.map((o) => `${o.text}`).join(', ')
-    // console.log(`Instruction: ${inputText}, \t with: ${value}, \noptions: ${optionsString}`)
-    const bestMatch = pickBestOption(options, searchValues)
-    if (bestMatch?.value && inputElement.value !== bestMatch.value) {
-      inputElement.value = bestMatch.value
-      inputElement.dispatchEvent(new Event('input', { bubbles: true }))
-      inputElement.dispatchEvent(new Event('change', { bubbles: true }))
-      inputElement.dispatchEvent(new Event('blur', { bubbles: true }))
-    }
-  }
-
-  // If no options were found, or if matching failed, log a warning.
-  console.warn(
-    `Could not find or match an option for custom select input (ID: ${inputElement.id || 'N/A'}, Class: ${inputElement.className || 'N/A'}) with search values: ${searchValues.join(', ')}. Input not changed.`,
-  )
 }
 
 /**
