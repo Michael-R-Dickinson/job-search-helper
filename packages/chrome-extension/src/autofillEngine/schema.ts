@@ -100,9 +100,9 @@ const RaceSchema = z.object({
 
 const GenderEnum = z.enum(['male', 'female', 'non_binary', 'other', 'prefer_not_to_say'])
 const SexualOrientationEnum = z.enum([
-  'heterosexual/straight',
-  'homosexual/gay',
-  'bisexual and/or pansexual',
+  'straight|heterosexual',
+  'gay|homosexual',
+  'bisexual|pansexual',
   'asexual',
   'queer',
   'prefer_not_to_say',

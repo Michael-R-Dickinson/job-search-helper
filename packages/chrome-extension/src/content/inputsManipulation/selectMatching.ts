@@ -57,6 +57,18 @@ export const getSelectOptions = (selectElement: HTMLSelectElement): SelectOption
     .filter((option) => option.value !== '' && option.text !== 'Select an option...')
 }
 
+const preprocessSearchValuesForFuzzyMatching = (searchValues: string[]): string[] => {
+  const isTrue = searchValues.find((s) => s === 'true')
+  if (isTrue) {
+    searchValues.push('yes')
+  }
+  const isFalse = searchValues.find((s) => s === 'false')
+  if (isFalse) {
+    searchValues.push('no')
+  }
+  return searchValues
+}
+
 /**
  * Enhanced fuzzy matching using fuse.js for better option selection
  */
@@ -103,6 +115,7 @@ export const pickBestOption = (
   options: SelectOption[],
   searchValues: string[],
 ): SelectOption | null => {
+  searchValues = preprocessSearchValuesForFuzzyMatching(searchValues)
   for (const searchValue of searchValues) {
     const bestMatch = findBestMatch(searchValue, options)
     if (bestMatch) {
