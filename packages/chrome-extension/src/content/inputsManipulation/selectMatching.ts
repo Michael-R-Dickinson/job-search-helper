@@ -5,6 +5,7 @@
 import Fuse from 'fuse.js'
 import { getCustomSelectOptions } from './optionExtraction'
 import type { SelectOption } from './optionExtraction'
+import { robustlyFillSelectOrInput } from './fillSelectInput'
 
 // Type for elements that can behave like selects
 export type SelectLikeElement = HTMLSelectElement | HTMLInputElement
@@ -83,7 +84,7 @@ export const findBestMatch = (
 
   const fuse = new Fuse(options, fuseOptions)
   const results = fuse.search(searchValue)
-  console.log(`searchValue: ${searchValue}, results: `, results)
+  // console.log(`searchValue: ${searchValue}, results: `, results)
 
   // Temporary logging for debugging a specific test case - REMOVING
   // if (searchValue === 'first' && options.some(o => o.value === 'optionA')) {
@@ -207,15 +208,10 @@ export const fillSelectLikeElement = async (
 
   const optionsString = selectOptions.map((o) => `${o.text}`).join(', ')
   console.log(
-    `Ideal: ${value}, Filled: ${bestMatch.text} \nInstruction: ${inputText}, \n\noptions: ${optionsString}`,
+    `Instruction: ${inputText}, \n\nIdeal: ${value}, Filled: ${bestMatch.text} \noptions: ${optionsString}`,
   )
 
+  console.log(element.value, element)
   element.value = bestMatch.value
-  if (element instanceof HTMLSelectElement) {
-    element.dispatchEvent(new Event('change', { bubbles: true }))
-  } else if (element instanceof HTMLInputElement) {
-    element.dispatchEvent(new Event('input', { bubbles: true }))
-    element.dispatchEvent(new Event('change', { bubbles: true }))
-    element.dispatchEvent(new Event('blur', { bubbles: true }))
-  }
+  robustlyFillSelectOrInput(element, bestMatch.value)
 }

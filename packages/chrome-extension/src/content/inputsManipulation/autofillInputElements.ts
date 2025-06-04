@@ -39,8 +39,10 @@ const fillTextAreaElement = (
   }
 }
 
-export const autofillInputElements = (autofillInstructions: AutofillInstruction[]): void => {
-  autofillInstructions.forEach((instruction) => {
+export const autofillInputElements = async (
+  autofillInstructions: AutofillInstruction[],
+): Promise<void> => {
+  autofillInstructions.forEach(async (instruction) => {
     const element = document.querySelector<HTMLElement>(
       `[data-autofill-id="${instruction.input_id}"]`,
     )
@@ -49,7 +51,7 @@ export const autofillInputElements = (autofillInstructions: AutofillInstruction[
     const autofillValue = instruction.value
 
     if (isSelectLikeElement(element)) {
-      fillSelectLikeElement(element, autofillValue, instruction?.input_text)
+      await fillSelectLikeElement(element, autofillValue, instruction?.input_text)
     } else if (element instanceof HTMLTextAreaElement) {
       fillTextAreaElement(element, autofillValue)
     } else if (element instanceof HTMLInputElement) {
