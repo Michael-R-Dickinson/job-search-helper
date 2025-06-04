@@ -1,3 +1,4 @@
+// Essentially documents synonyms for each key - used when picking options from a select input
 export const CANONICAL: { key: string; synonyms: string[] }[] = [
   {
     key: 'protected_veteran',
@@ -56,5 +57,13 @@ export const CANONICAL: { key: string; synonyms: string[] }[] = [
   {
     key: 'true',
     synonyms: ['true', 'yes'],
+  },
+  {
+    key: 'false',
+    synonyms: ['false', 'no'],
+  },
+  {
+    key: 'linkedin',
+    synonyms: ['linkedin', 'linkedin profile', 'job board', 'company website'],
   },
 ]
