@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export type ElementInfo =
   | HTMLInputElement
@@ -279,6 +279,7 @@ const isElementNearby = (target: HTMLElement, candidate: HTMLElement): boolean =
  */
 export function useInputElements(): InputInfo[] {
   const [inputs, setInputs] = useState<InputInfo[]>([])
+  const idCounterRef = useRef(0)
 
   useEffect(() => {
     const scanForElements = (): void => {
@@ -287,11 +288,12 @@ export function useInputElements(): InputInfo[] {
 
       const filteredInputs: InputInfo[] = Array.from(elements)
         .filter(shouldIncludeElement)
-        .map((el) => {
+        .map((el, idx) => {
           let elementReferenceId = el.getAttribute('data-autofill-id')
           if (!elementReferenceId) {
-            elementReferenceId = generateUniqueId()
+            elementReferenceId = idCounterRef.current.toString()
             el.setAttribute('data-autofill-id', elementReferenceId)
+            idCounterRef.current++
           }
 
           const label = getLabelText(el as HTMLElement)
