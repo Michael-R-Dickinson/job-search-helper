@@ -129,7 +129,6 @@ export const fillSelectLikeElement = async (
 
   const bestMatch = findBestCanonicalMatch(selectOptions, value)
   if (!bestMatch?.value || element.value === bestMatch.value) return
-  console.log('bestMatch', bestMatch)
 
   // const optionsString = selectOptions.map((o) => `${o.text}`).join(', ')
   // console.log(
