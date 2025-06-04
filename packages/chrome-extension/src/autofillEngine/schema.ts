@@ -184,6 +184,8 @@ export type UserAutofillPreferences = z.infer<typeof UserAutofillPreferencesSche
 
 // Autofill Instructions
 // -------------------------------
+
+// value can be a string or a boolean - string values are for text inputs or selects, boolean values are for radio buttons or checkboxes
 export const AutofillInstructionSchema = z.object({
   input_text: z.string().optional(),
   value: z.union([z.string(), z.boolean()]),
