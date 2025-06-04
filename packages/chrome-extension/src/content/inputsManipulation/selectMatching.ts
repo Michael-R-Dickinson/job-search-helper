@@ -115,6 +115,7 @@ function findBestCanonicalMatch(
 export const fillSelectLikeElement = async (
   element: SelectLikeElement,
   value: string | boolean,
+  // Passed in for debugging purposes
   inputText?: string,
 ): Promise<void> => {
   if (!(typeof value === 'string')) return
