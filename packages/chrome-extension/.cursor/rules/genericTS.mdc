@@ -3,4 +3,4 @@ description:
 globs: *.tsx
 alwaysApply: false
 ---
-Use typescript best practices and ensure high code quality across the board.
+Use typescript best practices and ensure high code quality across the board. This means avoiding putting huge non-descriptive blocks into a single function. Instead, domain specific pieces of logic should be put into separate functions, or in cases where the functionality goes beyond the original file - in a new file. The code should aim to be self documenting and readable. 
