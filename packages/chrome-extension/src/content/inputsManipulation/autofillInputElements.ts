@@ -1,5 +1,6 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
-import { fillSelectElement } from './selectMatching'
+import { fillSelectElement, isSelectLikeElement } from './selectMatching'
+
 const fillInputElement = (input: HTMLInputElement, instructionValue: string | boolean): void => {
   if (input.type === 'checkbox' || input.type === 'radio') {
     if (!(typeof instructionValue === 'boolean')) return
@@ -38,12 +39,6 @@ const fillTextAreaElement = (
   }
 }
 
-// const fillButtonElement = (button: HTMLButtonElement, instruction: AutofillInstruction): void => {
-//   if (instruction.action === 'fill') {
-//     button.click()
-//   }
-// }
-
 export const autofillInputElements = (autofillInstructions: AutofillInstruction[]): void => {
   autofillInstructions.forEach((instruction) => {
     const element = document.querySelector<HTMLElement>(
@@ -53,12 +48,12 @@ export const autofillInputElements = (autofillInstructions: AutofillInstruction[
 
     const autofillValue = instruction.value
 
-    if (element instanceof HTMLInputElement) {
-      fillInputElement(element, autofillValue)
+    if (isSelectLikeElement(element)) {
+      fillSelectElement(element, autofillValue, instruction?.input_text)
     } else if (element instanceof HTMLTextAreaElement) {
       fillTextAreaElement(element, autofillValue)
-    } else if (element instanceof HTMLSelectElement) {
-      fillSelectElement(element, autofillValue)
+    } else if (element instanceof HTMLInputElement) {
+      fillInputElement(element, autofillValue)
     }
     //  else if (element instanceof HTMLButtonElement) {
     //   fillButtonElement(element, autofillValue)
