@@ -1,12 +1,14 @@
+import { useState } from 'react'
 import { serializeInputInfosForTest } from '../e2e-testing/saveInputInfosForTests'
 import { useInputElements } from './hooks/useInputElements'
 import { autofillInputElements } from './inputsManipulation/autofillInputElements'
 import triggerGetAutofillValues from './triggerGetAutofillValues'
 import triggerSaveFilledValues from './triggerSaveFilledValues'
+import type { AutofillInstruction } from '../autofillEngine/schema'
 
 const Sidebar = () => {
   const elements = useInputElements()
-  console.log('elements', elements)
+  const [autofillInstructions, setAutofillInstructions] = useState<AutofillInstruction[]>([])
 
   // For testing
   // Collects all test data and copies to clipboard as JSON
@@ -44,10 +46,19 @@ const Sidebar = () => {
         onClick={async () => {
           const response = await triggerGetAutofillValues(elements)
           console.log('response', response)
+          setAutofillInstructions(response)
           autofillInputElements(response)
         }}
       >
         Begin Autofill Sequence
+      </button>
+      <button
+        onClick={() => {
+          console.log('rerunning autofill sequence', autofillInstructions)
+          autofillInputElements(autofillInstructions)
+        }}
+      >
+        Rerun Autofill Sequence
       </button>
       <button
         onClick={async () => {
