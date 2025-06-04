@@ -75,6 +75,9 @@ export const CategorizedInputSchema = z.object({
 
 export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
 
+// ! ALL Schema values contributing to UserAutofillPreferencesSchema are strongly linked to the schema string in the backend
+// When changing these values, make sure to update the schema string in the backend as well
+// TODO: Add a script to export this schema as json and import it into the backend
 const NameSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),

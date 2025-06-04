@@ -3,8 +3,6 @@
 # The autofill will break.
 
 AUTOFILL_SCHEMA_STRING = """
-const YesNoAbstainEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
-
 const NameSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),
@@ -23,26 +21,33 @@ export const RaceEthnicityEnum = z.enum([
 ])
 const RaceSchema = z.object({
   race: RaceEthnicityEnum.optional(),
-  hispanic_latino: YesNoAbstainEnum.optional(),
+  hispanic_latino: z.enum(['yes', 'no', 'prefer_not_to_say']).optional(),
 })
 
-const GenderEnum = z.enum(['male', 'female', 'non_binary', 'other', 'prefer_not_to_say'])
+const VeteranStatusEnum = z.enum(['protected_veteran', 'not_veteran', 'prefer_not_to_say'])
+
+const AuthorizationEnum = z
+  .enum(['us_authorized', 'no_authorization'])
+  .describe('Authorization to work in the US')
+
+const DisabilityEnum = z.enum(['disabled', 'enabled', 'prefer_not_to_say'])
+
+const GenderEnum = z.enum(['man', 'woman', 'non_binary', 'other', 'prefer_not_to_say'])
 const SexualOrientationEnum = z.enum([
-  'heterosexual/straight',
-  'homosexual/gay',
-  'bisexual and/or pansexual',
+  'heterosexual',
+  'homosexual',
+  'pansexual',
   'asexual',
   'queer',
   'prefer_not_to_say',
 ])
+const TransgenderEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
 const IdentitySchema = z.object({
   gender: GenderEnum.optional(),
   sexual_orientation: SexualOrientationEnum.optional(),
   pronouns: z.string().optional(),
-  transgender: z.boolean().optional(),
+  transgender: TransgenderEnum.optional(),
 })
-
-const AuthorizationEnum = z.enum(['yes', 'no']).describe('Authorization to work in the US')
 
 const JobSchema = z.object({
   current_company: z.string().optional(),
@@ -91,8 +96,8 @@ export const UserAutofillPreferencesSchema = z.object({
   twitter_url: z.string().optional(),
   github_url: z.string().optional(),
   salary_expectations: z.string().optional(),
-  veteran: YesNoAbstainEnum.optional(),
-  disability: YesNoAbstainEnum.optional(),
+  veteran: VeteranStatusEnum.optional(),
+  disability: DisabilityEnum.optional(),
   authorization: AuthorizationEnum.optional(),
   race: RaceSchema.optional(),
   identity: IdentitySchema.optional(),
@@ -102,5 +107,6 @@ export const UserAutofillPreferencesSchema = z.object({
   sponsorship: SponsorshipSchema.optional(),
   location: LocationSchema.optional(),
 })
+
 
 """

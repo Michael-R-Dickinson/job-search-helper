@@ -146,7 +146,7 @@ export const fillSelectLikeElement = async (
 
   if (selectOptions.length === 0) return
 
-  const bestMatch = findBestCanonicalMatch(selectOptions, value, 0.5, inputText)
+  const bestMatch = findBestCanonicalMatch(selectOptions, value)
   if (!bestMatch?.value || element.value === bestMatch.value) return
 
   // const optionsString = selectOptions.map((o) => `${o.text}`).join(', ')
@@ -165,7 +165,6 @@ function findBestCanonicalMatch(
   options: SelectOption[],
   logicalKey: string,
   maxScore = 0.5,
-  inputText?: string,
 ): SelectOption | null {
   const record = CANONICAL.find((r) => r.key === logicalKey)
   const synonyms = record?.synonyms || [logicalKey]
@@ -189,11 +188,8 @@ function findBestCanonicalMatch(
   let bestScore = Infinity
   let bestOption: SelectOption | null = null
 
-  console.log('InputText', inputText)
-  console.log('Synonyms', synonyms)
   for (const syn of synonyms) {
     const results = fuse.search(syn.toLowerCase())
-    console.log('Results', results)
     if (!results.length) continue
     const { score, item } = results[0]
     if (score !== undefined && score < bestScore && score <= maxScore) {
@@ -201,7 +197,6 @@ function findBestCanonicalMatch(
       bestOption = { value: item.value, text: item.text }
     }
   }
-  console.log('Best Option', bestOption, '\n\n')
 
   // const optionsString = optionList.map((o) => `${o.text}`).join(', ')
   // console.log(
