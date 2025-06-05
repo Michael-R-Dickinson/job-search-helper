@@ -82,9 +82,9 @@ class IfExpression(BaseModel):
 
 
 class AutofillInstruction(BaseModel):
+    initialLabel: str
     input_id: str
     valuePathString: Union[str, IfExpression]
-    initialLabel: str
 
 
 class AutofillResponseSchema(BaseModel):
