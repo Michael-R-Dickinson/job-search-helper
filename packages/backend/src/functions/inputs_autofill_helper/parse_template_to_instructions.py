@@ -33,7 +33,7 @@ def extract_value_path_segments(path: str):
 
 
 def is_special_value_path_token(value: str):
-    return value.lower() in ["{true}", "{false}"]
+    return value.lower() in ["{true}", "{false}", "gabaabagoo"]
 
 
 def get_special_value_path_value(value: str):
@@ -41,6 +41,8 @@ def get_special_value_path_value(value: str):
         return True
     elif value.lower() == "{false}":
         return False
+    elif value.lower() == "GABAABAGOO":
+        return ""
     else:
         raise ValueError(f"Invalid special value path token: {value}")
 
@@ -49,9 +51,9 @@ def get_value_from_path(path: str, user_data: dict):
     segments = extract_value_path_segments(path)
     output = []
     for segment in segments:
+        if is_special_value_path_token(segment):
+            return get_special_value_path_value(segment)
         if segment.startswith("{"):
-            if is_special_value_path_token(segment):
-                return get_special_value_path_value(segment)
             key = segment[1:-1]
             value = get_dict_value_by_path(key, user_data)
 

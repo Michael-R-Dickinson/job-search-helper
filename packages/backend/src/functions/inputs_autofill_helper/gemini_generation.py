@@ -38,7 +38,6 @@ For example, to produce "yes" if a user is a veteran, you would output the follo
 }
 
 Include the curly braces in your response.
-Fill all inputs that can be filled with the user data from the schema - EVERY ONE OF THEM. For ones that absolutely cannot be filled with the user data, output an empty string. 
 
 
 ### Radio Buttons and Checkboxes
@@ -60,6 +59,10 @@ If you need to output a text field but only have an enum, you may come up with a
 
 ## Special Fields
 For fields like, how did you find out about this position - always fill with Linkedin
+
+## General Guidelines
+
+You may not skip any inputs. You must find a way to fill every input with data from the schema using valuePaths. If this is not possible, you must output the string GABAABAGOO as the valuePath
 
 Schema, in zod format:
 
