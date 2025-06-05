@@ -1190,6 +1190,71 @@ const isPronounsInput = (input: SerializedHtmlInput): boolean => {
   )
 }
 
+const isResumeUploadInput = (input: SerializedHtmlInput): boolean => {
+    // If it's explicitly a file input, consider it a resume upload input
+    if (input.type === 'file') {
+      console.log('🗂️  Detected a resume upload field by type: file', { type: input.type, fieldType: input.fieldType });
+      return true;
+    }
+
+    // Only consider BUTTON-type inputs (or TEXT/TEXTAREA if used for a URL/pasting)
+    if (input.type !== 'button' && input.fieldType !== INPUT_ELEMENT_TYPES.TEXT && input.type !== 'textarea') {
+      return false;
+    }
+  
+    // Common patterns when a form asks for a resume/CV
+    const resumePatterns: Pattern[] = [
+      'resume',
+      'RESUME',
+      'curriculum vitae',
+      'cv',
+      'upload resume',
+      'attach resume',
+      'upload your resume',
+      'attach your resume',
+      'resume_file',
+      'resume_upload',
+      'Resume/CV',
+      'cv_upload',
+      /\bresume\b/i,
+      /\bcurriculum[\s-]?vitae\b/i,
+      /\battach[\s-]?resume\b/i,
+      // Add patterns for button text
+      'Attach',
+      'Upload',
+      'Browse',
+      'Select File',
+      // Add patterns for textarea labels
+      'Type or paste your Resume here',
+      'Paste your resume here',
+      'Enter your resume',
+      'Resume/CV',
+      'Resume/CV *',
+    ]
+  
+    const labelMatch = matchesPattern(input.label ?? undefined, resumePatterns);
+    const nameMatch = matchesPattern(input.name, resumePatterns);
+    const placeholderMatch = matchesPattern(input.placeholder, resumePatterns);
+    const wholeQuestionLabelMatch = matchesPattern(input.wholeQuestionLabel ?? undefined, resumePatterns);
+  
+    const matches = labelMatch || nameMatch || placeholderMatch || wholeQuestionLabelMatch;
+  
+   
+  
+    if (matches) {
+      console.log('🗂️  Detected a resume upload field:', {
+        label: input.label,
+        name: input.name,
+        placeholder: input.placeholder,
+        wholeQuestionLabel: input.wholeQuestionLabel,
+        type: input.type,
+        fieldType: input.fieldType,
+      });
+    }
+  
+    return matches;
+  }
+
 export {
   isNameInput,
   isEmailInput,
@@ -1216,4 +1281,5 @@ export {
   isCurrentJobTitleInput,
   isReferralSourceInput,
   isPronounsInput,
+  isResumeUploadInput,
 }

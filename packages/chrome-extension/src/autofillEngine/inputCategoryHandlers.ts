@@ -867,6 +867,24 @@ class PronounsHandler extends InputCategoryHandler {
   }
 }
 
+class ResumeUploadHandler extends InputCategoryHandler {
+  // You might add properties here if you were storing file data in the handler
+  // For now, we'll simulate a blank file directly in the autofill logic
+
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    // Since we can't directly "fill" with a string value,
+    // we'll use a custom action or perhaps 'fill' with a placeholder
+    // that signals to the autofill logic that a file upload is needed.
+    // Let's use 'fill' with a specific placeholder value for now.
+    return { action: 'fill', value: '__FILE_UPLOAD_NEEDED__', id: input.element.elementReferenceId };
+  }
+
+  saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
+    // We typically don't save the value of a file input
+    return Promise.resolve({ status: 'success', valuePath: 'resume_upload', value: 'skipped_saving_file_input' });
+  }
+}
+
 // Restore DefaultHandler for fallback
 class DefaultHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
@@ -921,7 +939,9 @@ const handlerClassMap: Partial<Record<InputCategory, InputCategoryHandlerConstru
   current_job_title: CurrentJobTitleHandler,
   referral_source: ReferralSourceHandler,
   pronouns: PronounsHandler,
+  resume_upload: ResumeUploadHandler,
   unknown: DefaultHandler,
+  
 }
 
 export default function getHandlerForInputCategory(

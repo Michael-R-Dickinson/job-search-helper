@@ -13,6 +13,7 @@ export const INPUT_ELEMENT_TYPES = {
   DATE: 'date',
   PASSWORD: 'password',
   URL: 'url',
+  FILE: 'file',
 } as const
 
 export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_ELEMENT_TYPES]
@@ -65,6 +66,7 @@ export type InputCategory =
   | 'current_job_title'
   | 'referral_source'
   | 'pronouns'
+  | 'resume_upload'
   | 'unknown'
 
 export const CategorizedInputSchema = z.object({

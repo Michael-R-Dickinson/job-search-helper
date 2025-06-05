@@ -36,6 +36,7 @@ const isValidInputType = (input: HTMLInputElement): boolean => {
     'checkbox',
     'radio',
     'button',
+    'file',
   ]
   return allowedTypes.includes(input.type)
 }
