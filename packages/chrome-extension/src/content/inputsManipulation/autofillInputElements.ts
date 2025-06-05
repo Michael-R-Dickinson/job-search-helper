@@ -14,15 +14,17 @@ const fillTextInputElement = (
   }
 }
 
+const isBooleanString = (value: string): boolean => {
+  const lowerCaseValue = value.toLowerCase()
+  return lowerCaseValue === 'true' || lowerCaseValue === 'false'
+}
+
 const fillRadioOrCheckboxElement = (
   input: HTMLInputElement,
   instructionValue: boolean | string,
 ): void => {
-  if (
-    typeof instructionValue === 'string' &&
-    (instructionValue === 'true' || instructionValue === 'false')
-  ) {
-    instructionValue = instructionValue === 'true'
+  if (typeof instructionValue === 'string' && isBooleanString(instructionValue)) {
+    instructionValue = instructionValue.toLowerCase() === 'true'
   }
 
   const shouldCheck = instructionValue === true
@@ -50,9 +52,6 @@ const isRadioOrCheckbox = (element: HTMLElement): element is HTMLInputElement =>
     element instanceof HTMLInputElement && (element.type === 'checkbox' || element.type === 'radio')
   )
 }
-const isTextInput = (element: HTMLElement): element is HTMLInputElement => {
-  return element instanceof HTMLInputElement && element.type === 'text'
-}
 
 const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
   const element = document.querySelector<HTMLElement>(
@@ -68,7 +67,7 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
     fillTextAreaElement(element, autofillValue)
   } else if (isRadioOrCheckbox(element)) {
     fillRadioOrCheckboxElement(element, autofillValue)
-  } else if (isTextInput(element)) {
+  } else if (element instanceof HTMLInputElement) {
     fillTextInputElement(element, autofillValue)
   }
   return element

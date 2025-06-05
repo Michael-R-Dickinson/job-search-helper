@@ -32,15 +32,45 @@ def extract_value_path_segments(path: str):
     return segments
 
 
+def is_special_value_path_token(value: str):
+    return value.lower() in ["{true}", "{false}"]
+
+
+def get_special_value_path_value(value: str):
+    if value.lower() == "{true}":
+        return True
+    elif value.lower() == "{false}":
+        return False
+    else:
+        raise ValueError(f"Invalid special value path token: {value}")
+
+
+# We only accept booleans and strings
+# Ints and other types can be autofilled as strings
+def handle_type_conversions(value):
+    if isinstance(value, bool):
+        return value
+    return str(value)
+
+
 def get_value_from_path(path: str, user_data: dict):
     segments = extract_value_path_segments(path)
     output = []
     for segment in segments:
         if segment.startswith("{"):
+            if is_special_value_path_token(segment):
+                return get_special_value_path_value(segment)
             key = segment[1:-1]
             value = get_dict_value_by_path(key, user_data)
-            if value:
-                output.append(str(value))
+            value = handle_type_conversions(value)
+            if value is None:
+                continue
+            # If we have a boolean, we can return it directly
+            # As this just indicates that a radio button or checkbox should be checked
+            if isinstance(value, bool):
+                return value
+
+            output.append(value)
         else:
             output.append(segment)
 
