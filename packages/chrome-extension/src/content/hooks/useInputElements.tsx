@@ -13,10 +13,6 @@ export interface InputInfo {
   elementReferenceId: string
 }
 
-function generateUniqueId(): string {
-  return `af-${crypto.randomUUID()}`
-}
-
 const isCaptchaElement = (el: HTMLElement): boolean => {
   const id = el.id?.toLowerCase() ?? ''
   const name = el.getAttribute('name')?.toLowerCase() ?? ''
