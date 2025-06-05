@@ -67,7 +67,7 @@ function findBestCanonicalMatch(
   logicalKey: string,
   maxScore = 0.5,
 ): SelectOption | null {
-  const record = CANONICAL.find((r) => r.key === logicalKey)
+  const record = CANONICAL.find((r) => r.key === logicalKey.toLowerCase())
   const synonyms = record?.synonyms || [logicalKey]
   if (!options.length) return null
 
