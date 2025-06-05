@@ -45,14 +45,6 @@ def get_special_value_path_value(value: str):
         raise ValueError(f"Invalid special value path token: {value}")
 
 
-# We only accept booleans and strings
-# Ints and other types can be autofilled as strings
-def handle_type_conversions(value):
-    if isinstance(value, bool):
-        return value
-    return str(value)
-
-
 def get_value_from_path(path: str, user_data: dict):
     segments = extract_value_path_segments(path)
     output = []
@@ -62,15 +54,15 @@ def get_value_from_path(path: str, user_data: dict):
                 return get_special_value_path_value(segment)
             key = segment[1:-1]
             value = get_dict_value_by_path(key, user_data)
-            value = handle_type_conversions(value)
-            if value is None:
-                continue
+
             # If we have a boolean, we can return it directly
             # As this just indicates that a radio button or checkbox should be checked
             if isinstance(value, bool):
                 return value
+            if value is None:
+                continue
 
-            output.append(value)
+            output.append(str(value))
         else:
             output.append(segment)
 
@@ -87,11 +79,11 @@ def map_autofill_template_to_instructions(
     for instruction in instructions:
         autofill_value = None
         if isinstance(instruction.valuePathString, str):
-            value = get_value_from_path(instruction.valuePathString, user_autofill_data)
-            autofill_value = value
+            autofill_value = get_value_from_path(
+                instruction.valuePathString, user_autofill_data
+            )
         elif isinstance(instruction.valuePathString, IfExpression):
             expression = instruction.valuePathString
-
             condition = expression.condition
             condition_check_value = get_value_from_path(
                 condition.valuePathString, user_autofill_data
@@ -110,6 +102,8 @@ def map_autofill_template_to_instructions(
                 f"Unknown instruction type: {type(instruction.valuePathString)}"
             )
 
+        # if autofill_value == None:
+        #     autofill_value = ""
         # find text text of the input with the same input_id as the instruction
         initial_input_text = next(
             (
