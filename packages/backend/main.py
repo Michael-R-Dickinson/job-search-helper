@@ -121,5 +121,14 @@ def get_input_autofill_instructions(req: https_fn.Request) -> https_fn.Response:
 )
 def save_filled_inputs(req: https_fn.Request) -> https_fn.Response:
     user_id = req.args.get("userId")
-    data = req.get_json()
+    try:
+        data = req.get_json()
+    except Exception as e:
+        print("Error getting json", e)
+        return https_fn.Response(
+            json.dumps({"message": "Error getting json"}),
+            status=400,
+        )
+
+    print("Successfully got json handing off to handler")
     return handle_save_filled_values_request(user_id, inputs=data)
