@@ -97,9 +97,10 @@ def generate_autofill_with_gemini(inputs) -> AutofillResponseSchema:
             response_mime_type="application/json",
             response_schema=AutofillResponseSchema,
             temperature=0.0,
-            thinking_config=types.ThinkingConfig(thinking_budget=0),
+            # thinking_config=types.ThinkingConfig(thinking_budget=0),
         ),
-        model="gemini-2.5-flash-preview-04-17",
+        # model="gemini-2.5-flash-preview-04-17",
+        model="gemini-2.0-flash",
     )
     response = chat.send_message(
         json.dumps(inputs),
