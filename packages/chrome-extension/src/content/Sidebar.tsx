@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { serializeInputInfosForTest } from '../e2e-testing/saveInputInfosForTests'
 import { useInputElements } from './hooks/useInputElements'
 import { autofillInputElements } from './inputsManipulation/autofillInputElements'
 import triggerGetAutofillValues from './triggerGetAutofillValues'
@@ -9,26 +8,6 @@ import type { AutofillInstruction } from '../autofillEngine/schema'
 const Sidebar = () => {
   const elements = useInputElements()
   const [autofillInstructions, setAutofillInstructions] = useState<AutofillInstruction[]>([])
-
-  // For testing
-  // Collects all test data and copies to clipboard as JSON
-  const getTestingJson = async () => {
-    const inputsData = serializeInputInfosForTest(elements)
-    const saveFilledInputsResponse = await triggerSaveFilledValues(elements)
-    const autofillInstructionsResponse = await triggerGetAutofillValues(elements)
-    const testCase = {
-      sourceURL: window.location.href,
-      inputsData,
-      saveFilledInputsResponse,
-      autofillInstructionsResponse,
-    }
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(testCase, null, 2))
-      alert('Test case copied to clipboard!')
-    } catch (e) {
-      alert('Failed to copy test case to clipboard.')
-    }
-  }
 
   return (
     <div
@@ -68,7 +47,6 @@ const Sidebar = () => {
       >
         Save Autofill Values
       </button>
-      <button onClick={getTestingJson}>Save Inputs For Testing</button>
     </div>
   )
 }
