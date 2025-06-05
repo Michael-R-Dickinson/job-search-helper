@@ -37,6 +37,10 @@ For example, to produce "yes" if a user is a veteran, you would output the follo
     "falsyValuePathString": "no"
 }
 
+Include the curly braces in your response.
+Fill all inputs that can be filled with the user data from the schema - EVERY ONE OF THEM. For ones that absolutely cannot be filled with the user data, output an empty string. 
+
+
 ### Radio Buttons and Checkboxes
 If the result of the value at a valuePath is a boolean, this will indicate that a radio button or checkbox should be checked. You may specify a value to always be true or false using the special lowercase {true} or {false} valuePaths. 
 Radio buttons and checkboxes must receive a boolean value otherwise no action will be taken. 
@@ -49,9 +53,10 @@ When filling radios/checkboxes, unless the valuePath maps directly to a boolean,
     "truthyValuePathString": "{true}",
     "falsyValuePathString": "{false}"
 }
+Remember, this is ONLY FOR RADIO BUTTONS AND CHECKBOXES. Do not output boolean values for text fields. DONT DO IT EVER - no {true} or {false} for anything except things that are explicitly fieldtype radio or checkbox.
 
-Include the curly braces in your response.
-Fill all inputs that can be filled with the user data from the schema - EVERY ONE OF THEM. For ones that absolutely cannot be filled with the user data, output an empty string. 
+### Enums
+If you need to output a text field but only have an enum, you may come up with a reasonable string interpretation of the enum.
 
 ## Special Fields
 For fields like, how did you find out about this position - always fill with Linkedin
@@ -91,8 +96,10 @@ def generate_autofill_with_gemini(inputs) -> AutofillResponseSchema:
             system_instruction=SYSTEM_INSTRUCTION,
             response_mime_type="application/json",
             response_schema=AutofillResponseSchema,
+            temperature=0.0,
+            thinking_config=types.ThinkingConfig(thinking_budget=0),
         ),
-        model="gemini-2.0-flash-lite",
+        model="gemini-2.5-flash-preview-04-17",
     )
     response = chat.send_message(
         json.dumps(inputs),

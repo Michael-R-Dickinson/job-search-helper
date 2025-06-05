@@ -29,7 +29,7 @@ const VeteranStatusEnum = z.enum(['protected_veteran', 'not_veteran', 'prefer_no
 
 const AuthorizationEnum = z
   .enum(['us_authorized', 'no_authorization'])
-  .describe('Authorization to work in the US')
+  .describe('Whether the user is legally authorized to work in the US')
 
 const DisabilityEnum = z.enum(['disabled', 'enabled', 'prefer_not_to_say'])
 
@@ -108,4 +108,5 @@ export const UserAutofillPreferencesSchema = z.object({
   sponsorship: SponsorshipSchema.optional(),
   location: LocationSchema.optional(),
 })
+
 """
