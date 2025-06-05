@@ -2,12 +2,23 @@ import { eventTypes } from './events'
 import authenticate, { currentUser } from './auth/background'
 import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
 import saveFilledInputs from './autofillEngine/saveFilledInputs'
+import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
 
 console.log('Background script loaded')
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === eventTypes.BEGIN_AUTHENTICATION_FLOW) {
     authenticate()
+  }
+
+  if (message.type === eventTypes.GET_SIMPLE_AUTOFILL_VALUES) {
+    const userId = currentUser?.uid
+    if (!message.payload) throw new Error('No payload provided')
+    if (!userId) throw new Error('No user found')
+    getSimpleInputAutofillInstructions(message.payload, userId).then((autofillInstructions) => {
+      sendResponse(autofillInstructions)
+    })
+    return true
   }
 
   if (message.type === eventTypes.GET_AUTOFILL_VALUES) {
