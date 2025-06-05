@@ -7,6 +7,8 @@ import {
   type UserAutofillPreferences,
 } from './schema'
 import type { AutofillInstruction } from './schema'
+import { INPUT_ELEMENT_TYPES, type SerializedHtmlInput } from './schema'
+
 
 export abstract class InputCategoryHandler {
   constructor(userAutofillPreferences: UserAutofillPreferences) {}
@@ -872,11 +874,12 @@ class ResumeUploadHandler extends InputCategoryHandler {
   // For now, we'll simulate a blank file directly in the autofill logic
 
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
-    // Since we can't directly "fill" with a string value,
-    // we'll use a custom action or perhaps 'fill' with a placeholder
-    // that signals to the autofill logic that a file upload is needed.
-    // Let's use 'fill' with a specific placeholder value for now.
-    return { action: 'fill', value: '__FILE_UPLOAD_NEEDED__', id: input.element.elementReferenceId };
+    // Return a special action that indicates we need to handle a file upload
+    return { 
+      action: 'fill', 
+      value: '__RESUME_FILE_UPLOAD__', 
+      id: input.element.elementReferenceId 
+    };
   }
 
   saveAutofillValue(input: CategorizedInput, userId: string): Promise<RealtimeDbSaveResult> {
@@ -884,6 +887,32 @@ class ResumeUploadHandler extends InputCategoryHandler {
     return Promise.resolve({ status: 'success', valuePath: 'resume_upload', value: 'skipped_saving_file_input' });
   }
 }
+
+/**
+ * When a "resume" file‐upload is detected, fetch a bundled PDF
+ * and assign it to the <input type="file"> element.
+ */
+export const handleResumeUpload = async (inputElement: HTMLInputElement) => {
+  // 1. Build a URL that points to the test‐resume PDF inside assets/
+  const fileUrl = chrome.runtime.getURL('src/assets/VasdevYash-Resume.pdf');
+
+  // 2. Fetch that PDF as a Blob
+  const response = await fetch(fileUrl);
+  const blob = await response.blob();
+
+  // 3. Construct a File object (the name "test-resume.pdf" is arbitrary)
+  const file = new File([blob], 'test-resume.pdf', { type: 'application/pdf' });
+
+  // 4. Use DataTransfer API to simulate user‐selection of that file
+  const dt = new DataTransfer();
+  dt.items.add(file);
+
+  // 5. Assign to the input element
+  inputElement.files = dt.files;
+
+  // 6. Fire a "change" event so that any listener on this input sees it as filled
+  inputElement.dispatchEvent(new Event('change', { bubbles: true }));
+};
 
 // Restore DefaultHandler for fallback
 class DefaultHandler extends InputCategoryHandler {

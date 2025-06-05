@@ -3,6 +3,7 @@ import { useInputElements } from './hooks/useInputElements'
 import { autofillInputElements } from './inputsManipulation/autofillInputElements'
 import triggerGetAutofillValues from './triggerGetAutofillValues'
 import triggerSaveFilledValues from './triggerSaveFilledValues'
+import type { SerializedHtmlInput } from '../autofillEngine/schema';
 
 const Sidebar = () => {
   const elements = useInputElements()
@@ -42,8 +43,12 @@ const Sidebar = () => {
     >
       <button
         onClick={async () => {
-          const response = await triggerGetAutofillValues(elements)
-          autofillInputElements(response)
+          const response = await triggerGetAutofillValues(elements);
+          if (!response.userId) {
+             console.error('User ID not received from background script.');
+             return;
+          }
+          await autofillInputElements(response.instructions, response.serializedInputs, response.userId);
         }}
       >
         Begin Autofill Sequence

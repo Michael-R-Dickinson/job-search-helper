@@ -1,5 +1,6 @@
 import { INPUT_ELEMENT_TYPES, type SerializedHtmlInput } from './schema'
 
+
 type Pattern = string | RegExp
 
 // Helper function for case-insensitive string matching

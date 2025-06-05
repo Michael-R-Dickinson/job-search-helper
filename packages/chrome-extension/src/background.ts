@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         'autofillInstructions, before handing off to content script',
         autofillInstructions,
       )
-      sendResponse(autofillInstructions)
+      sendResponse({ autofillInstructions, userId })
     })
     return true
   }
