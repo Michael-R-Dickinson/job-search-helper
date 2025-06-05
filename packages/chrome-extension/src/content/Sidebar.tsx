@@ -12,6 +12,7 @@ const Sidebar = () => {
 
   const fillSimpleInputs = async () => {
     const response = await triggerGetSimpleAutofillValues(elements)
+    console.log('filledSimpleInputsIds', response)
     const filledInputs = response
       .filter((instruction) => instruction.value)
       .map((instruction) => instruction.input_id)

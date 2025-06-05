@@ -157,6 +157,26 @@ class SalaryExpectationsHandler extends InputCategoryHandler {
   }
 }
 
+class ResumeUploadHandler extends InputCategoryHandler {
+  // You might add properties here if you were storing file data in the handler
+  // For now, we'll simulate a blank file directly in the autofill logic
+
+  getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
+    // Return a special action that indicates we need to handle a file upload
+    return {
+      value: '__RESUME_FILE_UPLOAD__',
+      input_id: input.element.elementReferenceId,
+    }
+  }
+
+  saveAutofillValue(): Promise<RealtimeDbSaveResult> {
+    return Promise.resolve({
+      status: 'error',
+      error: 'skipped_saving_file_input',
+    })
+  }
+}
+
 // Restore DefaultHandler for fallback
 class DefaultHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
@@ -192,6 +212,7 @@ const handlerClassMap: Partial<Record<SimpleInputsEnum, InputCategoryHandlerCons
   twitter_url: TwitterUrlHandler,
   github_url: GithubUrlHandler,
   salary_expectations: SalaryExpectationsHandler,
+  resume_upload: ResumeUploadHandler,
   unknown: DefaultHandler,
 }
 

@@ -19,6 +19,7 @@ const getSimpleInputAutofillInstructions = async (
 
   const preprocessedInputs = preprocessInputs(inputs)
   const categorizedInputs = categorizeSimpleInputs(preprocessedInputs)
+  console.log('categorizedInputs', categorizedInputs)
   const userAutofillPreferences = await getUserAutofillValues(userId)
 
   if (!userAutofillPreferences) return null
