@@ -145,7 +145,7 @@ const PhoneSchema = z.object({
 const SponsorshipSchema = z
   .object({
     textAnswer: z.string().optional(),
-    yesNoAnswer: z.boolean().optional(),
+    yesNoAnswer: z.enum(['require_sponsorship', 'no_sponsorship']).optional(),
   })
   .describe(
     'Whether one will now or in the future require a visa sponsorship or a transfer for employment status',

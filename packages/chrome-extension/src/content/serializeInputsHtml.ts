@@ -132,6 +132,9 @@ export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] 
       value = extractDisplayedValue(el, placeholder, input.label || '')
     }
     value = removeValuePrefixes(value)
+    if (type === 'checkbox' || type === 'radio') {
+      value = (el as any).checked.toString()
+    }
     return {
       label: input.label,
       wholeQuestionLabel: input.wholeQuestionLabel,

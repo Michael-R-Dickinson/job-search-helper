@@ -3,6 +3,7 @@
 # The autofill will break.
 
 AUTOFILL_SCHEMA_STRING = """
+
 const NameSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),
@@ -73,7 +74,7 @@ const PhoneSchema = z.object({
 const SponsorshipSchema = z
   .object({
     textAnswer: z.string().optional(),
-    yesNoAnswer: z.boolean().optional(),
+    yesNoAnswer: z.enum(['require_sponsorship', 'no_sponsorship']).optional(),
   })
   .describe(
     'Whether one will now or in the future require a visa sponsorship or a transfer for employment status',
@@ -107,6 +108,4 @@ export const UserAutofillPreferencesSchema = z.object({
   sponsorship: SponsorshipSchema.optional(),
   location: LocationSchema.optional(),
 })
-
-
 """
