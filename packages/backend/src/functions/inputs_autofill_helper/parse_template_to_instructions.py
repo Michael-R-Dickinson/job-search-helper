@@ -41,7 +41,7 @@ def get_special_value_path_value(value: str):
         return True
     elif value.lower() == "{false}":
         return False
-    elif value.lower() == "GABAABAGOO":
+    elif value.lower() == "gabaabagoo":
         return ""
     else:
         raise ValueError(f"Invalid special value path token: {value}")
