@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { categorizeBasicInputs } from '../categorizeInputs'
+import { categorizeSimpleInputs } from '../categorizeInputs'
 import { INPUT_ELEMENT_TYPES } from '../schema'
 import type { SerializedHtmlInput } from '../schema'
 
@@ -32,7 +32,7 @@ describe('categorizeInputs', () => {
         createInput({ autocomplete: 'given-name' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'name')).toBe(true)
     })
 
@@ -43,7 +43,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'full-name', label: 'Organization' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'unknown')).toBe(true)
     })
 
@@ -54,7 +54,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'fullname', fieldType: INPUT_ELEMENT_TYPES.TEL }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result[0].category).toBe('name')
       expect(result[1].category).toBe('unknown')
       expect(result[2].category).toBe('unknown')
@@ -71,7 +71,7 @@ describe('categorizeInputs', () => {
         createInput({ placeholder: 'Enter your email' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'email')).toBe(true)
     })
 
@@ -82,7 +82,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'email', fieldType: INPUT_ELEMENT_TYPES.TEXTBOX }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result[0].category).toBe('email')
       expect(result[1].category).toBe('email')
       expect(result[2].category).toBe('unknown')
@@ -99,7 +99,7 @@ describe('categorizeInputs', () => {
         createInput({ autocomplete: 'pronouns' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'pronouns')).toBe(true)
     })
 
@@ -111,7 +111,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'pronouns', fieldType: INPUT_ELEMENT_TYPES.CHECKBOX }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result[0].category).toBe('pronouns')
       expect(result[1].category).toBe('pronouns')
       expect(result[2].category).toBe('pronouns')
@@ -129,7 +129,7 @@ describe('categorizeInputs', () => {
         createInput({ placeholder: 'Enter your LinkedIn URL' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'linkedin_profile')).toBe(true)
     })
 
@@ -140,7 +140,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'linkedin', fieldType: INPUT_ELEMENT_TYPES.TEXTBOX }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'linkedin_profile')).toBe(true)
     })
   })
@@ -156,7 +156,7 @@ describe('categorizeInputs', () => {
         createInput({ autocomplete: 'twitter' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'twitter_url')).toBe(true)
     })
 
@@ -167,7 +167,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'twitter', fieldType: INPUT_ELEMENT_TYPES.TEXTBOX }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result[0].category).toBe('twitter_url')
       expect(result[1].category).toBe('twitter_url')
       expect(result[2].category).toBe('unknown')
@@ -185,7 +185,7 @@ describe('categorizeInputs', () => {
         createInput({ autocomplete: 'github' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'github_url')).toBe(true)
     })
 
@@ -196,7 +196,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'github', fieldType: INPUT_ELEMENT_TYPES.TEXTBOX }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result[0].category).toBe('github_url')
       expect(result[1].category).toBe('github_url')
       expect(result[2].category).toBe('unknown')
@@ -206,7 +206,7 @@ describe('categorizeInputs', () => {
   describe('edge cases', () => {
     it('handles empty inputs', () => {
       const inputs: SerializedHtmlInput[] = []
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result).toEqual([])
     })
 
@@ -217,7 +217,7 @@ describe('categorizeInputs', () => {
         createInput({ label: 'Some Label' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result.every((r) => r.category === 'unknown')).toBe(true)
     })
 
@@ -235,7 +235,7 @@ describe('categorizeInputs', () => {
         }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       // Should match the first matching category in the if-else chain
       expect(result[0].category).toBe('name')
       expect(result[1].category).toBe('name')
@@ -251,7 +251,7 @@ describe('categorizeInputs', () => {
         createInput({ name: 'PRONOUNS' }),
       ]
 
-      const result = categorizeBasicInputs(inputs)
+      const result = categorizeSimpleInputs(inputs)
       expect(result[0].category).toBe('name')
       expect(result[1].category).toBe('email')
       expect(result[2].category).toBe('linkedin_profile')

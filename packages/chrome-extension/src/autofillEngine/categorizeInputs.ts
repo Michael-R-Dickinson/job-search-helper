@@ -9,7 +9,7 @@ import {
 import type { SerializedHtmlInput, CategorizedInput, SimpleInputsEnum } from './schema'
 
 // Categorizes a number of simple inputs that we can handle without invoking the LLM autofilling engine
-const categorizeBasicInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => {
+const categorizeSimpleInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => {
   return inputs.map((input) => {
     let category: SimpleInputsEnum = 'unknown'
     if (isNameInput(input)) category = 'name'
@@ -28,4 +28,4 @@ const categorizeBasicInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[
   })
 }
 
-export { categorizeBasicInputs }
+export { categorizeSimpleInputs }
