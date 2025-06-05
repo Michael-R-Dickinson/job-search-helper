@@ -53,6 +53,9 @@ When filling radios/checkboxes, unless the valuePath maps directly to a boolean,
 Include the curly braces in your response.
 Fill all inputs that can be filled with the user data from the schema - EVERY ONE OF THEM. For ones that absolutely cannot be filled with the user data, output an empty string. 
 
+## Special Fields
+For fields like, how did you find out about this position - always fill with Linkedin
+
 Schema, in zod format:
 
 """
