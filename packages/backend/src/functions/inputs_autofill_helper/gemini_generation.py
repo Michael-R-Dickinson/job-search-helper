@@ -54,6 +54,8 @@ When filling radios/checkboxes, unless the valuePath maps directly to a boolean,
 }
 Remember, this is ONLY FOR RADIO BUTTONS AND CHECKBOXES. Do not output boolean values for text fields. DONT DO IT EVER - no {true} or {false} for anything except things that are explicitly fieldtype radio or checkbox.
 
+The initialLabel field is for outputting a two word summary of the input label - descriptive of the label - 2 words max.
+
 ### Enums
 If you need to output a text field but only have an enum, you may come up with a reasonable string interpretation of the enum.
 
