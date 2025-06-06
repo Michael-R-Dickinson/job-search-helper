@@ -1,4 +1,5 @@
 #crx-root {
+  all: initial !important;
   /* position: fixed;
   top: 3rem;
   left: 50%;
