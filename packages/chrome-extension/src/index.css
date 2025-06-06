@@ -7,16 +7,6 @@
   transform: translate(-50%, 0); */
 }
 
-#crx-root button {
-  background-color: rgb(239, 239, 239);
-  border-color: rgb(118, 118, 118);
-  border-image: initial;
-  border-style: outset;
-  border-width: 2px;
-  margin: 0;
-  padding: 1px 6px;
-}
-
 @keyframes pulse-outline {
   0% {
     box-shadow: 0 0 0 rgba(0, 123, 255, 0.3);
