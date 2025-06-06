@@ -9,6 +9,15 @@ const Container = styled.div`
   padding: 0.5rem 0;
 `
 
+const PointerCheckbox = styled(Checkbox)({
+  input: {
+    cursor: 'pointer',
+  },
+  label: {
+    cursor: 'pointer',
+  },
+})
+
 const data = [
   { value: 'resume1', label: 'Resume 1' },
   { value: 'resume2', label: 'Resume 2' },
@@ -66,8 +75,8 @@ function ResumeListItemContent() {
         }}
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        <Checkbox label="Tailor Resume" size="xs" />
-        <Checkbox label="Always Use This Resume" size="xs" />
+        <PointerCheckbox label="Tailor Resume" size="xs" />
+        <PointerCheckbox label="Always Use This Resume" size="xs" />
       </div>
     </Container>
   )
