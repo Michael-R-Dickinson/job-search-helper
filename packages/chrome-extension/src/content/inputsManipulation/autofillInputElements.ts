@@ -69,15 +69,19 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
   } else if (element instanceof HTMLInputElement) {
     fillTextInputElement(element, autofillValue)
   }
+  element.scrollIntoView({ behavior: 'smooth', block: 'center' })
   return element
 }
 
 export const autofillInputElements = async (
   autofillInstructions: AutofillInstruction[],
+  useSlowScrollAnimation: boolean = false,
 ): Promise<void> => {
   for (const instruction of autofillInstructions) {
     if (instruction.value === null || instruction.value === '') continue
     await fillElementWithInstructionValue(instruction)
-    await new Promise((resolve) => setTimeout(resolve, 400))
+    if (useSlowScrollAnimation) {
+      await new Promise((resolve) => setTimeout(resolve, 400))
+    }
   }
 }
