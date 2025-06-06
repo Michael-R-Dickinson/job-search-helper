@@ -23,16 +23,38 @@ const ItemTitle = styled.h4`
   letter-spacing: -0.03rem;
 `
 
-const SidebarListItem: React.FC<{ Icon: LucideIcon; title: string; active: boolean }> = ({
-  Icon,
-  title,
-  active,
-}) => {
+const ExpandededContentContainer = styled.div`
+  padding: 0.8rem 1.4rem;
+  display: flex;
+  gap: 0.8rem;
+`
+
+const VerticalLine = styled.div`
+  width: 1px;
+  height: auto;
+  background-color: rgba(0, 0, 0, 0.1);
+`
+
+const SidebarListItem: React.FC<{
+  Icon: LucideIcon
+  title: string
+  active: boolean
+  content?: React.ReactNode
+  onClick?: () => void
+}> = ({ Icon, title, active, content, onClick }) => {
   return (
-    <ListItemContainer active={active}>
-      <Icon size={20} />
-      <ItemTitle>{title}</ItemTitle>
-    </ListItemContainer>
+    <div>
+      <ListItemContainer active={active} onClick={onClick}>
+        <Icon size={20} />
+        <ItemTitle>{title}</ItemTitle>
+      </ListItemContainer>
+      {active && (
+        <ExpandededContentContainer>
+          <VerticalLine />
+          {content}
+        </ExpandededContentContainer>
+      )}
+    </div>
   )
 }
 

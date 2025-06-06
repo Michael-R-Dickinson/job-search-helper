@@ -21,7 +21,7 @@ const HorizontalDivider = styled.div`
 const SidebarHeader = () => {
   return (
     <div>
-      <TitleText>Bruteforce Jobs</TitleText>
+      <TitleText>Bruteforce</TitleText>
       <CaptionText>User: someUser</CaptionText>
       <HorizontalDivider />
     </div>
