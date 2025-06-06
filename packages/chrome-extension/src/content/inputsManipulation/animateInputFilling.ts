@@ -28,18 +28,6 @@ function hasVisualBorder(element: HTMLElement): boolean {
     (width, index) => parseFloat(width) > 0 && borderStyles[index] !== 'none',
   )
 
-  if (hasBoxShadow || hasOutline || hasBorder) {
-    console.log('hasVisualBorder', element, {
-      hasBoxShadow,
-      hasOutline,
-      hasBorder,
-      boxShadow: computedStyle.boxShadow,
-      outline: computedStyle.outline,
-      borderWidths,
-      borderStyles,
-    })
-  }
-
   return hasBoxShadow || hasOutline || hasBorder
 }
 
@@ -71,7 +59,6 @@ function triggerPulseAnimation(inputEl: HTMLElement) {
   targetElement.classList.add('pulse-outline')
 
   // Clean up after the animation finishes
-  console.log('triggerPulseAnimation', targetElement.classList, targetElement)
   const onAnimationEnd = () => {
     // targetElement.classList.remove('pulse-outline')
     targetElement.removeEventListener('animationend', onAnimationEnd)
