@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fontsource/inter": "^5.2.5",
     "firebase": "^11.7.1",
     "fuse.js": "^7.1.0",
     "lucide-react": "^0.507.0",
