@@ -2,16 +2,18 @@ import { autofillInputElements } from './inputsManipulation/autofillInputElement
 import useAutofillInputs from './hooks/useAutofillInputs'
 
 const Sidebar = () => {
-  const { autofillInstructionsPromise, stopRefetchingAutofillValues } = useAutofillInputs()
-  const fullAutofillSequence = async () => {
-    const instructions = await autofillInstructionsPromise
+  const { simpleInputsInstructions, llmGeneratedInputsPromise, stopRefetchingAutofillValues } =
+    useAutofillInputs()
 
-    if (!instructions) return
-    const { simpleInputsInstructions, remainingAutofillInstructions } = instructions
+  const fullAutofillSequence = async () => {
+    if (!simpleInputsInstructions || !llmGeneratedInputsPromise) return
+
+    await autofillInputElements(simpleInputsInstructions, true)
+
+    const remainingAutofillInstructions = await llmGeneratedInputsPromise
+    await autofillInputElements(remainingAutofillInstructions, false)
 
     stopRefetchingAutofillValues()
-    await autofillInputElements(simpleInputsInstructions, true)
-    await autofillInputElements(remainingAutofillInstructions, false)
   }
   return (
     <div

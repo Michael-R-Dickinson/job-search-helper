@@ -1,44 +1,41 @@
-import { useEffect, useRef } from 'react'
-import { useInputElements } from './useInputElements'
+import { useEffect, useRef, useState } from 'react'
+import { useInputElements, type InputInfo } from './useInputElements'
 import triggerGetAutofillValues, {
   triggerGetSimpleAutofillValues,
 } from '../triggerGetAutofillValues'
 import type { AutofillInstruction } from '../../autofillEngine/schema'
 
-// We separate these because often we want to animate them differently
-type SeparatedAutofillInstructions = {
-  simpleInputsInstructions: AutofillInstruction[]
-  remainingAutofillInstructions: AutofillInstruction[]
-}
-
 const useAutofillInputs = () => {
   const elements = useInputElements()
-  const instructionsQueryRef = useRef<Promise<SeparatedAutofillInstructions> | null>(null)
+  // const instructionsQueryRef = useRef<Promise<SeparatedAutofillInstructions> | null>(null)
+  const [simpleInputsInstructions, setSimpleInputsInstructions] = useState<
+    AutofillInstruction[] | null
+  >(null)
+  const remainingInstructionsRef = useRef<Promise<AutofillInstruction[]> | null>(null)
+
   const alreadyFilledRef = useRef<boolean>(false)
   useEffect(() => {
-    const getAutofillInstructions = async () => {
-      console.log('\n\nFetching autofill instructions\n\n')
-      const simpleInputsInstructions = await triggerGetSimpleAutofillValues(elements)
+    const getInstructions = async () => {
+      if (alreadyFilledRef.current) return
+      console.log('\n\nGetting instructions\n\n')
 
-      const unfilledInputIds = simpleInputsInstructions
+      const simpleInputsInstructionsCurrent = await triggerGetSimpleAutofillValues(elements)
+      setSimpleInputsInstructions(simpleInputsInstructionsCurrent)
+      console.log('Simple inputs instructions fetched')
+
+      const unfilledInputIds = simpleInputsInstructionsCurrent
         .filter((i) => i.value === null || i.value === '')
         .map((i) => i.input_id)
       const unfilledInputs = elements.filter((el) =>
         unfilledInputIds.includes(el.elementReferenceId),
       )
-      const remainingAutofillInstructions = await triggerGetAutofillValues(unfilledInputs)
+      remainingInstructionsRef.current = triggerGetAutofillValues(unfilledInputs)
 
-      console.log('\n\nAutofill instructions fetched\n\n')
-
-      return {
-        simpleInputsInstructions,
-        remainingAutofillInstructions,
-      }
+      await remainingInstructionsRef.current
+      console.log('\n\nRemaining instructions fetched\n\n')
     }
 
-    if (!alreadyFilledRef.current) {
-      instructionsQueryRef.current = getAutofillInstructions()
-    }
+    getInstructions()
   }, [elements])
 
   const stopRefetchingAutofillValues = () => {
@@ -46,7 +43,8 @@ const useAutofillInputs = () => {
   }
 
   return {
-    autofillInstructionsPromise: instructionsQueryRef.current,
+    simpleInputsInstructions,
+    llmGeneratedInputsPromise: remainingInstructionsRef.current,
     // Intended to be called after autofill is executed
     stopRefetchingAutofillValues,
   }
