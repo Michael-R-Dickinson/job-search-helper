@@ -1,53 +1,18 @@
-import { useState } from 'react'
-import { useInputElements } from './hooks/useInputElements'
 import { autofillInputElements } from './inputsManipulation/autofillInputElements'
-import triggerGetAutofillValues, {
-  triggerGetSimpleAutofillValues,
-} from './triggerGetAutofillValues'
-import triggerSaveFilledValues from './triggerSaveFilledValues'
+import useAutofillInputs from './hooks/useAutofillInputs'
 
 const Sidebar = () => {
-  const elements = useInputElements()
-  const [filledSimpleInputsIds, setFilledSimpleInputsIds] = useState<string[]>([])
-
+  const { autofillInstructionsPromise, stopRefetchingAutofillValues } = useAutofillInputs()
   const fullAutofillSequence = async () => {
-    const simpleInputsInstructions = await triggerGetSimpleAutofillValues(elements)
-    const simpleAutofillFinished = autofillInputElements(simpleInputsInstructions, true)
+    const instructions = await autofillInstructionsPromise
 
-    const unfilledInputIds = simpleInputsInstructions
-      .filter((i) => i.value === null || i.value === '')
-      .map((i) => i.input_id)
+    if (!instructions) return
+    const { simpleInputsInstructions, remainingAutofillInstructions } = instructions
 
-    const unfilledInputs = elements.filter((el) => unfilledInputIds.includes(el.elementReferenceId))
-
-    triggerGetAutofillValues(unfilledInputs).then(async (instructions) => {
-      await simpleAutofillFinished
-      autofillInputElements(instructions)
-    })
+    stopRefetchingAutofillValues()
+    await autofillInputElements(simpleInputsInstructions, true)
+    await autofillInputElements(remainingAutofillInstructions, false)
   }
-
-  const fillSimpleInputs = async () => {
-    const response = await triggerGetSimpleAutofillValues(elements)
-    const filledInputs = response
-      .filter((instruction) => instruction.value)
-      .map((instruction) => instruction.input_id)
-    setFilledSimpleInputsIds(filledInputs)
-    autofillInputElements(response, true)
-  }
-
-  const fillInputsWithLLM = async () => {
-    const unfilledInputs = elements.filter(
-      (element) => !filledSimpleInputsIds.includes(element.elementReferenceId),
-    )
-    const response = await triggerGetAutofillValues(unfilledInputs)
-    autofillInputElements(response)
-  }
-
-  const saveAutofillValues = async () => {
-    const response = await triggerSaveFilledValues(elements)
-    console.log('saveAutofillValues response', response)
-  }
-
   return (
     <div
       style={{
@@ -61,9 +26,6 @@ const Sidebar = () => {
       }}
     >
       <button onClick={fullAutofillSequence}>Full Autofill Sequence</button>
-      <button onClick={fillSimpleInputs}>Simple Autofill</button>
-      <button onClick={fillInputsWithLLM}>Begin Autofill Sequence</button>
-      <button onClick={saveAutofillValues}>Save Autofill Values</button>
     </div>
   )
 }

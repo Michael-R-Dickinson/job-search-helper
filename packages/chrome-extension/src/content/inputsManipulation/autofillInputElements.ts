@@ -85,7 +85,7 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
 
 export const autofillInputElements = async (
   autofillInstructions: AutofillInstruction[],
-  useSlowScrollAnimation: boolean = false,
+  useSlowScrollAnimation: boolean = true,
 ): Promise<void> => {
   // Scroll to the first filled element if we're using the slow scroll animation
   // Just for effect so they see the animation
