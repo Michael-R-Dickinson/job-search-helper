@@ -69,10 +69,20 @@ function triggerPulseAnimation(inputEl: HTMLElement) {
 
 export const asyncScrollToElement = async (element: HTMLElement) => {
   return new Promise<void>((resolve) => {
+    // Set a timeout to ensure the function resolves after 1 second - prevents animation hanging
+    const timeout = setTimeout(() => resolve(), 1000)
+
     // Feature detect scrollend event (modern browsers)
     if (window.onscrollend !== undefined) {
       // Use modern scrollend event
-      addEventListener('scrollend', () => resolve(), { once: true })
+      addEventListener(
+        'scrollend',
+        () => {
+          clearTimeout(timeout)
+          resolve()
+        },
+        { once: true },
+      )
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
     } else {
       // Fallback polyfill using requestAnimationFrame for older browsers
@@ -91,6 +101,7 @@ export const asyncScrollToElement = async (element: HTMLElement) => {
           // Position hasn't changed
           if (same++ > 2) {
             // If position is stable for more than 2 frames, scrolling is done
+            clearTimeout(timeout)
             return resolve()
           }
         } else {
