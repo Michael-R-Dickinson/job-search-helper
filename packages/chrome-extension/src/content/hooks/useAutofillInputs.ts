@@ -23,7 +23,6 @@ const useAutofillInputs = () => {
 
       const simpleInputsInstructionsCurrent = await triggerGetSimpleAutofillValues(elements)
       setSimpleInputsInstructions(simpleInputsInstructionsCurrent)
-      console.log('Simple inputs instructions fetched')
 
       const unfilledInputIds = simpleInputsInstructionsCurrent
         .filter((i) => i.value === null || i.value === '')
@@ -34,6 +33,7 @@ const useAutofillInputs = () => {
       remainingInstructionsRef.current = triggerGetAutofillValues(unfilledInputs)
 
       await remainingInstructionsRef.current
+      console.log('Finished Fetching LLM Instructions')
       loading.current = false
     }
 
