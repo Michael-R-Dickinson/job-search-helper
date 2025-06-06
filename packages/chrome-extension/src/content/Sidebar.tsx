@@ -32,7 +32,7 @@ const Sidebar = () => {
       .filter((instruction) => instruction.value)
       .map((instruction) => instruction.input_id)
     setFilledSimpleInputsIds(filledInputs)
-    autofillInputElements(response)
+    autofillInputElements(response, true)
   }
 
   const fillInputsWithLLM = async () => {

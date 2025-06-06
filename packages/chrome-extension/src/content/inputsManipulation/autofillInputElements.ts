@@ -1,4 +1,5 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
+import triggerPulseAnimation from './animateInputFilling'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 
 const fillTextInputElement = (
@@ -58,6 +59,7 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
     `[data-autofill-id="${instruction.input_id}"]`,
   )
   if (!element) return
+  element.scrollIntoView({ behavior: 'smooth', block: 'center' })
 
   const autofillValue = instruction.value
   if (isSelectLikeElement(element)) {
@@ -69,7 +71,7 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
   } else if (element instanceof HTMLInputElement) {
     fillTextInputElement(element, autofillValue)
   }
-  element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  triggerPulseAnimation(element)
   return element
 }
 
