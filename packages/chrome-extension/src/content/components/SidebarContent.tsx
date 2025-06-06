@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import SidebarListItem from './SidebarListItem'
-import { AppleIcon, BotIcon } from 'lucide-react'
+import { AppWindow, FileText, PencilLine } from 'lucide-react'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -15,8 +15,9 @@ const SidebarContent = () => {
     <div>
       <AutofillHeader>Autofill</AutofillHeader>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-        <SidebarListItem Icon={AppleIcon} title="Resume" active={true} />
-        <SidebarListItem Icon={BotIcon} title="Bots" active={false} />
+        <SidebarListItem Icon={FileText} title="Resume" active={true} />
+        <SidebarListItem Icon={AppWindow} title="Unfilled Inputs" active={false} />
+        <SidebarListItem Icon={PencilLine} title="Free Responses" active={false} />
       </div>
     </div>
   )

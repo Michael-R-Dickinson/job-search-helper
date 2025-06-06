@@ -4,7 +4,7 @@ import React from 'react'
 
 const ListItemContainer = styled.div<{ active?: boolean }>`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.7rem;
   align-items: center;
   padding: 0.8rem 1rem;
   border-radius: 0.7rem;
