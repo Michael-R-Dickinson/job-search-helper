@@ -1,4 +1,5 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
+import type { ValueOf } from '../../utils'
 import triggerPulseAnimation, { asyncScrollToElement } from './animateInputFilling'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 
@@ -83,22 +84,30 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
   return element
 }
 
+export const AutofillAnimationSpeeds = {
+  NONE: 0,
+  FAST: 200,
+  SLOW: 500,
+}
+export type AutofillingAnimationSpeed = ValueOf<typeof AutofillAnimationSpeeds>
+
 export const autofillInputElements = async (
   autofillInstructions: AutofillInstruction[],
-  useSlowScrollAnimation: boolean = true,
+  animationSpeed: AutofillingAnimationSpeed = AutofillAnimationSpeeds.SLOW,
 ): Promise<void> => {
   // Scroll to the first filled element if we're using the slow scroll animation
   // Just for effect so they see the animation
   const firstElement = getFirstFilledElement(autofillInstructions)
-  if (firstElement && useSlowScrollAnimation) {
+  if (firstElement && animationSpeed) {
     await asyncScrollToElement(firstElement)
   }
 
   for (const instruction of autofillInstructions) {
     if (instruction.value === null || instruction.value === '') continue
     await fillElementWithInstructionValue(instruction)
-    if (useSlowScrollAnimation) {
-      await new Promise((resolve) => setTimeout(resolve, 200))
+
+    if (animationSpeed !== AutofillAnimationSpeeds.NONE) {
+      await new Promise((resolve) => setTimeout(resolve, animationSpeed))
     }
   }
 }

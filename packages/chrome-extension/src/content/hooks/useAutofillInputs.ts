@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useInputElements, type InputInfo } from './useInputElements'
+import { useInputElements } from './useInputElements'
 import triggerGetAutofillValues, {
   triggerGetSimpleAutofillValues,
 } from '../triggerGetAutofillValues'
@@ -12,12 +12,14 @@ const useAutofillInputs = () => {
     AutofillInstruction[] | null
   >(null)
   const remainingInstructionsRef = useRef<Promise<AutofillInstruction[]> | null>(null)
+  const loading = useRef<boolean>(false)
 
   const alreadyFilledRef = useRef<boolean>(false)
   useEffect(() => {
     const getInstructions = async () => {
       if (alreadyFilledRef.current) return
-      console.log('\n\nGetting instructions\n\n')
+
+      loading.current = true
 
       const simpleInputsInstructionsCurrent = await triggerGetSimpleAutofillValues(elements)
       setSimpleInputsInstructions(simpleInputsInstructionsCurrent)
@@ -32,7 +34,7 @@ const useAutofillInputs = () => {
       remainingInstructionsRef.current = triggerGetAutofillValues(unfilledInputs)
 
       await remainingInstructionsRef.current
-      console.log('\n\nRemaining instructions fetched\n\n')
+      loading.current = false
     }
 
     getInstructions()
@@ -47,6 +49,7 @@ const useAutofillInputs = () => {
     llmGeneratedInputsPromise: remainingInstructionsRef.current,
     // Intended to be called after autofill is executed
     stopRefetchingAutofillValues,
+    loading,
   }
 }
 
