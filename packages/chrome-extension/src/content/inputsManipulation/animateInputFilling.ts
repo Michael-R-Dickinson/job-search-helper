@@ -67,4 +67,42 @@ function triggerPulseAnimation(inputEl: HTMLElement) {
   targetElement.addEventListener('animationend', onAnimationEnd)
 }
 
+export const asyncScrollToElement = async (element: HTMLElement) => {
+  return new Promise<void>((resolve) => {
+    // Feature detect scrollend event (modern browsers)
+    if (window.onscrollend !== undefined) {
+      // Use modern scrollend event
+      addEventListener('scrollend', () => resolve(), { once: true })
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    } else {
+      // Fallback polyfill using requestAnimationFrame for older browsers
+      let same = 0 // counter for consecutive same positions
+      let lastPos: number | null = null // last known Y position
+
+      // Start the smooth scroll
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      requestAnimationFrame(check)
+
+      // Check if scrolling has stopped by monitoring element position
+      function check() {
+        const newPos = element.getBoundingClientRect().top
+
+        if (newPos === lastPos) {
+          // Position hasn't changed
+          if (same++ > 2) {
+            // If position is stable for more than 2 frames, scrolling is done
+            return resolve()
+          }
+        } else {
+          // Position changed, reset counter and update last position
+          same = 0
+          lastPos = newPos
+        }
+        // Check again next frame
+        requestAnimationFrame(check)
+      }
+    }
+  })
+}
+
 export default triggerPulseAnimation

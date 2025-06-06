@@ -1,5 +1,5 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
-import triggerPulseAnimation from './animateInputFilling'
+import triggerPulseAnimation, { asyncScrollToElement } from './animateInputFilling'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 
 const fillTextInputElement = (
@@ -54,12 +54,20 @@ const isRadioOrCheckbox = (element: HTMLElement): element is HTMLInputElement =>
   )
 }
 
-const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
-  const element = document.querySelector<HTMLElement>(
-    `[data-autofill-id="${instruction.input_id}"]`,
+const getElementByReferenceId = (referenceId: string): HTMLElement | null => {
+  return document.querySelector<HTMLElement>(`[data-autofill-id="${referenceId}"]`)
+}
+
+const getFirstFilledElement = (autofillInstructions: AutofillInstruction[]): HTMLElement | null => {
+  const firstFilledElement = autofillInstructions.find(
+    (instruction) => instruction.value !== null && instruction.value !== '',
   )
+  return firstFilledElement ? getElementByReferenceId(firstFilledElement.input_id) : null
+}
+
+const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
+  const element = getElementByReferenceId(instruction.input_id)
   if (!element) return
-  element.scrollIntoView({ behavior: 'smooth', block: 'center' })
 
   const autofillValue = instruction.value
   if (isSelectLikeElement(element)) {
@@ -79,11 +87,18 @@ export const autofillInputElements = async (
   autofillInstructions: AutofillInstruction[],
   useSlowScrollAnimation: boolean = false,
 ): Promise<void> => {
+  // Scroll to the first filled element if we're using the slow scroll animation
+  // Just for effect so they see the animation
+  const firstElement = getFirstFilledElement(autofillInstructions)
+  if (firstElement && useSlowScrollAnimation) {
+    await asyncScrollToElement(firstElement)
+  }
+
   for (const instruction of autofillInstructions) {
     if (instruction.value === null || instruction.value === '') continue
     await fillElementWithInstructionValue(instruction)
     if (useSlowScrollAnimation) {
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await new Promise((resolve) => setTimeout(resolve, 200))
     }
   }
 }
