@@ -6,6 +6,7 @@ import useAutofillInputs from './hooks/useAutofillInputs'
 
 import styled from '@emotion/styled'
 import SidebarHeader from './components/SidebarHeader'
+import SidebarContent from './components/SidebarContent'
 
 const SidebarRoot = styled.div`
   position: fixed;
@@ -56,7 +57,8 @@ const Sidebar = () => {
     <SidebarRoot>
       <SidebarContainer>
         <SidebarHeader />
-        <RedButton onClick={fullAutofillSequence}>Full Autofill Sequence</RedButton>
+        {/* <RedButton onClick={fullAutofillSequence}>Full Autofill Sequence</RedButton> */}
+        <SidebarContent />
       </SidebarContainer>
     </SidebarRoot>
   )
