@@ -60,7 +60,6 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
   if (!element) return
 
   const autofillValue = instruction.value
-
   if (isSelectLikeElement(element)) {
     await fillSelectLikeElement(element, autofillValue, instruction?.input_text)
   } else if (element instanceof HTMLTextAreaElement) {
@@ -79,5 +78,6 @@ export const autofillInputElements = async (
   for (const instruction of autofillInstructions) {
     if (instruction.value === null || instruction.value === '') continue
     await fillElementWithInstructionValue(instruction)
+    await new Promise((resolve) => setTimeout(resolve, 400))
   }
 }

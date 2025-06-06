@@ -202,7 +202,7 @@ async function openDropdown(control: HTMLElement, framework: Framework): Promise
 
       // Focus the element before click sometimes helps with frameworks expecting focus
       if (typeof control.focus === 'function') {
-        control.focus()
+        control.focus({ preventScroll: true })
       }
       // Some frameworks might not fire 'click' if they preventDefault on mousedown/mouseup
       // So, if 'click' isn't caught, rely on the timeout.
