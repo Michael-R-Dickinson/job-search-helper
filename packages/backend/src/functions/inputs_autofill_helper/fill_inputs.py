@@ -20,8 +20,8 @@ def get_filled_inputs(user_id, inputs):
         autofill_template_values, user_autofill_data, original_inputs=inputs
     )
     # print("inputs\n", inputs)
-    # print("autofill_template_values\n", autofill_template_values.model_dump(), "\n\n")
-    # print("autofill_instructions\n", autofill_instructions)
+    print("autofill_template_values\n", autofill_template_values.model_dump(), "\n\n")
+    print("autofill_instructions\n", autofill_instructions)
 
     return autofill_instructions
 
