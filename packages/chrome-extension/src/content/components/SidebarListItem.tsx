@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { Collapse } from '@mantine/core'
 import type { LucideIcon } from 'lucide-react'
 import React from 'react'
 
@@ -49,12 +50,12 @@ const SidebarListItem: React.FC<{
         <Icon size={20} />
         <ItemTitle>{title}</ItemTitle>
       </ListItemContainer>
-      {active && (
+      <Collapse in={active}>
         <ExpandedContentContainer>
           <VerticalLine />
           {content}
         </ExpandedContentContainer>
-      )}
+      </Collapse>
     </div>
   )
 }
