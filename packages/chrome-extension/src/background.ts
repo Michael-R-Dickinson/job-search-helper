@@ -63,6 +63,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       lastModified: lastModified,
     })
 
-    uploadResumeQuery(file, userId)
+    uploadResumeQuery(file, userId).then((success) => {
+      sendResponse(success)
+    })
+    return true
   }
 })

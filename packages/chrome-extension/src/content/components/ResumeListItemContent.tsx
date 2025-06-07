@@ -39,10 +39,15 @@ const UploadResumeSelectItem = () => {
     fileInputRef.current?.click()
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      triggerResumeUpload(file)
+      const success = await triggerResumeUpload(file)
+      if (success) {
+        console.log('resume uploaded successfully')
+      } else {
+        console.error('resume upload failed')
+      }
     }
   }
 

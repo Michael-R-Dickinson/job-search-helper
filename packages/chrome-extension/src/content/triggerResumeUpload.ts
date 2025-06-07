@@ -9,7 +9,7 @@ const triggerResumeUpload = async (file: File) => {
   const fileData = Array.from(uint8Array)
 
   // Send file data along with metadata needed to reconstruct File
-  chrome.runtime.sendMessage({
+  return chrome.runtime.sendMessage({
     type: eventTypes.UPLOAD_RESUME,
     payload: {
       fileData,
