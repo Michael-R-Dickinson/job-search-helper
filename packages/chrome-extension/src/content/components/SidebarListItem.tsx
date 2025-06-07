@@ -23,8 +23,9 @@ const ItemTitle = styled.h4`
   letter-spacing: -0.03rem;
 `
 
-const ExpandededContentContainer = styled.div`
-  padding: 0.8rem 1.4rem;
+const ExpandedContentContainer = styled.div`
+  padding: 0.8rem 0.8rem 0.8rem 1.4rem;
+  // padding: 0.8rem 1.4rem;
   display: flex;
   gap: 0.8rem;
 `
@@ -49,10 +50,10 @@ const SidebarListItem: React.FC<{
         <ItemTitle>{title}</ItemTitle>
       </ListItemContainer>
       {active && (
-        <ExpandededContentContainer>
+        <ExpandedContentContainer>
           <VerticalLine />
           {content}
-        </ExpandededContentContainer>
+        </ExpandedContentContainer>
       )}
     </div>
   )
