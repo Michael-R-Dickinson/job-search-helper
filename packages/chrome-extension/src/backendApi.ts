@@ -65,3 +65,13 @@ export const uploadResumeQuery = async (file: File, userId: string): Promise<boo
     return false
   }
 }
+
+export const getResumesQuery = async (userId: string): Promise<string[]> => {
+  const queryParams = new URLSearchParams({
+    userId,
+  })
+  const response = await fetch(`${API_URL}/get_resume_list?${queryParams.toString()}`)
+  const data = await response.json()
+  console.log('get resumes response', data)
+  return data.resume_names
+}

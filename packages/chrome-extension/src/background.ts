@@ -3,7 +3,7 @@ import authenticate, { currentUser } from './auth/background'
 import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
 import saveFilledInputs from './autofillEngine/saveFilledInputs'
 import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
-import { uploadResumeQuery } from './backendApi'
+import { getResumesQuery, uploadResumeQuery } from './backendApi'
 
 console.log('Background script loaded')
 
@@ -66,6 +66,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     uploadResumeQuery(file, userId).then((success) => {
       sendResponse(success)
     })
+    return true
+  }
+
+  if (message.type === eventTypes.RETRIEVE_USER_DATA) {
+    const userId = currentUser?.uid
+    if (!userId) throw new Error('No user found')
+
+    getResumesQuery(userId).then((resumeNames) => {
+      sendResponse({
+        userId,
+        displayName: currentUser?.displayName,
+        userResumeNames: resumeNames,
+      })
+    })
+
     return true
   }
 })

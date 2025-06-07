@@ -7,6 +7,7 @@ import useAutofillInputs from './hooks/useAutofillInputs'
 import styled from '@emotion/styled'
 import SidebarHeader from './components/SidebarHeader'
 import SidebarContent from './components/SidebarContent'
+import useFetchUserData from './hooks/useUserData'
 
 const SidebarRoot = styled.div`
   position: fixed;
@@ -34,6 +35,7 @@ const RedButton = styled.button`
 `
 
 const Sidebar = () => {
+  useFetchUserData()
   const {
     simpleInputsInstructions,
     llmGeneratedInputsPromise,
