@@ -1,7 +1,7 @@
 import json
 
 from firebase import init_firebase
-from firebase.buckets import upload_resume_from_file
+from firebase.buckets import get_stored_resumes, upload_resume_from_file
 from firebase_functions import https_fn, options
 from functions.free_reponse.request_handler import handle_write_free_response_request
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
@@ -162,5 +162,21 @@ def upload_resume(req: https_fn.Request) -> https_fn.Response:
 
     return https_fn.Response(
         json.dumps({"message": "Resume uploaded"}),
+        status=200,
+    )
+
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
+        cors_methods=["GET", "POST", "OPTIONS"],
+    )
+)
+def get_resume_list(req: https_fn.Request) -> https_fn.Response:
+    user_id = req.args.get("userId")
+    resumes_names = get_stored_resumes(user_id)
+
+    return https_fn.Response(
+        json.dumps({"message": "Resumes fetched", "resume_names": resumes_names}),
         status=200,
     )
