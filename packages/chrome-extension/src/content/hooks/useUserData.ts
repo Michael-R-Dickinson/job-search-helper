@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import triggerGetUserData from '../eventTriggers'
 import { userAtom, userResumeNamesAtom } from '../atoms'
-import { useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai/react'
 
 const useFetchUserData = () => {
   const setUser = useSetAtom(userAtom)
