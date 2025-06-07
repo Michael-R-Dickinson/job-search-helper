@@ -1,6 +1,7 @@
 import json
 
 from firebase import init_firebase
+from firebase.buckets import upload_resume_from_file
 from firebase_functions import https_fn, options
 from functions.free_reponse.request_handler import handle_write_free_response_request
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
@@ -132,3 +133,34 @@ def save_filled_inputs(req: https_fn.Request) -> https_fn.Response:
 
     print("Successfully got json handing off to handler")
     return handle_save_filled_values_request(user_id, inputs=data)
+
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
+        cors_methods=["POST", "OPTIONS"],
+    )
+)
+def upload_resume(req: https_fn.Request) -> https_fn.Response:
+    user_id = req.args.get("userId")
+
+    uploaded_file = req.files.get("file")
+    if not uploaded_file:
+        return https_fn.Response(
+            json.dumps({"message": "No file provided"}),
+            status=400,
+        )
+
+    file_name = uploaded_file.filename
+
+    upload_resume_from_file(
+        uploaded_file,
+        user_id,
+        file_name,
+        public=True,
+    )
+
+    return https_fn.Response(
+        json.dumps({"message": "Resume uploaded"}),
+        status=200,
+    )

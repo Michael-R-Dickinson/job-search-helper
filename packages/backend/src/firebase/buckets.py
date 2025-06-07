@@ -8,6 +8,11 @@ from constants import COVER_LETTERS_PATH, RESUMES_PATH
 from utils import get_time_string
 
 
+DOCX_FILE_FORMAT = (
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+)
+
+
 def get_user_bucket_path(userId: str, tailored: bool = False) -> str:
     """
     Returns the path to the user's bucket,
@@ -18,6 +23,20 @@ def get_user_bucket_path(userId: str, tailored: bool = False) -> str:
         return f"{base}/tailored"
     else:
         return base
+
+
+def upload_resume_from_file(file, userId: str, file_name: str, public: bool = False):
+    """
+    Uploads resume to the user's bucket
+    returns download url
+    """
+    bucket = storage.bucket()
+    fileLocation = bucket.blob(
+        f"{get_user_bucket_path(userId=userId, tailored=False)}/{file_name}"
+    )
+    fileLocation.upload_from_file(file, content_type=DOCX_FILE_FORMAT)
+    if public:
+        fileLocation.make_public()
 
 
 def upload_tailored_resume(
