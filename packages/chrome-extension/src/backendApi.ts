@@ -44,3 +44,18 @@ export const saveFilledInputsQuery = async (inputs: Partial<MinifiedInput>[], us
     body: serializedInputs,
   })
 }
+
+export const uploadResumeQuery = async (file: File, userId: string) => {
+  console.log('uploading resume', file, userId)
+  const formData = new FormData()
+  formData.append('file', file)
+  const queryParams = new URLSearchParams({
+    userId,
+  })
+  const response = await fetch(`${API_URL}/upload_resume?${queryParams.toString()}`, {
+    method: 'POST',
+    body: formData,
+  })
+  const data = await response.json()
+  console.log('upload resume response', data)
+}

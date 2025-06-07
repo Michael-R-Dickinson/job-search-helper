@@ -1,6 +1,8 @@
 import { Select, type SelectProps, Group, Checkbox } from '@mantine/core'
 import { UploadIcon } from 'lucide-react'
 import styled from '@emotion/styled'
+import { useRef } from 'react'
+import triggerResumeUpload from '../triggerResumeUpload'
 
 const Container = styled.div`
   display: flex;
@@ -31,6 +33,19 @@ const UploadResumeSelectItemContainer = styled(Group)`
 `
 
 const UploadResumeSelectItem = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      triggerResumeUpload(file)
+    }
+  }
+
   return (
     <div
       style={{
@@ -41,10 +56,17 @@ const UploadResumeSelectItem = () => {
       }}
     >
       <div style={{ width: '90%', height: '1px', backgroundColor: '#e0e0e0' }} />
-      <UploadResumeSelectItemContainer>
+      <UploadResumeSelectItemContainer onClick={handleClick} style={{ cursor: 'pointer' }}>
         <span>Upload Resume</span>
         <UploadIcon size={16} opacity={0.7} style={{ marginLeft: 'auto' }} />
       </UploadResumeSelectItemContainer>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".docx"
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+      />
     </div>
   )
 }
