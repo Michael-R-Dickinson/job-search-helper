@@ -4,6 +4,7 @@ import { AppWindow, FileText, PencilLine } from 'lucide-react'
 import { useState } from 'react'
 import ResumeListItemContent from './autofillListItems/ResumeListItemContent'
 import UnfilledInputsListItemContent from './autofillListItems/UnfilledInputsListItemContent'
+import AutofillButton from './AutofillButton'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -39,6 +40,9 @@ const SidebarContent = () => {
           active={activeItem === 'free-response'}
           onClick={() => setActiveItem('free-response')}
         />
+      </div>
+      <div style={{ marginTop: '0.8rem' }}>
+        <AutofillButton />
       </div>
     </div>
   )
