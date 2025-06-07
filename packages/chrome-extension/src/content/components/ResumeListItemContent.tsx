@@ -3,6 +3,8 @@ import { UploadIcon } from 'lucide-react'
 import styled from '@emotion/styled'
 import { useRef } from 'react'
 import triggerResumeUpload from '../triggerResumeUpload'
+import { useAtomValue } from 'jotai'
+import { userResumeNamesAtom } from '../atoms'
 
 const Container = styled.div`
   display: flex;
@@ -19,13 +21,6 @@ const PointerCheckbox = styled(Checkbox)({
     cursor: 'pointer',
   },
 })
-
-const data = [
-  { value: 'resume1', label: 'Resume 1' },
-  { value: 'resume2', label: 'Resume 2' },
-  { value: 'resume3', label: 'Resume 3' },
-  { value: 'upload', label: 'Upload Resume' },
-]
 
 const UploadResumeSelectItemContainer = styled(Group)`
   width: 100%;
@@ -87,10 +82,14 @@ const renderOption: SelectProps['renderOption'] = ({ option }) =>
   )
 
 function ResumeListItemContent() {
+  const userResumeNames = useAtomValue(userResumeNamesAtom)
+  const resumeSelectOptions = userResumeNames.map((name) => ({ value: name, label: name }))
+  const fullSelectOptions = [...resumeSelectOptions, { value: 'upload', label: 'Upload Resume' }]
+
   return (
     <Container>
       <Select
-        data={data}
+        data={fullSelectOptions}
         placeholder="Select Resume"
         size="sm"
         // plug in your custom renderer
