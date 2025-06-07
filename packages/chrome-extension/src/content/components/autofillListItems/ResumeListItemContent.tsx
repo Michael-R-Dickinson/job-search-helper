@@ -74,8 +74,10 @@ const UploadResumeSelectItem: React.FC<{ onResumeUpload: (name: string) => void 
   )
 }
 
-function ResumeListItemContent() {
-  const [selectedResume, setSelectedResume] = useState<string | null>(null)
+const ResumeListItemContent: React.FC<{
+  selectedResume: string | null
+  setSelectedResume: (resume: string | null) => void
+}> = ({ selectedResume, setSelectedResume }) => {
   const [resumeNames, setResumeNames] = useAtom(userResumeNamesAtom)
   const resumeSelectOptions = resumeNames.map((name) => ({ value: name, label: name }))
   const fullSelectOptions = [...resumeSelectOptions, { value: 'upload', label: 'Upload Resume' }]

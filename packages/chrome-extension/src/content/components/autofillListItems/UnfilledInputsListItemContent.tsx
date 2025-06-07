@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { Check } from 'lucide-react'
+import type { InputInfo } from '../../hooks/useInputElements'
 
 const PromptText = styled.p({
   fontSize: '0.85rem',
@@ -63,20 +64,23 @@ const MoreQuestionsRemainingText = styled.p({
   margin: '0',
 })
 
-const UnfilledInputsListItemContent = () => {
+const UnfilledInputsListItemContent: React.FC<{ unfilledInputs: InputInfo[] }> = ({
+  unfilledInputs,
+}) => {
+  // const unfilledInputs = useGetUnfilledInputs(unfilledInputIds)
+  console.log('Unfilled Inputs', unfilledInputs)
+
   return (
     <PromptTextContainer>
       <PromptText>Help us fill in these inputs – </PromptText>
       <PromptText>And we'll remember them for next time!</PromptText>
       <QuestionListContainer>
-        <QuestionContainer>
-          <QuestionCheckIndicator />
-          <QuestionText>How would you describe your racial/ethnic background?</QuestionText>
-        </QuestionContainer>
-        <QuestionContainer>
-          <QuestionCheckIndicator />
-          <QuestionText>How would you describe your racial/ethnic background?</QuestionText>
-        </QuestionContainer>
+        {unfilledInputs.map((input) => (
+          <QuestionContainer key={input.elementReferenceId}>
+            <QuestionCheckIndicator />
+            <QuestionText>{input.label}</QuestionText>
+          </QuestionContainer>
+        ))}
       </QuestionListContainer>
       <MoreQuestionsRemainingText>3 More Questions Remaining</MoreQuestionsRemainingText>
     </PromptTextContainer>

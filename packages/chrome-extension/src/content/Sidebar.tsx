@@ -31,25 +31,7 @@ const SidebarContainer = styled.div`
 
 const Sidebar = () => {
   useFetchUserData()
-  const {
-    simpleInputsInstructions,
-    llmGeneratedInputsPromise,
-    stopRefetchingAutofillValues,
-    loading,
-  } = useAutofillInputs()
 
-  const fullAutofillSequence = async () => {
-    if (!simpleInputsInstructions || !llmGeneratedInputsPromise) return
-    console.log('Starting Autofill Sequence', simpleInputsInstructions, llmGeneratedInputsPromise)
-
-    const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
-    await autofillInputElements(simpleInputsInstructions, animationSpeed)
-
-    const remainingAutofillInstructions = await llmGeneratedInputsPromise
-    await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
-
-    stopRefetchingAutofillValues()
-  }
   return (
     <SidebarRoot>
       <SidebarContainer>

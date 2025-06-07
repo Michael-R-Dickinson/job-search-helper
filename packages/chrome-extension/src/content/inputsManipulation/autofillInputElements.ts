@@ -55,7 +55,7 @@ const isRadioOrCheckbox = (element: HTMLElement): element is HTMLInputElement =>
   )
 }
 
-const getElementByReferenceId = (referenceId: string): HTMLElement | null => {
+export const getElementByReferenceId = (referenceId: string): HTMLElement | null => {
   return document.querySelector<HTMLElement>(`[data-autofill-id="${referenceId}"]`)
 }
 

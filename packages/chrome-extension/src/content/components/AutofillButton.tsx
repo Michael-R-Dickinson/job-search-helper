@@ -41,10 +41,17 @@ const Button = styled.button<{ active: boolean }>`
   }
 `
 
-const AutofillButton: React.FC<{ unfilledSections: string[] }> = ({ unfilledSections }) => {
+const AutofillButton: React.FC<{ unfilledSections: string[]; onClick: () => void }> = ({
+  unfilledSections,
+  onClick,
+}) => {
   const enabled = unfilledSections.length === 0
   if (enabled) {
-    return <Button active={enabled}>Begin Autofill</Button>
+    return (
+      <Button active={enabled} onClick={onClick}>
+        Begin Autofill
+      </Button>
+    )
   }
   return (
     <Tooltip label={`Fill in sections: ${unfilledSections.join(', ')}`}>
