@@ -42,7 +42,7 @@ const SidebarContent = () => {
         />
       </div>
       <div style={{ marginTop: '0.8rem' }}>
-        <AutofillButton />
+        <AutofillButton unfilledSections={['hello']} />
       </div>
     </div>
   )

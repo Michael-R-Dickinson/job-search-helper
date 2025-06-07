@@ -1,5 +1,6 @@
-import { keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
+import { keyframes } from '@emotion/react'
+import { Tooltip } from '@mantine/core'
 
 const shimmer = keyframes`
   0% {
@@ -10,38 +11,46 @@ const shimmer = keyframes`
   }
 `
 
-const Button = styled.button`
-  background: linear-gradient(90deg, #2196f3, #1976d2, #2196f3);
+const Button = styled.button<{ active: boolean }>`
+  background: ${(props) =>
+    props.active
+      ? 'linear-gradient(90deg, #4dabf5, #339af0, #4dabf5)'
+      : 'linear-gradient(90deg, #a5d8ff, #74c0fc, #a5d8ff)'};
   background-size: 200% 100%;
   border-radius: 999px;
-  box-shadow: #1976d2 0 10px 20px -10px;
-  box-sizing: border-box;
+  box-shadow: ${(props) => (props.active ? '#339af0' : '#a5d8ff')} 0 10px 20px -10px;
   color: #ffffff;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 700;
+  cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
   line-height: 24px;
-  opacity: 1;
-  outline: 0 solid transparent;
-  padding: 8px 18px;
-  touch-action: manipulation;
-  width: fit-content;
-  word-break: break-word;
-  border: 0;
+  padding: 0.5rem 2rem;
   transition: all 0.3s ease;
+  font-size: 1rem;
+  opacity: ${(props) => (props.active ? 1 : 0.7)};
 
   &:hover {
-    animation: ${shimmer} 2s infinite linear;
-    transform: translateY(-2px);
-    box-shadow: #1976d2 0 15px 25px -10px;
+    animation: ${(props) => (props.active ? shimmer : 'none')} 2s infinite linear;
+    transform: ${(props) => (props.active ? 'translateY(-2px)' : 'none')};
+    box-shadow: ${(props) =>
+      props.active ? 'rgb(62, 148, 219) 0 15px 25px -10px' : '#a5d8ff 0 10px 20px -10px'};
   }
 
   &:active {
-    transform: translateY(1px);
-    box-shadow: #1976d2 0 5px 15px -10px;
+    transform: ${(props) => (props.active ? 'translateY(1px)' : 'none')};
+    box-shadow: ${(props) =>
+      props.active ? '#339af0 0 5px 15px -10px' : '#a5d8ff 0 10px 20px -10px'};
   }
 `
 
-const AutofillButton = () => <Button>Begin Autofill</Button>
+const AutofillButton: React.FC<{ unfilledSections: string[] }> = ({ unfilledSections }) => {
+  const enabled = unfilledSections.length === 0
+  if (enabled) {
+    return <Button active={enabled}>Begin Autofill</Button>
+  }
+  return (
+    <Tooltip label={`Fill in sections: ${unfilledSections.join(', ')}`}>
+      <Button active={enabled}>Begin Autofill</Button>
+    </Tooltip>
+  )
+}
 
 export default AutofillButton
