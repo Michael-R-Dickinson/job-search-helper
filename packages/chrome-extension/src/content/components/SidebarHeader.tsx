@@ -2,12 +2,12 @@ import styled from '@emotion/styled'
 import { useAtomValue } from 'jotai/react'
 import { userAtom } from '../atoms'
 
-const CaptionText = styled.p`
-  font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.7);
-  margin: 0.2rem;
-  margin-bottom: 0.5rem;
-`
+const CaptionText = styled.p({
+  fontSize: '0.8rem',
+  color: 'rgba(0, 0, 0, 0.7)',
+  margin: '0.2rem',
+  marginBottom: '0.5rem',
+})
 
 const TitleText = styled.h2`
   margin: 0;

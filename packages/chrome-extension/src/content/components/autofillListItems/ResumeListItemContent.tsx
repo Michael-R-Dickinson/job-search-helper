@@ -2,9 +2,9 @@ import { Select, type SelectProps, Group, Checkbox } from '@mantine/core'
 import { UploadIcon } from 'lucide-react'
 import styled from '@emotion/styled'
 import { useRef, useState } from 'react'
-import triggerResumeUpload from '../triggerResumeUpload'
+import triggerResumeUpload from '../../triggerResumeUpload'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
-import { userResumeNamesAtom } from '../atoms'
+import { userResumeNamesAtom } from '../../atoms'
 
 const Container = styled.div`
   display: flex;
