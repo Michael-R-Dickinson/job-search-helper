@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { useAtomValue } from 'jotai/react'
+import { userAtom } from '../atoms'
 
 const CaptionText = styled.p`
   font-size: 0.8rem;
@@ -19,10 +21,12 @@ const HorizontalDivider = styled.div`
 `
 
 const SidebarHeader = () => {
+  const user = useAtomValue(userAtom)
+
   return (
     <div>
       <TitleText>Bruteforce</TitleText>
-      <CaptionText>User: someUser</CaptionText>
+      <CaptionText>User: {user?.displayName}</CaptionText>
       <HorizontalDivider />
     </div>
   )
