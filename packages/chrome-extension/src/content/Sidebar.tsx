@@ -12,7 +12,7 @@ import useFetchUserData from './hooks/useUserData'
 const SidebarRoot = styled.div`
   position: fixed;
   height: 30rem;
-  width: 18rem;
+  width: 20rem;
   right: 0;
   top: 50%;
   transform: translate(-5%, -50%);

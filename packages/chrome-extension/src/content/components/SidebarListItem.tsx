@@ -25,8 +25,7 @@ const ItemTitle = styled.h4`
 `
 
 const ExpandedContentContainer = styled.div`
-  padding: 0.8rem 0.8rem 0.8rem 1.4rem;
-  // padding: 0.8rem 1.4rem;
+  padding: 0.8rem 0.8rem 0.4rem 1.4rem;
   display: flex;
   gap: 0.8rem;
 `

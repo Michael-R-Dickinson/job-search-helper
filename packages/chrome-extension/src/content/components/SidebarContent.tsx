@@ -2,7 +2,8 @@ import styled from '@emotion/styled'
 import SidebarListItem from './SidebarListItem'
 import { AppWindow, FileText, PencilLine } from 'lucide-react'
 import { useState } from 'react'
-import ResumeListItemContent from './ResumeListItemContent'
+import ResumeListItemContent from './autofillListItems/ResumeListItemContent'
+import UnfilledInputsListItemContent from './autofillListItems/UnfilledInputsListItemContent'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -30,6 +31,7 @@ const SidebarContent = () => {
           title="Unfilled Inputs"
           active={activeItem === 'unfilled'}
           onClick={() => setActiveItem('unfilled')}
+          content={<UnfilledInputsListItemContent />}
         />
         <SidebarListItem
           Icon={PencilLine}
