@@ -57,33 +57,29 @@ const QuestionListContainer = styled.div({
   gap: '0.1rem',
 })
 
+const MoreQuestionsRemainingText = styled.p({
+  fontSize: '0.8rem',
+  color: 'rgba(0, 0, 0, 0.6)',
+  margin: '0',
+})
+
 const UnfilledInputsListItemContent = () => {
   return (
-    <div>
-      <PromptTextContainer>
-        <PromptText>Help us fill in these inputs – </PromptText>
-        <PromptText>And we'll remember them for next time!</PromptText>
-        <QuestionListContainer>
-          <QuestionContainer>
-            <QuestionCheckIndicator />
-            <QuestionText>How would you describe your racial/ethnic background?</QuestionText>
-          </QuestionContainer>
-          <QuestionContainer>
-            <QuestionCheckIndicator />
-            <QuestionText>How would you describe your racial/ethnic background?</QuestionText>
-          </QuestionContainer>
-        </QuestionListContainer>
-        <p
-          style={{
-            fontSize: '0.8rem',
-            color: 'rgba(0, 0, 0, 0.6)',
-            margin: '0',
-          }}
-        >
-          3 More Questions Remaining
-        </p>
-      </PromptTextContainer>
-    </div>
+    <PromptTextContainer>
+      <PromptText>Help us fill in these inputs – </PromptText>
+      <PromptText>And we'll remember them for next time!</PromptText>
+      <QuestionListContainer>
+        <QuestionContainer>
+          <QuestionCheckIndicator />
+          <QuestionText>How would you describe your racial/ethnic background?</QuestionText>
+        </QuestionContainer>
+        <QuestionContainer>
+          <QuestionCheckIndicator />
+          <QuestionText>How would you describe your racial/ethnic background?</QuestionText>
+        </QuestionContainer>
+      </QuestionListContainer>
+      <MoreQuestionsRemainingText>3 More Questions Remaining</MoreQuestionsRemainingText>
+    </PromptTextContainer>
   )
 }
 
