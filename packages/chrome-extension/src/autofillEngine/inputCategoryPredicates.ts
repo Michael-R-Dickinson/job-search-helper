@@ -211,10 +211,6 @@ const isSalaryExpectationsInput = (input: SerializedHtmlInput): boolean => {
 const isResumeUploadInput = (input: SerializedHtmlInput): boolean => {
   // If it's explicitly a file input, consider it a resume upload input
   if (input.type === 'file') {
-    console.log('🗂️  Detected a resume upload field by type: file', {
-      type: input.type,
-      fieldType: input.fieldType,
-    })
     return true
   }
 
@@ -266,17 +262,6 @@ const isResumeUploadInput = (input: SerializedHtmlInput): boolean => {
   )
 
   const matches = labelMatch || nameMatch || placeholderMatch || wholeQuestionLabelMatch
-
-  if (matches) {
-    console.log('🗂️  Detected a resume upload field:', {
-      label: input.label,
-      name: input.name,
-      placeholder: input.placeholder,
-      wholeQuestionLabel: input.wholeQuestionLabel,
-      type: input.type,
-      fieldType: input.fieldType,
-    })
-  }
 
   return matches
 }
