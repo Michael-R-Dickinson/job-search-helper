@@ -1,23 +1,7 @@
-import {
-  AutofillAnimationSpeeds,
-  autofillInputElements,
-} from './inputsManipulation/autofillInputElements'
-import useAutofillInputs from './hooks/useAutofillInputs'
-
 import styled from '@emotion/styled'
 import SidebarHeader from './components/SidebarHeader'
 import SidebarContent from './components/SidebarContent'
 import useFetchUserData from './hooks/useUserData'
-
-const fillSimpleInputs = async () => {
-    const response = await triggerGetSimpleAutofillValues(elements)
-    console.log('filledSimpleInputsIds', response)
-    const filledInputs = response
-      .filter((instruction) => instruction.value)
-      .map((instruction) => instruction.input_id)
-    setFilledSimpleInputsIds(filledInputs)
-    autofillInputElements(response)
-  }
 
 const SidebarRoot = styled.div`
   position: fixed;

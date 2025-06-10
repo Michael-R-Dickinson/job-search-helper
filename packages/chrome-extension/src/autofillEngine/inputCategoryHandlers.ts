@@ -157,6 +157,8 @@ class SalaryExpectationsHandler extends InputCategoryHandler {
   }
 }
 
+export const RESUME_UPLOAD_VALUE = '__RESUME_FILE_UPLOAD__'
+
 class ResumeUploadHandler extends InputCategoryHandler {
   // You might add properties here if you were storing file data in the handler
   // For now, we'll simulate a blank file directly in the autofill logic
@@ -164,7 +166,7 @@ class ResumeUploadHandler extends InputCategoryHandler {
   getAutofillInstruction(input: CategorizedInput): AutofillInstruction {
     // Return a special action that indicates we need to handle a file upload
     return {
-      value: '__RESUME_FILE_UPLOAD__',
+      value: RESUME_UPLOAD_VALUE,
       input_id: input.element.elementReferenceId,
     }
   }

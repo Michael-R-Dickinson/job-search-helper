@@ -1,43 +1,40 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useInputElements, type InputInfo } from './useInputElements'
-import triggerGetAutofillValues, {
-  triggerGetSimpleAutofillValues,
-} from '../triggerGetAutofillValues'
+import { triggerGetSimpleAutofillValues } from '../triggerGetAutofillValues'
 import type { AutofillInstruction } from '../../autofillEngine/schema'
+import { useOnPageLoad } from '../../utils'
 
 const useAutofillInputs = () => {
-  const elements = useInputElements()
+  // State
   const [unfilledInputs, setUnfilledInputs] = useState<InputInfo[]>([])
-  // const instructionsQueryRef = useRef<Promise<SeparatedAutofillInstructions> | null>(null)
-  const [simpleInputsInstructions, setSimpleInputsInstructions] = useState<
-    AutofillInstruction[] | null
-  >(null)
-  const remainingInstructionsRef = useRef<Promise<AutofillInstruction[]> | null>(null)
-  const loading = useRef<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  const alreadyFilledRef = useRef<boolean>(false)
+  // Refs
+  const simpleInputsPromiseRef = useRef<Promise<AutofillInstruction[]> | null>(null)
+  const complexInputsPromiseRef = useRef<Promise<AutofillInstruction[]> | null>(null)
+  const pageLoadedDeferredRef = useRef<{
+    promise: Promise<void>
+    resolve: () => void
+  }>(null)
+  const elementsRef = useInputElements()
+
+  if (!pageLoadedDeferredRef.current) {
+    let resolveFn!: () => void
+    const promise = new Promise<void>((res) => {
+      resolveFn = res
+    })
+    pageLoadedDeferredRef.current = { promise, resolve: resolveFn }
+  }
+
+  useOnPageLoad(() => {
+    pageLoadedDeferredRef.current?.resolve()
+  })
+
   useEffect(() => {
-    const getInstructions = async () => {
-      if (alreadyFilledRef.current) return
-
-      loading.current = true
-
-      const simpleInputsInstructionsCurrent = await triggerGetSimpleAutofillValues(elements)
-      setSimpleInputsInstructions(simpleInputsInstructionsCurrent)
-
-      const unfilledInputIds = simpleInputsInstructionsCurrent
-        .filter((i) => i.value === null || i.value === '')
-        .map((i) => i.input_id)
-      const unfilledInputs = elements.filter((el) =>
-        unfilledInputIds.includes(el.elementReferenceId),
-      )
-      remainingInstructionsRef.current = triggerGetAutofillValues(unfilledInputs)
-      // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
-      // remainingInstructionsRef.current = Promise.resolve([] as AutofillInstruction[])
-
-      const llmInstructions = await remainingInstructionsRef.current
-      const allInstructions = [...simpleInputsInstructionsCurrent, ...llmInstructions]
-      const filledInputIds = allInstructions
+    // Takes instructions for inputs to fill and sets unfilledInputs based on which have no values to fill
+    const handleUnfilledInputs = (instructions: AutofillInstruction[]) => {
+      const elements = elementsRef.current
+      const filledInputIds = instructions
         .filter((i) => i.value !== null && i.value !== '')
         .map((i) => i.input_id)
 
@@ -45,25 +42,39 @@ const useAutofillInputs = () => {
         elements.filter((el) => !filledInputIds.includes(el.elementReferenceId) && !!el.label),
       )
 
-      console.log('Finished Fetching LLM Instructions')
-
-      loading.current = false
+      console.log('unfilled inputs set')
     }
 
-    getInstructions()
-  }, [elements])
+    simpleInputsPromiseRef.current = (async () => {
+      await pageLoadedDeferredRef.current?.promise
 
-  const stopRefetchingAutofillValues = () => {
-    alreadyFilledRef.current = true
-  }
+      const elements = elementsRef.current
+      const simpleInputsInstructions = await triggerGetSimpleAutofillValues(elements)
+      return simpleInputsInstructions
+    })()
+
+    complexInputsPromiseRef.current = (async () => {
+      await pageLoadedDeferredRef.current?.promise
+      await simpleInputsPromiseRef.current
+
+      const elements = elementsRef.current
+      // const complexInputsInstructions = await triggerGetAutofillValues(elements)
+      // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
+      const complexInputsInstructions = [] as AutofillInstruction[]
+
+      handleUnfilledInputs(complexInputsInstructions)
+      setLoading(false)
+
+      console.log('complex inputs instructions found')
+      return complexInputsInstructions
+    })()
+  }, [elementsRef])
 
   return {
-    simpleInputsInstructions,
-    llmGeneratedInputsPromise: remainingInstructionsRef.current,
-    // Intended to be called after autofill is executed
-    stopRefetchingAutofillValues,
-    loading: loading.current,
+    simpleInputsInstructionsPromise: simpleInputsPromiseRef.current,
+    complexInputsInstructionsPromise: complexInputsPromiseRef.current,
     unfilledInputs,
+    loading,
   }
 }
 

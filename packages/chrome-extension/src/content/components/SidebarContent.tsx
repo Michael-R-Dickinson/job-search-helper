@@ -10,6 +10,7 @@ import {
   AutofillAnimationSpeeds,
   autofillInputElements,
 } from '../inputsManipulation/autofillInputElements'
+import handleResumeInstructions from '../handleResumeInstructions'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -21,9 +22,8 @@ const AutofillHeader = styled.h3`
 
 const SidebarContent = () => {
   const {
-    simpleInputsInstructions,
-    llmGeneratedInputsPromise,
-    stopRefetchingAutofillValues,
+    simpleInputsInstructionsPromise,
+    complexInputsInstructionsPromise,
     loading,
     unfilledInputs,
   } = useAutofillInputs()
@@ -35,16 +35,19 @@ const SidebarContent = () => {
   if (!selectedResume) undoneAutofillSections.push('resume')
 
   const fullAutofillSequence = async () => {
-    if (!simpleInputsInstructions || !llmGeneratedInputsPromise) return
-    console.log('Starting Autofill Sequence', simpleInputsInstructions, llmGeneratedInputsPromise)
+    if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
+
+    const simpleInputsInstructions = await simpleInputsInstructionsPromise
+    const updatedSimpleInstructions = handleResumeInstructions(
+      simpleInputsInstructions,
+      selectedResume || '',
+    )
 
     const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
-    await autofillInputElements(simpleInputsInstructions, animationSpeed)
+    await autofillInputElements(updatedSimpleInstructions, animationSpeed)
 
-    const remainingAutofillInstructions = await llmGeneratedInputsPromise
+    const remainingAutofillInstructions = await complexInputsInstructionsPromise
     await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
-
-    stopRefetchingAutofillValues()
   }
 
   return (

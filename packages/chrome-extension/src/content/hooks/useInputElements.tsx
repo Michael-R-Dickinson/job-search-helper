@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, type RefObject } from 'react'
 
 export type ElementInfo =
   | HTMLInputElement
@@ -278,8 +278,8 @@ const isElementNearby = (target: HTMLElement, candidate: HTMLElement): boolean =
  * - input types that aren't useful for autofill (hidden, etc.)
  * - elements whose id/name/class contains "captcha"
  */
-export function useInputElements(): InputInfo[] {
-  const [inputs, setInputs] = useState<InputInfo[]>([])
+export function useInputElements(): RefObject<InputInfo[]> {
+  const inputsRef = useRef<InputInfo[]>([])
   const idCounterRef = useRef(0)
 
   useEffect(() => {
@@ -308,8 +308,8 @@ export function useInputElements(): InputInfo[] {
           }
         })
 
-      console.log('elements', filteredInputs)
-      setInputs(filteredInputs)
+      // console.log('elements', filteredInputs)
+      inputsRef.current = filteredInputs
     }
 
     // Initial scan
@@ -322,5 +322,5 @@ export function useInputElements(): InputInfo[] {
     return () => observer.disconnect()
   }, [])
 
-  return inputs
+  return inputsRef
 }
