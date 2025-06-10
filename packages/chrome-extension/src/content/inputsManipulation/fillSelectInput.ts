@@ -27,9 +27,6 @@ export const fillSelectOrInputExact = async (
         )
       }
       element.value = option.value
-    } else {
-      // Placeholder or empty-value option
-      element.value = ''
     }
     element.dispatchEvent(new Event('change', { bubbles: true, composed: true }))
     return
@@ -55,17 +52,6 @@ export const fillSelectOrInputExact = async (
       // Some components update the visible value asynchronously; enforce it immediately if needed
       if (element.value !== targetText) {
         element.value = targetText
-      }
-    } else {
-      // No DOM node → fall back to setting the input’s value directly
-      if (targetText) {
-        element.value = targetText
-      } else if (targetValue !== null) {
-        element.value = targetValue
-      } else {
-        throw new Error(
-          `fillSelectOrInputExact: Matched option "${option.text}" has neither a DOM node nor any text/value.`,
-        )
       }
     }
 

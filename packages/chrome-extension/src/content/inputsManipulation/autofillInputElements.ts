@@ -1,5 +1,8 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
+
 import { fillResumeUploadInput } from '../uploadFileToInput'
+import type { ValueOf } from '../../utils'
+import triggerPulseAnimation, { asyncScrollToElement } from './animateInputFilling'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 
 const fillTextInputElement = (
@@ -64,14 +67,23 @@ const isFileUploadInput = (
   )
 }
 
-const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
-  const element = document.querySelector<HTMLElement>(
-    `[data-autofill-id="${instruction.input_id}"]`,
+export const getElementByReferenceId = (referenceId: string): HTMLElement | null => {
+  return document.querySelector<HTMLElement>(`[data-autofill-id="${referenceId}"]`)
+}
+
+
+const getFirstFilledElement = (autofillInstructions: AutofillInstruction[]): HTMLElement | null => {
+  const firstFilledElement = autofillInstructions.find(
+    (instruction) => instruction.value !== null && instruction.value !== '',
   )
+  return firstFilledElement ? getElementByReferenceId(firstFilledElement.input_id) : null
+}
+
+const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
+  const element = getElementByReferenceId(instruction.input_id)
   if (!element) return
 
   const autofillValue = instruction.value
-
   if (isSelectLikeElement(element)) {
     await fillSelectLikeElement(element, autofillValue, instruction?.input_text)
   } else if (element instanceof HTMLTextAreaElement) {
@@ -83,14 +95,34 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
   } else if (element instanceof HTMLInputElement) {
     fillTextInputElement(element, autofillValue)
   }
+  triggerPulseAnimation(element)
   return element
 }
 
+export const AutofillAnimationSpeeds = {
+  NONE: 0,
+  FAST: 200,
+  SLOW: 500,
+}
+export type AutofillingAnimationSpeed = ValueOf<typeof AutofillAnimationSpeeds>
+
 export const autofillInputElements = async (
   autofillInstructions: AutofillInstruction[],
+  animationSpeed: AutofillingAnimationSpeed = AutofillAnimationSpeeds.SLOW,
 ): Promise<void> => {
+  // Scroll to the first filled element if we're using the slow scroll animation
+  // Just for effect so they see the animation
+  const firstElement = getFirstFilledElement(autofillInstructions)
+  if (firstElement && animationSpeed) {
+    await asyncScrollToElement(firstElement)
+  }
+
   for (const instruction of autofillInstructions) {
     if (instruction.value === null || instruction.value === '') continue
     await fillElementWithInstructionValue(instruction)
+
+    if (animationSpeed !== AutofillAnimationSpeeds.NONE) {
+      await new Promise((resolve) => setTimeout(resolve, animationSpeed))
+    }
   }
 }

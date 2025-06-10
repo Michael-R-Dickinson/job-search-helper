@@ -1,5 +1,9 @@
-import type { SerializedHtmlInput } from '../content/serializeInputsHtml'
-import { SerializedHtmlInputSchema, type AutofillInstruction, type MinifiedInput } from './schema'
+import {
+  SerializedHtmlInputSchema,
+  type AutofillInstruction,
+  type MinifiedInput,
+  type SerializedHtmlInput,
+} from './schema'
 import { autofillInstructionsQuery } from '../backendApi'
 
 export const preprocessInputs = (inputs: SerializedHtmlInput[]): SerializedHtmlInput[] => {

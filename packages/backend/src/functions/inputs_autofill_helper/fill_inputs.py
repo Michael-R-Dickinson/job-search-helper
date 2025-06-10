@@ -16,11 +16,12 @@ def get_filled_inputs(user_id, inputs):
         raise ValueError("User data not found")
 
     autofill_template_values = generate_autofill_with_gemini(inputs)
-    # print("autofill_template_values\n", autofill_template_values, "\n\n")
     autofill_instructions = map_autofill_template_to_instructions(
         autofill_template_values, user_autofill_data, original_inputs=inputs
     )
-    # print("autofill_instructions\n", autofill_instructions)
+    # print("inputs\n", inputs)
+    print("autofill_template_values\n", autofill_template_values.model_dump(), "\n\n")
+    print("autofill_instructions\n", autofill_instructions)
 
     return autofill_instructions
 

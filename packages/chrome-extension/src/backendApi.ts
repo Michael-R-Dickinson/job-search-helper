@@ -44,3 +44,34 @@ export const saveFilledInputsQuery = async (inputs: Partial<MinifiedInput>[], us
     body: serializedInputs,
   })
 }
+
+export const uploadResumeQuery = async (file: File, userId: string): Promise<boolean> => {
+  console.log('uploading resume', file, userId)
+  const formData = new FormData()
+  formData.append('file', file)
+  const queryParams = new URLSearchParams({
+    userId,
+  })
+  try {
+    const response = await fetch(`${API_URL}/upload_resume?${queryParams.toString()}`, {
+      method: 'POST',
+      body: formData,
+    })
+    const data = await response.json()
+    console.log('upload resume response', data)
+    return true
+  } catch (error) {
+    console.error('error uploading resume', error)
+    return false
+  }
+}
+
+export const getResumesQuery = async (userId: string): Promise<string[]> => {
+  const queryParams = new URLSearchParams({
+    userId,
+  })
+  const response = await fetch(`${API_URL}/get_resume_list?${queryParams.toString()}`)
+  const data = await response.json()
+  console.log('get resumes response', data)
+  return data.resume_names
+}

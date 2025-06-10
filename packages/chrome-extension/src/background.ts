@@ -3,6 +3,7 @@ import authenticate, { currentUser } from './auth/background'
 import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
 import saveFilledInputs from './autofillEngine/saveFilledInputs'
 import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
+import { getResumesQuery, uploadResumeQuery } from './backendApi'
 
 console.log('Background script loaded')
 
@@ -44,6 +45,42 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     saveFilledInputs(message.payload, userId).then((results) => {
       sendResponse(results)
     })
+    return true
+  }
+
+  if (message.type === eventTypes.UPLOAD_RESUME) {
+    const userId = currentUser?.uid
+    if (!message.payload) throw new Error('No payload provided')
+    if (!userId) throw new Error('No user found')
+
+    console.log('recieved resume upload request', message.payload)
+
+    // Reconstruct File object from transferred data
+    const { fileData, fileName, fileType, fileSize, lastModified } = message.payload
+    const uint8Array = new Uint8Array(fileData)
+    const file = new File([uint8Array], fileName, {
+      type: fileType,
+      lastModified: lastModified,
+    })
+
+    uploadResumeQuery(file, userId).then((success) => {
+      sendResponse(success)
+    })
+    return true
+  }
+
+  if (message.type === eventTypes.RETRIEVE_USER_DATA) {
+    const userId = currentUser?.uid
+    if (!userId) throw new Error('No user found')
+
+    getResumesQuery(userId).then((resumeNames) => {
+      sendResponse({
+        userId,
+        displayName: currentUser?.displayName,
+        userResumeNames: resumeNames,
+      })
+    })
+
     return true
   }
 })
