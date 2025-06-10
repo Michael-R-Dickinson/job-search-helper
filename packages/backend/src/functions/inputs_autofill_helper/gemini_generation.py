@@ -38,7 +38,6 @@ For example, to produce "yes" if a user is a veteran, you would output the follo
 }
 
 Include the curly braces in your response.
-Fill all inputs that can be filled with the user data from the schema - EVERY ONE OF THEM. For ones that absolutely cannot be filled with the user data, output an empty string. 
 
 
 ### Radio Buttons and Checkboxes
@@ -55,11 +54,17 @@ When filling radios/checkboxes, unless the valuePath maps directly to a boolean,
 }
 Remember, this is ONLY FOR RADIO BUTTONS AND CHECKBOXES. Do not output boolean values for text fields. DONT DO IT EVER - no {true} or {false} for anything except things that are explicitly fieldtype radio or checkbox.
 
+The initialLabel field is for outputting a two word summary of the input label - descriptive of the label - 2 words max.
+
 ### Enums
 If you need to output a text field but only have an enum, you may come up with a reasonable string interpretation of the enum.
 
 ## Special Fields
 For fields like, how did you find out about this position - always fill with Linkedin
+
+## General Guidelines
+
+You may not skip any inputs. You must find a way to fill every input with data from the schema using valuePaths. If this is not possible, you must output the string GABAABAGOO as the valuePath
 
 Schema, in zod format:
 
@@ -82,6 +87,7 @@ class IfExpression(BaseModel):
 
 
 class AutofillInstruction(BaseModel):
+    initialLabel: str
     input_id: str
     valuePathString: Union[str, IfExpression]
 
@@ -97,10 +103,11 @@ def generate_autofill_with_gemini(inputs) -> AutofillResponseSchema:
             response_mime_type="application/json",
             response_schema=AutofillResponseSchema,
             temperature=0.0,
-            # thinking_config=types.ThinkingConfig(thinking_budget=0),
+            top_k=1.0,
+            thinking_config=types.ThinkingConfig(thinking_budget=0),
         ),
-        # model="gemini-2.5-flash-preview-04-17",
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash-preview-04-17",
+        # model="gemini-2.0-flash",
     )
     response = chat.send_message(
         json.dumps(inputs),

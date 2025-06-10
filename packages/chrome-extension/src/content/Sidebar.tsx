@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import { useInputElements } from './hooks/useInputElements'
-import { autofillInputElements } from './inputsManipulation/autofillInputElements'
-import triggerGetAutofillValues, {
-  triggerGetSimpleAutofillValues,
-} from './triggerGetAutofillValues'
-import triggerSaveFilledValues from './triggerSaveFilledValues'
+import {
+  AutofillAnimationSpeeds,
+  autofillInputElements,
+} from './inputsManipulation/autofillInputElements'
+import useAutofillInputs from './hooks/useAutofillInputs'
 
-const Sidebar = () => {
-  const elements = useInputElements()
-  const [filledSimpleInputsIds, setFilledSimpleInputsIds] = useState<string[]>([])
+import styled from '@emotion/styled'
+import SidebarHeader from './components/SidebarHeader'
+import SidebarContent from './components/SidebarContent'
+import useFetchUserData from './hooks/useUserData'
 
-  const fillSimpleInputs = async () => {
+const fillSimpleInputs = async () => {
     const response = await triggerGetSimpleAutofillValues(elements)
     console.log('filledSimpleInputsIds', response)
     const filledInputs = response
@@ -20,35 +19,37 @@ const Sidebar = () => {
     autofillInputElements(response)
   }
 
-  const fillInputsWithLLM = async () => {
-    const unfilledInputs = elements.filter(
-      (element) => !filledSimpleInputsIds.includes(element.elementReferenceId),
-    )
-    const response = await triggerGetAutofillValues(unfilledInputs)
-    autofillInputElements(response)
-  }
+const SidebarRoot = styled.div`
+  position: fixed;
+  height: 30rem;
+  width: 20rem;
+  right: 0;
+  top: 50%;
+  transform: translate(-5%, -50%);
+`
 
-  const saveAutofillValues = async () => {
-    const response = await triggerSaveFilledValues(elements)
-    console.log('saveAutofillValues response', response)
-  }
+const SidebarContainer = styled.div`
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1.5rem;
+  border-radius: 10px 10px 10px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+`
+
+const Sidebar = () => {
+  useFetchUserData()
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        height: '500px',
-        width: '200px',
-        right: '0',
-        top: '50%',
-        transform: 'translate(0, -50%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-      }}
-    >
-      <button onClick={fillSimpleInputs}>Simple Autofill</button>
-      <button onClick={fillInputsWithLLM}>Begin Autofill Sequence</button>
-      <button onClick={saveAutofillValues}>Save Autofill Values</button>
-    </div>
+    <SidebarRoot>
+      <SidebarContainer>
+        <SidebarHeader />
+        {/* <RedButton onClick={fullAutofillSequence}>Full Autofill Sequence</RedButton> */}
+        <SidebarContent />
+      </SidebarContainer>
+    </SidebarRoot>
   )
 }
 
