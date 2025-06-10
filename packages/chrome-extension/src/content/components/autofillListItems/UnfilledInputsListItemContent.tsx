@@ -3,6 +3,8 @@ import { Check } from 'lucide-react'
 import type { InputInfo } from '../../hooks/useInputElements'
 import LoadingSpinner from '../LoadingSpinner'
 import { useMemo } from 'react'
+import { getElementByReferenceId } from '../../inputsManipulation/autofillInputElements'
+import triggerPulseAnimation from '../../inputsManipulation/animateInputFilling'
 
 const PromptText = styled.p({
   fontSize: '0.85rem',
@@ -66,6 +68,14 @@ const MoreQuestionsRemainingText = styled.p({
   margin: '0',
 })
 
+const highlightAndScrollToInput = (input: InputInfo) => () => {
+  const inputElement = getElementByReferenceId(input.elementReferenceId)
+  if (inputElement) {
+    triggerPulseAnimation(inputElement)
+    inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
 const UnfilledInputsListItemContent: React.FC<{
   unfilledInputs: InputInfo[]
   loading: boolean
@@ -82,7 +92,10 @@ const UnfilledInputsListItemContent: React.FC<{
       {loading && <LoadingSpinner />}
       <QuestionListContainer>
         {unfilledInputsToDisplay.map((input) => (
-          <QuestionContainer key={input.elementReferenceId}>
+          <QuestionContainer
+            key={input.elementReferenceId}
+            onClick={highlightAndScrollToInput(input)}
+          >
             <QuestionCheckIndicator />
             <QuestionText>{input.label}</QuestionText>
           </QuestionContainer>
