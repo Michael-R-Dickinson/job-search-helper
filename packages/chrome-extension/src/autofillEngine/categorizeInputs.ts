@@ -5,6 +5,7 @@ import {
   isTwitterUrlInput,
   isGithubUrlInput,
   isPronounsInput,
+  isResumeUploadInput,
 } from './inputCategoryPredicates'
 import type { SerializedHtmlInput, CategorizedInput, SimpleInputsEnum } from './schema'
 
@@ -18,6 +19,7 @@ const categorizeSimpleInputs = (inputs: SerializedHtmlInput[]): CategorizedInput
     else if (isLinkedInProfileInput(input)) category = 'linkedin_profile'
     else if (isTwitterUrlInput(input)) category = 'twitter_url'
     else if (isGithubUrlInput(input)) category = 'github_url'
+    else if (isResumeUploadInput(input)) category = 'resume_upload'
     // else if (isSalaryExpectationsInput(input)) category = 'salary_expectations'
     // else if (isOtherWebsiteInput(input)) category = 'other_website'
     // else if (isWebsiteInput(input)) category = 'website'

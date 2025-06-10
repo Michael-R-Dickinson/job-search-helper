@@ -15,6 +15,7 @@ export const INPUT_ELEMENT_TYPES = {
   DATE: 'date',
   PASSWORD: 'password',
   URL: 'url',
+  FILE: 'file',
 } as const
 
 export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_ELEMENT_TYPES]
@@ -52,6 +53,7 @@ export const SimpleInputsEnum = {
   twitter_url: 'twitter_url',
   github_url: 'github_url',
   salary_expectations: 'salary_expectations',
+  resume_upload: 'resume_upload',
 } as const
 export type SimpleInputsEnum = ValueOf<typeof SimpleInputsEnum>
 

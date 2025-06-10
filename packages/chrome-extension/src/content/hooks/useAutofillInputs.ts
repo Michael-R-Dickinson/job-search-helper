@@ -32,8 +32,8 @@ const useAutofillInputs = () => {
         unfilledInputIds.includes(el.elementReferenceId),
       )
       remainingInstructionsRef.current = triggerGetAutofillValues(unfilledInputs)
-      // // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
-      // remainingInstructionsRef.current = Promise.resolve(null as unknown as AutofillInstruction[])
+      // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
+      // remainingInstructionsRef.current = Promise.resolve([] as AutofillInstruction[])
 
       const llmInstructions = await remainingInstructionsRef.current
       const allInstructions = [...simpleInputsInstructionsCurrent, ...llmInstructions]

@@ -1,4 +1,6 @@
 import type { AutofillInstruction } from '../../autofillEngine/schema'
+
+import { fillResumeUploadInput } from '../uploadFileToInput'
 import type { ValueOf } from '../../utils'
 import triggerPulseAnimation, { asyncScrollToElement } from './animateInputFilling'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
@@ -55,9 +57,20 @@ const isRadioOrCheckbox = (element: HTMLElement): element is HTMLInputElement =>
   )
 }
 
+const isFileUploadInput = (
+  element: HTMLElement,
+  instructionValue: string | boolean,
+): element is HTMLInputElement => {
+  return (
+    (element instanceof HTMLInputElement || element instanceof HTMLButtonElement) &&
+    instructionValue === '__RESUME_FILE_UPLOAD__'
+  )
+}
+
 export const getElementByReferenceId = (referenceId: string): HTMLElement | null => {
   return document.querySelector<HTMLElement>(`[data-autofill-id="${referenceId}"]`)
 }
+
 
 const getFirstFilledElement = (autofillInstructions: AutofillInstruction[]): HTMLElement | null => {
   const firstFilledElement = autofillInstructions.find(
@@ -77,6 +90,8 @@ const fillElementWithInstructionValue = async (instruction: AutofillInstruction)
     fillTextAreaElement(element, autofillValue)
   } else if (isRadioOrCheckbox(element)) {
     fillRadioOrCheckboxElement(element, autofillValue)
+  } else if (isFileUploadInput(element, autofillValue)) {
+    await fillResumeUploadInput(element)
   } else if (element instanceof HTMLInputElement) {
     fillTextInputElement(element, autofillValue)
   }
