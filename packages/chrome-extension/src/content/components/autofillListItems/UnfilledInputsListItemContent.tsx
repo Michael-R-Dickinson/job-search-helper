@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { Check } from 'lucide-react'
 import type { InputInfo } from '../../hooks/useInputElements'
 import LoadingSpinner from '../LoadingSpinner'
+import { useMemo } from 'react'
 
 const PromptText = styled.p({
   fontSize: '0.85rem',
@@ -69,16 +70,18 @@ const UnfilledInputsListItemContent: React.FC<{
   unfilledInputs: InputInfo[]
   loading: boolean
 }> = ({ unfilledInputs, loading }) => {
-  console.log('unfilledInputs', unfilledInputs)
-  const moreQuestionsRemaining = unfilledInputs.length
-  console.log('loading', loading)
+  const unfilledInputsToDisplay = useMemo(() => {
+    return unfilledInputs.filter((input) => input.label !== '' && input.element.type !== 'button')
+  }, [unfilledInputs])
+  const moreQuestionsRemaining = unfilledInputsToDisplay.length
+
   return (
     <PromptTextContainer>
       <PromptText>Help us fill in these inputs – </PromptText>
       <PromptText>And we'll remember them for next time!</PromptText>
       {loading && <LoadingSpinner />}
       <QuestionListContainer>
-        {unfilledInputs.map((input) => (
+        {unfilledInputsToDisplay.map((input) => (
           <QuestionContainer key={input.elementReferenceId}>
             <QuestionCheckIndicator />
             <QuestionText>{input.label}</QuestionText>
@@ -86,7 +89,10 @@ const UnfilledInputsListItemContent: React.FC<{
         ))}
       </QuestionListContainer>
       <MoreQuestionsRemainingText>
-        {moreQuestionsRemaining} More Questions Remaining
+        {!loading &&
+          (moreQuestionsRemaining > 0
+            ? `${moreQuestionsRemaining} More Questions Remaining`
+            : 'All Inputs Filled!')}
       </MoreQuestionsRemainingText>
     </PromptTextContainer>
   )
