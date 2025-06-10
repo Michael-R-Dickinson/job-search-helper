@@ -68,7 +68,9 @@ const SidebarContent = () => {
           title="Unfilled Inputs"
           active={activeItem === 'unfilled'}
           onClick={() => setActiveItem('unfilled')}
-          content={<UnfilledInputsListItemContent unfilledInputs={unfilledInputs} />}
+          content={
+            <UnfilledInputsListItemContent unfilledInputs={unfilledInputs} loading={loading} />
+          }
         />
         <SidebarListItem
           Icon={PencilLine}

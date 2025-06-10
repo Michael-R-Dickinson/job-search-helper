@@ -62,7 +62,7 @@ const useAutofillInputs = () => {
     llmGeneratedInputsPromise: remainingInstructionsRef.current,
     // Intended to be called after autofill is executed
     stopRefetchingAutofillValues,
-    loading,
+    loading: loading.current,
     unfilledInputs,
   }
 }
