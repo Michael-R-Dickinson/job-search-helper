@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { eventTypes } from './events'
 import authenticate, { currentUser } from './auth/background'
 import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
@@ -5,6 +6,7 @@ import saveFilledInputs from './autofillEngine/saveFilledInputs'
 import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
 import { getResumesQuery, uploadResumeQuery, getTailoringQuestions } from './backendApi'
 import type { UserDataResponse } from './content/eventTriggers'
+import { UploadResumePayloadSchema } from './content/triggerResumeUpload'
 
 console.log('Background script loaded')
 
@@ -56,17 +58,35 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     console.log('recieved resume upload request', message.payload)
 
-    // Reconstruct File object from transferred data
-    const { fileData, fileName, fileType, fileSize, lastModified } = message.payload
-    const uint8Array = new Uint8Array(fileData)
-    const file = new File([uint8Array], fileName, {
-      type: fileType,
-      lastModified: lastModified,
-    })
+    try {
+      // Validate the incoming payload
+      const validatedPayload = UploadResumePayloadSchema.parse(message.payload)
 
-    uploadResumeQuery(file, userId).then((response) => {
-      sendResponse(response)
-    })
+      // Reconstruct File object from transferred data
+      const { fileData, fileName, fileType, fileSize, lastModified } = validatedPayload
+      const uint8Array = new Uint8Array(fileData)
+      const file = new File([uint8Array], fileName, {
+        type: fileType,
+        lastModified: lastModified,
+      })
+
+      uploadResumeQuery(file, userId)
+        .then((response) => {
+          sendResponse(response)
+        })
+        .catch((error) => {
+          console.error('Upload query failed:', error)
+          sendResponse(null)
+        })
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('Invalid payload for resume upload:', error.errors)
+        sendResponse(null)
+      } else {
+        console.error('Error processing resume upload:', error)
+        sendResponse(null)
+      }
+    }
     return true
   }
 })

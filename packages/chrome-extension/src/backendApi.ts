@@ -1,4 +1,9 @@
+import { z } from 'zod'
 import { AutofillInstructionsSchema, type MinifiedInput } from './autofillEngine/schema'
+import {
+  UploadResumeResponseSchema,
+  type UploadResumeResponse,
+} from './content/triggerResumeUpload'
 
 const API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1'
 
@@ -45,11 +50,6 @@ export const saveFilledInputsQuery = async (inputs: Partial<MinifiedInput>[], us
   })
 }
 
-type UploadResumeResponse = {
-  message: string
-  public_url: string
-}
-
 export const uploadResumeQuery = async (
   file: File,
   userId: string,
@@ -67,9 +67,16 @@ export const uploadResumeQuery = async (
     })
     const data = await response.json()
     console.log('upload resume response', data)
-    return data as UploadResumeResponse
+
+    // Validate the response using Zod schema
+    const validatedData = UploadResumeResponseSchema.parse(data)
+    return validatedData
   } catch (error) {
-    console.error('error uploading resume', error)
+    if (error instanceof z.ZodError) {
+      console.error('Backend response validation error:', error.errors)
+    } else {
+      console.error('error uploading resume', error)
+    }
     return null
   }
 }
