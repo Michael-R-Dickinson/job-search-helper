@@ -2,7 +2,7 @@ import type { QuestionAnswers } from '../../backendApi'
 import type { QuestionAnswersAllowUnfilled } from './autofillListItems/ResumeListItemContent'
 import LoadingSpinner from './LoadingSpinner'
 import AnimatedQuestionCard from './AnimatedQuestionCard'
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { PromptText } from './autofillListItems/UnfilledInputsListItemContent'
 
