@@ -15,7 +15,7 @@ export const UploadResumePayloadSchema = z.object({
 })
 
 export const RuntimeUploadResumeMessageSchema = z.object({
-  type: z.literal('UPLOAD_RESUME'),
+  type: z.literal(eventTypes.UPLOAD_RESUME),
   payload: UploadResumePayloadSchema,
 })
 
