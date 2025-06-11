@@ -106,7 +106,6 @@ export const getTailoringQuestions = async (
   const url = `${API_URL}/on_request?${queryParams.toString()}`
   const res = await fetch(url, {
     method: 'GET',
-    cache: 'force-cache',
   })
   const json = await res.json()
   console.log('Questions Response JSON:', json)

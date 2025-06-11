@@ -11,7 +11,6 @@ const ProgressIndicator = styled.div({
   justifyContent: 'center',
   alignItems: 'center',
   gap: '0.5rem',
-  marginBottom: '1rem',
 })
 
 const ProgressText = styled.p({
@@ -63,6 +62,13 @@ const updateQuestionAnswer = (
   }
 }
 
+const allQuestionsAnswered = (questionAnswers: QuestionAnswersAllowUnfilled): boolean => {
+  return (
+    Object.values(questionAnswers.experienceQuestions).every((answer) => answer !== null) &&
+    Object.values(questionAnswers.skillsToAdd).every((answer) => answer !== null)
+  )
+}
+
 const TailoringQuestions = ({
   tailoringQuestions,
   setQuestionAnswers,
@@ -79,24 +85,25 @@ const TailoringQuestions = ({
   const totalQuestions = allQuestions.length
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1
 
-  const handleAnswer = useCallback(
-    (answer: boolean) => {
-      if (!currentQuestion || !tailoringQuestions) return
-
-      const newAnswers = updateQuestionAnswer(tailoringQuestions, currentQuestion, answer)
-      setQuestionAnswers(newAnswers)
-    },
-    [currentQuestion, tailoringQuestions, setQuestionAnswers],
-  )
-
-  const handleNextQuestion = useCallback(() => {
+  const handleNextQuestion = () => {
     setCurrentQuestionIndex((prev) => prev + 1)
-  }, [])
+  }
 
-  const handleComplete = useCallback(() => {
-    if (!tailoringQuestions) return
-    onAllQuestionsAnswered(tailoringQuestions as QuestionAnswers)
-  }, [tailoringQuestions, onAllQuestionsAnswered])
+  const handleAnswer = (answer: boolean) => {
+    if (!currentQuestion || !tailoringQuestions) return
+
+    const newAnswers = updateQuestionAnswer(tailoringQuestions, currentQuestion, answer)
+    setQuestionAnswers(newAnswers)
+
+    if (isLastQuestion) {
+      if (!allQuestionsAnswered(newAnswers)) {
+        console.error('not all questions answered')
+        return
+      }
+
+      onAllQuestionsAnswered(newAnswers as QuestionAnswers)
+    }
+  }
 
   // Show loading spinner if tailoringQuestions is null
   if (!tailoringQuestions) {
@@ -114,7 +121,6 @@ const TailoringQuestions = ({
         question={currentQuestion.question}
         onAnswer={handleAnswer}
         onNextQuestion={handleNextQuestion}
-        onComplete={handleComplete}
         isSkillsQuestion={currentQuestion.type === 'skillsToAdd'}
         isLastQuestion={isLastQuestion}
       />

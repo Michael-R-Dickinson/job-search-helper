@@ -20,13 +20,9 @@ export const useSlideAnimation = () => {
     }, 300)
   }, [])
 
-  const slideOut = useCallback((onComplete?: () => void) => {
+  const slideOut = useCallback(() => {
     setIsTransitioning(true)
     setAnimationClass('slide-out-left')
-
-    setTimeout(() => {
-      onComplete?.()
-    }, 300)
   }, [])
 
   return { isTransitioning, animationClass, slideToNext, slideOut }

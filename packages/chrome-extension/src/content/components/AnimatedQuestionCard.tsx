@@ -56,7 +56,6 @@ type AnimatedQuestionCardProps = {
   question: string
   onAnswer: (answer: boolean) => void
   onNextQuestion: () => void
-  onComplete: () => void
   isSkillsQuestion: boolean
   isLastQuestion: boolean
 }
@@ -65,19 +64,19 @@ const AnimatedQuestionCard: React.FC<AnimatedQuestionCardProps> = ({
   question,
   onAnswer,
   onNextQuestion,
-  onComplete,
   isSkillsQuestion,
   isLastQuestion,
 }) => {
   const { isTransitioning, animationClass, slideToNext, slideOut } = useSlideAnimation()
 
   const handleAnswer = (answer: boolean) => {
+    console.log('isTransitioning', isTransitioning, 'answer', answer)
     if (isTransitioning) return
 
     onAnswer(answer)
 
     if (isLastQuestion) {
-      slideOut(onComplete)
+      slideOut()
     } else {
       slideToNext(onNextQuestion)
     }

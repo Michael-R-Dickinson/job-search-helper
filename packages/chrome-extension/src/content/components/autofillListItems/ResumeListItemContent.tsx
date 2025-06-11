@@ -106,6 +106,7 @@ const ResumeListItemContent: React.FC = () => {
       triggerGetTailoringQuestions(selectedResume, jobUrl).then((response) => {
         const { json: questionsData } = response
         if (!questionsData) return
+        console.log('questionsData', questionsData)
 
         setQuestionAnswers(getEmptyQuestionAnswers(questionsData.questions))
         chatIdRef.current = questionsData.chat_id
@@ -117,6 +118,7 @@ const ResumeListItemContent: React.FC = () => {
 
   const onAllQuestionsAnswered = async (filledQuestionAnswers: QuestionAnswers) => {
     if (!user?.userId || !selectedResume || !filledQuestionAnswers || !chatIdRef.current) return
+    console.log('onAllQuestionsAnswered', filledQuestionAnswers)
     const { json: tailoredResume } = await getTailoredResume(
       selectedResume,
       user.userId,
