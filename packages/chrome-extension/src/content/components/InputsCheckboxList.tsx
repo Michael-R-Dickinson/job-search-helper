@@ -66,6 +66,12 @@ const QuestionListContainer = styled.div<{ height: number }>(({ height }) => ({
   minHeight: `${height}px`,
 }))
 
+const MoreQuestionsRemainingText = styled.p({
+  fontSize: '0.8rem',
+  color: 'rgba(0, 0, 0, 0.6)',
+  margin: '0',
+})
+
 const highlightAndScrollToInput = (input: InputInfo) => () => {
   const inputElement = getElementByReferenceId(input.elementReferenceId)
   if (inputElement) {
@@ -94,6 +100,9 @@ const CheckboxList = ({ inputs, maxItems = 5 }: Props) => {
     isInputEntering,
   } = useInputAnimations(inputs, maxItems)
 
+  // TODO: calculate moreQuestionsRemaining accurately
+  const moreQuestionsRemaining = 0
+
   return (
     <QuestionListContainer height={dynamicHeight}>
       {visibleInputs.map((input) => (
@@ -111,6 +120,11 @@ const CheckboxList = ({ inputs, maxItems = 5 }: Props) => {
           <QuestionText>{truncateText(input.label ?? '', 90)}</QuestionText>
         </QuestionContainer>
       ))}
+      <MoreQuestionsRemainingText>
+        {moreQuestionsRemaining > 0
+          ? `${moreQuestionsRemaining} More Questions Remaining`
+          : 'All Inputs Filled!'}
+      </MoreQuestionsRemainingText>
     </QuestionListContainer>
   )
 }
