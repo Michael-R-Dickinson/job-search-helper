@@ -1,4 +1,9 @@
 import { useEffect, useRef } from 'react'
+import type {
+  QuestionAnswerMapAllowUnfilled,
+  QuestionAnswersAllowUnfilled,
+} from './content/components/autofillListItems/ResumeListItemContent'
+import type { QuestionsResponse } from './backendApi'
 
 export type ValueOf<T> = T[keyof T]
 
@@ -58,4 +63,18 @@ export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): v
       }
     }
   }, [timeoutMs])
+}
+
+export const getEmptyQuestionAnswers = (
+  questions: QuestionsResponse['questions'],
+): QuestionAnswersAllowUnfilled => {
+  const skillsToAdd = questions.skills_to_add.reduce((acc, question) => {
+    acc[question] = null
+    return acc
+  }, {} as QuestionAnswerMapAllowUnfilled)
+  const experienceQuestions = questions.experience_questions.reduce((acc, question) => {
+    acc[question] = null
+    return acc
+  }, {} as QuestionAnswerMapAllowUnfilled)
+  return { skillsToAdd, experienceQuestions }
 }

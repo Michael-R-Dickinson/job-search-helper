@@ -29,25 +29,21 @@ const SidebarContent = () => {
   } = useAutofillInputs()
 
   const [activeItem, setActiveItem] = useState<'resume' | 'unfilled' | 'free-response'>('resume')
-  const [selectedResume, setSelectedResume] = useState<string | null>(null)
 
-  const undoneAutofillSections = []
-  if (!selectedResume) undoneAutofillSections.push('resume')
+  const undoneAutofillSections: string[] = []
+  // if (!selectedResume) undoneAutofillSections.push('resume')
 
   const fullAutofillSequence = async () => {
-    if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
-
-    const simpleInputsInstructions = await simpleInputsInstructionsPromise
-    const updatedSimpleInstructions = handleResumeInstructions(
-      simpleInputsInstructions,
-      selectedResume || '',
-    )
-
-    const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
-    await autofillInputElements(updatedSimpleInstructions, animationSpeed)
-
-    const remainingAutofillInstructions = await complexInputsInstructionsPromise
-    await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
+    // if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
+    // const simpleInputsInstructions = await simpleInputsInstructionsPromise
+    // const updatedSimpleInstructions = handleResumeInstructions(
+    //   simpleInputsInstructions,
+    //   selectedResume || '',
+    // )
+    // const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
+    // await autofillInputElements(updatedSimpleInstructions, animationSpeed)
+    // const remainingAutofillInstructions = await complexInputsInstructionsPromise
+    // await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
   }
 
   return (
@@ -59,12 +55,7 @@ const SidebarContent = () => {
           title="Resume"
           active={activeItem === 'resume'}
           onClick={() => setActiveItem('resume')}
-          content={
-            <ResumeListItemContent
-              selectedResume={selectedResume}
-              setSelectedResume={setSelectedResume}
-            />
-          }
+          content={<ResumeListItemContent />}
         />
         <SidebarListItem
           Icon={AppWindow}
