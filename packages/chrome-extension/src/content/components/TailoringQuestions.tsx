@@ -3,6 +3,26 @@ import type { QuestionAnswersAllowUnfilled } from './autofillListItems/ResumeLis
 import LoadingSpinner from './LoadingSpinner'
 import AnimatedQuestionCard from './AnimatedQuestionCard'
 import { useState, useMemo, useCallback } from 'react'
+import styled from '@emotion/styled'
+import { PromptText } from './autofillListItems/UnfilledInputsListItemContent'
+
+const ProgressIndicator = styled.div({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '0.5rem',
+  marginBottom: '1rem',
+})
+
+const ProgressText = styled.p({
+  fontSize: '0.75rem',
+  color: 'rgba(0, 0, 0, 0.5)',
+  margin: '0',
+})
+
+const HeadingText = styled(PromptText)({
+  margin: '0.8rem 0',
+})
 
 type FlatQuestion = {
   type: 'skillsToAdd' | 'experienceQuestions'
@@ -15,7 +35,6 @@ type Props = {
   onAllQuestionsAnswered: (questionAnswers: QuestionAnswers) => void
 }
 
-// Utility functions
 const flattenQuestions = (tailoringQuestions: QuestionAnswersAllowUnfilled): FlatQuestion[] => {
   const skills = Object.keys(tailoringQuestions.skillsToAdd).map((skill) => ({
     type: 'skillsToAdd' as const,
@@ -89,15 +108,22 @@ const TailoringQuestions = ({
   }
 
   return (
-    <AnimatedQuestionCard
-      question={currentQuestion.question}
-      currentIndex={currentQuestionIndex + 1}
-      totalQuestions={totalQuestions}
-      onAnswer={handleAnswer}
-      onNextQuestion={handleNextQuestion}
-      onComplete={handleComplete}
-      isLastQuestion={isLastQuestion}
-    />
+    <div>
+      <HeadingText>Answer a few questions to help us tailor your resume</HeadingText>
+      <AnimatedQuestionCard
+        question={currentQuestion.question}
+        onAnswer={handleAnswer}
+        onNextQuestion={handleNextQuestion}
+        onComplete={handleComplete}
+        isSkillsQuestion={currentQuestion.type === 'skillsToAdd'}
+        isLastQuestion={isLastQuestion}
+      />
+      <ProgressIndicator>
+        <ProgressText>
+          Question {currentQuestionIndex + 1} of {totalQuestions}
+        </ProgressText>
+      </ProgressIndicator>
+    </div>
   )
 }
 

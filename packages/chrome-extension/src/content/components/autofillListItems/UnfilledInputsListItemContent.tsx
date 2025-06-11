@@ -6,11 +6,12 @@ import { useMemo } from 'react'
 import { getElementByReferenceId } from '../../inputsManipulation/autofillInputElements'
 import triggerPulseAnimation from '../../inputsManipulation/animateInputFilling'
 
-const PromptText = styled.p({
+export const PromptText = styled.p({
   fontSize: '0.85rem',
   color: 'rgba(0, 0, 0, 0.7)',
   margin: '0.0rem',
 })
+PromptText.withComponent('h3')
 
 const PromptTextContainer = styled.div({
   margin: '0.2rem',
