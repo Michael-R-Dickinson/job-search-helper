@@ -4,6 +4,7 @@ import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
 import saveFilledInputs from './autofillEngine/saveFilledInputs'
 import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
 import { getResumesQuery, uploadResumeQuery, getTailoringQuestions } from './backendApi'
+import type { UserDataResponse } from './content/eventTriggers'
 
 console.log('Background script loaded')
 
@@ -63,8 +64,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       lastModified: lastModified,
     })
 
-    uploadResumeQuery(file, userId).then((success) => {
-      sendResponse(success)
+    uploadResumeQuery(file, userId).then((response) => {
+      sendResponse(response)
     })
     return true
   }
@@ -75,12 +76,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const userId = currentUser?.uid
     if (!userId) throw new Error('No user found')
 
-    getResumesQuery(userId).then((resumeNames) => {
-      sendResponse({
+    getResumesQuery(userId).then((resumes) => {
+      const response: UserDataResponse = {
         userId,
         displayName: currentUser?.displayName,
-        userResumeNames: resumeNames,
-      })
+        userResumes: resumes,
+      }
+      sendResponse(response)
     })
 
     return true

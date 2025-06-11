@@ -45,7 +45,15 @@ export const saveFilledInputsQuery = async (inputs: Partial<MinifiedInput>[], us
   })
 }
 
-export const uploadResumeQuery = async (file: File, userId: string): Promise<boolean> => {
+type UploadResumeResponse = {
+  message: string
+  public_url: string
+}
+
+export const uploadResumeQuery = async (
+  file: File,
+  userId: string,
+): Promise<UploadResumeResponse | null> => {
   console.log('uploading resume', file, userId)
   const formData = new FormData()
   formData.append('file', file)
@@ -59,21 +67,26 @@ export const uploadResumeQuery = async (file: File, userId: string): Promise<boo
     })
     const data = await response.json()
     console.log('upload resume response', data)
-    return true
+    return data as UploadResumeResponse
   } catch (error) {
     console.error('error uploading resume', error)
-    return false
+    return null
   }
 }
 
-export const getResumesQuery = async (userId: string): Promise<string[]> => {
+type ResumeQueryResponse = {
+  message: string
+  resumes: Record<string, string>
+}
+export const getResumesQuery = async (userId: string): Promise<ResumeQueryResponse['resumes']> => {
   const queryParams = new URLSearchParams({
     userId,
   })
   const response = await fetch(`${API_URL}/get_resume_list?${queryParams.toString()}`)
-  const data = await response.json()
+  const data: ResumeQueryResponse = await response.json()
   console.log('get resumes response', data)
-  return data.resume_names
+
+  return data.resumes
 }
 
 // ! Copied from backendApi.ts in frontend

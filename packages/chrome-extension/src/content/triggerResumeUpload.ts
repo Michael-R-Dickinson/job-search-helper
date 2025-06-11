@@ -1,6 +1,11 @@
 import { eventTypes } from '../events'
 
-const triggerResumeUpload = async (file: File) => {
+type UploadResumeResponse = {
+  message: string
+  public_url: string
+}
+
+const triggerResumeUpload = async (file: File): Promise<string | null> => {
   console.log('Triggering resume upload', file)
 
   // Convert file to transferable format
@@ -9,7 +14,7 @@ const triggerResumeUpload = async (file: File) => {
   const fileData = Array.from(uint8Array)
 
   // Send file data along with metadata needed to reconstruct File
-  return chrome.runtime.sendMessage({
+  const response = (await chrome.runtime.sendMessage({
     type: eventTypes.UPLOAD_RESUME,
     payload: {
       fileData,
@@ -18,7 +23,10 @@ const triggerResumeUpload = async (file: File) => {
       fileSize: file.size,
       lastModified: file.lastModified,
     },
-  })
+  })) as UploadResumeResponse | null
+
+  // Extract and return the public_url from the response
+  return response?.public_url || null
 }
 
 export default triggerResumeUpload

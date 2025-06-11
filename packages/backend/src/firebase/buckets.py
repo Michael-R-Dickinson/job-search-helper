@@ -38,19 +38,25 @@ def upload_resume_from_file(file, userId: str, file_name: str, public: bool = Fa
     if public:
         fileLocation.make_public()
 
+    return fileLocation.public_url
+
 
 def get_stored_resumes(userId: str):
     """
-    Gets the list of resumes stored in the user's bucket
+    Gets the list of resumes stored in the user's bucket with their public URLs
     """
     bucket = storage.bucket()
-    return [
-        os.path.basename(blob.name)
-        for blob in bucket.list_blobs(
-            prefix=get_user_bucket_path(userId=userId, tailored=False) + "/",
-            delimiter="/",
-        )
-    ]
+    resume_dict = {}
+    blobs = bucket.list_blobs(
+        prefix=get_user_bucket_path(userId=userId, tailored=False) + "/",
+        delimiter="/",
+    )
+    for blob in blobs:
+        resume_name = os.path.basename(blob.name)
+        blob.make_public()
+        resume_dict[resume_name] = blob.public_url
+
+    return resume_dict
 
 
 def upload_tailored_resume(

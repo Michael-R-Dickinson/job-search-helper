@@ -153,7 +153,7 @@ def upload_resume(req: https_fn.Request) -> https_fn.Response:
 
     file_name = uploaded_file.filename
 
-    upload_resume_from_file(
+    public_url = upload_resume_from_file(
         uploaded_file,
         user_id,
         file_name,
@@ -161,7 +161,12 @@ def upload_resume(req: https_fn.Request) -> https_fn.Response:
     )
 
     return https_fn.Response(
-        json.dumps({"message": "Resume uploaded"}),
+        json.dumps(
+            {
+                "message": "Resume uploaded",
+                "public_url": public_url,
+            }
+        ),
         status=200,
     )
 
@@ -174,9 +179,9 @@ def upload_resume(req: https_fn.Request) -> https_fn.Response:
 )
 def get_resume_list(req: https_fn.Request) -> https_fn.Response:
     user_id = req.args.get("userId")
-    resumes_names = get_stored_resumes(user_id)
+    resumes = get_stored_resumes(user_id)
 
     return https_fn.Response(
-        json.dumps({"message": "Resumes fetched", "resume_names": resumes_names}),
+        json.dumps({"message": "Resumes fetched", "resumes": resumes}),
         status=200,
     )

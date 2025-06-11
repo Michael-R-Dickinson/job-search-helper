@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { useEffect, useRef, useState } from 'react'
 import triggerResumeUpload from '../../triggerResumeUpload'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
-import { jobUrlAtom, tailoringResumeAtom, userAtom, userResumeNamesAtom } from '../../atoms'
+import { jobUrlAtom, tailoringResumeAtom, userAtom, userResumesAtom } from '../../atoms'
 import { getTailoredResume, type QuestionAnswers } from '../../../backendApi'
 import TailoringQuestions from '../TailoringQuestions'
 import { getEmptyQuestionAnswers } from '../../../utils'
@@ -31,9 +31,9 @@ const UploadResumeSelectItemContainer = styled(Group)`
   padding: 0.375rem 0.625rem;
 `
 
-const UploadResumeSelectItem: React.FC<{ onResumeUpload: (name: string) => void }> = ({
-  onResumeUpload,
-}) => {
+const UploadResumeSelectItem: React.FC<{
+  onResumeUpload: (name: string, publicUrl: string) => void
+}> = ({ onResumeUpload }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleClick = () => {
@@ -43,10 +43,10 @@ const UploadResumeSelectItem: React.FC<{ onResumeUpload: (name: string) => void 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      const success = await triggerResumeUpload(file)
-      if (success) {
-        console.log('resume uploaded successfully')
-        onResumeUpload(file.name)
+      const publicUrl = await triggerResumeUpload(file)
+      if (publicUrl) {
+        console.log('resume uploaded successfully, public URL:', publicUrl)
+        onResumeUpload(file.name, publicUrl)
       } else {
         console.error('resume upload failed')
       }
@@ -85,7 +85,9 @@ export type QuestionAnswersAllowUnfilled = {
 }
 
 const ResumeListItemContent: React.FC = () => {
-  const [resumeNames, setResumeNames] = useAtom(userResumeNamesAtom)
+  const [resumes, setResumes] = useAtom(userResumesAtom)
+  const resumeNames = Object.keys(resumes ?? {})
+
   const setTailoringResume = useSetAtom(tailoringResumeAtom)
   const jobUrl = useAtomValue(jobUrlAtom)
   const user = useAtomValue(userAtom)
@@ -125,11 +127,11 @@ const ResumeListItemContent: React.FC = () => {
       chatIdRef.current,
       filledQuestionAnswers,
     )
-    setTailoringResume(Promise.resolve(tailoredResume.docx_download_url))
+    setTailoringResume(Promise.resolve(tailoredResume.pdf_url))
   }
 
-  const onResumeUpload = (name: string) => {
-    setResumeNames((prev) => [...prev, name])
+  const onResumeUpload = (name: string, publicUrl: string) => {
+    setResumes((prev) => ({ ...prev, [name]: publicUrl }))
     setSelectedResume(name)
   }
 

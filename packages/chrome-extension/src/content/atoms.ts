@@ -1,11 +1,14 @@
 import { atom } from 'jotai'
 
+// Maps resume name to public_url
+export type ResumesMap = Record<string, string>
+
 type UserInfo = {
   userId: string
-  displayName: string | null
+  displayName: string | null | undefined
 }
 export const userAtom = atom<UserInfo | null>(null)
-export const userResumeNamesAtom = atom<string[]>([])
+export const userResumesAtom = atom<ResumesMap | null>(null)
 
 export const tailoringResumeAtom = atom<Promise<string> | null>(null)
 
