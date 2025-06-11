@@ -9,4 +9,5 @@ export const userResumeNamesAtom = atom<string[]>([])
 
 export const tailoringResumeAtom = atom<Promise<string> | null>(null)
 
-export const jobUrlAtom = atom<string | null>(null)
+const testingJobUrl = 'https://www.linkedin.com/jobs/view/4198077637/?alternateChannel=search'
+export const jobUrlAtom = atom<string | null>(testingJobUrl)

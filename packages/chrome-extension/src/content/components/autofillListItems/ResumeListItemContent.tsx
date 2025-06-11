@@ -8,6 +8,7 @@ import { jobUrlAtom, tailoringResumeAtom, userAtom, userResumeNamesAtom } from '
 import { getTailoredResume, getTailoringQuestions, type QuestionAnswers } from '../../../backendApi'
 import TailoringQuestions from '../TailoringQuestions'
 import { getEmptyQuestionAnswers } from '../../../utils'
+import { triggerGetTailoringQuestions } from '../../../triggers/triggerGetTailoringQuestions'
 
 const Container = styled.div`
   display: flex;
@@ -101,13 +102,14 @@ const ResumeListItemContent: React.FC = () => {
     if (!selectedResume) return
 
     if (shouldTailorResume) {
-      if (!user?.userId || !jobUrl) return
-      // getTailoringQuestions(user?.userId, selectedResume, jobUrl).then((response) => {
-      //   const { json: questionsData } = response
-      //   console.log('questionsData', questionsData)
-      //   setQuestionAnswers(getEmptyQuestionAnswers(questionsData.questions))
-      //   chatIdRef.current = questionsData.chat_id
-      // })
+      if (!jobUrl) return
+      triggerGetTailoringQuestions(selectedResume, jobUrl).then((response) => {
+        const { json: questionsData } = response
+        if (!questionsData) return
+
+        setQuestionAnswers(getEmptyQuestionAnswers(questionsData.questions))
+        chatIdRef.current = questionsData.chat_id
+      })
     } else {
       setTailoringResume(Promise.resolve(selectedResume))
     }

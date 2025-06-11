@@ -3,7 +3,7 @@ import authenticate, { currentUser } from './auth/background'
 import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
 import saveFilledInputs from './autofillEngine/saveFilledInputs'
 import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
-import { getResumesQuery, uploadResumeQuery } from './backendApi'
+import { getResumesQuery, uploadResumeQuery, getTailoringQuestions } from './backendApi'
 
 console.log('Background script loaded')
 
@@ -82,6 +82,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         userResumeNames: resumeNames,
       })
     })
+
+    return true
+  }
+
+  if (message.type === eventTypes.GET_TAILORING_QUESTIONS) {
+    const userId = currentUser?.uid
+    if (!message.payload) throw new Error('No payload provided')
+    if (!userId) throw new Error('No user found')
+
+    const { fileName, linkedInJobUrl } = message.payload
+    if (!fileName || !linkedInJobUrl) {
+      throw new Error('fileName and linkedInJobUrl are required')
+    }
+
+    getTailoringQuestions(userId, fileName, linkedInJobUrl)
+      .then((result) => {
+        sendResponse(result)
+      })
+      .catch((error) => {
+        console.error('Error getting tailoring questions:', error)
+        sendResponse({ error: error.message })
+      })
 
     return true
   }
