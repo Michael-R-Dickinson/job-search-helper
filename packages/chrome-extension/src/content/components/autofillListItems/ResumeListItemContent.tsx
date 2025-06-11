@@ -173,7 +173,7 @@ const ResumeListItemContent: React.FC = () => {
         />
         <PointerCheckbox label="Always Use This Resume" size="xs" />
       </div>
-      {shouldTailorResume && (
+      {shouldTailorResume && selectedResume && (
         <TailoringQuestions
           tailoringQuestions={questionAnswers}
           setQuestionAnswers={setQuestionAnswers}
