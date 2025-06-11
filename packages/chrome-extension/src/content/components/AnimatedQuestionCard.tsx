@@ -70,7 +70,6 @@ const AnimatedQuestionCard: React.FC<AnimatedQuestionCardProps> = ({
   const { isTransitioning, animationClass, slideToNext, slideOut } = useSlideAnimation()
 
   const handleAnswer = (answer: boolean) => {
-    console.log('isTransitioning', isTransitioning, 'answer', answer)
     if (isTransitioning) return
 
     onAnswer(answer)
