@@ -7,7 +7,7 @@ import { useOnPageLoad } from '../../utils'
 const useAutofillInputs = () => {
   // State
   const [unfilledInputs, setUnfilledInputs] = useState<InputInfo[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   // Refs
   const simpleInputsPromiseRef = useRef<Promise<AutofillInstruction[]> | null>(null)
@@ -55,14 +55,15 @@ const useAutofillInputs = () => {
 
     complexInputsPromiseRef.current = (async () => {
       await pageLoadedDeferredRef.current?.promise
-      await simpleInputsPromiseRef.current
+      const simpleInputsInstructions = (await simpleInputsPromiseRef.current) || []
 
       const elements = elementsRef.current
       // const complexInputsInstructions = await triggerGetAutofillValues(elements)
       // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
       const complexInputsInstructions = [] as AutofillInstruction[]
+      const allInstructions = [...simpleInputsInstructions, ...complexInputsInstructions]
 
-      handleUnfilledInputs(complexInputsInstructions)
+      handleUnfilledInputs(allInstructions)
       setLoading(false)
 
       console.log('complex inputs instructions found')
