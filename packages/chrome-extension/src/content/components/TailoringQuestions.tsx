@@ -1,47 +1,13 @@
 import type { QuestionAnswers } from '../../backendApi'
 import type { QuestionAnswersAllowUnfilled } from './autofillListItems/ResumeListItemContent'
-import styled from '@emotion/styled'
-import { Check } from 'lucide-react'
 import LoadingSpinner from './LoadingSpinner'
+import AnimatedQuestionCard from './AnimatedQuestionCard'
+import { useState, useMemo, useCallback } from 'react'
 
-const QuestionContainer = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.8rem',
-  borderRadius: '0.5rem',
-  padding: '0.5rem 0.5rem',
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: 'rgba(0, 0, 0, 0.035)',
-  },
-})
-
-const QuestionText = styled.p({
-  fontSize: '0.8rem',
-  color: 'rgba(0, 0, 0, 0.6)',
-  margin: '0',
-})
-
-const QuestionCheckIndicator = styled.div<{ checked: boolean }>(({ checked }) => ({
-  borderRadius: '5rem',
-  border: '1px solid rgba(0, 0, 0, 0.1)',
-  minWidth: '24px',
-  minHeight: '24px',
-  maxWidth: '24px',
-  maxHeight: '24px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: checked ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
-}))
-
-const QuestionListContainer = styled.div({
-  marginTop: '0.3rem',
-  marginBottom: '0.8rem',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.1rem',
-})
+type FlatQuestion = {
+  type: 'skillsToAdd' | 'experienceQuestions'
+  question: string
+}
 
 type Props = {
   tailoringQuestions: QuestionAnswersAllowUnfilled | null
@@ -49,61 +15,89 @@ type Props = {
   onAllQuestionsAnswered: (questionAnswers: QuestionAnswers) => void
 }
 
+// Utility functions
+const flattenQuestions = (tailoringQuestions: QuestionAnswersAllowUnfilled): FlatQuestion[] => {
+  const skills = Object.keys(tailoringQuestions.skillsToAdd).map((skill) => ({
+    type: 'skillsToAdd' as const,
+    question: skill,
+  }))
+
+  const experience = Object.keys(tailoringQuestions.experienceQuestions).map((question) => ({
+    type: 'experienceQuestions' as const,
+    question,
+  }))
+
+  return [...skills, ...experience]
+}
+
+const updateQuestionAnswer = (
+  tailoringQuestions: QuestionAnswersAllowUnfilled,
+  question: FlatQuestion,
+  answer: boolean,
+): QuestionAnswersAllowUnfilled => {
+  return {
+    ...tailoringQuestions,
+    [question.type]: {
+      ...tailoringQuestions[question.type],
+      [question.question]: answer,
+    },
+  }
+}
+
 const TailoringQuestions = ({
   tailoringQuestions,
   setQuestionAnswers,
   onAllQuestionsAnswered,
 }: Props) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+
+  const allQuestions = useMemo(() => {
+    if (!tailoringQuestions) return []
+    return flattenQuestions(tailoringQuestions)
+  }, [tailoringQuestions])
+
+  const currentQuestion = allQuestions[currentQuestionIndex]
+  const totalQuestions = allQuestions.length
+  const isLastQuestion = currentQuestionIndex === totalQuestions - 1
+
+  const handleAnswer = useCallback(
+    (answer: boolean) => {
+      if (!currentQuestion || !tailoringQuestions) return
+
+      const newAnswers = updateQuestionAnswer(tailoringQuestions, currentQuestion, answer)
+      setQuestionAnswers(newAnswers)
+    },
+    [currentQuestion, tailoringQuestions, setQuestionAnswers],
+  )
+
+  const handleNextQuestion = useCallback(() => {
+    setCurrentQuestionIndex((prev) => prev + 1)
+  }, [])
+
+  const handleComplete = useCallback(() => {
+    if (!tailoringQuestions) return
+    onAllQuestionsAnswered(tailoringQuestions as QuestionAnswers)
+  }, [tailoringQuestions, onAllQuestionsAnswered])
+
   // Show loading spinner if tailoringQuestions is null
   if (!tailoringQuestions) {
     return <LoadingSpinner />
   }
 
-  const handleQuestionToggle = (
-    category: 'skillsToAdd' | 'experienceQuestions',
-    question: string,
-  ) => {
-    const newAnswers = {
-      ...tailoringQuestions,
-      [category]: {
-        ...tailoringQuestions[category],
-        [question]: !tailoringQuestions[category][question],
-      },
-    }
-    setQuestionAnswers(newAnswers)
-
-    // Check if all questions are answered
-    const allAnswered =
-      Object.values(newAnswers.skillsToAdd).every((answer) => answer !== null) &&
-      Object.values(newAnswers.experienceQuestions).every((answer) => answer !== null)
-
-    if (allAnswered) {
-      onAllQuestionsAnswered(newAnswers as QuestionAnswers)
-    }
+  if (!currentQuestion) {
+    return null
   }
 
   return (
-    <QuestionListContainer>
-      {Object.entries(tailoringQuestions.skillsToAdd).map(([skill, answer]) => (
-        <QuestionContainer key={skill} onClick={() => handleQuestionToggle('skillsToAdd', skill)}>
-          <QuestionCheckIndicator checked={answer === true}>
-            {answer === true && <Check size={16} color="rgba(0, 0, 0, 0.6)" />}
-          </QuestionCheckIndicator>
-          <QuestionText>{skill}</QuestionText>
-        </QuestionContainer>
-      ))}
-      {Object.entries(tailoringQuestions.experienceQuestions).map(([question, answer]) => (
-        <QuestionContainer
-          key={question}
-          onClick={() => handleQuestionToggle('experienceQuestions', question)}
-        >
-          <QuestionCheckIndicator checked={answer === true}>
-            {answer === true && <Check size={16} color="rgba(0, 0, 0, 0.6)" />}
-          </QuestionCheckIndicator>
-          <QuestionText>{question}</QuestionText>
-        </QuestionContainer>
-      ))}
-    </QuestionListContainer>
+    <AnimatedQuestionCard
+      question={currentQuestion.question}
+      currentIndex={currentQuestionIndex + 1}
+      totalQuestions={totalQuestions}
+      onAnswer={handleAnswer}
+      onNextQuestion={handleNextQuestion}
+      onComplete={handleComplete}
+      isLastQuestion={isLastQuestion}
+    />
   )
 }
 

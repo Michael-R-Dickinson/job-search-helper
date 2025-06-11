@@ -162,13 +162,6 @@ const ResumeListItemContent: React.FC = () => {
           },
         }}
       />
-      {shouldTailorResume && (
-        <TailoringQuestions
-          tailoringQuestions={questionAnswers}
-          setQuestionAnswers={setQuestionAnswers}
-          onAllQuestionsAnswered={onAllQuestionsAnswered}
-        />
-      )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <PointerCheckbox
           label="Tailor Resume"
@@ -178,6 +171,13 @@ const ResumeListItemContent: React.FC = () => {
         />
         <PointerCheckbox label="Always Use This Resume" size="xs" />
       </div>
+      {shouldTailorResume && (
+        <TailoringQuestions
+          tailoringQuestions={questionAnswers}
+          setQuestionAnswers={setQuestionAnswers}
+          onAllQuestionsAnswered={onAllQuestionsAnswered}
+        />
+      )}
     </Container>
   )
 }
