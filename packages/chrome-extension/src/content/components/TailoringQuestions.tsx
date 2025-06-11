@@ -2,6 +2,7 @@ import type { QuestionAnswers } from '../../backendApi'
 import type { QuestionAnswersAllowUnfilled } from './autofillListItems/ResumeListItemContent'
 import styled from '@emotion/styled'
 import { Check } from 'lucide-react'
+import LoadingSpinner from './LoadingSpinner'
 
 const QuestionContainer = styled.div({
   display: 'flex',
@@ -43,7 +44,7 @@ const QuestionListContainer = styled.div({
 })
 
 type Props = {
-  tailoringQuestions: QuestionAnswersAllowUnfilled
+  tailoringQuestions: QuestionAnswersAllowUnfilled | null
   setQuestionAnswers: (questionAnswers: QuestionAnswersAllowUnfilled) => void
   onAllQuestionsAnswered: (questionAnswers: QuestionAnswers) => void
 }
@@ -53,6 +54,11 @@ const TailoringQuestions = ({
   setQuestionAnswers,
   onAllQuestionsAnswered,
 }: Props) => {
+  // Show loading spinner if tailoringQuestions is null
+  if (!tailoringQuestions) {
+    return <LoadingSpinner />
+  }
+
   const handleQuestionToggle = (
     category: 'skillsToAdd' | 'experienceQuestions',
     question: string,

@@ -131,6 +131,11 @@ const ResumeListItemContent: React.FC = () => {
     setSelectedResume(name)
   }
 
+  const onResumeSelect = (value: string | null) => {
+    setSelectedResume(value)
+    setQuestionAnswers(null)
+  }
+
   // Renders each option and allows us to put in a special component for the resume upload select
   const renderSelectOption: SelectProps['renderOption'] = ({ option }) =>
     option.value === 'upload' ? (
@@ -150,14 +155,14 @@ const ResumeListItemContent: React.FC = () => {
         // plug in your custom renderer
         renderOption={renderSelectOption}
         value={selectedResume}
-        onChange={setSelectedResume}
+        onChange={onResumeSelect}
         styles={{
           option: {
             padding: '0px',
           },
         }}
       />
-      {questionAnswers && shouldTailorResume && (
+      {shouldTailorResume && (
         <TailoringQuestions
           tailoringQuestions={questionAnswers}
           setQuestionAnswers={setQuestionAnswers}
