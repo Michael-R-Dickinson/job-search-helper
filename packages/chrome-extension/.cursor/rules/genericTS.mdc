@@ -1,7 +1,9 @@
 ---
 description: 
-globs: *.tsx
+globs: *.tsx,*.ts
 alwaysApply: false
 ---
-Use typescript best practices and ensure high code quality across the board. This means avoiding putting huge non-descriptive blocks into a single function. Instead, domain specific pieces of logic should be put into separate functions, or in cases where the functionality goes beyond the original file - in a new file. The code should aim to be self documenting and readable. 
+Use typescript best practices and ensure high code quality across the board. This means avoiding putting huge non-descriptive blocks into a single function. Instead, domain specific pieces of logic should be put into separate functions, or in cases where the functionality goes beyond the original file - in a new file. The code should aim to be self documenting and readable. Ensure that if you're adding a bunch of code to a single component that would end up being bloated with functionality that is out of its scope, you intead create a new component to house this functionality or a hook. These may be in separate files if necessary. 
 Remember, is a chrome extension using manifest v3. 
+
+Begin each response by creating a plan of action, rewriting in your own description what the user is requesting and then considering atleast 2 ways to accomplish the task. Especially for animations consider all states the app could be in at any time. 

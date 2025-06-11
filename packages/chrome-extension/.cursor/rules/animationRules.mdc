@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+For creating animations you have access to the mantine library, also for adding css, you can use the index.css file
