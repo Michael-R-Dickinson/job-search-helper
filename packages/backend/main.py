@@ -1,5 +1,6 @@
 import json
 
+from docx_to_pdf import convert_docx_to_pdf
 from firebase import init_firebase
 from firebase.buckets import get_stored_resumes, upload_resume_from_file
 from firebase_functions import https_fn, options
@@ -160,11 +161,13 @@ def upload_resume(req: https_fn.Request) -> https_fn.Response:
         public=True,
     )
 
+    pdf_url = convert_docx_to_pdf(uploaded_file)
+
     return https_fn.Response(
         json.dumps(
             {
                 "message": "Resume uploaded",
-                "public_url": public_url,
+                "public_url": pdf_url,
             }
         ),
         status=200,
