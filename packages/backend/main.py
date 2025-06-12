@@ -2,7 +2,11 @@ import json
 
 from docx_to_pdf import convert_docx_to_pdf
 from firebase import init_firebase
-from firebase.buckets import get_stored_resumes, upload_resume_from_file
+from firebase.buckets import (
+    get_stored_resumes,
+    upload_resume_from_file,
+    fetch_and_download_resume,
+)
 from firebase_functions import https_fn, options
 from functions.free_reponse.request_handler import handle_write_free_response_request
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
@@ -188,3 +192,51 @@ def get_resume_list(req: https_fn.Request) -> https_fn.Response:
         json.dumps({"message": "Resumes fetched", "resumes": resumes}),
         status=200,
     )
+
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
+        cors_methods=["GET", "POST", "OPTIONS"],
+    )
+)
+def convert_resume_to_pdf(req: https_fn.Request) -> https_fn.Response:
+    user_id = req.args.get("userId")
+    file_name = req.args.get("fileName")
+
+    if not user_id or not file_name:
+        return https_fn.Response(
+            json.dumps({"message": "Missing userId or fileName parameter"}),
+            status=400,
+        )
+
+    try:
+        # Download the file from Firebase storage
+        local_file_path = fetch_and_download_resume(user_id, file_name)
+
+        # Convert the downloaded file to PDF
+        pdf_url = convert_docx_to_pdf(local_file_path)
+
+        print(
+            "success",
+            {"message": "success", "fileName": file_name, "public_url": pdf_url},
+        )
+        return https_fn.Response(
+            json.dumps(
+                {"message": "success", "fileName": file_name, "public_url": pdf_url}
+            ),
+            status=200,
+        )
+
+    except FileNotFoundError as e:
+        print("error", {"message": f"File not found: {str(e)}"})
+        return https_fn.Response(
+            json.dumps({"message": f"File not found: {str(e)}"}),
+            status=404,
+        )
+    except Exception as e:
+        print("error", {"message": f"Error converting file: {str(e)}"})
+        return https_fn.Response(
+            json.dumps({"message": f"Error converting file: {str(e)}"}),
+            status=500,
+        )

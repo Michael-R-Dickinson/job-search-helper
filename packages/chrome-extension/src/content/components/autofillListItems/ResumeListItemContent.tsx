@@ -9,6 +9,7 @@ import { getTailoredResume, type QuestionAnswers } from '../../../backendApi'
 import TailoringQuestions from '../TailoringQuestions'
 import { getEmptyQuestionAnswers } from '../../../utils'
 import { triggerGetTailoringQuestions } from '../../triggers/triggerGetTailoringQuestions'
+import triggerDocxToPdfConversion from '../../triggers/triggerDocxToPdfConversion'
 
 const Container = styled.div`
   display: flex;
@@ -114,7 +115,10 @@ const ResumeListItemContent: React.FC = () => {
         chatIdRef.current = questionsData.chat_id
       })
     } else {
-      setTailoringResume(Promise.resolve(selectedResume))
+      triggerDocxToPdfConversion(selectedResume).then((response) => {
+        if (!response) return
+        setTailoringResume(Promise.resolve(response.public_url))
+      })
     }
   }, [selectedResume, shouldTailorResume, user?.userId, jobUrl, setTailoringResume])
 

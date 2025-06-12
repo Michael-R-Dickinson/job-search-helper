@@ -4,6 +4,10 @@ import {
   UploadResumeResponseSchema,
   type UploadResumeResponse,
 } from './content/triggers/triggerResumeUpload'
+import {
+  ConvertDocxToPdfResponseSchema,
+  type ConvertDocxToPdfResponse,
+} from './content/triggers/triggerDocxToPdfConversion'
 
 const API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1'
 
@@ -179,4 +183,24 @@ export const getTailoredResume = async (
   }
 
   return { json: json, status: res.status, statusText: res.statusText }
+}
+
+export const convertDocxToPdfQuery = async (
+  fileName: string,
+  userId: string,
+): Promise<ConvertDocxToPdfResponse | null> => {
+  console.log('Converting DOCX to PDF:', fileName, userId)
+  const queryParams = new URLSearchParams({
+    userId,
+    fileName,
+  })
+
+  const response = await fetch(`${API_URL}/convert_resume_to_pdf?${queryParams.toString()}`, {
+    method: 'GET',
+  })
+  const data = await response.json()
+
+  // Validate the response using Zod schema
+  const validatedData = ConvertDocxToPdfResponseSchema.parse(data)
+  return validatedData
 }

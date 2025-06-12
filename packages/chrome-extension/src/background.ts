@@ -4,9 +4,15 @@ import authenticate, { currentUser } from './auth/background'
 import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
 import saveFilledInputs from './autofillEngine/saveFilledInputs'
 import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
-import { getResumesQuery, uploadResumeQuery, getTailoringQuestions } from './backendApi'
+import {
+  getResumesQuery,
+  uploadResumeQuery,
+  getTailoringQuestions,
+  convertDocxToPdfQuery,
+} from './backendApi'
 import type { UserDataResponse } from './content/triggers/triggerGetUserData'
 import { UploadResumePayloadSchema } from './content/triggers/triggerResumeUpload'
+import { ConvertDocxToPdfPayloadSchema } from './content/triggers/triggerDocxToPdfConversion'
 
 console.log('Background script loaded')
 
@@ -87,6 +93,27 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse(null)
       }
     }
+    return true
+  }
+
+  if (message.type === eventTypes.CONVERT_DOCX_TO_PDF) {
+    const userId = currentUser?.uid
+    if (!message.payload) throw new Error('No payload provided')
+    if (!userId) throw new Error('No user found')
+
+    console.log('Received DOCX to PDF conversion request', message.payload)
+
+    // Validate the incoming payload
+    const validatedPayload = ConvertDocxToPdfPayloadSchema.parse(message.payload)
+
+    convertDocxToPdfQuery(validatedPayload.fileName, userId)
+      .then((response) => {
+        sendResponse(response)
+      })
+      .catch((error) => {
+        console.error('DOCX to PDF conversion failed:', error)
+        sendResponse(null)
+      })
     return true
   }
 })
