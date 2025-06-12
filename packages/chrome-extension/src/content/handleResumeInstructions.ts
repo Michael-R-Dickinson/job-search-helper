@@ -1,7 +1,12 @@
 import { RESUME_UPLOAD_VALUE } from '../autofillEngine/inputCategoryHandlers'
 import type { AutofillInstruction } from '../autofillEngine/schema'
 
-const handleResumeInstructions = (instructions: AutofillInstruction[], selectedResume: string) => {
+const handleResumeInstructions = (
+  instructions: AutofillInstruction[],
+  selectedResume: string | null,
+) => {
+  if (!selectedResume) return instructions
+
   const resumeInstructions = instructions.filter(
     (instruction) => instruction.value === RESUME_UPLOAD_VALUE,
   )

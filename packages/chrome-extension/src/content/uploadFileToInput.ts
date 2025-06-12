@@ -1,3 +1,5 @@
+import { RESUME_UPLOAD_VALUE } from '../autofillEngine/inputCategoryHandlers'
+
 const findNearestInputElement = (element: HTMLElement): HTMLInputElement | null => {
   const parent = element.parentElement
   if (!parent) return null
@@ -14,7 +16,12 @@ const findNearestInputElement = (element: HTMLElement): HTMLInputElement | null 
   return findNearestInputElement(parent)
 }
 
-export const fillResumeUploadInput = async (inputElement: HTMLInputElement | HTMLButtonElement) => {
+export const fillResumeUploadInput = async (
+  inputElement: HTMLInputElement | HTMLButtonElement,
+  value: string | boolean,
+) => {
+  if (typeof value !== 'string') return
+
   let correctedInputElement: HTMLInputElement | null = null
   if (inputElement instanceof HTMLButtonElement) {
     correctedInputElement = findNearestInputElement(inputElement)
@@ -23,15 +30,13 @@ export const fillResumeUploadInput = async (inputElement: HTMLInputElement | HTM
   }
   if (correctedInputElement === null) return
 
-  // 1. Build a URL that points to the test‐resume PDF inside assets/
-  const fileUrl = chrome.runtime.getURL('src/assets/VasdevYash-Resume.pdf')
-
+  const fileUrl = value.replace(RESUME_UPLOAD_VALUE, '')
+  console.log('fileUrl', fileUrl)
   // 2. Fetch that PDF as a Blob
   const response = await fetch(fileUrl)
   const blob = await response.blob()
 
-  // 3. Construct a File object (the name "test-resume.pdf" is arbitrary)
-  const file = new File([blob], 'test-resume.pdf', { type: 'application/pdf' })
+  const file = new File([blob], 'Resume.pdf', { type: 'application/pdf' })
 
   // 4. Use DataTransfer API to simulate user‐selection of that file
   const dt = new DataTransfer()

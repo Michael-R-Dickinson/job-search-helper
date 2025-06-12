@@ -11,6 +11,8 @@ import {
   autofillInputElements,
 } from '../inputsManipulation/autofillInputElements'
 import handleResumeInstructions from '../handleResumeInstructions'
+import { tailoringResumeAtom } from '../atoms'
+import { useAtomValue } from 'jotai/react'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -29,21 +31,21 @@ const SidebarContent = () => {
   } = useAutofillInputs()
 
   const [activeItem, setActiveItem] = useState<'resume' | 'unfilled' | 'free-response'>('resume')
+  const resume = useAtomValue(tailoringResumeAtom)
 
   const undoneAutofillSections: string[] = []
-  // if (!selectedResume) undoneAutofillSections.push('resume')
+  if (!resume) undoneAutofillSections.push('resume')
 
   const fullAutofillSequence = async () => {
-    // if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
-    // const simpleInputsInstructions = await simpleInputsInstructionsPromise
-    // const updatedSimpleInstructions = handleResumeInstructions(
-    //   simpleInputsInstructions,
-    //   selectedResume || '',
-    // )
-    // const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
-    // await autofillInputElements(updatedSimpleInstructions, animationSpeed)
-    // const remainingAutofillInstructions = await complexInputsInstructionsPromise
-    // await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
+    if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
+
+    const simpleInputsInstructions = await simpleInputsInstructionsPromise
+    const updatedSimpleInstructions = handleResumeInstructions(simpleInputsInstructions, resume)
+
+    const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
+    await autofillInputElements(updatedSimpleInstructions, animationSpeed)
+    const remainingAutofillInstructions = await complexInputsInstructionsPromise
+    await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
   }
 
   return (

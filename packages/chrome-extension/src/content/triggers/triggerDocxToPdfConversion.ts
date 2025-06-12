@@ -24,8 +24,6 @@ export type RuntimeConvertDocxToPdfMessage = z.infer<typeof RuntimeConvertDocxTo
 const triggerDocxToPdfConversion = async (
   fileName: string,
 ): Promise<ConvertDocxToPdfResponse | null> => {
-  console.log('Triggering DOCX to PDF conversion for:', fileName)
-
   // Create and validate payload
   const payload: ConvertDocxToPdfPayload = {
     fileName,
@@ -44,7 +42,6 @@ const triggerDocxToPdfConversion = async (
     // Validate the response from background script
     const validatedResponse = ConvertDocxToPdfResponseSchema.parse(response)
 
-    console.log('Successfully validated DOCX to PDF conversion response:', validatedResponse)
     return validatedResponse
   } catch (error) {
     if (error instanceof Error && 'issues' in error) {
