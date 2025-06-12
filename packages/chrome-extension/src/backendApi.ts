@@ -199,8 +199,12 @@ export const convertDocxToPdfQuery = async (
     method: 'GET',
   })
   const data = await response.json()
-
-  // Validate the response using Zod schema
-  const validatedData = ConvertDocxToPdfResponseSchema.parse(data)
-  return validatedData
+  try {
+    // Validate the response using Zod schema
+    const validatedData = ConvertDocxToPdfResponseSchema.parse(data)
+    return validatedData
+  } catch (error) {
+    console.error('Validation error in docx to pdf conversion, DATA: ', data, 'ERROR: ', error)
+    throw error
+  }
 }

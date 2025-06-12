@@ -101,19 +101,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message.payload) throw new Error('No payload provided')
     if (!userId) throw new Error('No user found')
 
-    console.log('Received DOCX to PDF conversion request', message.payload)
-
     // Validate the incoming payload
     const validatedPayload = ConvertDocxToPdfPayloadSchema.parse(message.payload)
 
-    convertDocxToPdfQuery(validatedPayload.fileName, userId)
-      .then((response) => {
-        sendResponse(response)
-      })
-      .catch((error) => {
-        console.error('DOCX to PDF conversion failed:', error)
-        sendResponse(null)
-      })
+    convertDocxToPdfQuery(validatedPayload.fileName, userId).then((response) => {
+      sendResponse(response)
+    })
     return true
   }
 })
