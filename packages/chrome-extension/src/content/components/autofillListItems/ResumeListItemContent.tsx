@@ -33,7 +33,7 @@ const UploadResumeSelectItemContainer = styled(Group)`
 `
 
 const UploadResumeSelectItem: React.FC<{
-  onResumeUpload: (name: string, publicUrl: string) => void
+  onResumeUpload: (name: string, publicUrlPromise: Promise<string | null>) => void
 }> = ({ onResumeUpload }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -44,13 +44,8 @@ const UploadResumeSelectItem: React.FC<{
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      const publicUrl = await triggerResumeUpload(file)
-      if (publicUrl) {
-        console.log('resume uploaded successfully, public URL:', publicUrl)
-        onResumeUpload(file.name, publicUrl)
-      } else {
-        console.error('resume upload failed')
-      }
+      const publicUrlPromise = triggerResumeUpload(file)
+      onResumeUpload(file.name, publicUrlPromise)
     }
   }
 
@@ -115,10 +110,15 @@ const ResumeListItemContent: React.FC = () => {
         setQuestionAnswers(getEmptyQuestionAnswers(questionsData.questions))
         chatIdRef.current = questionsData.chat_id
       })
+    } else if (selectedResume === 'upload') {
+      return
     } else {
-      triggerDocxToPdfConversion(selectedResume).then((response) => {
-        if (!response) return
-        setTailoringResume(Promise.resolve(response.public_url))
+      console.log('Setting resume to promise: Pdf conversion - ', selectedResume)
+      setTailoringResume({
+        promise: triggerDocxToPdfConversion(selectedResume).then((response) => {
+          return response?.public_url ?? null
+        }),
+        name: selectedResume,
       })
     }
   }, [selectedResume, shouldTailorResume, user?.userId, jobUrl, setTailoringResume])
@@ -133,12 +133,26 @@ const ResumeListItemContent: React.FC = () => {
       chatIdRef.current,
       filledQuestionAnswers,
     )
-    setTailoringResume(Promise.resolve(tailoredResume.pdf_url))
+    console.log('Setting resume to promise: Tailored - ', selectedResume)
+    setTailoringResume({
+      promise: Promise.resolve(tailoredResume.pdf_url),
+      name: selectedResume,
+    })
   }
 
-  const onResumeUpload = (name: string, publicUrl: string) => {
-    setResumes((prev) => ({ ...prev, [name]: publicUrl }))
+  const onResumeUpload = async (name: string, publicUrlPromise: Promise<string | null>) => {
+    setResumes((prev) => ({ ...prev, [name]: '' }))
     setSelectedResume(name)
+    console.log('Setting resume to promise: Upload - ', name)
+    setTailoringResume({
+      promise: publicUrlPromise,
+      name,
+    })
+
+    const publicUrl = await publicUrlPromise
+    if (publicUrl) {
+      setResumes((prev) => ({ ...prev, [name]: publicUrl }))
+    }
   }
 
   const onResumeSelect = (value: string | null) => {
@@ -163,7 +177,6 @@ const ResumeListItemContent: React.FC = () => {
         data={fullSelectOptions}
         placeholder="Select Resume"
         size="sm"
-        // plug in your custom renderer
         renderOption={renderSelectOption}
         value={selectedResume}
         onChange={onResumeSelect}
