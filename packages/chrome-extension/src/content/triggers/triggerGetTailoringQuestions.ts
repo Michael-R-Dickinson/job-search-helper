@@ -1,5 +1,5 @@
-import { eventTypes } from '../events'
-import type { QuestionsResponse } from '../backendApi'
+import { eventTypes } from '../../events'
+import type { QuestionsResponse } from '../../backendApi'
 
 interface GetTailoringQuestionsPayload {
   fileName: string

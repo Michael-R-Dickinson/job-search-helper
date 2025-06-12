@@ -1,5 +1,5 @@
 import z from 'zod'
-import { eventTypes } from '../events'
+import { eventTypes } from '../../events'
 // Shared Zod schemas for resume upload validation
 export const UploadResumeResponseSchema = z.object({
   message: z.string(),

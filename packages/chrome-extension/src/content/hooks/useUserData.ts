@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import triggerGetUserData from '../eventTriggers'
+import triggerGetUserData from '../triggers/triggerGetUserData'
 import { userAtom, userResumesAtom } from '../atoms'
 import { useSetAtom } from 'jotai/react'
 

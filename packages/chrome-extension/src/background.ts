@@ -5,8 +5,8 @@ import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
 import saveFilledInputs from './autofillEngine/saveFilledInputs'
 import getSimpleInputAutofillInstructions from './autofillEngine/getSimpleInputAutofillInstructions'
 import { getResumesQuery, uploadResumeQuery, getTailoringQuestions } from './backendApi'
-import type { UserDataResponse } from './content/eventTriggers'
-import { UploadResumePayloadSchema } from './content/triggerResumeUpload'
+import type { UserDataResponse } from './content/triggers/triggerGetUserData'
+import { UploadResumePayloadSchema } from './content/triggers/triggerResumeUpload'
 
 console.log('Background script loaded')
 

@@ -3,7 +3,7 @@ import { AutofillInstructionsSchema, type MinifiedInput } from './autofillEngine
 import {
   UploadResumeResponseSchema,
   type UploadResumeResponse,
-} from './content/triggerResumeUpload'
+} from './content/triggers/triggerResumeUpload'
 
 const API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1'
 

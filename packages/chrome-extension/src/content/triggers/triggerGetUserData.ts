@@ -1,5 +1,5 @@
-import { eventTypes } from '../events'
-import type { ResumesMap } from './atoms'
+import { eventTypes } from '../../events'
+import type { ResumesMap } from '../atoms'
 
 export type UserDataResponse = {
   userId: string

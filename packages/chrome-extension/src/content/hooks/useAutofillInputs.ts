@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInputElements, type InputInfo } from './useInputElements'
-import { triggerGetSimpleAutofillValues } from '../triggerGetAutofillValues'
+import { triggerGetSimpleAutofillValues } from '../triggers/triggerGetAutofillValues'
 import type { AutofillInstruction } from '../../autofillEngine/schema'
 import { useOnPageLoad } from '../../utils'
 

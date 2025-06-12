@@ -1,6 +1,6 @@
-import { eventTypes } from '../events'
-import type { InputInfo } from './hooks/useInputElements'
-import { serializeInputsHtml } from './serializeInputsHtml'
+import { eventTypes } from '../../events'
+import type { InputInfo } from '../hooks/useInputElements'
+import { serializeInputsHtml } from '../serializeInputsHtml'
 
 const triggerSaveFilledValues = (inputs: InputInfo[]) => {
   const serializedInputs = serializeInputsHtml(inputs)

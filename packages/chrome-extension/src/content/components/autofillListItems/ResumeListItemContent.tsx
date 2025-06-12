@@ -2,13 +2,13 @@ import { Select, type SelectProps, Group, Checkbox } from '@mantine/core'
 import { UploadIcon } from 'lucide-react'
 import styled from '@emotion/styled'
 import { useEffect, useRef, useState } from 'react'
-import triggerResumeUpload from '../../triggerResumeUpload'
+import triggerResumeUpload from '../../triggers/triggerResumeUpload'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
 import { jobUrlAtom, tailoringResumeAtom, userAtom, userResumesAtom } from '../../atoms'
 import { getTailoredResume, type QuestionAnswers } from '../../../backendApi'
 import TailoringQuestions from '../TailoringQuestions'
 import { getEmptyQuestionAnswers } from '../../../utils'
-import { triggerGetTailoringQuestions } from '../../../triggers/triggerGetTailoringQuestions'
+import { triggerGetTailoringQuestions } from '../../triggers/triggerGetTailoringQuestions'
 
 const Container = styled.div`
   display: flex;

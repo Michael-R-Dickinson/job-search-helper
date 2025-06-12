@@ -1,7 +1,7 @@
-import { AutofillInstructionsSchema, type SerializedHtmlInput } from '../autofillEngine/schema'
-import { eventTypes } from '../events'
-import type { InputInfo } from './hooks/useInputElements'
-import { serializeInputsHtml } from './serializeInputsHtml'
+import { AutofillInstructionsSchema, type SerializedHtmlInput } from '../../autofillEngine/schema'
+import { eventTypes } from '../../events'
+import type { InputInfo } from '../hooks/useInputElements'
+import { serializeInputsHtml } from '../serializeInputsHtml'
 
 export const triggerGetSimpleAutofillValues = async (inputs: InputInfo[]) => {
   const parsedInputs: SerializedHtmlInput[] = serializeInputsHtml(inputs)
