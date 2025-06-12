@@ -96,6 +96,7 @@ const ResumeListItemContent: React.FC = () => {
   const [shouldTailorResume, setShouldTailorResume] = useState(false)
   const [selectedResume, setSelectedResume] = useState<string | null>(null)
   const [questionAnswers, setQuestionAnswers] = useState<QuestionAnswersAllowUnfilled | null>(null)
+  const [tailoringQuestionsFinished, setTailoringQuestionsFinished] = useState(false)
   const chatIdRef = useRef<string | null>(null)
 
   const resumeSelectOptions = resumeNames.map((name) => ({ value: name, label: name }))
@@ -124,7 +125,8 @@ const ResumeListItemContent: React.FC = () => {
 
   const onAllQuestionsAnswered = async (filledQuestionAnswers: QuestionAnswers) => {
     if (!user?.userId || !selectedResume || !filledQuestionAnswers || !chatIdRef.current) return
-    console.log('onAllQuestionsAnswered', filledQuestionAnswers)
+    setTailoringQuestionsFinished(true)
+
     const { json: tailoredResume } = await getTailoredResume(
       selectedResume,
       user.userId,
@@ -142,6 +144,7 @@ const ResumeListItemContent: React.FC = () => {
   const onResumeSelect = (value: string | null) => {
     setSelectedResume(value)
     setQuestionAnswers(null)
+    setTailoringQuestionsFinished(false)
   }
 
   // Renders each option and allows us to put in a special component for the resume upload select
@@ -179,13 +182,17 @@ const ResumeListItemContent: React.FC = () => {
         />
         <PointerCheckbox label="Always Use This Resume" size="xs" />
       </div>
-      {shouldTailorResume && selectedResume && (
-        <TailoringQuestions
-          tailoringQuestions={questionAnswers}
-          setQuestionAnswers={setQuestionAnswers}
-          onAllQuestionsAnswered={onAllQuestionsAnswered}
-        />
-      )}
+      {shouldTailorResume &&
+        selectedResume &&
+        (tailoringQuestionsFinished ? (
+          <div>Thanks!</div>
+        ) : (
+          <TailoringQuestions
+            tailoringQuestions={questionAnswers}
+            setQuestionAnswers={setQuestionAnswers}
+            onAllQuestionsAnswered={onAllQuestionsAnswered}
+          />
+        ))}
     </Container>
   )
 }
