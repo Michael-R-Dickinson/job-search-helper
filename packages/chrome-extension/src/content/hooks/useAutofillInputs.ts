@@ -41,8 +41,6 @@ const useAutofillInputs = () => {
       setUnfilledInputs(
         elements.filter((el) => !filledInputIds.includes(el.elementReferenceId) && !!el.label),
       )
-
-      console.log('unfilled inputs set')
     }
 
     simpleInputsPromiseRef.current = (async () => {

@@ -17,12 +17,11 @@ const handleResumeInstructions = (
     }
   })
 
-  const updatedInstructions = instructions
-    .filter((instruction) => instruction.value !== RESUME_UPLOAD_VALUE)
-    .concat(updatedResumeInstructions)
+  // const updatedInstructions = instructions
+  //   .filter((instruction) => instruction.value !== RESUME_UPLOAD_VALUE)
+  //   .concat(updatedResumeInstructions)
 
-  console.log('updated instructions', updatedInstructions)
-  return updatedInstructions
+  return updatedResumeInstructions
 }
 
 export default handleResumeInstructions
