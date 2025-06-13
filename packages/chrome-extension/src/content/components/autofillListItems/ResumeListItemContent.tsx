@@ -10,10 +10,10 @@ import {
 } from '../../../backendApi'
 import TailoringQuestions from '../TailoringQuestions'
 import { getEmptyQuestionAnswers } from '../../../utils'
+import { triggerGetTailoringQuestions } from '../../triggers/triggerGetTailoringQuestions'
+import triggerDocxToPdfConversion from '../../triggers/triggerDocxToPdfConversion'
 import UploadResumeSelectItem, { UploadResumeSelectItemContainer } from '../UploadResumeSelectItem'
 import triggerResumeUpload from '../../triggers/triggerResumeUpload'
-import { useResumeTailoring } from '../../hooks/useResumeTailoring'
-import { usePdfConversion } from '../../hooks/usePdfConversion'
 
 const Container = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ export type QuestionAnswersAllowUnfilled = {
   experienceQuestions: QuestionAnswerMapAllowUnfilled
 }
 
-export type ResumeListItemContent_ResumeFlowAction =
+type ResumeFlowAction =
   | { type: 'INIT'; payload: Record<string, string> }
   | { type: 'START_UPLOAD'; name: string }
   | { type: 'FINISH_UPLOAD'; name: string }
@@ -71,10 +71,7 @@ type ResumeFlowState = {
 
 type AllResumesState = Record<string, ResumeFlowState>
 
-const resumesReducer = (
-  state: AllResumesState,
-  action: ResumeListItemContent_ResumeFlowAction,
-): AllResumesState => {
+const resumesReducer = (state: AllResumesState, action: ResumeFlowAction): AllResumesState => {
   const actionType = action.type
   switch (actionType) {
     case 'INIT': {
@@ -218,35 +215,59 @@ const ResumeListItemContent: React.FC = () => {
     })
   }
 
-  useResumeTailoring({
-    shouldTailor: shouldTailorResume,
-    selectedResume,
-    jobUrl,
-    resumeState: selectedResumeState,
-    dispatch,
-  })
-
-  usePdfConversion({
-    shouldTailor: shouldTailorResume,
-    selectedResume,
-    resumeState: selectedResumeState,
-    dispatch,
-  })
-
   const resumeUploading = selectedResumeStatus === 'uploading'
   const selectedResumeExists = selectedResumeState !== null
+  useEffect(() => {
+    if (!selectedResume || !selectedResumeExists || !jobUrl || resumeUploading) return
+
+    if (shouldTailorResume) {
+      // We already have questions fetched so return
+      if (selectedResumeState?.tailoring.questionAnswers) return
+
+      dispatch({ type: 'START_FETCH_QS', name: selectedResume })
+      triggerGetTailoringQuestions(selectedResume, jobUrl).then(({ json }) => {
+        if (!json) return
+        dispatch({
+          type: 'FINISH_FETCH_QS',
+          name: selectedResume,
+          questions: json.questions,
+          chatId: json.chat_id,
+        })
+      })
+    } else if (!selectedResumeState?.pdfUrl) {
+      const pdfPromise = triggerDocxToPdfConversion(selectedResume).then((response) => {
+        if (!response) throw new Error('No response from docx to pdf conversion')
+        dispatch({
+          type: 'PDF_CONVERSION_FINISHED',
+          name: selectedResume,
+          url: response.public_url,
+        })
+        return response.public_url
+      })
+      console.log('Setting resume to promise: Pdf conversion - ', selectedResume)
+      setAutofillResume({
+        promise: pdfPromise,
+        name: selectedResume,
+      })
+    } else {
+      // Reset to finished upload state
+      dispatch({ type: 'FINISH_UPLOAD', name: selectedResume })
+    }
+  }, [
+    selectedResume,
+    shouldTailorResume,
+    jobUrl,
+    resumeUploading,
+    selectedResumeState?.pdfUrl,
+    selectedResumeState?.tailoring.questionAnswers,
+    setAutofillResume,
+    selectedResumeExists,
+  ])
+
   useEffect(() => {
     if (!resumes) return
     dispatch({ type: 'INIT', payload: resumes })
   }, [resumes])
-
-  useEffect(() => {
-    if (!selectedResume || !resumesState[selectedResume] || resumeUploading) return
-    if (!shouldTailorResume) {
-      // Reset to finished upload state when toggling tailoring off
-      dispatch({ type: 'FINISH_UPLOAD', name: selectedResume })
-    }
-  }, [shouldTailorResume, selectedResume, resumeUploading, resumesState])
 
   const renderSelectOption: SelectProps['renderOption'] = ({ option }) =>
     option.value === 'upload' ? (

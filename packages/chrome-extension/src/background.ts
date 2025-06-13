@@ -109,7 +109,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     })
     return true
   }
+})
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === eventTypes.RETRIEVE_USER_DATA) {
     const userId = currentUser?.uid
     if (!userId) throw new Error('No user found')
