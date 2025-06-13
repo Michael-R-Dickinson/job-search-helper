@@ -163,6 +163,7 @@ const resumesReducer = (state: AllResumesState, action: ResumeFlowAction): AllRe
   }
 }
 
+// TODO: This function could use a refactor into hooks badly
 const ResumeListItemContent: React.FC = () => {
   const resumes = useAtomValue(userResumesAtom)
   const jobUrl = useAtomValue(jobUrlAtom)
