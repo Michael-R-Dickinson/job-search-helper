@@ -1,15 +1,19 @@
-import { Select, type SelectProps, Group, Checkbox } from '@mantine/core'
-import { UploadIcon } from 'lucide-react'
+import { Select, type SelectProps, Checkbox } from '@mantine/core'
 import styled from '@emotion/styled'
-import { useEffect, useRef, useState } from 'react'
-import triggerResumeUpload from '../../triggers/triggerResumeUpload'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai/react'
+import { useEffect, useReducer, useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai/react'
 import { jobUrlAtom, tailoringResumeAtom, userAtom, userResumesAtom } from '../../atoms'
-import { getTailoredResume, type QuestionAnswers } from '../../../backendApi'
+import {
+  getTailoredResume,
+  type QuestionAnswers,
+  type QuestionsResponse,
+} from '../../../backendApi'
 import TailoringQuestions from '../TailoringQuestions'
 import { getEmptyQuestionAnswers } from '../../../utils'
 import { triggerGetTailoringQuestions } from '../../triggers/triggerGetTailoringQuestions'
 import triggerDocxToPdfConversion from '../../triggers/triggerDocxToPdfConversion'
+import UploadResumeSelectItem, { UploadResumeSelectItemContainer } from '../UploadResumeSelectItem'
+import triggerResumeUpload from '../../triggers/triggerResumeUpload'
 
 const Container = styled.div`
   display: flex;
@@ -27,141 +31,244 @@ const PointerCheckbox = styled(Checkbox)({
   },
 })
 
-const UploadResumeSelectItemContainer = styled(Group)`
-  width: 100%;
-  padding: 0.375rem 0.625rem;
-`
-
-const UploadResumeSelectItem: React.FC<{
-  onResumeUpload: (name: string, publicUrlPromise: Promise<string | null>) => void
-}> = ({ onResumeUpload }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleClick = () => {
-    fileInputRef.current?.click()
-  }
-
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const publicUrlPromise = triggerResumeUpload(file)
-      onResumeUpload(file.name, publicUrlPromise)
-    }
-  }
-
-  return (
-    <div
-      style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <div style={{ width: '90%', height: '1px', backgroundColor: '#e0e0e0' }} />
-      <UploadResumeSelectItemContainer onClick={handleClick} style={{ cursor: 'pointer' }}>
-        <span>Upload Resume</span>
-        <UploadIcon size={16} opacity={0.7} style={{ marginLeft: 'auto' }} />
-      </UploadResumeSelectItemContainer>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".docx"
-        onChange={handleFileChange}
-        style={{ display: 'none' }}
-      />
-    </div>
-  )
-}
-
 export type QuestionAnswerMapAllowUnfilled = Record<string, boolean | null>
 export type QuestionAnswersAllowUnfilled = {
   skillsToAdd: QuestionAnswerMapAllowUnfilled
   experienceQuestions: QuestionAnswerMapAllowUnfilled
 }
 
-const ResumeListItemContent: React.FC = () => {
-  const [resumes, setResumes] = useAtom(userResumesAtom)
-  const resumeNames = Object.keys(resumes ?? {})
+type ResumeFlowAction =
+  | { type: 'INIT'; payload: Record<string, string> }
+  | { type: 'START_UPLOAD'; name: string }
+  | { type: 'FINISH_UPLOAD'; name: string }
+  | { type: 'START_FETCH_QS'; name: string }
+  | { type: 'PDF_CONVERSION_FINISHED'; name: string; url: string }
+  | {
+      type: 'FINISH_FETCH_QS'
+      name: string
+      questions: QuestionsResponse['questions']
+      chatId: string
+    }
+  | { type: 'SET_ANSWERS'; name: string; answers: QuestionAnswersAllowUnfilled }
+  | { type: 'FINISH_TAILORING_QS'; name: string }
+  | { type: 'FINISH_TAILOR'; name: string; url: string }
 
-  const setTailoringResume = useSetAtom(tailoringResumeAtom)
+type ResumeFlowState = {
+  status:
+    | 'idle'
+    | 'uploading'
+    | 'uploaded'
+    | 'fetchingQuestions'
+    | 'questionsFetched'
+    | 'tailoring'
+    | 'done'
+  pdfUrl?: string | null
+  tailoring: {
+    chatId?: string | null
+    questionAnswers?: QuestionAnswersAllowUnfilled | null
+  }
+}
+
+type AllResumesState = Record<string, ResumeFlowState>
+
+const resumesReducer = (state: AllResumesState, action: ResumeFlowAction): AllResumesState => {
+  const actionType = action.type
+  switch (actionType) {
+    case 'INIT': {
+      const resumes = action.payload
+      return Object.entries(resumes).reduce((acc, [resumeName, docxUrl]) => {
+        acc[resumeName] = {
+          status: 'uploaded',
+          pdfUrl: null,
+          tailoring: {
+            questionAnswers: null,
+            chatId: null,
+          },
+        }
+        return acc
+      }, {} as AllResumesState)
+    }
+    case 'START_UPLOAD':
+      return {
+        ...state,
+        [action.name]: {
+          ...state[action.name],
+          status: 'uploading',
+
+          // Add in defaults for newly uploaded resumes
+          pdfUrl: null,
+          tailoring: {
+            questionAnswers: null,
+            chatId: null,
+          },
+        },
+      }
+    case 'FINISH_UPLOAD':
+      return {
+        ...state,
+        [action.name]: {
+          ...state[action.name],
+          status: 'uploaded',
+        },
+      }
+    case 'PDF_CONVERSION_FINISHED':
+      return {
+        ...state,
+        [action.name]: { ...state[action.name], pdfUrl: action.url },
+      }
+    case 'START_FETCH_QS':
+      return {
+        ...state,
+        [action.name]: { ...state[action.name], status: 'fetchingQuestions' },
+      }
+    case 'FINISH_FETCH_QS':
+      return {
+        ...state,
+        [action.name]: {
+          ...state[action.name],
+          status: 'questionsFetched',
+          tailoring: {
+            questionAnswers: getEmptyQuestionAnswers(action.questions),
+            chatId: action.chatId,
+          },
+        },
+      }
+    case 'SET_ANSWERS':
+      return {
+        ...state,
+        [action.name]: {
+          ...state[action.name],
+          tailoring: {
+            ...state[action.name].tailoring,
+            questionAnswers: action.answers,
+          },
+        },
+      }
+    case 'FINISH_TAILORING_QS':
+      return {
+        ...state,
+        [action.name]: { ...state[action.name], status: 'tailoring' },
+      }
+    case 'FINISH_TAILOR':
+      return {
+        ...state,
+        [action.name]: {
+          ...state[action.name],
+          status: 'done',
+          pdfUrl: action.url,
+        },
+      }
+    default:
+      throw new Error(`Unknown action type: ${actionType}`)
+  }
+}
+
+const ResumeListItemContent: React.FC = () => {
+  const resumes = useAtomValue(userResumesAtom)
   const jobUrl = useAtomValue(jobUrlAtom)
   const user = useAtomValue(userAtom)
 
-  const [shouldTailorResume, setShouldTailorResume] = useState(false)
+  const setAutofillResume = useSetAtom(tailoringResumeAtom)
+  const [resumesState, dispatch] = useReducer(resumesReducer, {})
+
+  // UI state
   const [selectedResume, setSelectedResume] = useState<string | null>(null)
-  const [questionAnswers, setQuestionAnswers] = useState<QuestionAnswersAllowUnfilled | null>(null)
-  const [tailoringQuestionsFinished, setTailoringQuestionsFinished] = useState(false)
-  const chatIdRef = useRef<string | null>(null)
+  const [shouldTailorResume, setShouldTailorResume] = useState(false)
+  const selectedResumeState = (selectedResume && resumesState[selectedResume]) || null
+  const selectedResumeStatus = selectedResumeState?.status
 
-  const resumeSelectOptions = resumeNames.map((name) => ({ value: name, label: name }))
-  const fullSelectOptions = [...resumeSelectOptions, { value: 'upload', label: 'Upload Resume' }]
+  const selectOptions = Object.keys(resumesState).map((name) => ({
+    value: name,
+    label: name,
+  }))
+  const fullSelectOptions = [...selectOptions, { value: 'upload', label: 'Upload Resume' }]
 
-  useEffect(() => {
-    if (!selectedResume) return
+  const onResumeSelect = (value: string | null) => {
+    setSelectedResume(value)
+  }
+  const onResumeUpload = async (file: File) => {
+    const name = file.name
+    const uploadPromise = triggerResumeUpload(file)
+    console.log('Setting resume to promise: Upload - ', name)
+    setSelectedResume(name)
+    dispatch({ type: 'START_UPLOAD', name })
+    await uploadPromise
+    dispatch({ type: 'FINISH_UPLOAD', name })
+  }
+  const onAllQuestionsAnswered = (answers: QuestionAnswers) => {
+    if (!selectedResume || !user?.userId || !selectedResumeState?.tailoring.chatId) return
+    dispatch({ type: 'FINISH_TAILORING_QS', name: selectedResume })
 
-    if (shouldTailorResume) {
-      if (!jobUrl) return
-      triggerGetTailoringQuestions(selectedResume, jobUrl).then((response) => {
-        const { json: questionsData } = response
-        if (!questionsData) return
-        console.log('questionsData', questionsData)
-
-        setQuestionAnswers(getEmptyQuestionAnswers(questionsData.questions))
-        chatIdRef.current = questionsData.chat_id
-      })
-    } else if (selectedResume === 'upload') {
-      return
-    } else {
-      console.log('Setting resume to promise: Pdf conversion - ', selectedResume)
-      setTailoringResume({
-        promise: triggerDocxToPdfConversion(selectedResume).then((response) => {
-          return response?.public_url ?? null
-        }),
-        name: selectedResume,
-      })
-    }
-  }, [selectedResume, shouldTailorResume, user?.userId, jobUrl, setTailoringResume])
-
-  const onAllQuestionsAnswered = async (filledQuestionAnswers: QuestionAnswers) => {
-    if (!user?.userId || !selectedResume || !filledQuestionAnswers || !chatIdRef.current) return
-    setTailoringQuestionsFinished(true)
-
-    const { json: tailoredResume } = await getTailoredResume(
+    const pdfPromise = getTailoredResume(
       selectedResume,
-      user.userId,
-      chatIdRef.current,
-      filledQuestionAnswers,
-    )
+      user.userId!,
+      selectedResumeState.tailoring.chatId,
+      answers,
+    ).then(({ json }) => {
+      dispatch({ type: 'FINISH_TAILOR', name: selectedResume, url: json.pdf_url })
+      return json.pdf_url
+    })
     console.log('Setting resume to promise: Tailored - ', selectedResume)
-    setTailoringResume({
-      promise: Promise.resolve(tailoredResume.pdf_url),
+    setAutofillResume({
+      promise: pdfPromise,
       name: selectedResume,
     })
   }
 
-  const onResumeUpload = async (name: string, publicUrlPromise: Promise<string | null>) => {
-    setResumes((prev) => ({ ...prev, [name]: '' }))
-    setSelectedResume(name)
-    console.log('Setting resume to promise: Upload - ', name)
-    setTailoringResume({
-      promise: publicUrlPromise,
-      name,
-    })
+  const resumeUploading = selectedResumeStatus === 'uploading'
+  const selectedResumeExists = selectedResumeState !== null
+  useEffect(() => {
+    if (!selectedResume || !selectedResumeExists || !jobUrl || resumeUploading) return
 
-    const publicUrl = await publicUrlPromise
-    if (publicUrl) {
-      setResumes((prev) => ({ ...prev, [name]: publicUrl }))
+    if (shouldTailorResume) {
+      // We already have questions fetched so return
+      if (selectedResumeState?.tailoring.questionAnswers) return
+
+      dispatch({ type: 'START_FETCH_QS', name: selectedResume })
+      triggerGetTailoringQuestions(selectedResume, jobUrl).then(({ json }) => {
+        if (!json) return
+        dispatch({
+          type: 'FINISH_FETCH_QS',
+          name: selectedResume,
+          questions: json.questions,
+          chatId: json.chat_id,
+        })
+      })
+    } else if (!selectedResumeState?.pdfUrl) {
+      const pdfPromise = triggerDocxToPdfConversion(selectedResume).then((response) => {
+        if (!response) throw new Error('No response from docx to pdf conversion')
+        dispatch({
+          type: 'PDF_CONVERSION_FINISHED',
+          name: selectedResume,
+          url: response.public_url,
+        })
+        return response.public_url
+      })
+      console.log('Setting resume to promise: Pdf conversion - ', selectedResume)
+      setAutofillResume({
+        promise: pdfPromise,
+        name: selectedResume,
+      })
+    } else {
+      // Reset to finished upload state
+      dispatch({ type: 'FINISH_UPLOAD', name: selectedResume })
     }
-  }
+  }, [
+    selectedResume,
+    shouldTailorResume,
+    jobUrl,
+    resumeUploading,
+    selectedResumeState?.pdfUrl,
+    selectedResumeState?.tailoring.questionAnswers,
+    setAutofillResume,
+    selectedResumeExists,
+  ])
 
-  const onResumeSelect = (value: string | null) => {
-    setSelectedResume(value)
-    setQuestionAnswers(null)
-    setTailoringQuestionsFinished(false)
-  }
+  useEffect(() => {
+    if (!resumes) return
+    dispatch({ type: 'INIT', payload: resumes })
+  }, [resumes])
 
-  // Renders each option and allows us to put in a special component for the resume upload select
   const renderSelectOption: SelectProps['renderOption'] = ({ option }) =>
     option.value === 'upload' ? (
       <UploadResumeSelectItem onResumeUpload={onResumeUpload} />
@@ -171,6 +278,14 @@ const ResumeListItemContent: React.FC = () => {
       </UploadResumeSelectItemContainer>
     )
 
+  const tailoringQuestionsFinished =
+    selectedResumeStatus === 'done' || selectedResumeStatus === 'tailoring'
+  const setQuestionAnswers = (answers: QuestionAnswersAllowUnfilled) => {
+    if (!selectedResume) return
+    dispatch({ type: 'SET_ANSWERS', name: selectedResume, answers })
+  }
+
+  const tailoringQuestions = selectedResumeState?.tailoring.questionAnswers ?? null
   return (
     <Container>
       <Select
@@ -196,12 +311,12 @@ const ResumeListItemContent: React.FC = () => {
         <PointerCheckbox label="Always Use This Resume" size="xs" />
       </div>
       {shouldTailorResume &&
-        selectedResume &&
+        selectedResumeExists &&
         (tailoringQuestionsFinished ? (
           <div>Thanks!</div>
         ) : (
           <TailoringQuestions
-            tailoringQuestions={questionAnswers}
+            tailoringQuestions={tailoringQuestions}
             setQuestionAnswers={setQuestionAnswers}
             onAllQuestionsAnswered={onAllQuestionsAnswered}
           />

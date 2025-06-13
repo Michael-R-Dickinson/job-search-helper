@@ -31,6 +31,7 @@ export const fillResumeUploadInput = async (
   if (correctedInputElement === null) return
 
   const fileUrl = value.replace(RESUME_UPLOAD_VALUE, '')
+  if (!fileUrl) return
   console.log('fileUrl', fileUrl)
   // 2. Fetch that PDF as a Blob
   const response = await fetch(fileUrl)

@@ -12,10 +12,10 @@ export const userResumesAtom = atom<ResumesMap | null>(null)
 
 // Should resolve to a string that is the public url of the resume
 export const tailoringResumeAtom = atom<{
-  promise: Promise<string | null>
+  promise: Promise<string> | null
   name: string | null
 }>({
-  promise: Promise.resolve(null),
+  promise: null,
   name: null,
 })
 
