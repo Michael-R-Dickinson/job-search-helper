@@ -22,6 +22,8 @@ const AutofillHeader = styled.h3`
   color: rgba(0, 0, 0, 0.7);
 `
 
+export type AutofillStatus = 'idle' | 'loading' | 'success' | 'error'
+
 const SidebarContent = () => {
   const {
     simpleInputsInstructionsPromise,
@@ -31,12 +33,14 @@ const SidebarContent = () => {
   } = useAutofillInputs()
 
   const [activeItem, setActiveItem] = useState<'resume' | 'unfilled' | 'free-response'>('resume')
+  const [autofillStatus, setAutofillStatus] = useState<AutofillStatus>('idle')
   const { promise: resumePromise, name: resumeName } = useAtomValue(tailoringResumeAtom)
 
   const undoneAutofillSections: string[] = []
   if (!resumePromise) undoneAutofillSections.push('resume')
 
   const fullAutofillSequence = async () => {
+    setAutofillStatus('loading')
     if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
 
     const simpleInputsInstructions = await simpleInputsInstructionsPromise
@@ -52,6 +56,7 @@ const SidebarContent = () => {
     const resumeInstructions = handleResumeInstructions(simpleInputsInstructions, resume)
     console.log('resumeInstructions', resumeInstructions)
     await autofillInputElements(resumeInstructions, AutofillAnimationSpeeds.NONE)
+    setAutofillStatus('success')
   }
 
   return (
@@ -82,7 +87,11 @@ const SidebarContent = () => {
         />
       </div>
       <div style={{ marginTop: '0.8rem' }}>
-        <AutofillButton unfilledSections={undoneAutofillSections} onClick={fullAutofillSequence} />
+        <AutofillButton
+          unfilledSections={undoneAutofillSections}
+          onClick={fullAutofillSequence}
+          status={autofillStatus}
+        />
       </div>
     </div>
   )
