@@ -52,7 +52,7 @@ function findElementWithVisualBorder(
 
 function triggerPulseAnimation(inputEl: HTMLElement) {
   // Find the best element to apply the pulse animation to
-  const targetElement = findElementWithVisualBorder(inputEl, 3)
+  const targetElement = findElementWithVisualBorder(inputEl, 10)
   if (!targetElement) return
 
   // Add the pulse class
@@ -60,7 +60,7 @@ function triggerPulseAnimation(inputEl: HTMLElement) {
 
   // Clean up after the animation finishes
   const onAnimationEnd = () => {
-    // targetElement.classList.remove('pulse-outline')
+    targetElement.classList.remove('pulse-outline')
     targetElement.removeEventListener('animationend', onAnimationEnd)
   }
 
