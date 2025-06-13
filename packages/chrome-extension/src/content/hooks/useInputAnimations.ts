@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import type { InputInfo } from './useInputElements'
 
-export const useInputAnimations = (inputs: InputInfo[], maxItems: number = 5) => {
-  const [filledInputs, setFilledInputs] = useState<InputInfo[]>([])
+export const useInputAnimations = (
+  inputs: InputInfo[],
+  maxItems: number = 5,
+  filledInputs: InputInfo[],
+  setFilledInputs: React.Dispatch<React.SetStateAction<InputInfo[]>>,
+) => {
   const [exitingInputs, setExitingInputs] = useState<Set<string>>(new Set())
   const [collapsingInputs, setCollapsingInputs] = useState<Set<string>>(new Set())
   const [removedInputs, setRemovedInputs] = useState<Set<string>>(new Set())
@@ -64,11 +68,6 @@ export const useInputAnimations = (inputs: InputInfo[], maxItems: number = 5) =>
     })
   }, [filledInputs, exitingInputs, removedInputs])
 
-  // Helper functions
-  const markInputAsFilled = (input: InputInfo) => {
-    setFilledInputs((prev) => [...prev, input])
-  }
-
   const isInputFilled = (input: InputInfo) =>
     filledInputs.some((filled) => filled.elementReferenceId === input.elementReferenceId)
 
@@ -81,7 +80,6 @@ export const useInputAnimations = (inputs: InputInfo[], maxItems: number = 5) =>
   return {
     visibleInputs,
     dynamicHeight,
-    markInputAsFilled,
     isInputFilled,
     isInputExiting,
     isInputCollapsing,

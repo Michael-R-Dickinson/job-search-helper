@@ -87,18 +87,19 @@ const truncateText = (text: string, maxLength: number) => {
 type Props = {
   inputs: InputInfo[]
   maxItems?: number
+  filledInputs: InputInfo[]
+  setFilledInputs: React.Dispatch<React.SetStateAction<InputInfo[]>>
 }
 
-const CheckboxList = ({ inputs, maxItems = 5 }: Props) => {
+const CheckboxList = ({ inputs, maxItems = 5, filledInputs, setFilledInputs }: Props) => {
   const {
     visibleInputs,
     dynamicHeight,
-    markInputAsFilled,
     isInputFilled,
     isInputExiting,
     isInputCollapsing,
     isInputEntering,
-  } = useInputAnimations(inputs, maxItems)
+  } = useInputAnimations(inputs, maxItems, filledInputs, setFilledInputs)
 
   // TODO: calculate moreQuestionsRemaining accurately
   const moreQuestionsRemaining = 0
@@ -109,7 +110,6 @@ const CheckboxList = ({ inputs, maxItems = 5 }: Props) => {
         <QuestionContainer
           key={input.elementReferenceId}
           onClick={() => {
-            markInputAsFilled(input)
             highlightAndScrollToInput(input)()
           }}
           isExiting={isInputExiting(input)}
