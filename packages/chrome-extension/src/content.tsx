@@ -44,6 +44,9 @@ const GlobalStyles = styled.div({
   ['p']: {
     letterSpacing: '-0.02rem',
   },
+  ['button']: {
+    border: '0',
+  },
 })
 
 const root = ReactDOM.createRoot(appContainer)
