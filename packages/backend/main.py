@@ -7,6 +7,8 @@ from firebase.buckets import (
     get_stored_resumes,
     upload_resume_from_file,
     fetch_and_download_resume,
+    get_cached_pdf_url,
+    upload_pdf_to_cache,
 )
 from firebase_functions import https_fn, options
 from functions.free_reponse.request_handler import handle_write_free_response_request
@@ -212,11 +214,48 @@ def convert_resume_to_pdf(req: https_fn.Request) -> https_fn.Response:
         )
 
     try:
+        # Check if cached PDF already exists
+        cached_pdf_url = get_cached_pdf_url(user_id, file_name)
+        print("cached_pdf_url", cached_pdf_url)
+
+        if cached_pdf_url:
+            print(
+                "cache hit",
+                {
+                    "message": "PDF found in cache",
+                    "fileName": file_name,
+                    "public_url": cached_pdf_url,
+                },
+            )
+            return https_fn.Response(
+                json.dumps(
+                    {
+                        "message": "PDF found in cache",
+                        "fileName": file_name,
+                        "public_url": cached_pdf_url,
+                    }
+                ),
+                status=200,
+            )
+
+        # If not cached, proceed with conversion
+        print("cache miss - converting file")
+
         # Download the file from Firebase storage
         local_file_path = fetch_and_download_resume(user_id, file_name)
 
         # Convert the downloaded file to PDF
         pdf_url = convert_docx_to_pdf(local_file_path)
+
+        # Cache the converted PDF
+        try:
+            cached_pdf_url = upload_pdf_to_cache(pdf_url, user_id, file_name)
+            print(f"PDF cached successfully: {cached_pdf_url}")
+            # Return the cached URL instead of the original CloudConvert URL
+            pdf_url = cached_pdf_url
+        except Exception as cache_error:
+            print(f"Warning: Failed to cache PDF: {str(cache_error)}")
+            # Continue with original PDF URL if caching fails
 
         print(
             "success",

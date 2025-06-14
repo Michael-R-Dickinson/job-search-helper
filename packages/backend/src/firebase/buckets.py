@@ -25,6 +25,55 @@ def get_user_bucket_path(userId: str, tailored: bool = False) -> str:
         return base
 
 
+def get_pdf_cache_path(userId: str) -> str:
+    """
+    Returns the path to the user's PDF cache bucket
+    """
+    return f"resumes/{userId}/pdf_cache"
+
+
+def get_cached_pdf_url(userId: str, file_name: str) -> str:
+    """
+    Check if a cached PDF exists for the given file and return its public URL
+    Returns None if no cached PDF exists
+    """
+    bucket = storage.bucket()
+    # Convert file name to PDF name (replace extension with .pdf)
+    pdf_name = os.path.splitext(file_name)[0] + ".pdf"
+    blob_path = f"{get_pdf_cache_path(userId)}/{pdf_name}"
+    blob = bucket.blob(blob_path)
+
+    if blob.exists():
+        blob.make_public()
+        return blob.public_url
+
+    return None
+
+
+def upload_pdf_to_cache(pdf_url: str, userId: str, file_name: str) -> str:
+    """
+    Downloads PDF from URL and uploads it to the user's PDF cache
+    Returns the public URL of the cached PDF
+    """
+    import requests
+
+    bucket = storage.bucket()
+    # Convert file name to PDF name (replace extension with .pdf)
+    pdf_name = os.path.splitext(file_name)[0] + ".pdf"
+    blob_path = f"{get_pdf_cache_path(userId)}/{pdf_name}"
+    blob = bucket.blob(blob_path)
+
+    # Download the PDF from the URL
+    response = requests.get(pdf_url)
+    response.raise_for_status()
+
+    # Upload to Firebase storage
+    blob.upload_from_string(response.content, content_type="application/pdf")
+    blob.make_public()
+
+    return blob.public_url
+
+
 def upload_resume_from_file(file, userId: str, file_name: str, public: bool = False):
     """
     Uploads resume to the user's bucket
