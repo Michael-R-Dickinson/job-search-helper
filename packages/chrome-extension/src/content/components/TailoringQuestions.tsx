@@ -97,7 +97,7 @@ const TailoringQuestions = ({
 
     if (isLastQuestion) {
       if (!allQuestionsAnswered(newAnswers)) {
-        console.error('not all questions answered')
+        console.error('not all questions answered', newAnswers)
         return
       }
 

@@ -218,12 +218,14 @@ const ResumeListItemContent: React.FC = () => {
 
   const resumeUploading = selectedResumeStatus === 'uploading'
   const selectedResumeExists = selectedResumeState !== null
+  const fetchingQuestions = selectedResumeState?.status === 'fetchingQuestions'
+  const alreadyFetched = selectedResumeState?.tailoring.questionAnswers
   useEffect(() => {
     if (!selectedResume || !selectedResumeExists || !jobUrl || resumeUploading) return
 
     if (shouldTailorResume) {
       // We already have questions fetched so return
-      if (selectedResumeState?.tailoring.questionAnswers) return
+      if (alreadyFetched || fetchingQuestions) return
 
       dispatch({ type: 'START_FETCH_QS', name: selectedResume })
       triggerGetTailoringQuestions(selectedResume, jobUrl).then(({ json }) => {
@@ -260,7 +262,8 @@ const ResumeListItemContent: React.FC = () => {
     jobUrl,
     resumeUploading,
     selectedResumeState?.pdfUrl,
-    selectedResumeState?.tailoring.questionAnswers,
+    fetchingQuestions,
+    alreadyFetched,
     setAutofillResume,
     selectedResumeExists,
   ])
