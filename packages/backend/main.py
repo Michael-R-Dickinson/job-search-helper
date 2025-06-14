@@ -96,7 +96,7 @@ def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
         cors_methods=["GET", "POST", "OPTIONS"],
     )
 )
-def get_autofill_instructions(req: https_fn.Request) -> https_fn.Response:
+def write_free_response(req: https_fn.Request) -> https_fn.Response:
     user_id = req.args.get("userId")
     prompt = req.args.get("prompt")
     job_description_link = req.args.get("jobDescriptionLink")

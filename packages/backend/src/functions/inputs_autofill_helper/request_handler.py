@@ -19,6 +19,7 @@ def handle_autofill_request(user_id, inputs):
         autofill_instructions = get_filled_inputs(user_id, inputs)
 
     except ValueError as e:
+        print("\nERROR when getting autofill instructions", e, "\n")
         return https_fn.Response(
             json.dumps({"message": str(e)}),
             status=400,
