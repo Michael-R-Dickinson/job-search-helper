@@ -10,13 +10,12 @@ import createCache from '@emotion/cache'
 
 // Import styles as raw strings
 import mantineStyles from '@mantine/core/styles.css?raw'
-import font400 from '@fontsource/inter/400.css?raw'
-import font500 from '@fontsource/inter/500.css?raw'
-import font600 from '@fontsource/inter/600.css?raw'
-import font700 from '@fontsource/inter/700.css?raw'
 import indexCss from './index.css?raw'
 
-const allStyles = [mantineStyles, font400, font500, font600, font700, indexCss].join('\\n')
+import { initializeFontLoading, getShadowDOMFontCSS } from './utils/fontLoader'
+
+// Initialize all font loading methods
+initializeFontLoading()
 
 const host = document.createElement('div')
 host.id = 'perfectify-host'
@@ -33,6 +32,10 @@ const cache = createCache({
   key: 'mantine-shadow-dom',
   container: shadowRoot,
 })
+
+// Get font CSS and setup shadow DOM fonts
+const fontCSS = getShadowDOMFontCSS(shadowRoot)
+const allStyles = [mantineStyles, indexCss, fontCSS].join('\n')
 
 // Create a style element and inject the combined styles directly into the shadow root
 const styleElement = document.createElement('style')
