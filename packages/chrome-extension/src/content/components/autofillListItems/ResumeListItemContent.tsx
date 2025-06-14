@@ -296,6 +296,7 @@ const ResumeListItemContent: React.FC = () => {
         renderOption={renderSelectOption}
         value={selectedResume}
         onChange={onResumeSelect}
+        comboboxProps={{ withinPortal: false }}
         styles={{
           option: {
             padding: '0px',
