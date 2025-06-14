@@ -315,7 +315,7 @@ const ResumeListItemContent: React.FC = () => {
           checked={shouldTailorResume}
           onChange={(event) => setShouldTailorResume(event.currentTarget.checked)}
         />
-        <PointerCheckbox label="Always Use This Resume" size="xs" />
+        {/* <PointerCheckbox label="Always Use This Resume" size="xs" /> */}
       </div>
       {shouldTailorResume &&
         selectedResumeExists &&
