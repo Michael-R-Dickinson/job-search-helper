@@ -19,9 +19,9 @@ def get_filled_inputs(user_id, inputs):
     autofill_instructions = map_autofill_template_to_instructions(
         autofill_template_values, user_autofill_data, original_inputs=inputs
     )
-    # print("inputs\n", inputs)
-    print("autofill_template_values\n", autofill_template_values.model_dump(), "\n\n")
-    print("autofill_instructions\n", autofill_instructions)
+    print("\nInitial Inputs: ", inputs, "\n")
+    print("Autofill Template: ", autofill_template_values.model_dump(), "\n")
+    print("Finished Autofill Instructions: ", autofill_instructions, "\n\n")
 
     return autofill_instructions
 
