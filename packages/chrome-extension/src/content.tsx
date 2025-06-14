@@ -17,6 +17,8 @@ import { initializeFontLoading, getShadowDOMFontCSS } from './utils/fontLoader'
 // Initialize all font loading methods
 initializeFontLoading()
 
+export const APP_ELEMENT_ID = 'perfectify-root'
+
 const host = document.createElement('div')
 host.id = 'perfectify-host'
 document.body.appendChild(host)
@@ -24,7 +26,7 @@ document.body.appendChild(host)
 const shadowRoot = host.attachShadow({ mode: 'open' })
 
 const appContainer = document.createElement('div')
-appContainer.id = 'perfectify-root'
+appContainer.id = APP_ELEMENT_ID
 shadowRoot.appendChild(appContainer)
 
 // Create an Emotion cache that will inject styles into the shadow root

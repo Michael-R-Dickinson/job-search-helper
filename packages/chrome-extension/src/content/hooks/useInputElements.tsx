@@ -1,4 +1,5 @@
 import { useEffect, useRef, type RefObject } from 'react'
+import { querySelectorAllDeep, observeDeepMutations } from '../../utils/shadowDomUtils'
 
 export type ElementInfo =
   | HTMLInputElement
@@ -285,41 +286,38 @@ export function useInputElements(): RefObject<InputInfo[]> {
   useEffect(() => {
     const scanForElements = (): void => {
       const selector = 'input, textarea, select, button'
-      const elements = document.querySelectorAll<ElementInfo>(selector)
+      // Use shadow DOM aware query instead of regular document.querySelectorAll
+      const elements = querySelectorAllDeep<ElementInfo>(selector)
 
-      const filteredInputs: InputInfo[] = Array.from(elements)
-        .filter(shouldIncludeElement)
-        .map((el) => {
-          let elementReferenceId = el.getAttribute('data-autofill-id')
-          if (!elementReferenceId) {
-            elementReferenceId = idCounterRef.current.toString()
-            el.setAttribute('data-autofill-id', elementReferenceId)
-            idCounterRef.current++
-          }
+      const filteredInputs: InputInfo[] = elements.filter(shouldIncludeElement).map((el) => {
+        let elementReferenceId = el.getAttribute('data-autofill-id')
+        if (!elementReferenceId) {
+          elementReferenceId = idCounterRef.current.toString()
+          el.setAttribute('data-autofill-id', elementReferenceId)
+          idCounterRef.current++
+        }
 
-          const label = getLabelText(el as HTMLElement)
-          const wholeQuestionLabel = getWholeQuestionLabel(el as HTMLElement)
+        const label = getLabelText(el as HTMLElement)
+        const wholeQuestionLabel = getWholeQuestionLabel(el as HTMLElement)
 
-          return {
-            element: el,
-            elementReferenceId,
-            label,
-            wholeQuestionLabel,
-          }
-        })
+        return {
+          element: el,
+          elementReferenceId,
+          label,
+          wholeQuestionLabel,
+        }
+      })
 
-      // console.log('elements', filteredInputs)
       inputsRef.current = filteredInputs
     }
 
     // Initial scan
     scanForElements()
 
-    // Set up observer for dynamic content
-    const observer = new MutationObserver(scanForElements)
-    observer.observe(document.body, { childList: true, subtree: true })
+    // Set up shadow DOM aware observer for dynamic content
+    const disconnect = observeDeepMutations(scanForElements)
 
-    return () => observer.disconnect()
+    return disconnect
   }, [])
 
   return inputsRef

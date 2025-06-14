@@ -30,7 +30,8 @@ const useAutofillInputs = () => {
 
   useOnPageLoad(() => {
     pageLoadedDeferredRef.current?.resolve()
-  })
+    console.log('Beginning input fill process, inputs: ', elementsRef.current)
+  }, 1000)
 
   useEffect(() => {
     // Takes instructions for inputs to fill and sets unfilledInputs based on which have no values to fill
@@ -58,9 +59,9 @@ const useAutofillInputs = () => {
       const simpleInputsInstructions = (await simpleInputsPromiseRef.current) || []
 
       const elements = elementsRef.current
-      // const complexInputsInstructions = await triggerGetAutofillValues(elements)
+      const complexInputsInstructions = await triggerGetAutofillValues(elements)
       // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
-      const complexInputsInstructions = [] as AutofillInstruction[]
+      // const complexInputsInstructions = [] as AutofillInstruction[]
       const allInstructions = [...simpleInputsInstructions, ...complexInputsInstructions]
 
       handleUnfilledInputs(allInstructions)
