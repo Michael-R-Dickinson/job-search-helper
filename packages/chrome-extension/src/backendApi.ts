@@ -34,9 +34,13 @@ export const autofillInstructionsQuery = async (
   const data = await response.json()
   const instructions = data.autofill_instructions
 
-  const parsedData = AutofillInstructionsSchema.parse(instructions)
-
-  return parsedData
+  try {
+    const parsedData = AutofillInstructionsSchema.parse(instructions)
+    return parsedData
+  } catch (error) {
+    console.error('Validation error in autofill instructions, DATA: ', data, 'ERROR: ', error)
+    throw error
+  }
 }
 
 export const saveFilledInputsQuery = async (inputs: Partial<MinifiedInput>[], userId: string) => {
