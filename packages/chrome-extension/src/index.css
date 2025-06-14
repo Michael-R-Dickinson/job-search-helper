@@ -1,8 +1,4 @@
 /* ! This css file is used for the content scripts not the action popup */
-#crx-root {
-  all: initial !important;
-}
-
 @keyframes pulse-outline {
   0% {
     box-shadow: 0 0 0 rgba(0, 123, 255, 0.3);
