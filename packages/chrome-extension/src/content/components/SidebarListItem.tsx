@@ -20,7 +20,7 @@ const ListItemContainer = styled.div<{ active?: boolean }>`
 
 const ItemTitle = styled.h4`
   margin: 0;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.03rem;
 `
 
