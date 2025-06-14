@@ -1,3 +1,5 @@
+import { querySelectorAllDeep, getElementByIdDeep } from '../../utils/shadowDomUtils'
+
 export type SelectOption = {
   value: string | null // Allow null for value as per normalizeOptionNode
   text: string
@@ -88,9 +90,9 @@ function isFallbackMenu(el: HTMLElement): boolean {
 }
 
 function detectFallbackMenus(): HTMLElement[] {
-  return Array.from(document.querySelectorAll('ul, div, table, tbody')).filter(
+  return querySelectorAllDeep<HTMLElement>('ul, div, table, tbody').filter(
     (el) => el instanceof HTMLElement && isFallbackMenu(el),
-  ) as HTMLElement[]
+  )
 }
 
 function findDropdownControl(startEl: HTMLElement): DropdownControlInfo | null {
@@ -267,7 +269,7 @@ function waitForOptions(framework: Framework, controlToOpen: HTMLElement): Promi
         // aria-controls might point to the listbox
         const ariaControlsId = controlToOpen.getAttribute('aria-controls')
         if (ariaControlsId) {
-          optionsContainer = document.getElementById(ariaControlsId)
+          optionsContainer = getElementByIdDeep<HTMLElement>(ariaControlsId)
         }
 
         // Look for a common parent if options are not directly portaled
@@ -287,9 +289,9 @@ function waitForOptions(framework: Framework, controlToOpen: HTMLElement): Promi
           )
         }
 
-        // If still no nodes, query the whole document (for portaled elements)
+        // If still no nodes, query the whole document (for portaled elements) with shadow DOM support
         if (nodes.length === 0) {
-          nodes = Array.from(document.querySelectorAll(selector)).map((n) => n as HTMLElement)
+          nodes = querySelectorAllDeep<HTMLElement>(selector)
         }
       }
 
@@ -315,7 +317,7 @@ function waitForOptions(framework: Framework, controlToOpen: HTMLElement): Promi
       let initialNodes: HTMLElement[] = []
       const ariaControlsId = controlToOpen.getAttribute('aria-controls')
       if (ariaControlsId) {
-        const optionsContainer = document.getElementById(ariaControlsId)
+        const optionsContainer = getElementByIdDeep<HTMLElement>(ariaControlsId)
         if (optionsContainer) {
           initialNodes = Array.from(optionsContainer.querySelectorAll(selector)).map(
             (n) => n as HTMLElement,
@@ -323,8 +325,8 @@ function waitForOptions(framework: Framework, controlToOpen: HTMLElement): Promi
         }
       }
       if (initialNodes.length === 0) {
-        // Fallback to global search if not found via aria-controls
-        initialNodes = Array.from(document.querySelectorAll(selector)).map((n) => n as HTMLElement)
+        // Fallback to global search if not found via aria-controls with shadow DOM support
+        initialNodes = querySelectorAllDeep<HTMLElement>(selector)
       }
 
       const visibleInitialNodes = initialNodes.filter((node) => {
@@ -403,7 +405,7 @@ function waitForOptions(framework: Framework, controlToOpen: HTMLElement): Promi
         } else if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
           // Sometimes options are revealed by class changes on existing elements
           // e.g. a class like 'is-open' is added to the options container
-          if (selector && document.querySelector(selector)) {
+          if (selector && querySelectorAllDeep(selector).length > 0) {
             // Re-check if options now match
             findAndResolveOptions()
             return

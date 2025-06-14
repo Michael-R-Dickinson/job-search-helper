@@ -1,5 +1,9 @@
 import { useEffect, useRef, type RefObject } from 'react'
-import { querySelectorAllDeep, observeDeepMutations } from '../../utils/shadowDomUtils'
+import {
+  querySelectorAllDeep,
+  observeDeepMutations,
+  getElementByAttributeDeep,
+} from '../../utils/shadowDomUtils'
 
 export type ElementInfo =
   | HTMLInputElement
@@ -81,7 +85,7 @@ const shouldIncludeElement = (el: ElementInfo): boolean => {
 const getLabelText = (el: HTMLElement): string | null => {
   // Try explicit label first
   if (el.id) {
-    const explicitLabel = document.querySelector<HTMLLabelElement>(`label[for="${el.id}"]`)
+    const explicitLabel = getElementByAttributeDeep<HTMLLabelElement>('for', el.id)
     if (explicitLabel) {
       return explicitLabel.textContent?.trim() ?? null
     }
@@ -219,7 +223,7 @@ const getWholeQuestionLabel = (el: HTMLElement): string | null => {
   ]
 
   for (const selector of questionSelectors) {
-    const headings = document.querySelectorAll(selector)
+    const headings = querySelectorAllDeep(selector)
     for (const heading of headings) {
       // Check if this heading is near our element (within reasonable DOM distance)
       if (isElementNearby(el, heading as HTMLElement)) {

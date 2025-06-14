@@ -165,3 +165,59 @@ export const getElementByAttributeDeep = <T extends Element = Element>(
 
   return null
 }
+
+/**
+ * Finds an element by ID across both regular DOM and shadow DOM
+ * @param id - The ID to search for
+ * @param root - Root element to start searching from (defaults to document)
+ * @returns The element with the matching ID or null if not found
+ */
+export const getElementByIdDeep = <T extends Element = Element>(
+  id: string,
+  root: Document | DocumentFragment = document,
+): T | null => {
+  return getElementByAttributeDeep<T>('id', id, root)
+}
+
+/**
+ * Searches for elements matching a selector within an element's ancestry, including shadow DOM boundaries
+ * @param startElement - The element to start searching from
+ * @param selector - The CSS selector to search for
+ * @param maxDepth - Maximum number of ancestor levels to traverse (default: 10)
+ * @returns The first matching element or null if not found
+ */
+export const queryUpTreeDeep = <T extends Element = Element>(
+  startElement: Element,
+  selector: string,
+  maxDepth: number = 10,
+): T | null => {
+  let current: Element | null = startElement
+  let depth = 0
+
+  while (current && depth < maxDepth) {
+    // Check if current element matches
+    if (current.matches && current.matches(selector)) {
+      return current as T
+    }
+
+    // Check if current element contains a matching descendant
+    const descendant = current.querySelector<T>(selector)
+    if (descendant) {
+      return descendant
+    }
+
+    // Move to parent, handling shadow DOM boundaries
+    if (current.parentElement) {
+      current = current.parentElement
+    } else if (current.parentNode && current.parentNode instanceof ShadowRoot) {
+      // Cross shadow DOM boundary to the host element
+      current = (current.parentNode as ShadowRoot).host
+    } else {
+      break
+    }
+
+    depth++
+  }
+
+  return null
+}

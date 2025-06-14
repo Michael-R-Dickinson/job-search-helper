@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react'
+import { queryUpTreeDeep } from '../../utils/shadowDomUtils'
 
 export type WatchableInputElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 
@@ -77,20 +78,10 @@ export function useWatchInputs({
       return { isReactSelect: false, valueContainer: null }
     }
 
-    // Look for the value container (this is what changes between placeholder and single-value)
-    let current: Element | null = element
-    let attempts = 0
-    const maxAttempts = 10
-
-    while (current && attempts < maxAttempts) {
-      // Look for the value container that holds both placeholder and single-value
-      const valueContainer = current.querySelector('.select__value-container')
-      if (valueContainer) {
-        return { isReactSelect: true, valueContainer }
-      }
-
-      current = current.parentElement
-      attempts++
+    // Look for the value container using shadow DOM-aware traversal
+    const valueContainer = queryUpTreeDeep<Element>(element, '.select__value-container')
+    if (valueContainer) {
+      return { isReactSelect: true, valueContainer }
     }
 
     return { isReactSelect: false, valueContainer: null }
