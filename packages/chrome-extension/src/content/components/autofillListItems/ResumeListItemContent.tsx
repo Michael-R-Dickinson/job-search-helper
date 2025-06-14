@@ -300,6 +300,8 @@ const ResumeListItemContent: React.FC = () => {
         styles={{
           option: {
             padding: '0px',
+            fontSize: '0.8rem',
+            opacity: 0.8,
           },
         }}
       />
