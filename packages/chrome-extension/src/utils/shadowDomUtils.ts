@@ -128,3 +128,40 @@ export const findElementRoot = (element: Element): Document | ShadowRoot => {
 
   return document
 }
+
+/**
+ * Finds an element by attribute value across both regular DOM and shadow DOM
+ * @param attributeName - The attribute name to search for
+ * @param attributeValue - The attribute value to match
+ * @param root - Root element to start searching from (defaults to document)
+ * @returns The first matching element or null if not found
+ */
+export const getElementByAttributeDeep = <T extends Element = Element>(
+  attributeName: string,
+  attributeValue: string,
+  root: Document | DocumentFragment = document,
+): T | null => {
+  // First check the current root for a direct match
+  const selector = `[${attributeName}="${attributeValue}"]`
+  const directMatch = root.querySelector<T>(selector)
+  if (directMatch) {
+    return directMatch
+  }
+
+  // Recursively search shadow DOMs
+  const allElements = root.querySelectorAll('*')
+  for (const element of allElements) {
+    if (element.shadowRoot) {
+      const shadowMatch = getElementByAttributeDeep<T>(
+        attributeName,
+        attributeValue,
+        element.shadowRoot,
+      )
+      if (shadowMatch) {
+        return shadowMatch
+      }
+    }
+  }
+
+  return null
+}

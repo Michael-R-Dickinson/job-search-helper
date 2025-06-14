@@ -5,6 +5,7 @@ import type { ValueOf } from '../../utils'
 import triggerPulseAnimation, { asyncScrollToElement } from './animateInputFilling'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 import { RESUME_UPLOAD_VALUE } from '../../autofillEngine/inputCategoryHandlers'
+import { getElementByAttributeDeep } from '../../utils/shadowDomUtils'
 
 const fillTextInputElement = (
   input: HTMLInputElement,
@@ -69,7 +70,7 @@ const isFileUploadInput = (
 }
 
 export const getElementByReferenceId = (referenceId: string): HTMLElement | null => {
-  return document.querySelector<HTMLElement>(`[data-autofill-id="${referenceId}"]`)
+  return getElementByAttributeDeep<HTMLElement>('data-autofill-id', referenceId)
 }
 
 const getFirstFilledElement = (autofillInstructions: AutofillInstruction[]): HTMLElement | null => {
