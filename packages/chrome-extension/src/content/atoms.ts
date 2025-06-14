@@ -1,4 +1,5 @@
 import { atom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 // Maps resume name to public_url
 export type ResumesMap = Record<string, string>
@@ -7,8 +8,8 @@ type UserInfo = {
   userId: string
   displayName: string | null | undefined
 }
-export const userAtom = atom<UserInfo | null>(null)
-export const userResumesAtom = atom<ResumesMap | null>(null)
+export const userAtom = atomWithStorage<UserInfo | null>('basicUserData', null)
+export const userResumesAtom = atomWithStorage<ResumesMap | null>('userResumesStore', null)
 
 // Should resolve to a string that is the public url of the resume
 export const tailoringResumeAtom = atom<{
