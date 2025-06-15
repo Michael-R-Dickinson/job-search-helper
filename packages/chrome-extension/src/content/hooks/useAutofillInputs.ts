@@ -30,7 +30,7 @@ const useAutofillInputs = () => {
 
   useOnPageLoad(() => {
     pageLoadedDeferredRef.current?.resolve()
-    console.log('Beginning input fill process, inputs: ', elementsRef.current)
+    console.log('Found inputs for autofill: ', elementsRef.current)
   }, 1000)
 
   useEffect(() => {
