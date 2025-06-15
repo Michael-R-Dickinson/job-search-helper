@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import SidebarListItem from './SidebarListItem'
 import { AppWindow, FileText, PencilLine } from 'lucide-react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import ResumeListItemContent from './autofillListItems/ResumeListItemContent'
 import UnfilledInputsListItemContent from './autofillListItems/UnfilledInputsListItemContent'
 import AutofillButton from './AutofillButton'
@@ -10,9 +10,10 @@ import {
   AutofillAnimationSpeeds,
   autofillInputElements,
 } from '../inputsManipulation/autofillInputElements'
-import handleResumeInstructions from '../handleResumeInstructions'
 import { tailoringResumeAtom } from '../atoms'
 import { useAtomValue } from 'jotai/react'
+import type { AutofillInstruction } from '../../autofillEngine/schema'
+import { RESUME_UPLOAD_VALUE } from '../../autofillEngine/inputCategoryHandlers'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -23,6 +24,35 @@ const AutofillHeader = styled.h3`
 `
 
 export type AutofillStatus = 'idle' | 'loading' | 'success' | 'error'
+
+const executeAutofillSequence = async (
+  simpleInputsInstructionsPromise: Promise<AutofillInstruction[]> | null,
+  complexInputsInstructionsPromise: Promise<AutofillInstruction[]> | null,
+  loading: boolean,
+  setAutofillStatus: React.Dispatch<React.SetStateAction<AutofillStatus>>,
+) => {
+  setAutofillStatus('loading')
+  if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
+
+  const simpleInputsInstructions = await simpleInputsInstructionsPromise
+  console.log('filling simple inputs', simpleInputsInstructions)
+
+  const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
+  await autofillInputElements(simpleInputsInstructions, animationSpeed)
+
+  const remainingAutofillInstructions = await complexInputsInstructionsPromise
+  console.log('filling complex inputs', remainingAutofillInstructions)
+  await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
+
+  const resumeInstructions = simpleInputsInstructions.filter(
+    (instruction) => instruction.value === RESUME_UPLOAD_VALUE,
+  )
+
+  setAutofillStatus('success')
+
+  // Returns the resume instructions to be filled in the next step
+  return resumeInstructions
+}
 
 const SidebarContent = () => {
   const {
@@ -38,26 +68,6 @@ const SidebarContent = () => {
 
   const undoneAutofillSections: string[] = []
   if (!resumePromise) undoneAutofillSections.push('resume')
-
-  const fullAutofillSequence = async () => {
-    setAutofillStatus('loading')
-    if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
-
-    const simpleInputsInstructions = await simpleInputsInstructionsPromise
-
-    const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
-    await autofillInputElements(simpleInputsInstructions, animationSpeed)
-
-    const remainingAutofillInstructions = await complexInputsInstructionsPromise
-    await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
-
-    const resume = await resumePromise
-    console.log('Got Resume', resumeName)
-    const resumeInstructions = handleResumeInstructions(simpleInputsInstructions, resume)
-    console.log('resumeInstructions', resumeInstructions)
-    await autofillInputElements(resumeInstructions, AutofillAnimationSpeeds.NONE)
-    setAutofillStatus('success')
-  }
 
   return (
     <div>
@@ -89,7 +99,14 @@ const SidebarContent = () => {
       <div style={{ marginTop: '0.8rem' }}>
         <AutofillButton
           unfilledSections={undoneAutofillSections}
-          onClick={fullAutofillSequence}
+          onClick={() =>
+            executeAutofillSequence(
+              simpleInputsInstructionsPromise,
+              complexInputsInstructionsPromise,
+              loading,
+              setAutofillStatus,
+            )
+          }
           status={autofillStatus}
         />
       </div>

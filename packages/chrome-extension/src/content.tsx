@@ -56,6 +56,9 @@ const GlobalStyles = styled.div({
 
 const root = ReactDOM.createRoot(appContainer)
 
+export const isTopFrame = window.self === window.top
+console.log('isTopFrame', isTopFrame)
+
 root.render(
   <React.StrictMode>
     <CacheProvider value={cache}>
