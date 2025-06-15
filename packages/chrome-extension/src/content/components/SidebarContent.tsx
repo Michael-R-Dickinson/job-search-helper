@@ -1,19 +1,13 @@
 import styled from '@emotion/styled'
 import SidebarListItem from './SidebarListItem'
 import { AppWindow, FileText, PencilLine } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import ResumeListItemContent from './autofillListItems/ResumeListItemContent'
 import UnfilledInputsListItemContent from './autofillListItems/UnfilledInputsListItemContent'
 import AutofillButton from './AutofillButton'
 import useAutofillInputs from '../hooks/useAutofillInputs'
-import {
-  AutofillAnimationSpeeds,
-  autofillInputElements,
-} from '../inputsManipulation/autofillInputElements'
 import { tailoringResumeAtom } from '../atoms'
 import { useAtomValue } from 'jotai/react'
-import type { AutofillInstruction } from '../../autofillEngine/schema'
-import { RESUME_UPLOAD_VALUE } from '../../autofillEngine/inputCategoryHandlers'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -23,51 +17,17 @@ const AutofillHeader = styled.h3`
   color: rgba(0, 0, 0, 0.7);
 `
 
-export type AutofillStatus = 'idle' | 'loading' | 'success' | 'error'
-
-const executeAutofillSequence = async (
-  simpleInputsInstructionsPromise: Promise<AutofillInstruction[]> | null,
-  complexInputsInstructionsPromise: Promise<AutofillInstruction[]> | null,
-  loading: boolean,
-  setAutofillStatus: React.Dispatch<React.SetStateAction<AutofillStatus>>,
-) => {
-  setAutofillStatus('loading')
-  if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
-
-  const simpleInputsInstructions = await simpleInputsInstructionsPromise
-  console.log('filling simple inputs', simpleInputsInstructions)
-
-  const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
-  await autofillInputElements(simpleInputsInstructions, animationSpeed)
-
-  const remainingAutofillInstructions = await complexInputsInstructionsPromise
-  console.log('filling complex inputs', remainingAutofillInstructions)
-  await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
-
-  const resumeInstructions = simpleInputsInstructions.filter(
-    (instruction) => instruction.value === RESUME_UPLOAD_VALUE,
-  )
-
-  setAutofillStatus('success')
-
-  // Returns the resume instructions to be filled in the next step
-  return resumeInstructions
-}
-
 const SidebarContent = () => {
-  const {
-    simpleInputsInstructionsPromise,
-    complexInputsInstructionsPromise,
-    loading,
-    unfilledInputs,
-  } = useAutofillInputs()
+  const { fillingStatus, fetchStatus, executeAutofillSequence, unfilledInputs } =
+    useAutofillInputs()
 
   const [activeItem, setActiveItem] = useState<'resume' | 'unfilled' | 'free-response'>('resume')
-  const [autofillStatus, setAutofillStatus] = useState<AutofillStatus>('idle')
   const { promise: resumePromise, name: resumeName } = useAtomValue(tailoringResumeAtom)
 
   const undoneAutofillSections: string[] = []
   if (!resumePromise) undoneAutofillSections.push('resume')
+
+  const isFetchingValues = fetchStatus === 'loading'
 
   return (
     <div>
@@ -86,7 +46,10 @@ const SidebarContent = () => {
           active={activeItem === 'unfilled'}
           onClick={() => setActiveItem('unfilled')}
           content={
-            <UnfilledInputsListItemContent unfilledInputs={unfilledInputs} loading={loading} />
+            <UnfilledInputsListItemContent
+              unfilledInputs={unfilledInputs}
+              loading={isFetchingValues}
+            />
           }
         />
         <SidebarListItem
@@ -99,15 +62,8 @@ const SidebarContent = () => {
       <div style={{ marginTop: '0.8rem' }}>
         <AutofillButton
           unfilledSections={undoneAutofillSections}
-          onClick={() =>
-            executeAutofillSequence(
-              simpleInputsInstructionsPromise,
-              complexInputsInstructionsPromise,
-              loading,
-              setAutofillStatus,
-            )
-          }
-          status={autofillStatus}
+          onClick={() => executeAutofillSequence()}
+          fillStatus={fillingStatus}
         />
       </div>
     </div>
