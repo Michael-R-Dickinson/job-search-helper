@@ -8,10 +8,15 @@ import type { QuestionsResponse } from './backendApi'
 export type ValueOf<T> = T[keyof T]
 
 // For content scripts
-export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): void {
+export function useOnPageLoad(
+  callback: () => void,
+  timeoutMs: number = 1000,
+  maxTotalTimeMs: number = 5000,
+): void {
   const callbackRef = useRef<() => void>(callback)
   const hasFiredRef = useRef<boolean>(false)
   const timerRef = useRef<number | null>(null)
+  const maxTimerRef = useRef<number | null>(null)
   const observerRef = useRef<MutationObserver | null>(null)
 
   // Keep the latest callback in a ref
@@ -27,6 +32,9 @@ export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): v
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current)
       }
+      if (maxTimerRef.current !== null) {
+        clearTimeout(maxTimerRef.current)
+      }
       callbackRef.current()
     }
 
@@ -38,6 +46,9 @@ export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): v
     }
 
     const startObserving = (): void => {
+      // Start the maximum total time timer
+      maxTimerRef.current = window.setTimeout(finish, maxTotalTimeMs)
+
       // Kick off the timer in case there are no mutations
       resetTimer()
       observerRef.current = new MutationObserver(resetTimer)
@@ -61,8 +72,11 @@ export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): v
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current)
       }
+      if (maxTimerRef.current !== null) {
+        clearTimeout(maxTimerRef.current)
+      }
     }
-  }, [timeoutMs])
+  }, [timeoutMs, maxTotalTimeMs])
 }
 
 export const getEmptyQuestionAnswers = (
