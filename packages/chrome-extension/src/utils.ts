@@ -92,3 +92,13 @@ export const getEmptyQuestionAnswers = (
   }, {} as QuestionAnswerMapAllowUnfilled)
   return { skillsToAdd, experienceQuestions }
 }
+
+export function shortHash(str: string): string {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    // multiply by 31 (a small prime), add the char code, force int32
+    hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0
+  }
+  // >>> 0 turns it into an unsigned 32-bit, toString(36) makes it shorter
+  return (hash >>> 0).toString(36)
+}

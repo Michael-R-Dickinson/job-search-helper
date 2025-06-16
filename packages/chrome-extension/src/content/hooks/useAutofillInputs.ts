@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInputElements, type InputInfo } from './useInputElements'
-import triggerGetAutofillValues, {
-  triggerGetSimpleAutofillValues,
-} from '../triggers/triggerGetAutofillValues'
+import { triggerGetSimpleAutofillValues } from '../triggers/triggerGetAutofillValues'
 import type { AutofillInstruction } from '../../autofillEngine/schema'
 import { useOnPageLoad } from '../../utils'
 import {
@@ -10,6 +8,7 @@ import {
   autofillInputElements,
 } from '../inputsManipulation/autofillInputElements'
 import { RESUME_UPLOAD_VALUE } from '../../autofillEngine/inputCategoryHandlers'
+import { sendAutofillMessageToIframes } from '../iframe/iframeMessageHandler'
 
 export type AutofillFetchStatus = 'loading' | 'fetched' | 'error'
 export type AutofillFillingStatus = 'idle' | 'filling_inputs' | 'success' | 'error'
@@ -44,6 +43,10 @@ const useAutofillInputs = () => {
   }, 1000)
 
   useEffect(() => {
+    // Conditional to prevent fetching autofills for frames or documents with few inputs
+    const shouldFetchAutofills = elementsRef.current.length > 3
+    if (!shouldFetchAutofills) return
+
     // Takes instructions for inputs to fill and sets unfilledInputs based on which have no values to fill
     const handleUnfilledInputs = (instructions: AutofillInstruction[]) => {
       const elements = elementsRef.current
@@ -69,9 +72,9 @@ const useAutofillInputs = () => {
       const simpleInputsInstructions = (await simpleInputsPromiseRef.current) || []
 
       const elements = elementsRef.current
-      const complexInputsInstructions = await triggerGetAutofillValues(elements)
+      // const complexInputsInstructions = await triggerGetAutofillValues(elements)
       // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
-      // const complexInputsInstructions = [] as AutofillInstruction[]
+      const complexInputsInstructions = [] as AutofillInstruction[]
       const allInstructions = [...simpleInputsInstructions, ...complexInputsInstructions]
 
       handleUnfilledInputs(allInstructions)
@@ -89,6 +92,10 @@ const useAutofillInputs = () => {
     const loading = fetchStatus === 'loading'
 
     setFillingStatus('filling_inputs')
+
+    // Send autofill messages to all nested iframes
+    await sendAutofillMessageToIframes()
+
     if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
 
     const simpleInputsInstructions = await simpleInputsInstructionsPromise
