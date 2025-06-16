@@ -1,4 +1,5 @@
 import { frameId } from '../../content'
+import { eventTypes } from '../../events'
 
 /**
  * Iframe Message Handler
@@ -22,13 +23,13 @@ type IframeInfo = {
 const scanForIframes = (retryCount = 3, delay = 200): Promise<HTMLIFrameElement[]> => {
   return new Promise((resolve) => {
     const attemptScan = (attemptsLeft: number) => {
-      console.log(`[Frame ${frameId}] Document ready state: ${document.readyState}`)
+      // console.log(`[Frame ${frameId}] Document ready state: ${document.readyState}`)
 
       const iframes = Array.from(document.querySelectorAll('iframe'))
 
-      console.log(
-        `[Frame ${frameId}] Scan attempt ${4 - attemptsLeft}, found ${iframes.length} iframes`,
-      )
+      // console.log(
+      //   `[Frame ${frameId}] Scan attempt ${4 - attemptsLeft}, found ${iframes.length} iframes`,
+      // )
       if (iframes.length > 0) {
         console.log(
           `[Frame ${frameId}] Found iframes:`,
@@ -45,9 +46,9 @@ const scanForIframes = (retryCount = 3, delay = 200): Promise<HTMLIFrameElement[
       if (iframes.length > 0 || attemptsLeft <= 1) {
         resolve(iframes)
       } else {
-        console.log(
-          `[Frame ${frameId}] No iframes found, retrying in ${delay}ms (${attemptsLeft - 1} attempts left)`,
-        )
+        // console.log(
+        //   `[Frame ${frameId}] No iframes found, retrying in ${delay}ms (${attemptsLeft - 1} attempts left)`,
+        // )
         setTimeout(() => attemptScan(attemptsLeft - 1), delay)
       }
     }
@@ -69,17 +70,17 @@ const injectIntoSrcdocIframe = async (frameEl: HTMLIFrameElement): Promise<boole
       return true
     }
 
-    console.log(`[Frame ${frameId}] → Injecting into srcdoc iframe`)
+    // console.log(`[Frame ${frameId}] → Injecting into srcdoc iframe`)
 
     // Set up frame identification
     win.frameId = 'srcdoc-' + Math.random().toString(36).substr(2, 8)
 
     // Set up message listener directly on window object
     win.addEventListener('message', (event: MessageEvent) => {
-      if (event.data?.type === 'BEGIN_AUTOFILL') {
-        console.log(
-          `[Frame ${win.frameId}] ✅ Received BEGIN_AUTOFILL from frame ${event.data?.fromFrame}`,
-        )
+      if (event.data?.type === eventTypes.BEGIN_AUTOFILL_WITH_IFRAMES) {
+        // console.log(
+        //   `[Frame ${win.frameId}] ✅ Received BEGIN_AUTOFILL from frame ${event.data?.fromFrame}`,
+        // )
         // Note: Cascading is handled by IframeAutofillWrapper, not here
       }
     })
@@ -122,10 +123,10 @@ const injectIntoAboutBlankIframe = (frameEl: HTMLIFrameElement): boolean => {
 
     // Set up message listener directly
     win.addEventListener('message', (event: MessageEvent) => {
-      if (event.data?.type === 'BEGIN_AUTOFILL') {
-        console.log(
-          `[Frame ${win.frameId}] ✅ Received BEGIN_AUTOFILL from frame ${event.data?.fromFrame}`,
-        )
+      if (event.data?.type === eventTypes.BEGIN_AUTOFILL_WITH_IFRAMES) {
+        // console.log(
+        //   `[Frame ${win.frameId}] ✅ Received BEGIN_AUTOFILL from frame ${event.data?.fromFrame}`,
+        // )
         // Note: Cascading is handled by IframeAutofillWrapper, not here
       }
     })
@@ -199,7 +200,7 @@ export const setupIframeMessagePassing = async () => {
   const iframes = await scanForIframes()
 
   if (iframes.length === 0) {
-    console.log(`[Frame ${frameId}] No nested iframes found`)
+    // console.log(`[Frame ${frameId}] No nested iframes found`)
 
     // Set up mutation observer to catch dynamically created iframes
     const observer = new MutationObserver((mutations) => {
@@ -212,16 +213,16 @@ export const setupIframeMessagePassing = async () => {
 
             // Check if it's an iframe
             if (element.tagName === 'IFRAME') {
-              console.log(`[Frame ${frameId}] 🔍 New iframe detected via mutation observer`)
+              // console.log(`[Frame ${frameId}] 🔍 New iframe detected via mutation observer`)
               foundNewIframe = true
             }
 
             // Check for nested iframes
             const nestedIframes = element.querySelectorAll('iframe')
             if (nestedIframes.length > 0) {
-              console.log(
-                `[Frame ${frameId}] 🔍 Found ${nestedIframes.length} nested iframes via mutation observer`,
-              )
+              // console.log(
+              //   `[Frame ${frameId}] 🔍 Found ${nestedIframes.length} nested iframes via mutation observer`,
+              // )
               foundNewIframe = true
             }
           }
@@ -230,7 +231,7 @@ export const setupIframeMessagePassing = async () => {
 
       // If we found new iframes, rescan and send messages
       if (foundNewIframe) {
-        console.log(`[Frame ${frameId}] → Rescanning due to new iframes detected`)
+        // console.log(`[Frame ${frameId}] → Rescanning due to new iframes detected`)
         setTimeout(async () => {
           await setupIframeMessagePassing()
         }, 300) // Give the iframe time to fully load
@@ -242,21 +243,21 @@ export const setupIframeMessagePassing = async () => {
       subtree: true,
     })
 
-    console.log(`[Frame ${frameId}] Set up mutation observer for dynamic iframes`)
+    // console.log(`[Frame ${frameId}] Set up mutation observer for dynamic iframes`)
     return
   }
 
-  console.log(`[Frame ${frameId}] → Sending messages to ${iframes.length} nested iframes`)
+  // console.log(`[Frame ${frameId}] → Sending messages to ${iframes.length} nested iframes`)
 
   // Process each iframe and send messages
   for (let i = 0; i < iframes.length; i++) {
     const frameEl = iframes[i]
-    console.log(`[Frame ${frameId}] Processing iframe ${i + 1}/${iframes.length}:`, {
-      src: frameEl.src || 'no-src',
-      id: frameEl.id || 'no-id',
-      srcdoc: frameEl.srcdoc ? 'has-srcdoc' : 'no-srcdoc',
-      documentURL: frameEl.contentDocument?.URL || 'inaccessible',
-    })
+    // console.log(`[Frame ${frameId}] Processing iframe ${i + 1}/${iframes.length}:`, {
+    //   src: frameEl.src || 'no-src',
+    //   id: frameEl.id || 'no-id',
+    //   srcdoc: frameEl.srcdoc ? 'has-srcdoc' : 'no-srcdoc',
+    //   documentURL: frameEl.contentDocument?.URL || 'inaccessible',
+    // })
 
     await processIframe(frameEl)
 
@@ -264,13 +265,13 @@ export const setupIframeMessagePassing = async () => {
     try {
       frameEl.contentWindow?.postMessage(
         {
-          type: 'BEGIN_AUTOFILL',
+          type: eventTypes.BEGIN_AUTOFILL_WITH_IFRAMES,
           fromFrame: frameId,
           timestamp: Date.now(),
         },
         '*',
       )
-      console.log(`[Frame ${frameId}] ✅ Sent message to iframe ${i + 1}`)
+      // console.log(`[Frame ${frameId}] ✅ Sent message to iframe ${i + 1}`)
     } catch (e) {
       console.warn(`[Frame ${frameId}] ❌ Failed to send message to iframe ${i + 1}:`, e)
     }

@@ -67,7 +67,8 @@ const useAutofillInputs = () => {
 
   useOnPageLoad(() => {
     pageLoadedDeferredRef.current?.resolve()
-    console.log('Found inputs for autofill: ', elementsRef.current)
+    if (elementsRef.current.length > 3)
+      console.log('Found inputs for autofill: ', elementsRef.current)
   }, 1000)
 
   useEffect(() => {
