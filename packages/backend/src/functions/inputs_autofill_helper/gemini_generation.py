@@ -54,7 +54,7 @@ When filling radios/checkboxes, unless the valuePath maps directly to a boolean,
 }
 Remember, this is ONLY FOR RADIO BUTTONS AND CHECKBOXES. Do not output boolean values for text fields. DONT DO IT EVER - no {true} or {false} for anything except things that are explicitly fieldtype radio or checkbox.
 
-The initialLabel field is for outputting a two word summary of the input label - descriptive of the label - 2 words max.
+The initialLabel field is for outputting a two word summary of the input label - descriptive of the label - 2 words max. No next line characters.
 
 ### Enums
 If you need to output a text field but only have an enum, you may come up with a reasonable string interpretation of the enum.
@@ -109,7 +109,10 @@ def generate_autofill_with_gemini(inputs) -> AutofillResponseSchema:
         model="gemini-2.5-flash-preview-04-17",
         # model="gemini-2.0-flash",
     )
+    print("got chat about to send inputs", json.dumps(inputs))
     response = chat.send_message(
         json.dumps(inputs),
     )
+    print("reponse got?", response)
+
     return response.parsed
