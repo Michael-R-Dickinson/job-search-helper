@@ -8,6 +8,7 @@ import AutofillButton from './AutofillButton'
 import useAutofillInputs from '../hooks/useAutofillInputs'
 import { tailoringResumeAtom } from '../atoms'
 import { useAtomValue } from 'jotai/react'
+import FreeResponseListItemContent from './autofillListItems/FreeResponseListItemContent'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -24,6 +25,7 @@ const SidebarContent = () => {
     executeAutofillSequence,
     executeResumeAutofill,
     unfilledInputs,
+    freeResponseInputs,
     usesIframes,
   } = useAutofillInputs()
 
@@ -65,6 +67,12 @@ const SidebarContent = () => {
               title="Free Responses"
               active={activeItem === 'free-response'}
               onClick={() => setActiveItem('free-response')}
+              content={
+                <FreeResponseListItemContent
+                  freeResponseInputs={freeResponseInputs}
+                  loading={isFetchingValues}
+                />
+              }
             />
           </>
         )}

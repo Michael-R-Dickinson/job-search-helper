@@ -1,3 +1,6 @@
+import type { InputInfo } from '../hooks/useInputElements'
+import { getElementByReferenceId } from './autofillInputElements'
+
 function hasVisualBorder(element: HTMLElement): boolean {
   const computedStyle = window.getComputedStyle(element)
 
@@ -114,6 +117,14 @@ export const asyncScrollToElement = async (element: HTMLElement) => {
       }
     }
   })
+}
+
+export const highlightAndScrollToInput = (input: InputInfo) => {
+  const inputElement = getElementByReferenceId(input.elementReferenceId)
+  if (inputElement) {
+    triggerPulseAnimation(inputElement)
+    inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
 }
 
 export default triggerPulseAnimation
