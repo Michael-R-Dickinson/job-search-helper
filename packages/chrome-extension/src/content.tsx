@@ -19,13 +19,15 @@ import { shortHash } from './utils'
 export const isTopFrame = window.self === window.top
 export const frameId = shortHash(document.documentElement.innerHTML.slice(0, 1000))
 
+export const APP_ELEMENT_ID = 'perfectify-root'
+export const HOST_ELEMENT_ID = 'perfectify-host'
+
 const initializeFullApp = () => {
   // Initialize all font loading methods
   initializeFontLoading()
 
-  const APP_ELEMENT_ID = 'perfectify-root'
   const host = document.createElement('div')
-  host.id = 'perfectify-host'
+  host.id = HOST_ELEMENT_ID
   document.body.appendChild(host)
 
   const shadowRoot = host.attachShadow({ mode: 'open' })
