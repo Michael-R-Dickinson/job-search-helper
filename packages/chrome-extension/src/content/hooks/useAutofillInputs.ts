@@ -4,7 +4,7 @@ import triggerGetAutofillValues, {
   triggerGetSimpleAutofillValues,
 } from '../triggers/triggerGetAutofillValues'
 import type { AutofillInstruction } from '../../autofillEngine/schema'
-import { useOnPageLoad } from '../../utils'
+import { cleanText, useOnPageLoad } from '../../utils'
 import {
   AutofillAnimationSpeeds,
   autofillInputElements,
@@ -96,9 +96,17 @@ const useAutofillInputs = () => {
         .filter((i) => i.value !== null && i.value !== '')
         .map((i) => i.input_id)
 
-      setUnfilledInputs(
-        elements.filter((el) => !filledInputIds.includes(el.elementReferenceId) && !!el.label),
-      )
+      const unfilledInputs = elements.filter((el, idx, self) => {
+        const isUnfilled = !filledInputIds.includes(el.elementReferenceId) && !!el.label
+        const isTextInput =
+          el.element instanceof HTMLInputElement || el.element instanceof HTMLTextAreaElement
+        const isUnique =
+          idx === self.findIndex((i) => cleanText(i.label || '') === cleanText(el.label || ''))
+
+        return isUnfilled && isTextInput && isUnique
+      })
+      setUnfilledInputs(unfilledInputs)
+      console.log('unfilledInputs', unfilledInputs)
     }
 
     const handleSpecialAutofillTokens = (instructions: AutofillInstruction[]) => {

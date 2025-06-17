@@ -102,3 +102,11 @@ export function shortHash(str: string): string {
   // >>> 0 turns it into an unsigned 32-bit, toString(36) makes it shorter
   return (hash >>> 0).toString(36)
 }
+
+// Remove leading or trailing * characters, trim whitespace and lower
+export const cleanText = (text: string) => {
+  return text
+    .replace(/^[*]+|[*]+$/g, '')
+    .trim()
+    .toLowerCase()
+}

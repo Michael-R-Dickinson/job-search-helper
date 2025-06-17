@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import type { InputInfo } from '../../hooks/useInputElements'
 import LoadingSpinner from '../LoadingSpinner'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import InputsCheckboxList from '../InputsCheckboxList'
 import { useWatchInputs, type WatchableInputElement } from '../../hooks/useWatchInputs'
 
@@ -22,17 +22,10 @@ const UnfilledInputsListItemContent: React.FC<{
 }> = ({ unfilledInputs, loading }) => {
   const [filledInputs, setFilledInputs] = useState<InputInfo[]>([])
 
-  const unfilledInputsToDisplay = useMemo(() => {
-    return unfilledInputs
-      .filter((input) => input.label !== '' && input.element.type !== 'button')
-      .filter((i) => !(i instanceof HTMLButtonElement))
-      .filter((input, index, self) => index === self.findIndex((i) => i.label === input.label))
-  }, [unfilledInputs])
-
   useWatchInputs({
-    inputElements: unfilledInputsToDisplay.map((i) => i.element) as WatchableInputElement[],
+    inputElements: unfilledInputs.map((i) => i.element) as WatchableInputElement[],
     onInputFilled: (el) => {
-      setFilledInputs((prev) => [...prev, unfilledInputsToDisplay.find((i) => i.element === el)!])
+      setFilledInputs((prev) => [...prev, unfilledInputs.find((i) => i.element === el)!])
     },
   })
 
@@ -44,7 +37,7 @@ const UnfilledInputsListItemContent: React.FC<{
         <LoadingSpinner />
       ) : (
         <InputsCheckboxList
-          inputs={unfilledInputsToDisplay}
+          inputs={unfilledInputs}
           filledInputs={filledInputs}
           setFilledInputs={setFilledInputs}
         />
