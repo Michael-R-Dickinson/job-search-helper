@@ -124,13 +124,14 @@ const useAutofillInputs = () => {
       }
       if (freeResponseInputs.length > 0) {
         setFreeResponseInputs(freeResponseInputs)
+        console.log('freeResponseInputs', freeResponseInputs)
       }
 
       const specialInputsIds = [...freeResponseInputIds, ...resumeInputIds]
-      console.log(
-        'specialInputs',
-        instructions.filter((i) => specialInputsIds.includes(i.input_id)),
-      )
+      // console.log(
+      //   'specialInputs',
+      //   instructions.filter((i) => specialInputsIds.includes(i.input_id)),
+      // )
       return specialInputsIds
     }
 
@@ -151,8 +152,14 @@ const useAutofillInputs = () => {
       const simpleInputsInstructions = (await simpleInputsPromiseRef.current) || []
 
       const elements = elementsRef.current
-      console.log('triggering complex inputs', elements)
-      const complexInputsInstructions = await triggerGetAutofillValues(elements)
+      const complexInputs = elements.filter(
+        (el) =>
+          !simpleInputsInstructions.some(
+            (i) => i.input_id === el.elementReferenceId && i.value !== null && i.value !== '',
+          ),
+      )
+      console.log('triggering complex inputs', complexInputs)
+      const complexInputsInstructions = await triggerGetAutofillValues(complexInputs)
       // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
       // const complexInputsInstructions = [] as AutofillInstruction[]
       const allInstructions = [...simpleInputsInstructions, ...complexInputsInstructions]
