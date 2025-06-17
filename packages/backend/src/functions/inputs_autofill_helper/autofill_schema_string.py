@@ -42,11 +42,19 @@ const SexualOrientationEnum = z.enum([
   'queer',
   'prefer_not_to_say',
 ])
+const PronounEnum = z.enum([
+  'he/him',
+  'she/her',
+  'they/them',
+  'ze/zir',
+  'other',
+  'prefer_not_to_say',
+])
 const TransgenderEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
 const IdentitySchema = z.object({
   gender: GenderEnum.optional(),
   sexual_orientation: SexualOrientationEnum.optional(),
-  pronouns: z.string().optional(),
+  pronouns: PronounEnum.optional(),
   transgender: TransgenderEnum.optional(),
 })
 
