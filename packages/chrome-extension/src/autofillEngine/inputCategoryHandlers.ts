@@ -157,7 +157,8 @@ class SalaryExpectationsHandler extends InputCategoryHandler {
   }
 }
 
-export const RESUME_UPLOAD_VALUE = '__RESUME_FILE_UPLOAD__'
+export const FREE_RESPONSE_VALUE = '<FREE_RESPONSE>'
+export const RESUME_UPLOAD_VALUE = '<RESUME_FILE_UPLOAD>'
 
 class ResumeUploadHandler extends InputCategoryHandler {
   // You might add properties here if you were storing file data in the handler
