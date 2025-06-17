@@ -19,6 +19,13 @@ type IframeInfo = {
   contentScriptPresent: 'yes' | 'no' | 'injected' | 'injection-failed' | 'cross-origin-blocked'
 }
 
+type MessageData = {
+  type: string
+  fromFrame: string
+  timestamp: number
+  [key: string]: any
+}
+
 // Scan for iframes with retry logic
 const scanForIframes = (retryCount = 3, delay = 200): Promise<HTMLIFrameElement[]> => {
   return new Promise((resolve) => {
@@ -75,13 +82,14 @@ const injectIntoSrcdocIframe = async (frameEl: HTMLIFrameElement): Promise<boole
     // Set up frame identification
     win.frameId = 'srcdoc-' + Math.random().toString(36).substr(2, 8)
 
-    // Set up message listener directly on window object
+    // Set up generic message listener directly on window object
     win.addEventListener('message', (event: MessageEvent) => {
-      if (event.data?.type === eventTypes.BEGIN_AUTOFILL_WITH_IFRAMES) {
+      // Generic message handling - can handle any message type
+      if (event.data?.type && event.data?.fromFrame) {
         // console.log(
-        //   `[Frame ${win.frameId}] ✅ Received BEGIN_AUTOFILL from frame ${event.data?.fromFrame}`,
+        //   `[Frame ${win.frameId}] ✅ Received ${event.data.type} from frame ${event.data.fromFrame}`,
         // )
-        // Note: Cascading is handled by IframeAutofillWrapper, not here
+        // Note: Specific message handling is done by components that need it
       }
     })
 
@@ -121,13 +129,14 @@ const injectIntoAboutBlankIframe = (frameEl: HTMLIFrameElement): boolean => {
     // Set up frame identification
     win.frameId = 'blank-' + Math.random().toString(36).substr(2, 8)
 
-    // Set up message listener directly
+    // Set up generic message listener directly
     win.addEventListener('message', (event: MessageEvent) => {
-      if (event.data?.type === eventTypes.BEGIN_AUTOFILL_WITH_IFRAMES) {
+      // Generic message handling - can handle any message type
+      if (event.data?.type && event.data?.fromFrame) {
         // console.log(
-        //   `[Frame ${win.frameId}] ✅ Received BEGIN_AUTOFILL from frame ${event.data?.fromFrame}`,
+        //   `[Frame ${win.frameId}] ✅ Received ${event.data.type} from frame ${event.data.fromFrame}`,
         // )
-        // Note: Cascading is handled by IframeAutofillWrapper, not here
+        // Note: Specific message handling is done by components that need it
       }
     })
 
@@ -196,7 +205,7 @@ const processIframe = async (frameEl: HTMLIFrameElement): Promise<IframeInfo> =>
  * Main function: Set up message passing to all nested iframes
  * Handles detection, injection, and message sending automatically
  */
-export const setupIframeMessagePassing = async () => {
+const setupIframeMessagePassing = async (messageType: string, payload: any = {}) => {
   const iframes = await scanForIframes()
 
   if (iframes.length === 0) {
@@ -233,7 +242,7 @@ export const setupIframeMessagePassing = async () => {
       if (foundNewIframe) {
         // console.log(`[Frame ${frameId}] → Rescanning due to new iframes detected`)
         setTimeout(async () => {
-          await setupIframeMessagePassing()
+          await setupIframeMessagePassing(messageType, payload)
         }, 300) // Give the iframe time to fully load
       }
     })
@@ -261,17 +270,17 @@ export const setupIframeMessagePassing = async () => {
 
     await processIframe(frameEl)
 
-    // Send BEGIN_AUTOFILL message to the iframe
+    // Send message to the iframe with provided type and payload
     try {
-      frameEl.contentWindow?.postMessage(
-        {
-          type: eventTypes.BEGIN_AUTOFILL_WITH_IFRAMES,
-          fromFrame: frameId,
-          timestamp: Date.now(),
-        },
-        '*',
-      )
-      // console.log(`[Frame ${frameId}] ✅ Sent message to iframe ${i + 1}`)
+      const messageData: MessageData = {
+        type: messageType,
+        fromFrame: frameId,
+        timestamp: Date.now(),
+        ...payload,
+      }
+
+      frameEl.contentWindow?.postMessage(messageData, '*')
+      // console.log(`[Frame ${frameId}] ✅ Sent ${messageType} message to iframe ${i + 1}`)
     } catch (e) {
       console.warn(`[Frame ${frameId}] ❌ Failed to send message to iframe ${i + 1}:`, e)
     }
@@ -279,9 +288,12 @@ export const setupIframeMessagePassing = async () => {
 }
 
 /**
- * Simple interface: Send autofill message to all nested iframes
+ * Generic interface: Send any message type with payload to all nested iframes
  * This is the main function that should be called from the frontend
+ *
+ * @param messageType - The event type to send (from eventTypes or any custom type)
+ * @param payload - Additional data to include in the message (optional)
  */
-export const sendAutofillMessageToIframes = async () => {
-  await setupIframeMessagePassing()
+export const sendMessageToIframes = async (messageType: string, payload: any = {}) => {
+  await setupIframeMessagePassing(messageType, payload)
 }

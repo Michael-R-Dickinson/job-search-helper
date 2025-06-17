@@ -13,7 +13,7 @@ import {
   FREE_RESPONSE_VALUE,
   RESUME_UPLOAD_VALUE,
 } from '../../autofillEngine/inputCategoryHandlers'
-import { sendAutofillMessageToIframes } from '../iframe/iframeMessageHandler'
+import { sendMessageToIframes } from '../iframe/iframeMessageHandler'
 import { eventTypes } from '../../events'
 import { frameId } from '../../content'
 import handleResumeInstructions from '../handleResumeInstructions'
@@ -59,6 +59,8 @@ const useAutofillInputs = () => {
   const simpleInputsPromiseRef = useRef<Promise<AutofillInstruction[]> | null>(null)
   const complexInputsPromiseRef = useRef<Promise<AutofillInstruction[]> | null>(null)
   const resumeInstructionsRef = useRef<AutofillInstruction[]>([])
+  // whether the inputs are housed in iframes or not - we need to disable some features if they are
+  const [usesIframes, setUsesIframes] = useState(false)
   const pageLoadedDeferredRef = useRef<{
     promise: Promise<void>
     resolve: () => void
@@ -75,8 +77,11 @@ const useAutofillInputs = () => {
 
   useOnPageLoad(() => {
     pageLoadedDeferredRef.current?.resolve()
-    if (elementsRef.current.length > 3)
-      console.log('Found inputs for autofill: ', elementsRef.current)
+    if (elementsRef.current.length <= 3) {
+      setUsesIframes(true)
+      return
+    }
+    console.log('Found inputs for autofill: ', elementsRef.current)
   }, 1000)
 
   useEffect(() => {
@@ -172,7 +177,7 @@ const useAutofillInputs = () => {
     setFillingStatus('filling_inputs')
 
     // Send autofill messages to all nested iframes
-    await sendAutofillMessageToIframes()
+    await sendMessageToIframes(eventTypes.BEGIN_AUTOFILL_WITH_IFRAMES)
 
     if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
 
@@ -198,6 +203,7 @@ const useAutofillInputs = () => {
   }
 
   const executeResumeAutofill = async (resumeName: string) => {
+    await sendMessageToIframes(eventTypes.BEGIN_RESUME_AUTOFILL, { resumeName })
     await simpleInputsPromiseRef.current
     const resumeInstructions = resumeInstructionsRef.current
     if (!resumeInstructions) return
@@ -217,6 +223,7 @@ const useAutofillInputs = () => {
     freeResponseInputs,
     fillingStatus,
     fetchStatus,
+    usesIframes,
   }
 }
 

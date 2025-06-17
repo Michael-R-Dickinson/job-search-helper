@@ -24,10 +24,11 @@ const SidebarContent = () => {
     executeAutofillSequence,
     executeResumeAutofill,
     unfilledInputs,
+    usesIframes,
   } = useAutofillInputs()
 
   const [activeItem, setActiveItem] = useState<'resume' | 'unfilled' | 'free-response'>('resume')
-  const { promise: resumePromise, name: resumeName } = useAtomValue(tailoringResumeAtom)
+  const { promise: resumePromise } = useAtomValue(tailoringResumeAtom)
 
   const undoneAutofillSections: string[] = []
   if (!resumePromise) undoneAutofillSections.push('resume')
@@ -45,24 +46,28 @@ const SidebarContent = () => {
           onClick={() => setActiveItem('resume')}
           content={<ResumeListItemContent />}
         />
-        <SidebarListItem
-          Icon={AppWindow}
-          title="Unfilled Inputs"
-          active={activeItem === 'unfilled'}
-          onClick={() => setActiveItem('unfilled')}
-          content={
-            <UnfilledInputsListItemContent
-              unfilledInputs={unfilledInputs}
-              loading={isFetchingValues}
+        {!usesIframes && (
+          <>
+            <SidebarListItem
+              Icon={AppWindow}
+              title="Unfilled Inputs"
+              active={activeItem === 'unfilled'}
+              onClick={() => setActiveItem('unfilled')}
+              content={
+                <UnfilledInputsListItemContent
+                  unfilledInputs={unfilledInputs}
+                  loading={isFetchingValues}
+                />
+              }
             />
-          }
-        />
-        <SidebarListItem
-          Icon={PencilLine}
-          title="Free Responses"
-          active={activeItem === 'free-response'}
-          onClick={() => setActiveItem('free-response')}
-        />
+            <SidebarListItem
+              Icon={PencilLine}
+              title="Free Responses"
+              active={activeItem === 'free-response'}
+              onClick={() => setActiveItem('free-response')}
+            />
+          </>
+        )}
       </div>
       <div style={{ marginTop: '0.8rem' }}>
         <AutofillButton
