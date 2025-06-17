@@ -39,6 +39,11 @@ For example, to produce "yes" if a user is a veteran, you would output the follo
 
 Include the curly braces in your response.
 
+For free response inputs - ie. ones that should be answered with a custom essay-type response rather than a simple value from the schema - output the special value path: {free_response}
+Examples of free response inputs:
+- Why are you interested in this position?
+- What are your strengths and weaknesses?
+- What are your career goals?
 
 ### Radio Buttons and Checkboxes
 If the result of the value at a valuePath is a boolean, this will indicate that a radio button or checkbox should be checked. You may specify a value to always be true or false using the special lowercase {true} or {false} valuePaths. 
@@ -54,7 +59,11 @@ When filling radios/checkboxes, unless the valuePath maps directly to a boolean,
 }
 Remember, this is ONLY FOR RADIO BUTTONS AND CHECKBOXES. Do not output boolean values for text fields. DONT DO IT EVER - no {true} or {false} for anything except things that are explicitly fieldtype radio or checkbox.
 
-The initialLabel field is for outputting a two word summary of the input label - descriptive of the label - 2 words max. No next line characters.
+The initialLabel field is for outputting a two word summary of the input label - descriptive of the label - 2 words max. 
+Do not output \\n or next line characters whatsoever, words please.
+Do not output \\n or next line characters whatsoever, words please.
+Do not output \\n or next line characters whatsoever, words please.
+Do not output \\n or next line characters whatsoever, words please.
 
 ### Enums
 If you need to output a text field but only have an enum, you may come up with a reasonable string interpretation of the enum.
@@ -102,14 +111,11 @@ def generate_autofill_with_gemini(inputs) -> AutofillResponseSchema:
             system_instruction=SYSTEM_INSTRUCTION,
             response_mime_type="application/json",
             response_schema=AutofillResponseSchema,
-            temperature=0.0,
-            top_k=1.0,
             thinking_config=types.ThinkingConfig(thinking_budget=0),
         ),
         model="gemini-2.5-flash-preview-04-17",
         # model="gemini-2.0-flash",
     )
-    print("got chat about to send inputs", json.dumps(inputs))
     response = chat.send_message(
         json.dumps(inputs),
     )
