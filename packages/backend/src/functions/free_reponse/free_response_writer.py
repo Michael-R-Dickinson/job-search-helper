@@ -9,18 +9,25 @@ from linkedin_fetching.fetch_job_description import fetch_job_description_markdo
 
 def write_response(
     user_id: str,
-    prompt: str,
+    prompt_question: str,
+    user_answer_suggestion: str,
     job_description_link: str,
-    resume_name: str,
+    resume_name: str | None,
 ) -> str:
-    resume_path = fetch_and_download_resume(user_id, resume_name)
-    resume_rawtext = serialize_raw_docx(resume_path)
+    resume_rawtext = None
+    if not ((resume_name is None) or (resume_name == "")):
+        resume_path = fetch_and_download_resume(user_id, resume_name)
+        resume_rawtext = serialize_raw_docx(resume_path)
+
     job_description = fetch_job_description_markdown(job_description_link)
 
     prompt = generate_free_response_prompt(
         job_description=job_description,
-        resume=resume_rawtext,
+        user_answer_suggestion=user_answer_suggestion,
+        prompt_question=prompt_question,
+        resume_text=resume_rawtext,
     )
+    print("PROMPT", prompt)
 
     response = execute_generation_with_claude(prompt, model="claude-sonnet-4-20250514")
 
