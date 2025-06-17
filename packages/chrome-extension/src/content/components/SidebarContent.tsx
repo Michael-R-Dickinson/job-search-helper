@@ -18,8 +18,13 @@ const AutofillHeader = styled.h3`
 `
 
 const SidebarContent = () => {
-  const { fillingStatus, fetchStatus, executeAutofillSequence, unfilledInputs } =
-    useAutofillInputs()
+  const {
+    fillingStatus,
+    fetchStatus,
+    executeAutofillSequence,
+    executeResumeAutofill,
+    unfilledInputs,
+  } = useAutofillInputs()
 
   const [activeItem, setActiveItem] = useState<'resume' | 'unfilled' | 'free-response'>('resume')
   const { promise: resumePromise, name: resumeName } = useAtomValue(tailoringResumeAtom)
@@ -62,7 +67,13 @@ const SidebarContent = () => {
       <div style={{ marginTop: '0.8rem' }}>
         <AutofillButton
           unfilledSections={undoneAutofillSections}
-          onClick={() => executeAutofillSequence()}
+          onClick={async () => {
+            await executeAutofillSequence()
+            const resumeUrl = await resumePromise
+            if (resumeUrl) {
+              await executeResumeAutofill(resumeUrl)
+            }
+          }}
           fillStatus={fillingStatus}
         />
       </div>

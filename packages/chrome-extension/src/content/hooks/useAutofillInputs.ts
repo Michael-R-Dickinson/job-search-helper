@@ -1,16 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useInputElements, type InputInfo } from './useInputElements'
-import { triggerGetSimpleAutofillValues } from '../triggers/triggerGetAutofillValues'
+import triggerGetAutofillValues, {
+  triggerGetSimpleAutofillValues,
+} from '../triggers/triggerGetAutofillValues'
 import type { AutofillInstruction } from '../../autofillEngine/schema'
 import { useOnPageLoad } from '../../utils'
 import {
   AutofillAnimationSpeeds,
   autofillInputElements,
 } from '../inputsManipulation/autofillInputElements'
-import { RESUME_UPLOAD_VALUE } from '../../autofillEngine/inputCategoryHandlers'
+import {
+  FREE_RESPONSE_VALUE,
+  RESUME_UPLOAD_VALUE,
+} from '../../autofillEngine/inputCategoryHandlers'
 import { sendAutofillMessageToIframes } from '../iframe/iframeMessageHandler'
 import { eventTypes } from '../../events'
 import { frameId } from '../../content'
+import handleResumeInstructions from '../handleResumeInstructions'
 
 const useMonitorIframeAutofills = (setAutofillCompleted: () => void) => {
   useEffect(() => {
@@ -43,14 +49,16 @@ export type AutofillFillingStatus = 'idle' | 'filling_inputs' | 'success' | 'err
 
 const useAutofillInputs = () => {
   // State
-  const [unfilledInputs, setUnfilledInputs] = useState<InputInfo[]>([])
   // Purely for UI
+  const [freeResponseInputs, setFreeResponseInputs] = useState<InputInfo[]>([])
+  const [unfilledInputs, setUnfilledInputs] = useState<InputInfo[]>([])
   const [fetchStatus, setFetchStatus] = useState<AutofillFetchStatus>('loading')
   const [fillingStatus, setFillingStatus] = useState<AutofillFillingStatus>('idle')
 
   // Refs
   const simpleInputsPromiseRef = useRef<Promise<AutofillInstruction[]> | null>(null)
   const complexInputsPromiseRef = useRef<Promise<AutofillInstruction[]> | null>(null)
+  const resumeInstructionsRef = useRef<AutofillInstruction[]>([])
   const pageLoadedDeferredRef = useRef<{
     promise: Promise<void>
     resolve: () => void
@@ -88,12 +96,49 @@ const useAutofillInputs = () => {
       )
     }
 
+    const handleSpecialAutofillTokens = (instructions: AutofillInstruction[]) => {
+      // Resume instructions
+      const resumeInstructions = instructions.filter(
+        (instruction) => instruction.value === RESUME_UPLOAD_VALUE,
+      )
+      const resumeInputIds = resumeInstructions.map((i) => i.input_id)
+
+      // Free Responses
+      const freeResponseInputs: InputInfo[] = instructions
+        .filter((instruction) => instruction.value === FREE_RESPONSE_VALUE)
+        .map((i) => {
+          const element = elementsRef.current.find((el) => el.elementReferenceId === i.input_id)
+          if (!element) return null
+          return element
+        })
+        .filter((i) => i !== null)
+      const freeResponseInputIds = freeResponseInputs.map((i) => i.elementReferenceId)
+
+      if (resumeInstructions.length > 0) {
+        resumeInstructionsRef.current = resumeInstructions
+      }
+      if (freeResponseInputs.length > 0) {
+        setFreeResponseInputs(freeResponseInputs)
+      }
+
+      const specialInputsIds = [...freeResponseInputIds, ...resumeInputIds]
+      console.log(
+        'specialInputs',
+        instructions.filter((i) => specialInputsIds.includes(i.input_id)),
+      )
+      return specialInputsIds
+    }
+
     simpleInputsPromiseRef.current = (async () => {
       await pageLoadedDeferredRef.current?.promise
 
       const elements = elementsRef.current
       const simpleInputsInstructions = await triggerGetSimpleAutofillValues(elements)
-      return simpleInputsInstructions
+      const specialInputsIds = handleSpecialAutofillTokens(simpleInputsInstructions)
+      const instructions = simpleInputsInstructions.filter(
+        (i) => !specialInputsIds.includes(i.input_id),
+      )
+      return instructions
     })()
 
     complexInputsPromiseRef.current = (async () => {
@@ -101,17 +146,21 @@ const useAutofillInputs = () => {
       const simpleInputsInstructions = (await simpleInputsPromiseRef.current) || []
 
       const elements = elementsRef.current
-      // const complexInputsInstructions = await triggerGetAutofillValues(elements)
+      console.log('triggering complex inputs', elements)
+      const complexInputsInstructions = await triggerGetAutofillValues(elements)
       // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
-      const complexInputsInstructions = [] as AutofillInstruction[]
+      // const complexInputsInstructions = [] as AutofillInstruction[]
       const allInstructions = [...simpleInputsInstructions, ...complexInputsInstructions]
 
       handleUnfilledInputs(allInstructions)
+      const specialInputsIds = handleSpecialAutofillTokens(allInstructions)
+      const instructions = complexInputsInstructions.filter(
+        (i) => !specialInputsIds.includes(i.input_id),
+      )
       setFetchStatus('fetched')
 
-      // TODO: This probably runs too many times
       console.log('complex inputs instructions found')
-      return complexInputsInstructions
+      return instructions
     })()
   }, [elementsRef])
 
@@ -148,6 +197,14 @@ const useAutofillInputs = () => {
     return resumeInstructions
   }
 
+  const executeResumeAutofill = async (resumeName: string) => {
+    await simpleInputsPromiseRef.current
+    const resumeInstructions = resumeInstructionsRef.current
+    if (!resumeInstructions) return
+    const updatedResumeInstructions = handleResumeInstructions(resumeInstructions, resumeName)
+    await autofillInputElements(updatedResumeInstructions, AutofillAnimationSpeeds.NONE)
+  }
+
   const setAutofillCompleted = useCallback(() => {
     setFillingStatus('success')
   }, [setFillingStatus])
@@ -155,7 +212,9 @@ const useAutofillInputs = () => {
 
   return {
     executeAutofillSequence,
+    executeResumeAutofill,
     unfilledInputs,
+    freeResponseInputs,
     fillingStatus,
     fetchStatus,
   }
