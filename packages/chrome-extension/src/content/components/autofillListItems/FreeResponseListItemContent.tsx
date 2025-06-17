@@ -173,6 +173,11 @@ const FreeResponseListItemContent: React.FC<FreeResponseListItemContentProps> = 
                         [input.label]: e.target.value,
                       })
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleClick(input)
+                      }
+                    }}
                     disabled={loadingStates[input.label!]}
                   />
                 </PromptInputWrapper>
