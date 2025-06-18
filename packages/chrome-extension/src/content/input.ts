@@ -5,10 +5,10 @@ import type { ElementInfo } from './hooks/useInputElements'
 import { extractDisplayedValue, getFieldType, removeValuePrefixes } from './serializeInputsHtml'
 
 class InputElement {
+  readonly label: string | null
   readonly elementReferenceId: string
   readonly element: ElementInfo
 
-  readonly label: string | null
   readonly wholeQuestionLabel: string | null
   readonly name: string
   readonly fieldType: InputElementType
