@@ -17,6 +17,7 @@ export const INPUT_ELEMENT_TYPES = {
   PASSWORD: 'password',
   URL: 'url',
   FILE: 'file',
+  BUTTON: 'button',
 } as const
 
 export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_ELEMENT_TYPES]

@@ -11,6 +11,7 @@ import { useAtomValue } from 'jotai'
 import { jobUrlAtom, tailoringResumeAtom } from '../../atoms'
 import { highlightAndScrollToInput } from '../../inputsManipulation/animateInputFilling'
 import { autofillInputElements } from '../../inputsManipulation/autofillInputElements'
+import { AutofillReadyInputArray } from '../../autofillReadyInput'
 
 const Container = styled.div({
   width: '100%',
@@ -127,12 +128,14 @@ const FreeResponseListItemContent: React.FC<FreeResponseListItemContentProps> = 
       const content = res.content
       console.log(content)
       highlightAndScrollToInput(input)
-      autofillInputElements([
-        {
-          input_id: input.elementReferenceId,
-          value: content,
-        },
-      ])
+      autofillInputElements(
+        AutofillReadyInputArray.fromAutofillInstructions([
+          {
+            input_id: input.elementReferenceId,
+            value: content,
+          },
+        ]),
+      )
     }
     setLoadingState(input.label, false)
   }

@@ -1,5 +1,3 @@
-import { RESUME_UPLOAD_VALUE } from '../autofillEngine/inputCategoryHandlers'
-
 const findNearestInputElement = (element: HTMLElement): HTMLInputElement | null => {
   const parent = element.parentElement
   if (!parent) return null
@@ -18,9 +16,9 @@ const findNearestInputElement = (element: HTMLElement): HTMLInputElement | null 
 
 export const fillResumeUploadInput = async (
   inputElement: HTMLInputElement | HTMLButtonElement,
-  value: string | boolean,
+  fileUrl: string | boolean,
 ) => {
-  if (typeof value !== 'string') return
+  if (typeof fileUrl !== 'string') return
 
   let correctedInputElement: HTMLInputElement | null = null
   if (inputElement instanceof HTMLButtonElement) {
@@ -30,8 +28,6 @@ export const fillResumeUploadInput = async (
   }
   if (correctedInputElement === null) return
 
-  const fileUrl = value.replace(RESUME_UPLOAD_VALUE, '')
-  if (!fileUrl) return
   console.log('fileUrl', fileUrl)
   // 2. Fetch that PDF as a Blob
   const response = await fetch(fileUrl)

@@ -33,11 +33,20 @@ class InputElement {
     return this.fieldType === 'text' || this.fieldType === 'textbox'
   }
 
+  get isFileUploadInput(): boolean {
+    return this.fieldType === 'file' || this.fieldType === 'button'
+  }
+
   get isCheckable(): boolean {
     return (
       this.element instanceof HTMLInputElement &&
       (this.fieldType === 'checkbox' || this.fieldType === 'radio')
     )
+  }
+
+  // can be autofilled by LLM - essentially text inputs and checkboxes
+  get isLLMAutofillable(): boolean {
+    return this.isTextInput || this.isCheckable
   }
 
   private getValue(): string {

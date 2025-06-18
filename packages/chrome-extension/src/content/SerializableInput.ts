@@ -124,28 +124,26 @@ class SerializableInput {
 }
 
 export class SerializableInputArray extends Array<SerializableInput> {
-  public readonly inputs: SerializableInput[]
-
   constructor(inputs: SerializableInput[]) {
     console.log('SerializableInputArray constructor', typeof inputs, inputs)
     // Convert to proper Array to ensure it's iterable before spreading
     const inputsArray = Array.isArray(inputs)
       ? inputs
       : Array.from(inputs as ArrayLike<SerializableInput>)
+
     super(...inputsArray)
-    this.inputs = inputsArray
   }
 
   public toMinified(): MinifiedInput[] {
-    return this.inputs.map((input) => input.toMinified())
+    return this.map((input) => input.toMinified())
   }
 
   public toSerialized(): SerializedHtmlInput[] {
-    return this.inputs.map((input) => input.toSerialized())
+    return this.map((input) => input.toSerialized())
   }
 
   public toString(): string {
-    return 'SerializableInputArray(' + this.inputs.map((input) => input.toString()).join('\n') + ')'
+    return 'SerializableInputArray(' + this.map((input) => input.toString()).join('\n') + ')'
   }
 
   public static fromSerialized(serializedObject: unknown): SerializableInputArray {

@@ -1,5 +1,6 @@
 import { AutofillInstructionsSchema } from '../../autofillEngine/schema'
 import { eventTypes } from '../../events'
+import { AutofillReadyInputArray } from '../autofillReadyInput'
 import type InputElement from '../input'
 
 export const triggerGetSimpleAutofillValues = async (inputs: InputElement[]) => {
@@ -9,7 +10,7 @@ export const triggerGetSimpleAutofillValues = async (inputs: InputElement[]) => 
     payload: parsedInputs,
   })
   const parsedResponse = AutofillInstructionsSchema.parse(response)
-  return parsedResponse
+  return AutofillReadyInputArray.fromAutofillInstructions(parsedResponse)
 }
 
 const triggerGetAutofillValues = async (inputs: InputElement[]) => {
@@ -19,7 +20,7 @@ const triggerGetAutofillValues = async (inputs: InputElement[]) => {
     payload: parsedInputs,
   })
   const parsedResponse = AutofillInstructionsSchema.parse(response)
-  return parsedResponse
+  return AutofillReadyInputArray.fromAutofillInstructions(parsedResponse)
 }
 
 export default triggerGetAutofillValues
