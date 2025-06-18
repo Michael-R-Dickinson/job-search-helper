@@ -1,3 +1,4 @@
+import type { SerializableInputArray } from '../content/SerializableInput'
 import {
   isNameInput,
   isEmailInput,
@@ -10,7 +11,7 @@ import {
 import type { SerializedHtmlInput, CategorizedInput, SimpleInputsEnum } from './schema'
 
 // Categorizes a number of simple inputs that we can handle without invoking the LLM autofilling engine
-const categorizeSimpleInputs = (inputs: SerializedHtmlInput[]): CategorizedInput[] => {
+const categorizeSimpleInputs = (inputs: SerializableInputArray): CategorizedInput[] => {
   return inputs.map((input) => {
     let category: SimpleInputsEnum = 'unknown'
     if (isNameInput(input)) category = 'name'

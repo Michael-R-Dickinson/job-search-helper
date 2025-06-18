@@ -1,10 +1,9 @@
-import { AutofillInstructionsSchema, type SerializedHtmlInput } from '../../autofillEngine/schema'
+import { AutofillInstructionsSchema } from '../../autofillEngine/schema'
 import { eventTypes } from '../../events'
-import type { InputInfo } from '../hooks/useInputElements'
-import { serializeInputsHtml } from '../serializeInputsHtml'
+import type InputElement from '../input'
 
-export const triggerGetSimpleAutofillValues = async (inputs: InputInfo[]) => {
-  const parsedInputs: SerializedHtmlInput[] = serializeInputsHtml(inputs)
+export const triggerGetSimpleAutofillValues = async (inputs: InputElement[]) => {
+  const parsedInputs = inputs.map((input) => input.toSerializable().toSerialized())
   const response = await chrome.runtime.sendMessage({
     type: eventTypes.GET_SIMPLE_AUTOFILL_VALUES,
     payload: parsedInputs,
@@ -13,8 +12,8 @@ export const triggerGetSimpleAutofillValues = async (inputs: InputInfo[]) => {
   return parsedResponse
 }
 
-const triggerGetAutofillValues = async (inputs: InputInfo[]) => {
-  const parsedInputs: SerializedHtmlInput[] = serializeInputsHtml(inputs)
+const triggerGetAutofillValues = async (inputs: InputElement[]) => {
+  const parsedInputs = inputs.map((input) => input.toSerializable().toSerialized())
   const response = await chrome.runtime.sendMessage({
     type: eventTypes.GET_AUTOFILL_VALUES,
     payload: parsedInputs,

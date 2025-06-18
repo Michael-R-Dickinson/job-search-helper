@@ -15,6 +15,7 @@ import type { UserDataResponse } from './content/triggers/triggerGetUserData'
 import { UploadResumePayloadSchema } from './content/triggers/triggerResumeUpload'
 import { ConvertDocxToPdfPayloadSchema } from './content/triggers/triggerDocxToPdfConversion'
 import { WriteFreeResponsePayloadSchema } from './content/triggers/triggerWriteFreeResponse'
+import { SerializableInputArray } from './content/SerializableInput'
 
 console.log('Background script loaded')
 
@@ -27,7 +28,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const userId = currentUser?.uid
     if (!message.payload) throw new Error('No payload provided')
     if (!userId) throw new Error('No user found')
-    getSimpleInputAutofillInstructions(message.payload, userId).then((autofillInstructions) => {
+
+    const inputs = SerializableInputArray.fromSerialized(message.payload)
+
+    getSimpleInputAutofillInstructions(inputs, userId).then((autofillInstructions) => {
       sendResponse(autofillInstructions)
     })
     return true
@@ -38,7 +42,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message.payload) throw new Error('No payload provided')
     if (!userId) throw new Error('No user found')
 
-    getAutofillInstructions(message.payload, userId).then((autofillInstructions) => {
+    const inputs = SerializableInputArray.fromSerialized(message.payload)
+
+    getAutofillInstructions(inputs, userId).then((autofillInstructions) => {
       console.log(
         'autofillInstructions, before handing off to content script',
         autofillInstructions,
@@ -53,7 +59,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message.payload) throw new Error('No payload provided')
     if (!userId) throw new Error('No user found')
 
-    saveFilledInputs(message.payload, userId).then((results) => {
+    const inputs = SerializableInputArray.fromSerialized(message.payload)
+
+    saveFilledInputs(inputs, userId).then((results) => {
       sendResponse(results)
     })
     return true
