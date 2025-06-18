@@ -26,14 +26,12 @@ export const SerializedHtmlInputSchema = z.object({
   html: z.string(),
   fieldType: z.nativeEnum(INPUT_ELEMENT_TYPES),
   name: z.string(),
-  type: z.string(),
   placeholder: z.string(),
   autocomplete: z.string(),
-  id: z.string(),
+  htmlId: z.string(),
   className: z.string(),
   value: z.string(),
   required: z.boolean(),
-  checked: z.boolean().nullable().optional(),
   // A unique identifier we give to the input element to identify it in the DOM
   // This is used to match the input element to the autofill instruction in the frontend
   elementReferenceId: z.string(),

@@ -8,12 +8,11 @@ const createInput = (overrides: Partial<SerializedHtmlInput> = {}): SerializedHt
   name: '',
   label: '',
   placeholder: '',
-  type: 'text',
   fieldType: INPUT_ELEMENT_TYPES.TEXT,
   autocomplete: '',
   html: '<input>',
   value: '',
-  id: '',
+  htmlId: '',
   className: '',
   required: false,
   elementReferenceId: '',
@@ -66,7 +65,7 @@ describe('categorizeInputs', () => {
       const inputs: SerializedHtmlInput[] = [
         createInput({ name: 'email' }),
         createInput({ name: 'e-mail' }),
-        createInput({ type: 'email' }),
+        createInput({ fieldType: INPUT_ELEMENT_TYPES.EMAIL }),
         createInput({ autocomplete: 'email' }),
         createInput({ placeholder: 'Enter your email' }),
       ]

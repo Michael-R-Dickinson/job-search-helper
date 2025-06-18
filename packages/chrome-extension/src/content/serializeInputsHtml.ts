@@ -5,7 +5,7 @@ import {
 } from '../autofillEngine/schema'
 import type { InputInfo } from './hooks/useInputElements'
 
-function getFieldType(el: Element): InputElementType {
+export function getFieldType(el: Element): InputElementType {
   const tag = el.tagName.toLowerCase()
   if (tag === 'select') return INPUT_ELEMENT_TYPES.SELECT
   if (tag === 'textarea') return INPUT_ELEMENT_TYPES.TEXTBOX
@@ -22,7 +22,11 @@ function getFieldType(el: Element): InputElementType {
 }
 
 // Helper to extract a visible value from nearby DOM if input value is empty
-function extractDisplayedValue(el: Element, placeholder: string = '', label: string = ''): string {
+export function extractDisplayedValue(
+  el: Element,
+  placeholder: string = '',
+  label: string = '',
+): string {
   const valueClassFragments = [
     'single-value',
     'selected-value',
@@ -106,7 +110,7 @@ function extractDisplayedValue(el: Element, placeholder: string = '', label: str
   return ''
 }
 
-const removeValuePrefixes = (value: string) => {
+export const removeValuePrefixes = (value: string) => {
   // Remove prefixes like "string:" or "number:"
   return value.replace(/^string:|number:/, '')
 }
@@ -116,36 +120,41 @@ export function serializeInputsHtml(inputs: InputInfo[]): SerializedHtmlInput[] 
     const el = input.element
     const tag = el.tagName.toLowerCase()
     const fieldType = getFieldType(el)
-    let type = 'text'
+
+    // Determine the input type for checkbox/radio handling
+    let inputType = 'text'
     if (tag === 'input') {
-      type = (el as HTMLInputElement).type?.toLowerCase() || 'text'
+      inputType = (el as HTMLInputElement).type?.toLowerCase() || 'text'
     } else if (tag === 'select') {
-      type = (el as HTMLSelectElement).type || 'select-one'
+      inputType = (el as HTMLSelectElement).type || 'select-one'
     } else if (tag === 'textarea') {
-      type = 'textarea'
+      inputType = 'textarea'
     }
+
     const placeholder = (el as any).placeholder || ''
     let value = (el as any).value || ''
+
     if (!value) {
       value = extractDisplayedValue(el, placeholder, input.label || '')
     }
     value = removeValuePrefixes(value)
-    if (type === 'checkbox' || type === 'radio') {
+
+    // For checkbox and radio inputs, use the checked state as the value
+    if (inputType === 'checkbox' || inputType === 'radio') {
       value = (el as any).checked.toString()
     }
+
     return {
       label: input.label,
       wholeQuestionLabel: input.wholeQuestionLabel,
       html: el.outerHTML,
       fieldType,
       name: (el as any).name || '',
-      type,
       placeholder,
       autocomplete: (el as any).autocomplete || '',
-      id: el.id || '',
+      htmlId: el.id || '',
       className: el.className || '',
       value,
-      checked: (el as any).checked || false,
       required: !!(el as any).required,
       elementReferenceId: input.elementReferenceId,
     }
