@@ -9,10 +9,12 @@ import {
   uploadResumeQuery,
   getTailoringQuestions,
   convertDocxToPdfQuery,
+  writeFreeResponseQuery,
 } from './backendApi'
 import type { UserDataResponse } from './content/triggers/triggerGetUserData'
 import { UploadResumePayloadSchema } from './content/triggers/triggerResumeUpload'
 import { ConvertDocxToPdfPayloadSchema } from './content/triggers/triggerDocxToPdfConversion'
+import { WriteFreeResponsePayloadSchema } from './content/triggers/triggerWriteFreeResponse'
 
 console.log('Background script loaded')
 
@@ -107,6 +109,36 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     convertDocxToPdfQuery(validatedPayload.fileName, userId).then((response) => {
       sendResponse(response)
     })
+    return true
+  }
+
+  if (message.type === eventTypes.WRITE_FREE_RESPONSE) {
+    const userId = currentUser?.uid
+    if (!message.payload) throw new Error('No payload provided')
+    if (!userId) throw new Error('No user found')
+
+    try {
+      // Validate the incoming payload
+      const validatedPayload = WriteFreeResponsePayloadSchema.parse(message.payload)
+
+      writeFreeResponseQuery(
+        validatedPayload.promptQuestion,
+        validatedPayload.userAnswerSuggestion,
+        validatedPayload.jobDescriptionLink,
+        validatedPayload.resumeName,
+        userId,
+      ).then((response) => {
+        sendResponse(response)
+      })
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('Invalid payload for write free response:', error.errors)
+        sendResponse(null)
+      } else {
+        console.error('Error processing write free response:', error)
+        sendResponse(null)
+      }
+    }
     return true
   }
 

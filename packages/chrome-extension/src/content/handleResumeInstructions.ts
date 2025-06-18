@@ -17,10 +17,6 @@ const handleResumeInstructions = (
     }
   })
 
-  // const updatedInstructions = instructions
-  //   .filter((instruction) => instruction.value !== RESUME_UPLOAD_VALUE)
-  //   .concat(updatedResumeInstructions)
-
   return updatedResumeInstructions
 }
 

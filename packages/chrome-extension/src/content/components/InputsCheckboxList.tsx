@@ -1,7 +1,9 @@
 import { Check } from 'lucide-react'
 import styled from '@emotion/styled'
 import type { InputInfo } from '../hooks/useInputElements'
-import triggerPulseAnimation from '../inputsManipulation/animateInputFilling'
+import triggerPulseAnimation, {
+  highlightAndScrollToInput,
+} from '../inputsManipulation/animateInputFilling'
 import { getElementByReferenceId } from '../inputsManipulation/autofillInputElements'
 import { useInputAnimations } from '../hooks/useInputAnimations'
 
@@ -28,7 +30,7 @@ const QuestionContainer = styled.div<{
   },
 }))
 
-const QuestionText = styled.p({
+export const QuestionText = styled.p({
   fontSize: '0.8rem',
   color: 'rgba(0, 0, 0, 0.6)',
   margin: '0',
@@ -72,14 +74,6 @@ const MoreQuestionsRemainingText = styled.p({
   margin: '0',
 })
 
-const highlightAndScrollToInput = (input: InputInfo) => () => {
-  const inputElement = getElementByReferenceId(input.elementReferenceId)
-  if (inputElement) {
-    triggerPulseAnimation(inputElement)
-    inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }
-}
-
 const truncateText = (text: string, maxLength: number) => {
   return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
 }
@@ -110,7 +104,7 @@ const CheckboxList = ({ inputs, maxItems = 5, filledInputs, setFilledInputs }: P
         <QuestionContainer
           key={input.elementReferenceId}
           onClick={() => {
-            highlightAndScrollToInput(input)()
+            highlightAndScrollToInput(input)
           }}
           isExiting={isInputExiting(input)}
           isCollapsing={isInputCollapsing(input)}

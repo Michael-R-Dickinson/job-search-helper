@@ -6,17 +6,12 @@ from functions.validation import validate_file_name_and_userId, validate_linkedi
 
 def validate_inputs(
     user_id: str,
-    prompt: str,
     job_description_link: str,
-    resume_name: str,
+    prompt: str,
 ) -> None:
-    validate_file_name_and_userId(
-        userId=user_id,
-        fileName=resume_name,
-    )
-    if not resume_name:
+    if not user_id:
         raise ValueError(
-            "Missing resumeName in the request. Please provide a valid resume name."
+            "Missing userId in the request. Please provide a valid userId."
         )
     if not job_description_link:
         raise ValueError(
@@ -34,20 +29,21 @@ def validate_inputs(
 
 def handle_write_free_response_request(
     user_id: str,
-    prompt: str,
+    prompt_question: str,
     job_description_link: str,
-    resume_name: str,
+    user_answer_suggestion: str,
+    resume_name: str | None,
 ) -> https_fn.Response:
     try:
         validate_inputs(
             user_id=user_id,
             job_description_link=job_description_link,
-            prompt=prompt,
-            resume_name=resume_name,
+            prompt=prompt_question,
         )
         content = write_response(
             user_id=user_id,
-            prompt=prompt,
+            prompt_question=prompt_question,
+            user_answer_suggestion=user_answer_suggestion,
             job_description_link=job_description_link,
             resume_name=resume_name,
         )
@@ -58,6 +54,7 @@ def handle_write_free_response_request(
             status=200,
         )
     except ValueError as e:
+        raise e
         return https_fn.Response(
             json.dumps({"message": f"Invalid Inputs: f{e}"}),
             status=400,

@@ -6,13 +6,9 @@ import ResumeListItemContent from './autofillListItems/ResumeListItemContent'
 import UnfilledInputsListItemContent from './autofillListItems/UnfilledInputsListItemContent'
 import AutofillButton from './AutofillButton'
 import useAutofillInputs from '../hooks/useAutofillInputs'
-import {
-  AutofillAnimationSpeeds,
-  autofillInputElements,
-} from '../inputsManipulation/autofillInputElements'
-import handleResumeInstructions from '../handleResumeInstructions'
 import { tailoringResumeAtom } from '../atoms'
 import { useAtomValue } from 'jotai/react'
+import FreeResponseListItemContent from './autofillListItems/FreeResponseListItemContent'
 
 const AutofillHeader = styled.h3`
   margin: 0.8rem 0;
@@ -22,42 +18,24 @@ const AutofillHeader = styled.h3`
   color: rgba(0, 0, 0, 0.7);
 `
 
-export type AutofillStatus = 'idle' | 'loading' | 'success' | 'error'
-
 const SidebarContent = () => {
   const {
-    simpleInputsInstructionsPromise,
-    complexInputsInstructionsPromise,
-    loading,
+    fillingStatus,
+    fetchStatus,
+    executeAutofillSequence,
+    executeResumeAutofill,
     unfilledInputs,
+    freeResponseInputs,
+    usesIframes,
   } = useAutofillInputs()
 
   const [activeItem, setActiveItem] = useState<'resume' | 'unfilled' | 'free-response'>('resume')
-  const [autofillStatus, setAutofillStatus] = useState<AutofillStatus>('idle')
-  const { promise: resumePromise, name: resumeName } = useAtomValue(tailoringResumeAtom)
+  const { promise: resumePromise } = useAtomValue(tailoringResumeAtom)
 
   const undoneAutofillSections: string[] = []
   if (!resumePromise) undoneAutofillSections.push('resume')
 
-  const fullAutofillSequence = async () => {
-    setAutofillStatus('loading')
-    if (!simpleInputsInstructionsPromise || !complexInputsInstructionsPromise) return
-
-    const simpleInputsInstructions = await simpleInputsInstructionsPromise
-
-    const animationSpeed = loading ? AutofillAnimationSpeeds.SLOW : AutofillAnimationSpeeds.FAST
-    await autofillInputElements(simpleInputsInstructions, animationSpeed)
-
-    const remainingAutofillInstructions = await complexInputsInstructionsPromise
-    await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
-
-    const resume = await resumePromise
-    console.log('Got Resume', resumeName)
-    const resumeInstructions = handleResumeInstructions(simpleInputsInstructions, resume)
-    console.log('resumeInstructions', resumeInstructions)
-    await autofillInputElements(resumeInstructions, AutofillAnimationSpeeds.NONE)
-    setAutofillStatus('success')
-  }
+  const isFetchingValues = fetchStatus === 'loading'
 
   return (
     <div>
@@ -70,27 +48,46 @@ const SidebarContent = () => {
           onClick={() => setActiveItem('resume')}
           content={<ResumeListItemContent />}
         />
-        <SidebarListItem
-          Icon={AppWindow}
-          title="Unfilled Inputs"
-          active={activeItem === 'unfilled'}
-          onClick={() => setActiveItem('unfilled')}
-          content={
-            <UnfilledInputsListItemContent unfilledInputs={unfilledInputs} loading={loading} />
-          }
-        />
-        <SidebarListItem
-          Icon={PencilLine}
-          title="Free Responses"
-          active={activeItem === 'free-response'}
-          onClick={() => setActiveItem('free-response')}
-        />
+        {!usesIframes && (
+          <>
+            <SidebarListItem
+              Icon={AppWindow}
+              title="Unfilled Inputs"
+              active={activeItem === 'unfilled'}
+              onClick={() => setActiveItem('unfilled')}
+              content={
+                <UnfilledInputsListItemContent
+                  unfilledInputs={unfilledInputs}
+                  loading={isFetchingValues}
+                />
+              }
+            />
+            <SidebarListItem
+              Icon={PencilLine}
+              title="Free Responses"
+              active={activeItem === 'free-response'}
+              onClick={() => setActiveItem('free-response')}
+              content={
+                <FreeResponseListItemContent
+                  freeResponseInputs={freeResponseInputs}
+                  loading={isFetchingValues}
+                />
+              }
+            />
+          </>
+        )}
       </div>
       <div style={{ marginTop: '0.8rem' }}>
         <AutofillButton
           unfilledSections={undoneAutofillSections}
-          onClick={fullAutofillSequence}
-          status={autofillStatus}
+          onClick={async () => {
+            await executeAutofillSequence()
+            const resumeUrl = await resumePromise
+            if (resumeUrl) {
+              await executeResumeAutofill(resumeUrl)
+            }
+          }}
+          fillStatus={fillingStatus}
         />
       </div>
     </div>

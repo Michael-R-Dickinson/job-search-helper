@@ -8,6 +8,10 @@ import {
   ConvertDocxToPdfResponseSchema,
   type ConvertDocxToPdfResponse,
 } from './content/triggers/triggerDocxToPdfConversion'
+import {
+  WriteFreeResponseResponseSchema,
+  type WriteFreeResponseResponse,
+} from './content/triggers/triggerWriteFreeResponse'
 
 const API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1'
 
@@ -210,5 +214,50 @@ export const convertDocxToPdfQuery = async (
   } catch (error) {
     console.error('Validation error in docx to pdf conversion, DATA: ', data, 'ERROR: ', error)
     throw error
+  }
+}
+
+export const writeFreeResponseQuery = async (
+  promptQuestion: string,
+  userAnswerSuggestion: string,
+  jobDescriptionLink: string,
+  resumeName: string | null,
+  userId: string,
+): Promise<WriteFreeResponseResponse | null> => {
+  console.log('Writing free response:', {
+    promptQuestion,
+    userAnswerSuggestion,
+    jobDescriptionLink,
+    resumeName,
+    userId,
+  })
+  const queryParams = new URLSearchParams({
+    userId,
+    promptQuestion,
+    userAnswerSuggestion,
+    jobDescriptionLink,
+  })
+
+  // Only add resumeName if it's not null
+  if (resumeName) {
+    queryParams.append('resumeName', resumeName)
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/write_free_response?${queryParams.toString()}`, {
+      method: 'GET',
+    })
+    const data = await response.json()
+
+    // Validate the response using Zod schema
+    const validatedData = WriteFreeResponseResponseSchema.parse(data)
+    return validatedData
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error('Backend response validation error for write free response:', error.errors)
+    } else {
+      console.error('Error in write free response query:', error)
+    }
+    return null
   }
 }

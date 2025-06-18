@@ -26,14 +26,12 @@ export const SerializedHtmlInputSchema = z.object({
   html: z.string(),
   fieldType: z.nativeEnum(INPUT_ELEMENT_TYPES),
   name: z.string(),
-  type: z.string(),
   placeholder: z.string(),
   autocomplete: z.string(),
-  id: z.string(),
+  htmlId: z.string(),
   className: z.string(),
   value: z.string(),
   required: z.boolean(),
-  checked: z.boolean().nullable().optional(),
   // A unique identifier we give to the input element to identify it in the DOM
   // This is used to match the input element to the autofill instruction in the frontend
   elementReferenceId: z.string(),
@@ -115,11 +113,19 @@ const SexualOrientationEnum = z.enum([
   'queer',
   'prefer_not_to_say',
 ])
+const PronounEnum = z.enum([
+  'he/him',
+  'she/her',
+  'they/them',
+  'ze/zir',
+  'other',
+  'prefer_not_to_say',
+])
 const TransgenderEnum = z.enum(['yes', 'no', 'prefer_not_to_say'])
 const IdentitySchema = z.object({
   gender: GenderEnum.optional(),
   sexual_orientation: SexualOrientationEnum.optional(),
-  pronouns: z.string().optional(),
+  pronouns: PronounEnum.optional(),
   transgender: TransgenderEnum.optional(),
 })
 

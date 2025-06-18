@@ -8,10 +8,15 @@ import type { QuestionsResponse } from './backendApi'
 export type ValueOf<T> = T[keyof T]
 
 // For content scripts
-export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): void {
+export function useOnPageLoad(
+  callback: () => void,
+  timeoutMs: number = 1000,
+  maxTotalTimeMs: number = 5000,
+): void {
   const callbackRef = useRef<() => void>(callback)
   const hasFiredRef = useRef<boolean>(false)
   const timerRef = useRef<number | null>(null)
+  const maxTimerRef = useRef<number | null>(null)
   const observerRef = useRef<MutationObserver | null>(null)
 
   // Keep the latest callback in a ref
@@ -27,6 +32,9 @@ export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): v
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current)
       }
+      if (maxTimerRef.current !== null) {
+        clearTimeout(maxTimerRef.current)
+      }
       callbackRef.current()
     }
 
@@ -38,6 +46,9 @@ export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): v
     }
 
     const startObserving = (): void => {
+      // Start the maximum total time timer
+      maxTimerRef.current = window.setTimeout(finish, maxTotalTimeMs)
+
       // Kick off the timer in case there are no mutations
       resetTimer()
       observerRef.current = new MutationObserver(resetTimer)
@@ -61,8 +72,11 @@ export function useOnPageLoad(callback: () => void, timeoutMs: number = 1000): v
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current)
       }
+      if (maxTimerRef.current !== null) {
+        clearTimeout(maxTimerRef.current)
+      }
     }
-  }, [timeoutMs])
+  }, [timeoutMs, maxTotalTimeMs])
 }
 
 export const getEmptyQuestionAnswers = (
@@ -77,4 +91,22 @@ export const getEmptyQuestionAnswers = (
     return acc
   }, {} as QuestionAnswerMapAllowUnfilled)
   return { skillsToAdd, experienceQuestions }
+}
+
+export function shortHash(str: string): string {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    // multiply by 31 (a small prime), add the char code, force int32
+    hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0
+  }
+  // >>> 0 turns it into an unsigned 32-bit, toString(36) makes it shorter
+  return (hash >>> 0).toString(36)
+}
+
+// Remove leading or trailing * characters, trim whitespace and lower
+export const cleanText = (text: string) => {
+  return text
+    .replace(/^[*]+|[*]+$/g, '')
+    .trim()
+    .toLowerCase()
 }

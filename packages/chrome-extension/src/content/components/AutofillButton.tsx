@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 import { Tooltip } from '@mantine/core'
-import type { AutofillStatus } from './SidebarContent'
+import type { AutofillFillingStatus } from '../hooks/useAutofillInputs'
 
 const shimmer = keyframes`
   0% {
@@ -86,11 +86,11 @@ const AnimatedDots = styled.span`
 
 const AutofillButton: React.FC<{
   unfilledSections: string[]
-  status: AutofillStatus
+  fillStatus: AutofillFillingStatus
   onClick: () => void
-}> = ({ unfilledSections, status, onClick }) => {
+}> = ({ unfilledSections, fillStatus, onClick }) => {
   const enabled = unfilledSections.length === 0
-  if (status === 'loading') {
+  if (fillStatus === 'filling_inputs') {
     return (
       <Button active={enabled} loading={true}>
         Loading

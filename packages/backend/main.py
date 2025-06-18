@@ -98,13 +98,15 @@ def tailor_cover_letter(req: https_fn.Request) -> https_fn.Response:
 )
 def write_free_response(req: https_fn.Request) -> https_fn.Response:
     user_id = req.args.get("userId")
-    prompt = req.args.get("prompt")
+    prompt_question = req.args.get("promptQuestion")
+    user_answer_suggestion = req.args.get("userAnswerSuggestion")
     job_description_link = req.args.get("jobDescriptionLink")
     resume_name = req.args.get("resumeName")
 
     return handle_write_free_response_request(
         user_id=user_id,
-        prompt=prompt,
+        prompt_question=prompt_question,
+        user_answer_suggestion=user_answer_suggestion,
         job_description_link=job_description_link,
         resume_name=resume_name,
     )

@@ -29,26 +29,37 @@ You are writing a single paragraph response to a job application question. Your 
 4. **(Optional 4th sentence)**: Brief forward-looking statement if needed
 
 Remember: Hiring managers can instantly spot AI-generated responses. Write like you're having a focused conversation with someone who understands your field.
+
+You may also be provided by a suggestion from the user for how to answer the question. Use this as a starting point or guideline, but do not be limited by it.
+
+If you do not receive a specific question or insufficient information, you must still answer to the best of your ability. Whether you believe that the question, resume or job is the right fit is irrelevant.
 """
 
 LLM_PROMPT_TEMPLATE = """
 Job description:
 {job_description}
 
-Resume:
 {resume}
+
+{prompt_question}
+
+{user_answer_suggestion}
 """
 
 
 def generate_free_response_prompt(
     job_description: str,
-    resume: str,
+    user_answer_suggestion: str,
+    prompt_question: str,
+    resume_text: str,
 ) -> str:
     return (
         LLM_SYSTEM_INSTRUCTIONS
         + "\n\n"
         + LLM_PROMPT_TEMPLATE.format(
             job_description=job_description,
-            resume=resume,
+            resume="RESUME:\n" + resume_text if resume_text else "",
+            prompt_question=prompt_question,
+            user_answer_suggestion=user_answer_suggestion,
         )
     )

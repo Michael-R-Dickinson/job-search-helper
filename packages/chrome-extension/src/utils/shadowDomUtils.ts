@@ -2,11 +2,54 @@
  * Utility functions for working with Shadow DOM elements
  */
 
+import { HOST_ELEMENT_ID } from '../content'
+
 export type ShadowDomElement =
   | HTMLInputElement
   | HTMLTextAreaElement
   | HTMLSelectElement
   | HTMLButtonElement
+
+/**
+ * Helper function to check if an element is under the perfectify host and should be excluded
+ * @param element - Element to check
+ * @returns true if element should be excluded from queries
+ */
+const shouldExcludeElement = (element: Element): boolean => {
+  // Check if this element is the perfectify host itself
+  if (element.id === HOST_ELEMENT_ID) {
+    return true
+  }
+
+  // Check if this element is a descendant of the perfectify host
+  const hostElement = document.getElementById(HOST_ELEMENT_ID)
+  if (hostElement && hostElement.contains(element)) {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * Helper function to check if a root should be excluded from traversal
+ * @param root - Root element to check
+ * @returns true if root should be excluded
+ */
+const shouldExcludeRoot = (root: Document | DocumentFragment | Element): boolean => {
+  if (root instanceof Element) {
+    return shouldExcludeElement(root)
+  }
+  return false
+}
+
+/**
+ * Helper function to check if a shadow host should be excluded
+ * @param shadowHost - The element that hosts the shadow DOM
+ * @returns true if the shadow DOM should be excluded
+ */
+const shouldExcludeShadowHost = (shadowHost: Element): boolean => {
+  return shadowHost.id === HOST_ELEMENT_ID
+}
 
 /**
  * Recursively queries elements across both regular DOM and Shadow DOM boundaries
@@ -18,18 +61,37 @@ export const querySelectorAllDeep = <T extends Element = Element>(
   selector: string,
   root: Document | DocumentFragment = document,
 ): T[] => {
+  // Skip if this root should be excluded
+  if (shouldExcludeRoot(root)) {
+    return []
+  }
+
   const elements: T[] = []
 
   // Query the current root
   const directMatches = root.querySelectorAll<T>(selector)
-  elements.push(...Array.from(directMatches))
+  for (const match of directMatches) {
+    if (!shouldExcludeElement(match)) {
+      elements.push(match)
+    }
+  }
 
   // Find all elements that might have shadow DOM
   const allElements = root.querySelectorAll('*')
 
   for (const element of allElements) {
+    // Skip if this element should be excluded
+    if (shouldExcludeElement(element)) {
+      continue
+    }
+
     // Check if this element has a shadow root
     if (element.shadowRoot) {
+      // Skip if this is the perfectify shadow host
+      if (shouldExcludeShadowHost(element)) {
+        continue
+      }
+
       // Recursively search inside the shadow DOM
       const shadowMatches = querySelectorAllDeep<T>(selector, element.shadowRoot)
       elements.push(...shadowMatches)
@@ -49,14 +111,31 @@ export const querySelectorAllShallow = <T extends Element = Element>(selector: s
   const elements: T[] = []
 
   // Regular DOM elements
-  elements.push(...Array.from(document.querySelectorAll<T>(selector)))
+  const regularElements = document.querySelectorAll<T>(selector)
+  for (const element of regularElements) {
+    if (!shouldExcludeElement(element)) {
+      elements.push(element)
+    }
+  }
 
   // Check immediate shadow DOM hosts
   const potentialShadowHosts = document.querySelectorAll('*')
   for (const host of potentialShadowHosts) {
+    // Skip if this host should be excluded
+    if (shouldExcludeElement(host)) {
+      continue
+    }
+
     if (host.shadowRoot) {
+      // Skip if this is the perfectify shadow host
+      if (shouldExcludeShadowHost(host)) {
+        continue
+      }
+
       const shadowElements = host.shadowRoot.querySelectorAll<T>(selector)
-      elements.push(...Array.from(shadowElements))
+      for (const element of shadowElements) {
+        elements.push(element)
+      }
     }
   }
 
@@ -141,17 +220,32 @@ export const getElementByAttributeDeep = <T extends Element = Element>(
   attributeValue: string,
   root: Document | DocumentFragment = document,
 ): T | null => {
+  // Skip if this root should be excluded
+  if (shouldExcludeRoot(root)) {
+    return null
+  }
+
   // First check the current root for a direct match
   const selector = `[${attributeName}="${attributeValue}"]`
   const directMatch = root.querySelector<T>(selector)
-  if (directMatch) {
+  if (directMatch && !shouldExcludeElement(directMatch)) {
     return directMatch
   }
 
   // Recursively search shadow DOMs
   const allElements = root.querySelectorAll('*')
   for (const element of allElements) {
+    // Skip if this element should be excluded
+    if (shouldExcludeElement(element)) {
+      continue
+    }
+
     if (element.shadowRoot) {
+      // Skip if this is the perfectify shadow host
+      if (shouldExcludeShadowHost(element)) {
+        continue
+      }
+
       const shadowMatch = getElementByAttributeDeep<T>(
         attributeName,
         attributeValue,
@@ -191,19 +285,29 @@ export const queryUpTreeDeep = <T extends Element = Element>(
   selector: string,
   maxDepth: number = 10,
 ): T | null => {
+  // Skip if the start element should be excluded
+  if (shouldExcludeElement(startElement)) {
+    return null
+  }
+
   let current: Element | null = startElement
   let depth = 0
 
   while (current && depth < maxDepth) {
-    // Check if current element matches
-    if (current.matches && current.matches(selector)) {
-      return current as T
-    }
+    // Skip if current element should be excluded
+    if (shouldExcludeElement(current)) {
+      // Move to parent without checking this element
+    } else {
+      // Check if current element matches
+      if (current.matches && current.matches(selector)) {
+        return current as T
+      }
 
-    // Check if current element contains a matching descendant
-    const descendant = current.querySelector<T>(selector)
-    if (descendant) {
-      return descendant
+      // Check if current element contains a matching descendant
+      const descendant = current.querySelector<T>(selector)
+      if (descendant && !shouldExcludeElement(descendant)) {
+        return descendant
+      }
     }
 
     // Move to parent, handling shadow DOM boundaries

@@ -78,7 +78,10 @@ const emailPatterns = ['email', 'e-mail', 'mail', 'username', 'login', /^e[\s-]?
 const isEmailInput = (input: SerializedHtmlInput): boolean => {
   if (!hasValidInputType(input, [INPUT_ELEMENT_TYPES.EMAIL, INPUT_ELEMENT_TYPES.TEXT])) return false
 
-  return input.type === 'email' || matchesInputPatterns(input, emailPatterns, ['email'])
+  return (
+    input.fieldType === INPUT_ELEMENT_TYPES.EMAIL ||
+    matchesInputPatterns(input, emailPatterns, ['email'])
+  )
 }
 
 // LinkedIn patterns
@@ -104,7 +107,7 @@ const isTwitterUrlInput = (input: SerializedHtmlInput): boolean => {
 
   return !!(
     matchesInputPatterns(input, twitterPatterns, autocompletePatterns) ||
-    (input.type === 'url' &&
+    (input.fieldType === INPUT_ELEMENT_TYPES.URL &&
       ((input.name && input.name.toLowerCase().includes('twitter')) ||
         (input.label && input.label.toLowerCase().includes('twitter'))))
   )
@@ -123,7 +126,7 @@ const isGithubUrlInput = (input: SerializedHtmlInput): boolean => {
 
   return !!(
     matchesInputPatterns(input, githubPatterns, autocompletePatterns) ||
-    (input.type === 'url' &&
+    (input.fieldType === INPUT_ELEMENT_TYPES.URL &&
       ((input.name && input.name.toLowerCase().includes('github')) ||
         (input.label && input.label.toLowerCase().includes('github'))))
   )
@@ -181,7 +184,7 @@ const isWebsiteInput = (input: SerializedHtmlInput): boolean => {
   if (!hasValidInputType(input, [INPUT_ELEMENT_TYPES.URL, INPUT_ELEMENT_TYPES.TEXT])) return false
 
   return (
-    input.type === 'url' ||
+    input.fieldType === INPUT_ELEMENT_TYPES.URL ||
     matchesInputPatterns(input, websitePatterns, websiteAutocompletePatterns)
   )
 }
@@ -210,15 +213,14 @@ const isSalaryExpectationsInput = (input: SerializedHtmlInput): boolean => {
 
 const isResumeUploadInput = (input: SerializedHtmlInput): boolean => {
   // If it's explicitly a file input, consider it a resume upload input
-  if (input.type === 'file') {
+  if (input.fieldType === INPUT_ELEMENT_TYPES.FILE) {
     return true
   }
 
-  // Only consider BUTTON-type inputs (or TEXT/TEXTAREA if used for a URL/pasting)
+  // Only consider TEXT/TEXTBOX inputs (for URL/pasting) or other compatible field types
   if (
-    input.type !== 'button' &&
     input.fieldType !== INPUT_ELEMENT_TYPES.TEXT &&
-    input.type !== 'textarea'
+    input.fieldType !== INPUT_ELEMENT_TYPES.TEXTBOX
   ) {
     return false
   }
