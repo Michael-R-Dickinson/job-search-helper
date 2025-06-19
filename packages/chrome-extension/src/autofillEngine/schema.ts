@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { ValueOf } from '../utils'
+import type SerializableInput from '../content/SerializableInput'
 
 // Getting and serializing Inputs
 // -------------------------------
@@ -16,6 +17,7 @@ export const INPUT_ELEMENT_TYPES = {
   PASSWORD: 'password',
   URL: 'url',
   FILE: 'file',
+  BUTTON: 'button',
 } as const
 
 export type InputElementType = (typeof INPUT_ELEMENT_TYPES)[keyof typeof INPUT_ELEMENT_TYPES]
@@ -55,11 +57,10 @@ export const SimpleInputsEnum = {
 } as const
 export type SimpleInputsEnum = ValueOf<typeof SimpleInputsEnum>
 
-export const CategorizedInputSchema = z.object({
-  category: z.custom<SimpleInputsEnum>(),
-  element: SerializedHtmlInputSchema,
-})
-export type CategorizedInput = z.infer<typeof CategorizedInputSchema>
+export type CategorizedInput = {
+  category: SimpleInputsEnum
+  element: SerializableInput
+}
 
 export type MinifiedInput = {
   label: string | null
@@ -67,6 +68,7 @@ export type MinifiedInput = {
   fieldType: string | null
   wholeQuestionLabel: string | null
   value: string | null
+  id: string
 }
 
 // Getting Autofill Values - the huge schema here defines all the data we save on users in the realtime db

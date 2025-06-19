@@ -1,11 +1,11 @@
-import type { AutofillInstruction } from '../../autofillEngine/schema'
-
 import { fillResumeUploadInput } from '../uploadFileToInput'
 import type { ValueOf } from '../../utils'
 import triggerPulseAnimation, { asyncScrollToElement } from './animateInputFilling'
 import { fillSelectLikeElement, isSelectLikeElement } from './selectMatching'
 import { RESUME_UPLOAD_VALUE } from '../../autofillEngine/inputCategoryHandlers'
 import { getElementByAttributeDeep } from '../../utils/shadowDomUtils'
+import type { AutofillReadyInputArray } from '../autofillReadyInput'
+import type AutofillReadyInputElement from '../autofillReadyInput'
 
 const fillTextInputElement = (
   input: HTMLInputElement,
@@ -73,20 +73,20 @@ export const getElementByReferenceId = (referenceId: string): HTMLElement | null
   return getElementByAttributeDeep<HTMLElement>('data-autofill-id', referenceId)
 }
 
-const getFirstFilledElement = (autofillInstructions: AutofillInstruction[]): HTMLElement | null => {
-  const firstFilledElement = autofillInstructions.find(
-    (instruction) => instruction.value !== null && instruction.value !== '',
-  )
-  return firstFilledElement ? getElementByReferenceId(firstFilledElement.input_id) : null
+const getFirstFilledElement = (
+  autofillInstructions: AutofillReadyInputArray,
+): HTMLElement | null => {
+  const firstFilledElement = autofillInstructions[0]
+  return firstFilledElement ? getElementByReferenceId(firstFilledElement.elementReferenceId) : null
 }
 
-const fillElementWithInstructionValue = async (instruction: AutofillInstruction) => {
-  const element = getElementByReferenceId(instruction.input_id)
+const fillElementWithInstructionValue = async (instruction: AutofillReadyInputElement) => {
+  const element = getElementByReferenceId(instruction.elementReferenceId)
   if (!element) return
 
-  const autofillValue = instruction.value
+  const autofillValue = instruction.autofillValue
   if (isSelectLikeElement(element)) {
-    await fillSelectLikeElement(element, autofillValue, instruction?.input_text)
+    await fillSelectLikeElement(element, autofillValue, instruction.label)
   } else if (element instanceof HTMLTextAreaElement) {
     fillTextAreaElement(element, autofillValue)
   } else if (isRadioOrCheckbox(element)) {
@@ -108,7 +108,7 @@ export const AutofillAnimationSpeeds = {
 export type AutofillingAnimationSpeed = ValueOf<typeof AutofillAnimationSpeeds>
 
 export const autofillInputElements = async (
-  autofillInstructions: AutofillInstruction[],
+  autofillInstructions: AutofillReadyInputArray,
   animationSpeed: AutofillingAnimationSpeed = AutofillAnimationSpeeds.SLOW,
 ): Promise<void> => {
   // Scroll to the first filled element if we're using the slow scroll animation

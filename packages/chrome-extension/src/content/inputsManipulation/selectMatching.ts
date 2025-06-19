@@ -116,7 +116,7 @@ export const fillSelectLikeElement = async (
   element: SelectLikeElement,
   value: string | boolean,
   // Passed in for debugging purposes
-  inputText?: string,
+  inputText: string | null,
 ): Promise<void> => {
   if (!(typeof value === 'string')) return
   // searchValues are the parsed values we want to fill, for example, for an ethnicity field, if the passed value was

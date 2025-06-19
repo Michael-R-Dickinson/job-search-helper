@@ -1,6 +1,6 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import { querySelectorAllDeep, observeDeepMutations } from '../../utils/shadowDomUtils'
-import { getLabelText, getWholeQuestionLabel } from '../../autofillEngine/getLabelText'
+import InputElement from '../input'
 
 export type ElementInfo =
   | HTMLInputElement
@@ -87,8 +87,8 @@ const shouldIncludeElement = (el: ElementInfo): boolean => {
  * - input types that aren't useful for autofill (hidden, etc.)
  * - elements whose id/name/class contains "captcha"
  */
-export function useInputElements(): RefObject<InputInfo[]> {
-  const inputsRef = useRef<InputInfo[]>([])
+export function useInputElements(): RefObject<InputElement[]> {
+  const inputsRef = useRef<InputElement[]>([])
   const idCounterRef = useRef(0)
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export function useInputElements(): RefObject<InputInfo[]> {
       // Use shadow DOM aware query instead of regular document.querySelectorAll
       const elements = querySelectorAllDeep<ElementInfo>(selector)
 
-      const filteredInputs: InputInfo[] = elements.filter(shouldIncludeElement).map((el) => {
+      const filteredInputs: InputElement[] = elements.filter(shouldIncludeElement).map((el) => {
         let elementReferenceId = el.getAttribute('data-autofill-id')
         if (!elementReferenceId) {
           elementReferenceId = idCounterRef.current.toString()
@@ -105,15 +105,7 @@ export function useInputElements(): RefObject<InputInfo[]> {
           idCounterRef.current++
         }
 
-        const label = getLabelText(el as HTMLElement)
-        const wholeQuestionLabel = getWholeQuestionLabel(el as HTMLElement)
-
-        return {
-          element: el,
-          elementReferenceId,
-          label,
-          wholeQuestionLabel,
-        }
+        return new InputElement(el, elementReferenceId)
       })
 
       inputsRef.current = filteredInputs
