@@ -3,10 +3,13 @@ from enum import Enum
 
 class InputType(Enum):
     FULL_NAME = "full_name"
+    FIRST_NAME = "first_name"
+    LAST_NAME = "last_name"
+    PHONE_NUMBER = "phone_number"
     SPONSORSHIP_REQUIRED = "sponsorship_required"
+    SPONSORSHIP_EXPLANATION = "sponsorship_explanation"
     DISABILITY = "disability"
     VETERAN = "veteran"
-    SPONSORSHIP_EXPLANATION = "sponsorship_explanation"
     LINKEDIN_URL = "linkedin_url"
     PERSONAL_WEBSITE = "personal_website"
     GENDER_IDENTITY = "gender_identity"
@@ -16,6 +19,9 @@ class InputType(Enum):
 
 PROTOTYPES: dict[InputType, list[str]] = {
     InputType.FULL_NAME: ["Please enter your full legal name", "Full name"],
+    InputType.FIRST_NAME: ["First name", "Please enter your first name"],
+    InputType.LAST_NAME: ["Last name", "Please enter your last name"],
+    InputType.PHONE_NUMBER: ["Phone number"],
     InputType.SPONSORSHIP_REQUIRED: [
         "Do you require or will you require sponsorship to work in the US?"
     ],

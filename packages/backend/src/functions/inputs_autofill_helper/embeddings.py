@@ -1,16 +1,41 @@
+from collections import defaultdict
 import os
+from typing import Optional
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInputList,
+    Input,
     InputList,
+    ListModel,
 )
 from functions.inputs_autofill_helper.input_prototype_strings import (
     get_flattened_proto_strings,
 )
+from firebase.realtime_db import cache_prototype_embeds, get_cached_prototype_embeds
 from google import genai
 from dotenv import load_dotenv
 import numpy as np
+from pydantic import BaseModel, ConfigDict, field_validator
+from utils import timer
 
 CLASSIFICATION_THRESHOLD = 0.5
+
+
+class InputWithEmbed(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    input_item: Input
+    label_embed: np.ndarray
+    whole_question_embed: Optional[np.ndarray] = None
+
+    @field_validator("whole_question_embed", "label_embed")
+    def ensure_ndarray(cls, v):
+        if isinstance(v, np.ndarray):
+            return v
+        raise ValueError("embeds must be a numpy array")
+
+
+class InputWithEmbedList(ListModel):
+    root: list[InputWithEmbed]
 
 
 def get_client():
@@ -70,10 +95,7 @@ def embed_content(client, contents):
     )
 
 
-def get_input_type(client, input_text, prototype_embeds, categories):
-    input_raw = embed_content(client, input_text)
-    input_embeds = np.array(input_raw.embeddings[0].values)
-
+def get_input_type(input_embeds, prototype_embeds, categories):
     # Normalize the prototypes and input embeddings
     prototypes_normalized = prototype_embeds / np.linalg.norm(
         prototype_embeds, axis=1, keepdims=True
@@ -87,35 +109,92 @@ def get_input_type(client, input_text, prototype_embeds, categories):
     return best_match_label, best_match_score
 
 
-def get_input_classifications(inputs: InputList):
-    client = get_client()
-    categories, texts = get_flattened_proto_strings()
+def get_prototype_embeds(client):
+    # Check if we have cached embeddings first
+    cached_result = get_cached_prototype_embeds()
+    if cached_result is not None:
+        print("Using cached prototype embeddings")
+        return cached_result
 
+    print("Computing new prototype embeddings")
+    embed_categories, texts = get_flattened_proto_strings()
     prototypes_raw = embed_content(client, texts)
     prototype_embeds = np.stack(
         [np.array(emb.values) for emb in prototypes_raw.embeddings], axis=0
     )
 
-    classified_inputs = []
-    for input_item in inputs:
-        input_text = input_item.label
-        whole_question_label = input_item.wholeQuestionLabel
+    # Cache the result for future use
+    cache_prototype_embeds(embed_categories, prototype_embeds)
 
-        best_match, best_score = get_input_type(
-            client, input_text, prototype_embeds, categories
+    return embed_categories, prototype_embeds
+
+
+def get_input_embeds(client, inputs: InputList) -> InputWithEmbedList:
+    flat_inputs = []
+    for input_data in inputs:
+        flat_inputs.append(
+            {
+                "id": input_data.id,
+                "text": input_data.label,
+                "input_item": input_data,
+                "type": "label",
+            }
         )
-        whole_q_best_match, whole_q_score = 0, 0
-        if whole_question_label:
-            whole_q_best_match, whole_q_score = get_input_type(
-                client, whole_question_label, prototype_embeds, categories
+        if input_data.wholeQuestionLabel:
+            flat_inputs.append(
+                {
+                    "id": input_data.id,
+                    "text": input_data.wholeQuestionLabel,
+                    "input_item": input_data,
+                    "type": "whole_question_label",
+                }
             )
-            if whole_q_score > best_score:
-                best_match, best_score = whole_q_best_match, whole_q_score
+    flat_input_texts = [input["text"] for input in flat_inputs]
+    raw_embeds = embed_content(client, flat_input_texts).embeddings
+    embed_values = [np.array(emb.values) for emb in raw_embeds]
 
-        if best_score > CLASSIFICATION_THRESHOLD:
-            classified_inputs.append(
-                input_item.with_classification(best_match, best_score)
+    inputs_with_embeds_map = defaultdict(lambda: {})
+    for input_data, embed_value in zip(flat_inputs, embed_values):
+        input_id = input_data["id"]
+        updated_item = inputs_with_embeds_map[input_id]
+        updated_item["input_item"] = input_data["input_item"]
+
+        if input_data["type"] == "label":
+            updated_item["label_embed"] = embed_value
+        elif input_data["type"] == "whole_question_label":
+            updated_item["whole_question_embed"] = embed_value
+
+    inputs_with_embeds = list(inputs_with_embeds_map.values())
+
+    return InputWithEmbedList.model_validate(inputs_with_embeds)
+
+
+@timer
+def get_input_classifications(inputs: InputList):
+    client = get_client()
+    # The two lists are one for one - each prototype_embed[i] is of category embed_categories[i]
+    embed_categories, prototype_embeds = get_prototype_embeds(client)
+    inputs_with_embeds = get_input_embeds(client, inputs)
+
+    classified_inputs = []
+    for input_with_embed in inputs_with_embeds:
+        input_item = input_with_embed.input_item
+        label_embed = input_with_embed.label_embed
+        whole_question_embed = input_with_embed.whole_question_embed
+
+        input_type, score = get_input_type(
+            label_embed, prototype_embeds, embed_categories
+        )
+
+        if whole_question_embed is not None:
+            whole_q_input_type, whole_q_score = get_input_type(
+                whole_question_embed, prototype_embeds, embed_categories
             )
+            if whole_q_score > score:
+                input_type, score = whole_q_input_type, whole_q_score
+
+        if score > CLASSIFICATION_THRESHOLD:
+            classified_inputs.append(input_item.with_classification(input_type, score))
         else:
             classified_inputs.append(input_item.with_classification("unknown", 0))
 

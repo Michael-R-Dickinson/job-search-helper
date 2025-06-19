@@ -17,14 +17,21 @@ class Input(BaseModel):
         return ClassifiedInput.model_validate(data)
 
 
-class InputList(RootModel):
-    root: list[Input]
+class ListModel(RootModel):
+    root: list[BaseModel]
 
     def __iter__(self):
         return iter(self.root)
 
     def __getitem__(self, item):
         return self.root[item]
+
+    def __len__(self):
+        return len(self.root)
+
+
+class InputList(ListModel):
+    root: list[Input]
 
 
 class ClassifiedInput(Input):
@@ -32,11 +39,5 @@ class ClassifiedInput(Input):
     classification_score: float
 
 
-class ClassifiedInputList(RootModel):
+class ClassifiedInputList(ListModel):
     root: list[ClassifiedInput]
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]

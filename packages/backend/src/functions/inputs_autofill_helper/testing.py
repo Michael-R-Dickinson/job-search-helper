@@ -1,6 +1,22 @@
 def get_cached_inputs():
     return [
         {
+            "label": "first name",
+            "name": "",
+            "fieldType": "text",
+            "wholeQuestionLabel": None,
+            "value": "false",
+            "id": "1",
+        },
+        {
+            "label": "surname?",
+            "name": "",
+            "fieldType": "text",
+            "wholeQuestionLabel": None,
+            "value": "false",
+            "id": "2",
+        },
+        {
             "label": "phone",
             "name": "",
             "fieldType": "text",
@@ -132,7 +148,7 @@ def get_cached_inputs():
             "label": "disability status",
             "name": "",
             "fieldType": "text",
-            "wholeQuestionLabel": None,
+            "wholeQuestionLabel": "Are you disabled broski?",
             "value": "false",
             "id": "41",
         },
