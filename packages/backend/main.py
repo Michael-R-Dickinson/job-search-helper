@@ -12,7 +12,6 @@ from firebase.buckets import (
 )
 from firebase_functions import https_fn, options
 from functions.free_reponse.request_handler import handle_write_free_response_request
-from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from functions.inputs_autofill_helper.request_handler import handle_autofill_request
 from functions.tailor_cover_letter.request_handler import (
     handle_cover_letter_tailor_request,
