@@ -9,6 +9,7 @@ from functions.inputs_autofill_helper.autofill_schema import (
 )
 from functions.inputs_autofill_helper.input_prototype_strings import (
     get_flattened_proto_strings,
+    InputType,
 )
 from firebase.realtime_db import cache_prototype_embeds, get_cached_prototype_embeds
 from google import genai
@@ -196,6 +197,8 @@ def get_input_classifications(inputs: InputList):
         if score > CLASSIFICATION_THRESHOLD:
             classified_inputs.append(input_item.with_classification(input_type, score))
         else:
-            classified_inputs.append(input_item.with_classification("unknown", 0))
+            classified_inputs.append(
+                input_item.with_classification(InputType.UNKNOWN, 0)
+            )
 
     return ClassifiedInputList.model_validate(classified_inputs)
