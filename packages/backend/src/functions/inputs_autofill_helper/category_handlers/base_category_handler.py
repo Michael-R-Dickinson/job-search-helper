@@ -72,10 +72,24 @@ class BaseCategoryHandler(ABC):
 
 
 class TextOnlyCategoryHandler(BaseCategoryHandler):
+    def can_autofill_category(self) -> bool:
+        return self.get_text() != ""
+
+    def get_text(self):
+        return ""
+
+    def handle_text_input(
+        self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
+    ) -> str | None:
+        return self.get_text()
+
     def get_autofill_value(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ):
-        if not self.is_text_field(classified_input.fieldType):
+        if (
+            not self.is_text_field(classified_input.fieldType)
+            or classified_input.fieldType == FieldType.SELECT
+        ):
             raise ValueError(
                 f"TextOnlyCategoryHandler can only handle text fields, got {classified_input.fieldType} for category {classified_input.category} - label {classified_input.label}"
             )
