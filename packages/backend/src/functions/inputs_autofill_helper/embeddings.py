@@ -1,5 +1,6 @@
 from collections import defaultdict
 import os
+import time
 from typing import Optional
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInputList,
@@ -11,12 +12,18 @@ from functions.inputs_autofill_helper.input_prototype_strings import (
     get_flattened_proto_strings,
     InputType,
 )
-from firebase.realtime_db import cache_prototype_embeds, get_cached_prototype_embeds
 from google import genai
 from dotenv import load_dotenv
 import numpy as np
 from pydantic import BaseModel, ConfigDict, field_validator
 from utils import timer
+
+from functools import lru_cache
+
+from firebase.buckets import (
+    cache_prototype_embeds_to_storage,
+    get_cached_prototype_embeds_from_storage,
+)
 
 CLASSIFICATION_THRESHOLD = 0.5
 
@@ -37,6 +44,22 @@ class InputWithEmbed(BaseModel):
 
 class InputWithEmbedList(ListModel):
     root: list[InputWithEmbed]
+
+
+@lru_cache(maxsize=1)
+def get_stored_prototype_embeddings():
+    loaded_embed_data = get_cached_prototype_embeds_from_storage()
+    if loaded_embed_data:
+        print("Using cached prototype embeddings")
+        print(loaded_embed_data)
+        return loaded_embed_data
+
+    print("No cached prototype embeddings found - generating new ones (slowly)")
+    embed_categories, prototype_embeds = generate_prototype_embeds()
+    cache_prototype_embeds_to_storage(embed_categories, prototype_embeds)
+
+    print(embed_categories, prototype_embeds)
+    return embed_categories, prototype_embeds
 
 
 def get_client():
@@ -110,23 +133,32 @@ def get_input_type(input_embeds, prototype_embeds, categories):
     return best_match_label, best_match_score
 
 
-def get_prototype_embeds(client):
-    # Check if we have cached embeddings first
-    cached_result = get_cached_prototype_embeds()
-    if cached_result is not None:
-        print("Using cached prototype embeddings")
-        return cached_result
-
+def generate_prototype_embeds():
     print("Computing new prototype embeddings")
+    client = get_client()
     embed_categories, texts = get_flattened_proto_strings()
-    prototypes_raw = embed_content(client, texts)
+
+    # Process embeddings in batches of 100
+    batch_size = 50
+    all_embeddings = []
+
+    for i in range(0, len(texts), batch_size):
+        batch_texts = texts[i : i + batch_size]
+        print(
+            f"Processing embedding batch {i//batch_size + 1}/{(len(texts) + batch_size - 1)//batch_size}"
+        )
+
+        batch_embeds = embed_content(client, batch_texts)
+        all_embeddings.extend(batch_embeds.embeddings)
+
+        # Wait to avoid rate limiting
+        if i < len(texts) - batch_size:
+            print("Sleeping for 120 seconds")
+            time.sleep(120)
+
     prototype_embeds = np.stack(
-        [np.array(emb.values) for emb in prototypes_raw.embeddings], axis=0
+        [np.array(emb.values) for emb in all_embeddings], axis=0
     )
-
-    # Cache the result for future use
-    cache_prototype_embeds(embed_categories, prototype_embeds)
-
     return embed_categories, prototype_embeds
 
 
@@ -174,7 +206,7 @@ def get_input_embeds(client, inputs: InputList) -> InputWithEmbedList:
 def get_input_classifications(inputs: InputList):
     client = get_client()
     # The two lists are one for one - each prototype_embed[i] is of category embed_categories[i]
-    embed_categories, prototype_embeds = get_prototype_embeds(client)
+    embed_categories, prototype_embeds = get_stored_prototype_embeddings()
     inputs_with_embeds = get_input_embeds(client, inputs)
 
     classified_inputs = []
@@ -195,10 +227,8 @@ def get_input_classifications(inputs: InputList):
                 input_type, score = whole_q_input_type, whole_q_score
 
         if score > CLASSIFICATION_THRESHOLD:
-            classified_inputs.append(input_item.with_classification(input_type, score))
+            classified_inputs.append(input_item.with_category(input_type, score))
         else:
-            classified_inputs.append(
-                input_item.with_classification(InputType.UNKNOWN, 0)
-            )
+            classified_inputs.append(input_item.with_category(InputType.UNKNOWN, 0))
 
     return ClassifiedInputList.model_validate(classified_inputs)

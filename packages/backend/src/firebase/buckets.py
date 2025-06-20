@@ -1,5 +1,6 @@
 import datetime
 import os
+import pickle
 
 from firebase import init_firebase
 from firebase_admin import storage
@@ -161,6 +162,87 @@ def fetch_and_download_cover_letter(userId: str, coverLetterName: str):
         blob_path=f"cover_letters/{userId}/{coverLetterName}",
         output_path=f"{COVER_LETTERS_PATH}/{userId}/{coverLetterName}",
     )
+
+
+def get_autofill_prototype_cache_path() -> str:
+    """
+    Returns the path to the autofill prototype cache in Firebase Storage
+    """
+    return "autofill_prototype_cache"
+
+
+def cache_prototype_embeds_to_storage(categories, prototype_embeds):
+    """
+    Cache prototype embeddings in Firebase Storage as a pickle file.
+
+    Args:
+        categories: List of InputType enum objects
+        prototype_embeds: numpy array of shape (num_prototypes, embedding_dim)
+    """
+    bucket = storage.bucket()
+    blob_path = f"{get_autofill_prototype_cache_path()}/prototype_embeddings.pkl"
+    blob = bucket.blob(blob_path)
+
+    # Prepare data for storage
+    cache_data = {
+        "categories": [category.value for category in categories],
+        "prototype_embeds": prototype_embeds,
+    }
+
+    # Serialize to pickle
+    pickled_data = pickle.dumps(cache_data)
+
+    # Upload to Firebase Storage
+    blob.upload_from_string(pickled_data, content_type="application/octet-stream")
+
+    print(f"Cached prototype embeddings to storage: {blob_path}")
+
+
+def get_cached_prototype_embeds_from_storage():
+    """
+    Retrieve cached prototype embeddings from Firebase Storage.
+
+    Returns:
+        tuple: (categories, prototype_embeds) or None if cache doesn't exist
+        where categories is a list of InputType enum objects
+    """
+    bucket = storage.bucket()
+    blob_path = f"{get_autofill_prototype_cache_path()}/prototype_embeddings.pkl"
+    blob = bucket.blob(blob_path)
+
+    if not blob.exists():
+        return None
+
+    try:
+        # Download and deserialize
+        pickled_data = blob.download_as_bytes()
+        cache_data = pickle.loads(pickled_data)
+
+        categories_strings = cache_data["categories"]
+        prototype_embeds = cache_data["prototype_embeds"]
+
+        # Convert string values back to InputType enum objects
+        from functions.inputs_autofill_helper.input_prototype_strings import InputType
+
+        categories = []
+        for category_str in categories_strings:
+            # Find the enum object by its value
+            for input_type in InputType:
+                if input_type.value == category_str:
+                    categories.append(input_type)
+                    break
+            else:
+                # If no matching enum is found, fall back to UNKNOWN
+                categories.append(InputType.UNKNOWN)
+
+        print(
+            f"Retrieved cached prototype embeddings from storage: {len(categories)} embeddings"
+        )
+        return categories, prototype_embeds
+
+    except Exception as e:
+        print(f"Error retrieving cached prototype embeds from storage: {e}")
+        return None
 
 
 if __name__ == "__main__":
