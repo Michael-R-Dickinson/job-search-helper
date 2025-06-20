@@ -139,6 +139,7 @@ const JobSchema = z.object({
 })
 
 const EducationSchema = z.object({
+  currently_enrolled: z.boolean().optional(),
   school: z.string().optional(),
   degree: z.string().optional(),
   discipline: z.string().optional(),

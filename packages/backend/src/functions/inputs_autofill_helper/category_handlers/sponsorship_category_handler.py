@@ -6,16 +6,17 @@ from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
 )
+from dictor import dictor
 
 
 class SponsorshipHandler(BaseCategoryHandler):
     def can_autofill_category(self) -> bool:
-        return self.user_autofill_data["sponsorship"] is not None
+        return dictor(self.user_autofill_data, "sponsorship") is not None
 
     def handle_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str | None:
-        text_answer = self.user_autofill_data["sponsorship"]["textAnswer"]
+        text_answer = dictor(self.user_autofill_data, "sponsorship.textAnswer")
         if text_answer is not None:
             return text_answer
         else:
@@ -24,7 +25,7 @@ class SponsorshipHandler(BaseCategoryHandler):
     def handle_radio_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> bool | None:
-        radio_answer = self.user_autofill_data["sponsorship"]["yesNoAnswer"]
+        radio_answer = dictor(self.user_autofill_data, "sponsorship.yesNoAnswer")
         if radio_answer is not None:
             return radio_answer
 

@@ -5,16 +5,17 @@ from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
 )
+from dictor import dictor
 
 
 class AuthorizationHandler(BaseCategoryHandler):
     def can_autofill_category(self) -> bool:
-        return self.user_autofill_data["authorization"] is not None
+        return dictor(self.user_autofill_data, "authorization") is not None
 
     def handle_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str:
-        authorized_value = self.user_autofill_data["authorization"]
+        authorized_value = dictor(self.user_autofill_data, "authorization")
         if authorized_value == "us_authorized":
             return "I am authorized to work in the United States"
         if authorized_value == "no_authorization":
@@ -26,7 +27,7 @@ class AuthorizationHandler(BaseCategoryHandler):
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> bool:
         authorized_value_bool = (
-            self.user_autofill_data["authorization"] == "us_authorized"
+            dictor(self.user_autofill_data, "authorization") == "us_authorized"
         )
 
         positive_answer_choice = self.is_positive_answer(classified_input.value)
