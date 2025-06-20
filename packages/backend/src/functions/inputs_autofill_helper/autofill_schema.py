@@ -25,7 +25,6 @@ class InputType(Enum):
     FIRST_NAME = "first_name"
     PREFERRED_FIRST_NAME = "preferred_first_name"
     LAST_NAME = "last_name"
-    SURNAME = "surname"
     PHONE_NUMBER = "phone_number"
 
     # Profiles

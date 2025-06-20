@@ -25,7 +25,7 @@ from firebase.buckets import (
     get_cached_prototype_embeds_from_storage,
 )
 
-CLASSIFICATION_THRESHOLD = 0.5
+CLASSIFICATION_THRESHOLD = 0.8
 
 
 class InputWithEmbed(BaseModel):
@@ -50,8 +50,9 @@ class InputWithEmbedList(ListModel):
 def get_stored_prototype_embeddings():
     loaded_embed_data = get_cached_prototype_embeds_from_storage()
     if loaded_embed_data:
-        print("Using cached prototype embeddings")
-        print(loaded_embed_data)
+        print(
+            f"Retrieved cached prototype embeddings from storage: {len(loaded_embed_data[0])} embeddings"
+        )
         return loaded_embed_data
 
     print("No cached prototype embeddings found - generating new ones (slowly)")

@@ -19,7 +19,6 @@ from functions.inputs_autofill_helper.category_handlers.unknown_category_handler
 
 
 def get_category_handler(category_name: str, user_autofill_data):
-    print("category_name\n", category_name)
     match category_name:
         case InputType.FIRST_NAME:
             return FirstNameHandler(user_autofill_data)

@@ -235,9 +235,6 @@ def get_cached_prototype_embeds_from_storage():
                 # If no matching enum is found, fall back to UNKNOWN
                 categories.append(InputType.UNKNOWN)
 
-        print(
-            f"Retrieved cached prototype embeddings from storage: {len(categories)} embeddings"
-        )
         return categories, prototype_embeds
 
     except Exception as e:

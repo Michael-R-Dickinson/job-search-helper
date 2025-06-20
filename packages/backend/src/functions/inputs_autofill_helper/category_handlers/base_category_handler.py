@@ -38,16 +38,16 @@ class BaseCategoryHandler(ABC):
 
         fieldType = classified_input.fieldType
         if self.is_text_field(fieldType):
-            return self.handle_text_input(classified_input)
+            return self.handle_text_input(classified_input, other_inputs)
 
         if fieldType == FieldType.SELECT:
-            return self.handle_select_input(classified_input)
+            return self.handle_select_input(classified_input, other_inputs)
 
         if fieldType == FieldType.RADIO:
-            return self.handle_radio_input(classified_input)
+            return self.handle_radio_input(classified_input, other_inputs)
 
         if fieldType == FieldType.CHECKBOX:
-            return self.handle_checkbox_input(classified_input)
+            return self.handle_checkbox_input(classified_input, other_inputs)
 
     def handle_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
@@ -76,6 +76,8 @@ class TextOnlyCategoryHandler(BaseCategoryHandler):
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ):
         if not self.is_text_field(classified_input.fieldType):
-            raise ValueError("TextOnlyCategoryHandler can only handle text fields")
+            raise ValueError(
+                f"TextOnlyCategoryHandler can only handle text fields, got {classified_input.fieldType} for category {classified_input.category} - label {classified_input.label}"
+            )
 
         return self.handle_text_input(classified_input, other_inputs)

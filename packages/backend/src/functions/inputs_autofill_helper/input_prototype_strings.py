@@ -31,13 +31,6 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "What is your last name?",
         "Surname",
     ],
-    InputType.SURNAME: [
-        "Surname",
-        "Family name",
-        "Last name",
-        "What is your surname?",
-        "Family surname",
-    ],
     InputType.PHONE_NUMBER: [
         "Phone number",
         "Mobile number",
