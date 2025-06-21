@@ -144,6 +144,7 @@ const EducationSchema = z.object({
   degree: z.string().optional(),
   discipline: z.string().optional(),
   end_date_year: z.string().optional(),
+  start_date_year: z.string().optional(),
 })
 
 const PhoneTypeEnum = z.enum(['mobile', 'landline'])
