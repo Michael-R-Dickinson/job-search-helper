@@ -10,7 +10,7 @@ from functions.inputs_autofill_helper.category_handlers.base_category_handler im
 from dictor import dictor
 
 
-class StudentCategoryHandler(BaseCategoryHandler):
+class StudentHandler(BaseCategoryHandler):
     def can_autofill_category(self):
         return self.get_currently_enrolled() != None
 
@@ -35,6 +35,16 @@ class StudentCategoryHandler(BaseCategoryHandler):
             return not is_student_boolean
 
 
-class UniversityCategoryHandler(TextOnlyCategoryHandler):
+class UniversityHandler(TextOnlyCategoryHandler):
     def get_text(self):
         return dictor(self.user_autofill_data, "education.school")
+
+
+class StartYearHandler(TextOnlyCategoryHandler):
+    def get_text(self):
+        return dictor(self.user_autofill_data, "education.start_year_date")
+
+
+class EndYearHandler(TextOnlyCategoryHandler):
+    def get_text(self):
+        return dictor(self.user_autofill_data, "education.end_date_year")
