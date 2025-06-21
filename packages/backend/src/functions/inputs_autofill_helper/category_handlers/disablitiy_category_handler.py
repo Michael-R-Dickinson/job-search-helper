@@ -50,23 +50,32 @@ class DisabilityHandler(BaseCategoryHandler):
         if classified_input.value == None or classified_input.value == "":
             return []
 
-        if "yes" in classified_input.value.lower():
+        value = classified_input.value.lower()
+
+        if "yes" in value:
             return {
                 "path": self.value_path,
                 "value": "disabled",
                 "dont_overwrite_existing": True,
             }
 
-        return {
-            "path": self.value_path,
-            "value": "enabled",
-            "dont_overwrite_existing": True,
-        }
+        if "no" in value:
+            return {
+                "path": self.value_path,
+                "value": "enabled",
+                "dont_overwrite_existing": True,
+            }
+
+        return []
 
     def save_checkable_value(
         self, classified_input: ClassifiedInput
     ) -> SaveInstruction | list[SaveInstruction]:
         if classified_input.value == None or classified_input.value == "":
+            return []
+
+        # We only fill this when the box is checked as we can be absolutely certain the user has intended this
+        if classified_input.value == False:
             return []
 
         input_label = classified_input.label
