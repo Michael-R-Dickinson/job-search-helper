@@ -1,10 +1,18 @@
 from abc import ABC
+from typing import NotRequired, TypedDict, Union
 
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
     FieldType,
 )
+
+
+class SaveInstruction(TypedDict):
+    value: str | bool
+    path: str
+    dont_overwrite_existing: NotRequired[bool]
+
 
 DECLINE_ANSWER_CANONICALS = [
     "prefer not to say",
@@ -46,18 +54,20 @@ class BaseCategoryHandler(ABC):
         if not self.can_autofill_category():
             return None
 
-        fieldType = classified_input.fieldType
-        if self.is_text_field(fieldType):
+        field_type = classified_input.fieldType
+        if self.is_text_field(field_type):
             return self.handle_text_input(classified_input, other_inputs)
 
-        if fieldType == FieldType.SELECT:
+        if field_type == FieldType.SELECT:
             return self.handle_select_input(classified_input, other_inputs)
 
-        if fieldType == FieldType.RADIO:
+        if field_type == FieldType.RADIO:
             return self.handle_radio_input(classified_input, other_inputs)
 
-        if fieldType == FieldType.CHECKBOX:
+        if field_type == FieldType.CHECKBOX:
             return self.handle_checkbox_input(classified_input, other_inputs)
+
+        raise ValueError(f"unsupported field type {field_type}")
 
     def handle_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
@@ -66,9 +76,9 @@ class BaseCategoryHandler(ABC):
 
     def handle_select_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
-    ) -> str:
+    ) -> str | None:
         # If no other behavior is defined, we can just use the text input handler and pray
-        self.handle_text_input(classified_input, other_inputs)
+        return self.handle_text_input(classified_input, other_inputs)
 
     def handle_radio_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
@@ -78,7 +88,33 @@ class BaseCategoryHandler(ABC):
     def handle_checkbox_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> bool | None:
-        self.handle_radio_input(classified_input, other_inputs)
+        return self.handle_radio_input(classified_input, other_inputs)
+
+    def save_filled_value(
+        self, classified_input: ClassifiedInput
+    ) -> Union[SaveInstruction, list[SaveInstruction]]:
+        field_type = classified_input.fieldType
+        if self.is_text_field(field_type) or field_type == FieldType.SELECT:
+            return self.save_text_value(classified_input)
+
+        elif field_type == FieldType.CHECKBOX or field_type == FieldType.RADIO:
+            return self.save_checkable_value(classified_input)
+
+        raise ValueError(f"Unsupported field type for save {field_type}")
+
+    def save_text_value(
+        self, classified_input: ClassifiedInput
+    ) -> Union[SaveInstruction, list[SaveInstruction]]:
+        raise NotImplementedError(
+            f"No save handler created for text input on {self.__class__.__name__}"
+        )
+
+    def save_checkable_value(
+        self, classified_input: ClassifiedInput
+    ) -> Union[SaveInstruction, list[SaveInstruction]]:
+        raise NotImplementedError(
+            f"No save handler created for checkable input on {self.__class__.__name__}"
+        )
 
 
 class TextOnlyCategoryHandler(BaseCategoryHandler):

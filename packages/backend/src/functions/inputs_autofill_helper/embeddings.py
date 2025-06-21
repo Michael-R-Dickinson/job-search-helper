@@ -1,7 +1,7 @@
 from collections import defaultdict
 import os
 import time
-from typing import Optional
+from typing import Optional, cast
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInputList,
     Input,
@@ -105,7 +105,8 @@ def classify_field(
             best_label, best_score = proto_label, score
 
     if best_score >= threshold:
-        return best_label, best_score
+        return cast(str, best_label), best_score
+
     return None
 
 
@@ -187,7 +188,7 @@ def get_input_embeds(client, inputs: InputList) -> InputWithEmbedList:
     raw_embeds = embed_content(client, flat_input_texts).embeddings
     embed_values = [np.array(emb.values) for emb in raw_embeds]
 
-    inputs_with_embeds_map = defaultdict(lambda: {})
+    inputs_with_embeds_map: dict = defaultdict(lambda: {})
     for input_data, embed_value in zip(flat_inputs, embed_values):
         input_id = input_data["id"]
         updated_item = inputs_with_embeds_map[input_id]

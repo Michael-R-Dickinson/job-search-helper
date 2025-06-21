@@ -94,8 +94,6 @@ class Input(BaseModel):
 
 
 class ListModel(RootModel):
-    root: list[BaseModel]
-
     def __iter__(self):
         return iter(self.root)
 
