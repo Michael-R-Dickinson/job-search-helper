@@ -1,18 +1,12 @@
 from abc import ABC
-from typing import NotRequired, TypedDict, Union
+from typing import Union
 
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
     FieldType,
+    SaveInstruction,
 )
-
-
-class SaveInstruction(TypedDict):
-    value: str | bool
-    path: str
-    dont_overwrite_existing: NotRequired[bool]
-
 
 DECLINE_ANSWER_CANONICALS = [
     "prefer not to say",

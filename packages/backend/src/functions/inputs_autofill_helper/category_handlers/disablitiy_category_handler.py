@@ -1,6 +1,7 @@
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
+    SaveInstruction,
 )
 from functions.inputs_autofill_helper.category_handlers.base_category_handler import (
     get_decline_answer_canonicals,
@@ -14,6 +15,7 @@ from functions.inputs_autofill_helper.option_selection import (
 
 
 class DisabilityHandler(BaseCategoryHandler):
+    value_path = "disability"
     disability_canonicals = {
         "disabled": ["yes", "Yes, I have a disability"],
         "enabled": ["no", "No, I do not have a disability"],
@@ -21,7 +23,7 @@ class DisabilityHandler(BaseCategoryHandler):
     }
 
     def get_disability_value(self):
-        return dictor(self.user_autofill_data, "disability")
+        return dictor(self.user_autofill_data, self.value_path)
 
     def can_autofill_category(self) -> bool:
         return self.get_disability_value() is not None
@@ -41,3 +43,38 @@ class DisabilityHandler(BaseCategoryHandler):
         print("best canonical: ", best_canonical)
 
         return self.get_disability_value() == best_canonical
+
+    def save_text_value(
+        self, classified_input: ClassifiedInput
+    ) -> SaveInstruction | list[SaveInstruction]:
+        if classified_input.value == None or classified_input.value == "":
+            return []
+
+        if "yes" in classified_input.value.lower():
+            return {
+                "path": self.value_path,
+                "value": "disabled",
+                "dont_overwrite_existing": True,
+            }
+
+        return {
+            "path": self.value_path,
+            "value": "enabled",
+            "dont_overwrite_existing": True,
+        }
+
+    def save_checkable_value(
+        self, classified_input: ClassifiedInput
+    ) -> SaveInstruction | list[SaveInstruction]:
+        if classified_input.value == None or classified_input.value == "":
+            return []
+
+        input_label = classified_input.label
+        best_canonical = get_most_similar_canonical_option(
+            input_label, self.disability_canonicals
+        )
+
+        return {
+            "path": self.value_path,
+            "value": best_canonical,
+        }
