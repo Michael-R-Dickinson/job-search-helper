@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import NotRequired, Optional, TypedDict
 from pydantic import BaseModel, RootModel
 
 
@@ -115,3 +115,9 @@ class ClassifiedInput(Input):
 
 class ClassifiedInputList(ListModel):
     root: list[ClassifiedInput]
+
+
+class SaveInstruction(TypedDict):
+    value: str | bool
+    path: str
+    dont_overwrite_existing: NotRequired[bool]
