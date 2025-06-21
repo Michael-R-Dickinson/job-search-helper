@@ -6,6 +6,16 @@ from functions.inputs_autofill_helper.autofill_schema import (
     FieldType,
 )
 
+DECLINE_ANSWER_CANONICALS = [
+    "prefer not to say",
+    "i would rather not say",
+    "choose not to specify",
+]
+
+
+def get_decline_answer_canonicals():
+    return DECLINE_ANSWER_CANONICALS
+
 
 class BaseCategoryHandler(ABC):
     def __init__(self, user_autofill_data):
