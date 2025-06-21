@@ -83,7 +83,7 @@ class Input(BaseModel):
     fieldType: FieldType
     name: Optional[str] = None
     wholeQuestionLabel: Optional[str] = None
-    value: Optional[str] = None
+    value: Optional[str | bool] = None
     id: str
 
     def with_category(self, category: InputType, score: float):
