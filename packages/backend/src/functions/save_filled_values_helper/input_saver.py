@@ -1,7 +1,10 @@
-from firebase.realtime_db import get_user_autofill_data, save_user_autofill_data
-from src.functions.save_filled_values_helper.gemini_save_inputs import (
-    generate_save_input_paths,
+import json
+from firebase.realtime_db import get_user_autofill_data
+from functions.inputs_autofill_helper.autofill_schema import SaveInstruction
+from functions.inputs_autofill_helper.category_handlers.get_handler import (
+    get_category_handler,
 )
+from functions.inputs_autofill_helper.embeddings import get_input_classifications
 
 
 def convert_to_int(value) -> int:
@@ -56,10 +59,23 @@ def get_updated_user_autofill_data_obj(prev_user_autofill_data, save_values):
     return updated_data
 
 
-def save_input_values(user_id, inputs):
-    save_values = generate_save_input_paths(inputs)
+def save_input_values(user_id, inputs) -> list[SaveInstruction]:
     user_autofill_data = get_user_autofill_data(user_id)
-    updated_user_autofill_data = get_updated_user_autofill_data_obj(
-        user_autofill_data, save_values
-    )
-    save_user_autofill_data(user_id, updated_user_autofill_data)
+    if not user_autofill_data:
+        raise ValueError("User data not found")
+
+    classified_inputs = get_input_classifications(inputs)
+
+    saved_inputs: list[SaveInstruction] = []
+    for classified_input in classified_inputs:
+        category_handler = get_category_handler(
+            classified_input.category, user_autofill_data
+        )
+        save_instruction = category_handler.save_filled_value(classified_input)
+        if not isinstance(save_instruction, list):
+            save_instruction = [save_instruction]
+
+        saved_inputs.extend(save_instruction)
+
+    print("saved inputs\n", json.dumps(saved_inputs, indent=4))
+    return saved_inputs
