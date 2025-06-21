@@ -255,13 +255,6 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "University report requirements",
         "Academic requirements",
     ],
-    InputType.GRADUATION_DATE: [
-        "When will you graduate? (expected month & year)",
-        "Graduation date",
-        "Expected graduation",
-        "When do you graduate?",
-        "Graduation month and year",
-    ],
     InputType.EDUCATION_START_DATE: [
         "Start date (year)",
         "When did you start?",
@@ -275,6 +268,9 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "Education end date",
         "Year completed",
         "Completion year",
+        "When will you graduate? (expected month & year)",
+        "Graduation date",
+        "Expected graduation",
     ],
     InputType.DEGREE: [
         "Degree",

@@ -70,7 +70,6 @@ class InputType(Enum):
     SCHOOL = "school"
     ENROLLED_STUDENT = "enrolled_student"
     REPORT_REQUIRED = "report_required"
-    GRADUATION_DATE = "graduation_date"
     EDUCATION_START_DATE = "education_start_date"
     EDUCATION_END_DATE = "education_end_date"
     DEGREE = "degree"
