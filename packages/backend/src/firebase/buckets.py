@@ -1,3 +1,4 @@
+import requests
 import datetime
 import os
 import pickle
@@ -33,7 +34,7 @@ def get_pdf_cache_path(userId: str) -> str:
     return f"resumes/{userId}/pdf_cache"
 
 
-def get_cached_pdf_url(userId: str, file_name: str) -> str:
+def get_cached_pdf_url(userId: str, file_name: str) -> str | None:
     """
     Check if a cached PDF exists for the given file and return its public URL
     Returns None if no cached PDF exists
@@ -56,7 +57,6 @@ def upload_pdf_to_cache(pdf_url: str, userId: str, file_name: str) -> str:
     Downloads PDF from URL and uploads it to the user's PDF cache
     Returns the public URL of the cached PDF
     """
-    import requests
 
     bucket = storage.bucket()
     # Convert file name to PDF name (replace extension with .pdf)

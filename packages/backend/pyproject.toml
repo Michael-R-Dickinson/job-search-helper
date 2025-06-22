@@ -26,6 +26,7 @@ numpy = "^2.3.0"
 dictor = "^0.1.12"
 textdistance = "^4.6.3"
 nltk = "^3.9.1"
+types-requests = "^2.32.4.20250611"
 
 
 [tool.poetry.group.dev.dependencies]
