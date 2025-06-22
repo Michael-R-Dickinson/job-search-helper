@@ -39,8 +39,12 @@ class StudentHandler(BaseCategoryHandler):
     def save_text_input(
         self, classified_input: ClassifiedInput
     ) -> SaveInstruction | list[SaveInstruction]:
-        # Hard to parse for enrollment from a string
-        return []
+        value = classified_input.value
+        is_enrolled = "yes" in value.lower()
+        return {
+            "path": "education/currently_enrolled",
+            "value": is_enrolled,
+        }
 
     def save_checkable_input(
         self, classified_input: ClassifiedInput
