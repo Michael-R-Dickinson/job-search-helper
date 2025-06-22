@@ -5,6 +5,7 @@ from functions.inputs_autofill_helper.category_handlers.base_category_handler im
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
+    SaveInstruction,
 )
 from dictor import dictor
 
@@ -34,3 +35,13 @@ class SponsorshipHandler(BaseCategoryHandler):
             return radio_answer_bool
         else:
             return not radio_answer_bool
+
+    def save_text_input(
+        self, classified_input: ClassifiedInput
+    ) -> SaveInstruction | list[SaveInstruction]:
+        raise NotImplementedError
+
+    def save_checkable_input(
+        self, classified_input: ClassifiedInput
+    ) -> SaveInstruction | list[SaveInstruction]:
+        raise NotImplementedError
