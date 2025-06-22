@@ -7,3 +7,9 @@ When testing autofills or value saves, we are limited in our API calls so we wil
 Achieve this through purposeful testing. 
 - First consider the main paths, such as common input types (ie. select or radio button) for each category and the types of labels frequently used on job applications. 
 - Then aim to consider a few, important edge cases with either different phrasing, or an uncommon field type - ie a text input for a question like "do you require sponsorship to work in the US?" (normally this would be a select or radio button with a "yes" or "no" answer). 
+
+Notably, avoid testing direct matches to canonicals as this generally is a waste, instead, for basic tests where you might do this, test similar strings for more free coverage. 
+
+Also consider that we are testing both autofilling and saving filled values. This saving step reflects the way we would save the values a user inputted into the job application so that we can more accurately fill in the future.
+
+Aim for maybe 15-20 api calls.
