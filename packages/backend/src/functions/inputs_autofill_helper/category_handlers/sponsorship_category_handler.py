@@ -1,47 +1,36 @@
 from functions.inputs_autofill_helper.category_handlers.base_category_handler import (
-    BaseCategoryHandler,
+    EnumBasedHandler,
+    SimpleTextOnlyCategoryHandler,
 )
 
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
-    SaveInstruction,
 )
-from dictor import dictor
 
 
-class SponsorshipHandler(BaseCategoryHandler):
-    def can_autofill_category(self) -> bool:
-        return dictor(self.user_autofill_data, "sponsorship") is not None
-
+class SponsorshipYesNoHandlerNew(EnumBasedHandler):
     def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str | None:
-        text_answer = dictor(self.user_autofill_data, "sponsorship.textAnswer")
-        if text_answer is not None:
-            return text_answer
+        if self._autofill_value == "require_sponsorship":
+            return "Yes, I require sponsorship to work"
         else:
-            return None
+            return "No, I do not require sponsorship to work"
 
-    def fill_radio_input(
-        self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
-    ) -> bool | None:
-        radio_answer = dictor(self.user_autofill_data, "sponsorship.yesNoAnswer")
-        if radio_answer is not None:
-            return radio_answer
+    @property
+    def CANONICALS(self) -> dict[str, list[str]]:
+        return {
+            "require_sponsorship": ["yes", "Yes, I require sponsorship"],
+            "no_sponsorship": ["No", "No, I do not require sponsorship"],
+        }
 
-        radio_answer_bool = radio_answer == "require_sponsorship"
-        if self.is_positive_answer(classified_input.value):
-            return radio_answer_bool
-        else:
-            return not radio_answer_bool
+    @property
+    def VALUE_PATH(self) -> str:
+        return "sponsorship/yesNoAnswer"
 
-    def save_text_input(
-        self, classified_input: ClassifiedInput
-    ) -> SaveInstruction | list[SaveInstruction]:
-        raise NotImplementedError
 
-    def save_checkable_input(
-        self, classified_input: ClassifiedInput
-    ) -> SaveInstruction | list[SaveInstruction]:
-        raise NotImplementedError
+class SponsorshipExplanationHandler(SimpleTextOnlyCategoryHandler):
+    @property
+    def VALUE_PATH(self) -> str:
+        return "sponsorship/textAnswer"

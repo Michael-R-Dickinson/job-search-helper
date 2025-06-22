@@ -30,9 +30,6 @@ class BaseCategoryHandler(ABC):
     def __init__(self, user_autofill_data):
         self.user_autofill_data = user_autofill_data
 
-    def is_positive_answer(self, text: str) -> bool:
-        return any([answer in text.lower() for answer in ["yes", "true"]])
-
     def is_text_field(self, fieldType: FieldType):
         return fieldType in [
             FieldType.TEXT,

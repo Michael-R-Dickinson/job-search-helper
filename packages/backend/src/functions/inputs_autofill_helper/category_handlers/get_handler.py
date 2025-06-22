@@ -14,7 +14,8 @@ from functions.inputs_autofill_helper.category_handlers.phone_category_handler i
     PhoneNumberHandler,
 )
 from functions.inputs_autofill_helper.category_handlers.sponsorship_category_handler import (
-    SponsorshipHandler,
+    SponsorshipExplanationHandler,
+    SponsorshipYesNoHandler,
 )
 from functions.inputs_autofill_helper.category_handlers.student_category_handler import (
     EndYearHandler,
@@ -75,11 +76,11 @@ def get_category_handler(category_name: str, user_autofill_data):
 
         # Work Authorization
         case InputType.SPONSORSHIP_REQUIRED:
-            return SponsorshipHandler(user_autofill_data)
+            return SponsorshipYesNoHandler(user_autofill_data)
+        case InputType.SPONSORSHIP_EXPLANATION:
+            return SponsorshipExplanationHandler(user_autofill_data)
         case InputType.AUTHORIZATION:
             return AuthorizationHandler(user_autofill_data)
-        case InputType.SPONSORSHIP_EXPLANATION:
-            raise NotImplementedError("No Sponsorship Explanation Handler Implemented")
         case InputType.USING_WORK_VISA:
             raise NotImplementedError("No Using Work Visa Handler Implemented")
 
