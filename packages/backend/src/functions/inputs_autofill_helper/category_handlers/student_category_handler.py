@@ -69,15 +69,18 @@ class StudentHandler(BaseCategoryHandler):
 
 
 class UniversityHandler(SimpleTextOnlyCategoryHandler):
-    def get_value_path(self) -> str:
+    @property
+    def VALUE_PATH(self) -> str:
         return "education/school"
 
 
 class StartYearHandler(SimpleTextOnlyCategoryHandler):
-    def get_value_path(self) -> str:
+    @property
+    def VALUE_PATH(self) -> str:
         return "education/start_date_year"
 
 
 class EndYearHandler(SimpleTextOnlyCategoryHandler):
-    def get_value_path(self) -> str:
+    @property
+    def VALUE_PATH(self) -> str:
         return "education/end_date_year"

@@ -12,12 +12,14 @@ from dictor import dictor
 
 
 class FirstNameHandler(SimpleTextOnlyCategoryHandler):
-    def get_value_path(self) -> str:
+    @property
+    def VALUE_PATH(self) -> str:
         return "name/first_name"
 
 
 class LastNameHandler(SimpleTextOnlyCategoryHandler):
-    def get_value_path(self) -> str:
+    @property
+    def VALUE_PATH(self) -> str:
         return "name/last_name"
 
 

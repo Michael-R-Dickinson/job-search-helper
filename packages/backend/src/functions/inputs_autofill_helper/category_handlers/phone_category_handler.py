@@ -4,5 +4,6 @@ from functions.inputs_autofill_helper.category_handlers.base_category_handler im
 
 
 class PhoneNumberHandler(SimpleTextOnlyCategoryHandler):
-    def get_value_path(self) -> str:
+    @property
+    def VALUE_PATH(self) -> str:
         return "phone/phoneNum"

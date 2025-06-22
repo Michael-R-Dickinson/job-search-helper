@@ -140,7 +140,7 @@ class TextOnlyCategoryHandler(BaseCategoryHandler, ABC):
 
 class SimpleTextOnlyCategoryHandler(TextOnlyCategoryHandler, ABC):
     def _get_text(self) -> str:
-        return dictor(self.user_autofill_data, self.get_value_path().replace("/", "."))
+        return dictor(self.user_autofill_data, self.VALUE_PATH.replace("/", "."))
 
     @override
     def can_autofill_category(self) -> bool:
@@ -161,11 +161,12 @@ class SimpleTextOnlyCategoryHandler(TextOnlyCategoryHandler, ABC):
 
         return {
             "value": classified_input.value,
-            "path": self.get_value_path(),
+            "path": self.VALUE_PATH,
         }
 
+    @property
     @abstractmethod
-    def get_value_path(self) -> str:
+    def VALUE_PATH(self) -> str:
         # ie "name/first_name"
         pass
 
