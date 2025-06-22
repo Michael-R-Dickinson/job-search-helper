@@ -1,0 +1,9 @@
+---
+description: Any pytest testing for autofills
+globs: 
+alwaysApply: false
+---
+When testing autofills or value saves, we are limited in our API calls so we will focus on achieving strong coverage without bloating ourselves with too many calls to the function. 
+Achieve this through purposeful testing. 
+- First consider the main paths, such as common input types (ie. select or radio button) for each category and the types of labels frequently used on job applications. 
+- Then aim to consider a few, important edge cases with either different phrasing, or an uncommon field type - ie a text input for a question like "do you require sponsorship to work in the US?" (normally this would be a select or radio button with a "yes" or "no" answer). 
