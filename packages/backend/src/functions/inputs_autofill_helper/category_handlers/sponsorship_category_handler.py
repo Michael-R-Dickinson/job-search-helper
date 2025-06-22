@@ -1,5 +1,5 @@
 from functions.inputs_autofill_helper.category_handlers.base_category_handler import (
-    EnumBasedHandler,
+    EnumBasedCategoryHandler,
     SimpleTextOnlyCategoryHandler,
 )
 
@@ -9,7 +9,7 @@ from functions.inputs_autofill_helper.autofill_schema import (
 )
 
 
-class SponsorshipYesNoHandlerNew(EnumBasedHandler):
+class SponsorshipYesNoHandler(EnumBasedCategoryHandler):
     def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str | None:

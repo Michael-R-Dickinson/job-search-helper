@@ -3,12 +3,12 @@ from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInputList,
 )
 from functions.inputs_autofill_helper.category_handlers.base_category_handler import (
-    EnumBasedHandler,
+    EnumBasedCategoryHandler,
     get_decline_answer_canonicals,
 )
 
 
-class DisabilityHandler(EnumBasedHandler):
+class DisabilityHandler(EnumBasedCategoryHandler):
     def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str | None:

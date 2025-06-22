@@ -1,5 +1,5 @@
 from functions.inputs_autofill_helper.category_handlers.base_category_handler import (
-    EnumBasedHandler,
+    EnumBasedCategoryHandler,
 )
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
@@ -7,7 +7,7 @@ from functions.inputs_autofill_helper.autofill_schema import (
 )
 
 
-class AuthorizationHandler(EnumBasedHandler):
+class AuthorizationHandler(EnumBasedCategoryHandler):
     def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str | None:

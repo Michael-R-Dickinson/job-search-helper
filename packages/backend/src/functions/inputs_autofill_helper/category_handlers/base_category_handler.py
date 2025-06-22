@@ -168,7 +168,7 @@ class SimpleTextOnlyCategoryHandler(TextOnlyCategoryHandler, ABC):
         pass
 
 
-class EnumBasedHandler(BaseCategoryHandler, ABC):
+class EnumBasedCategoryHandler(BaseCategoryHandler, ABC):
     """
     For input categories whose autofill value in the schema is represented by an enum - ie. disability status is represented by an enum with values "disabled" or "enabled".
     These input fields could be either a select dropdown or a radio button, or sometimes even a raw text box.
