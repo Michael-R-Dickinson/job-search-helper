@@ -18,8 +18,8 @@ from functions.inputs_autofill_helper.category_handlers.sponsorship_category_han
 )
 from functions.inputs_autofill_helper.category_handlers.student_category_handler import (
     EndYearHandler,
+    EnrolledHandler,
     StartYearHandler,
-    StudentHandler,
     UniversityHandler,
 )
 from functions.inputs_autofill_helper.category_handlers.unknown_category_handler import (
@@ -111,7 +111,7 @@ def get_category_handler(category_name: str, user_autofill_data):
         case InputType.SCHOOL:
             return UniversityHandler(user_autofill_data)
         case InputType.ENROLLED_STUDENT:
-            return StudentHandler(user_autofill_data)
+            return EnrolledHandler(user_autofill_data)
         case InputType.REPORT_REQUIRED:
             raise NotImplementedError("No Report Required Handler Implemented")
         case InputType.EDUCATION_START_DATE:
