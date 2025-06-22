@@ -6,7 +6,7 @@ from functions.inputs_autofill_helper.category_handlers.disablitiy_category_hand
     DisabilityHandler,
 )
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
-from functions.inputs_autofill_helper.tests.basic_tests import (
+from functions.inputs_autofill_helper.tests.test_setup import (
     create_testing_input,
     get_testing_user,
 )
