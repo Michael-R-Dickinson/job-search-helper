@@ -2,9 +2,6 @@ from firebase import init_firebase
 from functions.inputs_autofill_helper.autofill_schema import (
     InputList,
 )
-from functions.inputs_autofill_helper.category_handlers.disablitiy_category_handler import (
-    DisabilityHandler,
-)
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from functions.inputs_autofill_helper.tests.test_setup import (
     create_testing_input,
@@ -43,7 +40,7 @@ def test_disability_autofill() -> None:
         get_testing_user(), InputList(save_inputs)
     )
 
-    assert updated_autofill_data[DisabilityHandler.value_path] == "disabled"
+    assert updated_autofill_data["disability"] == "disabled"
 
     autofill_inputs = [
         create_testing_input(

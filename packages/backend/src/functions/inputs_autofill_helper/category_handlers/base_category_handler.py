@@ -10,6 +10,10 @@ from functions.inputs_autofill_helper.autofill_schema import (
 
 from dictor import dictor
 
+from functions.inputs_autofill_helper.option_selection import (
+    get_most_similar_canonical_option,
+)
+
 
 DECLINE_ANSWER_CANONICALS = [
     "prefer not to say",
@@ -116,21 +120,6 @@ class BaseCategoryHandler(ABC):
         pass
 
 
-#     @override
-#     def handle_text_input(
-#         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
-#     ) -> str | None:
-#         return self.get_text()
-
-#     def save_text_value(
-#         self, classified_input: ClassifiedInput
-#     ) -> Union[SaveInstruction, list[SaveInstruction]]:
-#         return SaveInstruction(
-#             value=classified_input.value,
-#             path=self.get_value_path(),
-#         )
-
-
 class TextOnlyCategoryHandler(BaseCategoryHandler, ABC):
     @override
     def fill_radio_input(
@@ -178,4 +167,70 @@ class SimpleTextOnlyCategoryHandler(TextOnlyCategoryHandler, ABC):
     @abstractmethod
     def get_value_path(self) -> str:
         # ie "name/first_name"
+        pass
+
+
+class EnumBasedHandler(BaseCategoryHandler, ABC):
+    """
+    For input categories whose autofill value in the schema is represented by an enum - ie. disability status is represented by an enum with values "disabled" or "enabled".
+    These input fields could be either a select dropdown or a radio button, or sometimes even a raw text box.
+    """
+
+    @property
+    def _autofill_value(self):
+        return dictor(self.user_autofill_data, self.VALUE_PATH.replace("/", "."))
+
+    def can_autofill_category(self) -> bool:
+        return self._autofill_value is not None
+
+    def fill_radio_input(
+        self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
+    ) -> bool | None:
+        label = classified_input.label
+        best_canonical = get_most_similar_canonical_option(label, self.CANONICALS)
+        print(f"label: {label} best_canonical {best_canonical}")
+
+        if best_canonical == self._autofill_value:
+            return True
+
+        return False
+
+    def save_text_input(
+        self, classified_input: ClassifiedInput
+    ) -> SaveInstruction | list[SaveInstruction]:
+        value = classified_input.value
+        best_canonical = get_most_similar_canonical_option(value, self.CANONICALS)
+
+        return {
+            "path": self.VALUE_PATH,
+            "value": best_canonical,
+            "dont_overwrite_existing": True,
+        }
+
+    def save_checkable_input(
+        self, classified_input: ClassifiedInput
+    ) -> SaveInstruction | list[SaveInstruction]:
+        label = classified_input.label
+        checked = classified_input.value == True
+        best_canonical = get_most_similar_canonical_option(label, self.CANONICALS)
+
+        if not checked:
+            # We only save when the box is checked as we can be absolutely certain the user has intended this
+            return []
+
+        return {
+            "path": self.VALUE_PATH,
+            "value": best_canonical,
+            "dont_overwrite_existing": False,
+        }
+
+    @property
+    @abstractmethod
+    def CANONICALS(self) -> dict[str, list[str]]:
+        pass
+
+    @property
+    @abstractmethod
+    def VALUE_PATH(self) -> str:
+        # ie. sponsorship/yesNoAnswer
         pass
