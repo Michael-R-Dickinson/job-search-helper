@@ -1,31 +1,17 @@
 from functions.inputs_autofill_helper.category_handlers.base_category_handler import (
-    BaseCategoryHandler,
+    EnumBasedHandler,
 )
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInput,
     ClassifiedInputList,
-    SaveInstruction,
-)
-from dictor import dictor
-
-from functions.inputs_autofill_helper.option_selection import (
-    get_most_similar_canonical_option,
 )
 
 
-class AuthorizationHandler(BaseCategoryHandler):
-    CANONICALS = {
-        "us_authorized": ["Yes", "I am authorized to work"],
-        "no_authorization": ["No", "I am not authorized"],
-    }
-
-    def can_autofill_category(self) -> bool:
-        return dictor(self.user_autofill_data, "authorization") is not None
-
+class AuthorizationHandler(EnumBasedHandler):
     def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
-    ) -> str:
-        authorized_value = dictor(self.user_autofill_data, "authorization")
+    ) -> str | None:
+        authorized_value = self._autofill_value
         if authorized_value == "us_authorized":
             return "Yes, I am authorized to work in the United States"
         if authorized_value == "no_authorization":
@@ -33,38 +19,13 @@ class AuthorizationHandler(BaseCategoryHandler):
         else:
             raise ValueError("Authorization value incorrect")
 
-    def fill_radio_input(
-        self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
-    ) -> bool | None:
-        authorization_value = dictor(self.user_autofill_data, "authorization")
-        best_canonical = get_most_similar_canonical_option(
-            classified_input.label, self.CANONICALS
-        )
-        if authorization_value == best_canonical:
-            return True
-
-        return None
-
-    def save_text_input(
-        self, classified_input: ClassifiedInput
-    ) -> SaveInstruction | list[SaveInstruction]:
-        value = classified_input.value
-        best_canonical = get_most_similar_canonical_option(value, self.CANONICALS)
-
+    @property
+    def CANONICALS(self) -> dict[str, list[str]]:
         return {
-            "path": "authorization",
-            "value": best_canonical,
-            "dont_overwrite_existing": True,
+            "us_authorized": ["Yes", "I am authorized to work"],
+            "no_authorization": ["No", "I am not authorized"],
         }
 
-    def save_checkable_input(
-        self, classified_input: ClassifiedInput
-    ) -> SaveInstruction | list[SaveInstruction]:
-        best_canonical = get_most_similar_canonical_option(classified_input.label)
-        checked = classified_input.value == True
-
-        # Only set value for checked options
-        if not checked:
-            return []
-
-        return {"path": "authorization", "value": best_canonical}
+    @property
+    def VALUE_PATH(self) -> str:
+        return "authorization"
