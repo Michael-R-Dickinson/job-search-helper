@@ -1,9 +1,8 @@
 from functions.inputs_autofill_helper.category_handlers.base_category_handler import (
-    TextOnlyCategoryHandler,
+    SimpleTextOnlyCategoryHandler,
 )
-from dictor import dictor
 
 
-class PhoneNumberHandler(TextOnlyCategoryHandler):
-    def get_text(self):
-        return dictor(self.user_autofill_data, "phone.phoneNum")
+class PhoneNumberHandler(SimpleTextOnlyCategoryHandler):
+    def get_value_path(self) -> str:
+        return "phone/phoneNum"

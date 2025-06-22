@@ -13,7 +13,7 @@ class SponsorshipHandler(BaseCategoryHandler):
     def can_autofill_category(self) -> bool:
         return dictor(self.user_autofill_data, "sponsorship") is not None
 
-    def handle_text_input(
+    def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str | None:
         text_answer = dictor(self.user_autofill_data, "sponsorship.textAnswer")
@@ -22,7 +22,7 @@ class SponsorshipHandler(BaseCategoryHandler):
         else:
             return None
 
-    def handle_radio_input(
+    def fill_radio_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> bool | None:
         radio_answer = dictor(self.user_autofill_data, "sponsorship.yesNoAnswer")

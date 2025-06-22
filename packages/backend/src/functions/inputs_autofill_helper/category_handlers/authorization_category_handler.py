@@ -12,7 +12,7 @@ class AuthorizationHandler(BaseCategoryHandler):
     def can_autofill_category(self) -> bool:
         return dictor(self.user_autofill_data, "authorization") is not None
 
-    def handle_text_input(
+    def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str:
         authorized_value = dictor(self.user_autofill_data, "authorization")
@@ -23,7 +23,7 @@ class AuthorizationHandler(BaseCategoryHandler):
         else:
             raise ValueError("Authorization value incorrect")
 
-    def handle_radio_input(
+    def fill_radio_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> bool:
         authorized_value_bool = (

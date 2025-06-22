@@ -28,12 +28,12 @@ class DisabilityHandler(BaseCategoryHandler):
     def can_autofill_category(self) -> bool:
         return self.get_disability_value() is not None
 
-    def handle_text_input(
+    def fill_text_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> str | None:
         return self.get_disability_value()
 
-    def handle_radio_input(
+    def fill_radio_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> bool | None:
         input_label = classified_input.label
@@ -44,7 +44,7 @@ class DisabilityHandler(BaseCategoryHandler):
 
         return self.get_disability_value() == best_canonical
 
-    def save_text_value(
+    def save_text_input(
         self, classified_input: ClassifiedInput
     ) -> SaveInstruction | list[SaveInstruction]:
         if classified_input.value == None or classified_input.value == "":
@@ -68,7 +68,7 @@ class DisabilityHandler(BaseCategoryHandler):
 
         return []
 
-    def save_checkable_value(
+    def save_checkable_input(
         self, classified_input: ClassifiedInput
     ) -> SaveInstruction | list[SaveInstruction]:
         if classified_input.value == None or classified_input.value == "":
