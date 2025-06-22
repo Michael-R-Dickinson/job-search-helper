@@ -8,6 +8,7 @@ from functions.inputs_autofill_helper.autofill_schema import (
 from functions.inputs_autofill_helper.category_handlers.disablitiy_category_handler import (
     DisabilityHandler,
 )
+from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from functions.save_filled_values_helper.input_saver import save_input_values
 
 TESTING_USER = "test-autofill-user"
@@ -61,19 +62,22 @@ def test_disability_autofill() -> None:
 
     assert updated_autofill_data[DisabilityHandler.value_path] == "disabled"
 
-    # autofills = get_filled_inputs(
-    #     TESTING_USER,
-    #     create_testing_input(
-    #         label="Yes, the most",
-    #         fieldType="radio",
-    #         wholeQuestionLabel="Are you disabled af?",
-    #     ),
-    #     create_testing_input(
-    #         label="Nope",
-    #         fieldType="radio",
-    #         wholeQuestionLabel="Are you disabled af?",
-    #     ),
-    # )
+    autofill_inputs = [
+        create_testing_input(
+            label="Yes, the most",
+            fieldType="radio",
+            wholeQuestionLabel="Are you disabled af?",
+        ),
+        create_testing_input(
+            label="Nope",
+            fieldType="radio",
+            wholeQuestionLabel="Are you disabled af?",
+        ),
+    ]
+    autofills = get_filled_inputs(TESTING_USER, InputList(autofill_inputs))
 
-    # answer_0 = autofills[0]
-    # assert answer_0["value"] == True
+    answer_0 = autofills[0]
+    assert answer_0["value"] == True
+
+    answer_1 = autofills[1]
+    assert answer_1["value"] == False

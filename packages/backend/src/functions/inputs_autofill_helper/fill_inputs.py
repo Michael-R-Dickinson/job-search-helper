@@ -14,7 +14,7 @@ def get_filled_inputs(user_id, inputs: InputList):
         raise ValueError("User data not found")
 
     classified_inputs = get_input_classifications(inputs)
-    print("classified\n", classified_inputs.model_dump(), "\n\n")
+    print("classified\n", classified_inputs.model_dump_json(), "\n\n")
 
     filled_inputs = []
     for classified_input in classified_inputs:

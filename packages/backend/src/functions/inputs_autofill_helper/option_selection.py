@@ -41,6 +41,7 @@ def get_similarity(value1: str, value2: str):
 
     # Sorensen similarity metric - does a decent job
     score = sorensen.normalized_similarity(tokenized1, tokenized2)
+    # print(f"\t {value2} - Score: {score}, negated: {negation_equality}")
     if not negation_equality:
         return score * 0.4
 
@@ -66,7 +67,9 @@ def get_most_similar_canonical_option(value: str, canonical_options: dict):
     max_similarity = -1
     max_similarity_option = None
     for canonical_label, canonical_strings in canonical_options.items():
+        # print("Label: ", canonical_label)
         similarity = get_max_similarity(value, canonical_strings)
+        # print(f"Max Similarity: {similarity}\n")
         if similarity > max_similarity:
             max_similarity = similarity
             max_similarity_option = canonical_label

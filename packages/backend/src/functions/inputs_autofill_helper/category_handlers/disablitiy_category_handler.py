@@ -18,7 +18,7 @@ class DisabilityHandler(BaseCategoryHandler):
     value_path = "disability"
     disability_canonicals = {
         "disabled": ["yes", "Yes, I have a disability"],
-        "enabled": ["no", "No, I do not have a disability"],
+        "enabled": ["no", "No, I do not have a disability", "nope"],
         "prefer_not_to_say": get_decline_answer_canonicals(),
     }
 
