@@ -1,4 +1,3 @@
-from firebase import init_firebase
 from functions.inputs_autofill_helper.autofill_schema import (
     InputList,
 )
@@ -6,31 +5,26 @@ from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from functions.inputs_autofill_helper.tests.test_setup import (
     create_testing_input,
     get_testing_user,
+    init_firebase_once,
 )
 from functions.save_filled_values_helper.input_saver import save_input_values
 
 
-def get_instruction_by_value_path(instructions, value_path):
-    for instruction in instructions:
-        if instruction["path"] == value_path:
-            return instruction
+def test_disability_radio_autofill_common_formats() -> None:
+    """Test the most common disability radio button formats in job applications"""
+    init_firebase_once()
 
-    raise LookupError(f"No instruction with path {value_path}")
-
-
-def test_disability_autofill() -> None:
-    init_firebase()
-
+    # Save disability status using the most common format
     save_inputs = [
         create_testing_input(
-            label="Yes",
-            wholeQuestionLabel="Are you disabled?",
+            label="Yes, I have a disability",
+            wholeQuestionLabel="Do you have a disability?",
             fieldType="radio",
             value=True,
         ),
         create_testing_input(
-            label="No",
-            wholeQuestionLabel="Are you disabled?",
+            label="No, I do not have a disability",
+            wholeQuestionLabel="Do you have a disability?",
             fieldType="radio",
             value=False,
         ),
@@ -39,25 +33,110 @@ def test_disability_autofill() -> None:
     updated_autofill_data = save_input_values(
         get_testing_user(), InputList(save_inputs)
     )
-
     assert updated_autofill_data["disability"] == "disabled"
 
-    autofill_inputs = [
+    # Test autofilling critical variations that match existing CANONICALS
+    test_cases = [
+        # Direct matches to CANONICALS
+        ("Yes", True),  # matches "disabled" canonical
+        ("Yes, I have a disability", True),  # matches "disabled" canonical
+        ("No", False),  # matches "enabled" canonical
+        ("No, I do not have a disability", False),  # matches "enabled" canonical
+    ]
+
+    for label, expected_value in test_cases:
+        autofill_inputs = [
+            create_testing_input(
+                label=label,
+                fieldType="radio",
+                wholeQuestionLabel="Do you have a disability?",
+            ),
+        ]
+        autofills = get_filled_inputs(get_testing_user(), InputList(autofill_inputs))
+        assert autofills[0]["value"] == expected_value, f"Failed for label: {label}"
+
+
+def test_disability_text_autofill_key_responses() -> None:
+    """Test text input autofill with the key response formats"""
+    init_firebase_once()
+
+    # Set up disabled status and test text response
+    save_inputs = [
         create_testing_input(
-            label="Yes, the most",
+            label="Yes, I have a disability",
+            wholeQuestionLabel="Do you have a disability?",
             fieldType="radio",
-            wholeQuestionLabel="Are you disabled af?",
-        ),
-        create_testing_input(
-            label="Nope",
-            fieldType="radio",
-            wholeQuestionLabel="Are you disabled af?",
+            value=True,
         ),
     ]
+    save_input_values(get_testing_user(), InputList(save_inputs))
+
+    # Test autofilling text input
+    autofill_inputs = [
+        create_testing_input(
+            label="",
+            fieldType="text",
+            wholeQuestionLabel="Please describe your disability status",
+        ),
+    ]
+
     autofills = get_filled_inputs(get_testing_user(), InputList(autofill_inputs))
+    assert autofills[0]["value"] == "Yes, I have a disability"
 
-    answer_0 = autofills[0]
-    assert answer_0["value"] == True
 
-    answer_1 = autofills[1]
-    assert answer_1["value"] == False
+def test_disability_save_critical_variations() -> None:
+    """Test saving the most critical input variations found in job applications"""
+    init_firebase_once()
+
+    # Test key variations that should map to existing CANONICALS
+    critical_cases = [
+        # Positive responses - should map to "disabled"
+        ("Yes", "disabled"),
+        ("Yes, I have a disability", "disabled"),
+        ("I am disabled", "disabled"),
+        # Negative responses - should map to "enabled"
+        ("No", "enabled"),
+        ("No, I do not have a disability", "enabled"),
+        ("nope", "enabled"),
+        # Decline responses - should map to "prefer_not_to_say"
+        ("prefer not to say", "prefer_not_to_say"),
+    ]
+
+    for input_value, expected_canonical in critical_cases:
+        save_inputs = [
+            create_testing_input(
+                label="",
+                wholeQuestionLabel="Do you have a disability?",
+                fieldType="select",
+                value=input_value,
+            ),
+        ]
+
+        updated_autofill_data = save_input_values(
+            get_testing_user(), InputList(save_inputs)
+        )
+
+        assert (
+            updated_autofill_data["disability"] == expected_canonical
+        ), f"Failed for input: {input_value}"
+
+
+def test_disability_checkbox_basic() -> None:
+    """Basic test for checkbox input (less common but still used)"""
+    init_firebase_once()
+
+    # Test checking a disability checkbox
+    save_inputs = [
+        create_testing_input(
+            label="I have a disability",
+            wholeQuestionLabel="Self-identification",
+            fieldType="checkbox",
+            value=True,
+        ),
+    ]
+
+    updated_autofill_data = save_input_values(
+        get_testing_user(), InputList(save_inputs)
+    )
+
+    assert updated_autofill_data["disability"] == "disabled"

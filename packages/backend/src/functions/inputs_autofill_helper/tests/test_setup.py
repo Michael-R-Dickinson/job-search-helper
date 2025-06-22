@@ -1,5 +1,7 @@
 import uuid
 from functions.inputs_autofill_helper.autofill_schema import FieldType, Input
+import firebase_admin
+from firebase import init_firebase
 
 
 TESTING_USER = "test-autofill-user"
@@ -7,6 +9,15 @@ TESTING_USER = "test-autofill-user"
 
 def get_testing_user():
     return TESTING_USER
+
+
+def init_firebase_once():
+    """Initialize Firebase only if it hasn't been initialized already"""
+    try:
+        firebase_admin.get_app()
+    except ValueError:
+        # App doesn't exist, so initialize it
+        init_firebase()
 
 
 def create_testing_input(**kwargs):
