@@ -2,17 +2,15 @@ from functions.inputs_autofill_helper.autofill_schema import (
     InputList,
 )
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
-from functions.inputs_autofill_helper.tests.test_setup import (
+from functions.inputs_autofill_helper.tests.conftest import (
     create_testing_input,
     get_testing_user,
-    init_firebase_once,
 )
 from functions.save_filled_values_helper.input_saver import save_input_values
 
 
 def test_disability_radio_autofill_common_formats() -> None:
     """Test the most common disability radio button formats in job applications"""
-    init_firebase_once()
 
     # Save disability status using the most common format
     save_inputs = [
@@ -58,7 +56,6 @@ def test_disability_radio_autofill_common_formats() -> None:
 
 def test_disability_text_autofill_key_responses() -> None:
     """Test text input autofill with the key response formats"""
-    init_firebase_once()
 
     # Set up disabled status and test text response
     save_inputs = [
@@ -86,7 +83,6 @@ def test_disability_text_autofill_key_responses() -> None:
 
 def test_disability_save_critical_variations() -> None:
     """Test saving the most critical input variations found in job applications"""
-    init_firebase_once()
 
     # Test key variations that should map to existing CANONICALS
     critical_cases = [
@@ -123,7 +119,6 @@ def test_disability_save_critical_variations() -> None:
 
 def test_disability_checkbox_basic() -> None:
     """Basic test for checkbox input (less common but still used)"""
-    init_firebase_once()
 
     # Test checking a disability checkbox
     save_inputs = [

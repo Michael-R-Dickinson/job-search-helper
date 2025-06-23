@@ -1,4 +1,8 @@
+import time
+import pytest
+
 import uuid
+
 from functions.inputs_autofill_helper.autofill_schema import FieldType, Input
 import firebase_admin
 from firebase import init_firebase
@@ -36,3 +40,12 @@ def create_testing_input(**kwargs):
     }
     defaults.update(kwargs)
     return Input(**defaults)
+
+
+@pytest.fixture(autouse=True)
+def setup_tests():
+    init_firebase_once()
+
+    yield
+
+    time.sleep(5)

@@ -2,17 +2,15 @@ from functions.inputs_autofill_helper.autofill_schema import (
     InputList,
 )
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
-from functions.inputs_autofill_helper.tests.test_setup import (
+from functions.inputs_autofill_helper.tests.conftest import (
     create_testing_input,
     get_testing_user,
-    init_firebase_once,
 )
 from functions.save_filled_values_helper.input_saver import save_input_values
 
 
 def test_sponsorship_radio_autofill_common_formats() -> None:
     """Test the most common sponsorship radio button formats in job applications"""
-    init_firebase_once()
 
     # Save sponsorship status using common format - person requires sponsorship
     save_inputs = [
@@ -62,7 +60,6 @@ def test_sponsorship_radio_autofill_common_formats() -> None:
 
 def test_sponsorship_various_question_formats() -> None:
     """Test different ways companies ask about sponsorship"""
-    init_firebase_once()
 
     # Test the Tesla-style question format
     tesla_inputs = [
@@ -101,7 +98,6 @@ def test_sponsorship_various_question_formats() -> None:
 
 def test_sponsorship_text_input_responses() -> None:
     """Test text input responses for sponsorship questions"""
-    init_firebase_once()
 
     # Set up user who requires sponsorship
     save_inputs = [
@@ -142,7 +138,6 @@ def test_sponsorship_text_input_responses() -> None:
 
 def test_sponsorship_save_critical_variations() -> None:
     """Test saving various sponsorship response formats to ensure proper classification"""
-    init_firebase_once()
 
     # Test positive responses that should map to requires_sponsorship: true
     positive_cases = [
@@ -199,7 +194,6 @@ def test_sponsorship_save_critical_variations() -> None:
 
 def test_sponsorship_checkbox_format() -> None:
     """Test checkbox format for sponsorship questions"""
-    init_firebase_once()
 
     # Test checking sponsorship checkbox
     save_inputs = [
@@ -231,7 +225,6 @@ def test_sponsorship_checkbox_format() -> None:
 
 def test_sponsorship_text_explanation_edge_case() -> None:
     """Test edge case where text input asks for sponsorship answer and explanation together"""
-    init_firebase_once()
 
     # Save detailed sponsorship explanation
     save_inputs = [
@@ -268,7 +261,6 @@ def test_sponsorship_text_explanation_edge_case() -> None:
 
 def test_sponsorship_select_uncommon_field_type() -> None:
     """Test uncommon select field type for sponsorship questions"""
-    init_firebase_once()
 
     # Set up sponsorship status - save via select to ensure it's stored properly
     save_inputs = [

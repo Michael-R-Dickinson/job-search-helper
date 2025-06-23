@@ -2,17 +2,15 @@ from functions.inputs_autofill_helper.autofill_schema import (
     InputList,
 )
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
-from functions.inputs_autofill_helper.tests.test_setup import (
+from functions.inputs_autofill_helper.tests.conftest import (
     create_testing_input,
     get_testing_user,
-    init_firebase_once,
 )
 from functions.save_filled_values_helper.input_saver import save_input_values
 
 
 def test_basic_name_autofill() -> None:
     """Test basic first/last name saving and autofilling with key variations"""
-    init_firebase_once()
 
     # Save first and last names
     save_inputs = [
@@ -56,7 +54,6 @@ def test_basic_name_autofill() -> None:
 
 def test_full_name_parsing_and_autofill() -> None:
     """Test critical full name parsing functionality and bidirectional autofill"""
-    init_firebase_once()
 
     # Test saving a full name that gets parsed into first and last
     save_inputs = [
@@ -88,7 +85,6 @@ def test_full_name_parsing_and_autofill() -> None:
 
 def test_name_edge_cases() -> None:
     """Test important edge cases: special characters and uncommon field types"""
-    init_firebase_once()
 
     # Test names with special characters (common in real applications)
     save_inputs = [
