@@ -1,6 +1,7 @@
 from pydantic import RootModel
 from nltk.tokenize import TreebankWordTokenizer
 from textdistance import sorensen
+import contractions
 
 
 tokenizer = TreebankWordTokenizer()
@@ -20,7 +21,9 @@ NEGATION_TOKENS = {"not", "can't", "cannot", "isn't", "aren't"}
 # Tokenize into words - we use nltk just to remove contractions and because I have
 # more confidence in it than my regex abilities
 def tokenize_string(s: str):
-    tokens = tokenizer.tokenize(s.lower())
+    lowered = s.lower()
+    contractions_removed = contractions.fix(lowered)
+    tokens = tokenizer.tokenize(contractions_removed)
     # drop puncation
     return [t for t in tokens if any(c.isalnum() for c in t)]
 
