@@ -141,6 +141,7 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "Do you need sponsorship to work in the United States?",
     ],
     InputType.SPONSORSHIP_EXPLANATION: [
+        "Do you require or will you require sponsorship to work in the US? If so, explain."
         "If yes, please explain your sponsorship needs",
         "Please explain your sponsorship requirements",
         "Sponsorship details",
