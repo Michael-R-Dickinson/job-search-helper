@@ -268,7 +268,7 @@ def test_sponsorship_select_uncommon_field_type() -> None:
             label="",
             wholeQuestionLabel="Do you require sponsorship?",
             fieldType="select",
-            value="No, I do not require sponsorship",
+            value="No, I don't require sponsorship",
         ),
     ]
     updated_autofill_data = save_input_values(
@@ -284,4 +284,4 @@ def test_sponsorship_select_uncommon_field_type() -> None:
         ),
     ]
     autofills = get_filled_inputs(get_testing_user(), InputList(select_inputs))
-    assert autofills[0]["value"] == "No, I do not require sponsorship to work"
+    assert autofills[0]["value"] == "No|No, I do not require sponsorship"

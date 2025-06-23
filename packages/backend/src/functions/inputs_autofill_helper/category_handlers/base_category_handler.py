@@ -181,6 +181,12 @@ class EnumBasedCategoryHandler(BaseCategoryHandler, ABC):
     def can_autofill_category(self) -> bool:
         return self._autofill_value is not None
 
+    def fill_select_input(
+        self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
+    ) -> str | None:
+        # The frontend handles picking the best option from the given ones joined by |
+        return "|".join(self.CANONICALS[self._autofill_value])
+
     def fill_radio_input(
         self, classified_input: ClassifiedInput, other_inputs: ClassifiedInputList
     ) -> bool | None:
