@@ -5,6 +5,9 @@ from functions.inputs_autofill_helper.category_handlers.authorization_category_h
 from functions.inputs_autofill_helper.category_handlers.disablitiy_category_handler import (
     DisabilityHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.job_discovery_category_handler import (
+    JobDiscoveryHandler,
+)
 from functions.inputs_autofill_helper.category_handlers.name_category_handlers import (
     FirstNameHandler,
     FullNameHandler,
@@ -52,7 +55,7 @@ def get_category_handler(category_name: str, user_autofill_data):
         case InputType.OTHER_WEBSITE:
             raise NotImplementedError("No Other Website Handler Implemented")
         case InputType.JOB_DISCOVERY:
-            raise NotImplementedError("No Job Discovery Handler Implemented")
+            return JobDiscoveryHandler(user_autofill_data)
 
         # Location
         case InputType.GENERAL_LOCATION:
