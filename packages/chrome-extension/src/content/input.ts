@@ -33,6 +33,10 @@ class InputElement {
     return this.fieldType === 'text' || this.fieldType === 'textbox'
   }
 
+  get isSelectInput(): boolean {
+    return this.fieldType === 'select'
+  }
+
   get isFileUploadInput(): boolean {
     return this.fieldType === 'file' || this.fieldType === 'button'
   }
@@ -46,7 +50,7 @@ class InputElement {
 
   // can be autofilled by LLM - essentially text inputs and checkboxes
   get isLLMAutofillable(): boolean {
-    return this.isTextInput || this.isCheckable
+    return this.isTextInput || this.isCheckable || this.isSelectInput
   }
 
   private getValue(): string {
