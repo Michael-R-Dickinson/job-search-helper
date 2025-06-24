@@ -18,18 +18,27 @@ def get_filled_inputs(user_id, inputs: InputList):
 
     filled_inputs = []
     for classified_input in classified_inputs:
-        category_handler = get_category_handler(
-            classified_input.category, user_autofill_data
-        )
-        value = category_handler.get_autofill_value(classified_input, classified_inputs)
-        filled_inputs.append(
-            {
-                "input_text": classified_input.label
-                or classified_input.wholeQuestionLabel,
-                "input_id": classified_input.id,
-                "value": value,
-            }
-        )
+        try:
+            category_handler = get_category_handler(
+                classified_input.category, user_autofill_data
+            )
+            value = category_handler.get_autofill_value(
+                classified_input, classified_inputs
+            )
+            if value is None:
+                continue
+
+            filled_inputs.append(
+                {
+                    "input_text": classified_input.label
+                    or classified_input.wholeQuestionLabel,
+                    "input_id": classified_input.id,
+                    "value": value,
+                }
+            )
+        except NotImplementedError:
+            print(f"Not implemented: {classified_input.category}")
+            continue
 
     print("filled_inputs\n", json.dumps(filled_inputs, indent=4))
 

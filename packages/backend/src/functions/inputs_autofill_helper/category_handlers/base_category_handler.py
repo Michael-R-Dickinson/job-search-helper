@@ -137,7 +137,7 @@ class TextOnlyCategoryHandler(BaseCategoryHandler, ABC):
 
 class SimpleTextOnlyCategoryHandler(TextOnlyCategoryHandler, ABC):
     def _get_text(self) -> str:
-        return dictor(self.user_autofill_data, self.VALUE_PATH.replace("/", "."))
+        return str(dictor(self.user_autofill_data, self.VALUE_PATH.replace("/", ".")))
 
     @override
     def can_autofill_category(self) -> bool:
