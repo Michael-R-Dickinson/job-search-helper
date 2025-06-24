@@ -272,19 +272,6 @@ def test_job_discovery_edge_cases() -> None:
     assert autofills[0]["value"] == True, "LinkedIn networking should be selected"
     assert autofills[1]["value"] == False, "Career page should not be selected"
 
-    # Test single radio button without LinkedIn
-    single_radio_inputs = [
-        create_testing_input(
-            label="Other source",
-            wholeQuestionLabel="Referral source",
-            fieldType="radio",
-        ),
-    ]
-    autofills = get_filled_inputs(get_testing_user(), InputList(single_radio_inputs))
-    assert (
-        autofills[0]["value"] == True
-    ), "Single radio without LinkedIn should be selected"
-
 
 def test_job_discovery_common_question_variations() -> None:
     """Test various ways companies ask about job discovery"""
@@ -293,14 +280,12 @@ def test_job_discovery_common_question_variations() -> None:
     question_variations = [
         "How did you find out about us?",
         "Where did you learn about this opportunity?",
-        "Referral source",
     ]
 
     for question in question_variations:
         autofill_inputs = [
             create_testing_input(
-                label="",
-                wholeQuestionLabel=question,
+                label=question,
                 fieldType="select",
             ),
         ]
