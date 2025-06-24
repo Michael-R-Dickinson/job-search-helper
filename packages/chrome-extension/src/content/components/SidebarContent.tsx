@@ -24,6 +24,7 @@ const SidebarContent = () => {
     fetchStatus,
     executeAutofillSequence,
     executeResumeAutofill,
+    executeSaveFilledValues,
     unfilledInputs,
     freeResponseInputs,
     usesIframes,
@@ -89,6 +90,7 @@ const SidebarContent = () => {
           }}
           fillStatus={fillingStatus}
         />
+        <button onClick={executeSaveFilledValues}>Save</button>
       </div>
     </div>
   )
