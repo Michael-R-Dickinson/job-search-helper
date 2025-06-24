@@ -46,6 +46,15 @@ from functions.inputs_autofill_helper.category_handlers.generated.pronouns_categ
 from functions.inputs_autofill_helper.category_handlers.generated.sexual_orientation_category_handler import (
     SexualOrientationHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.generated.linkedin_url_category_handler import (
+    LinkedInUrlHandler,
+)
+from functions.inputs_autofill_helper.category_handlers.generated.github_url_category_handler import (
+    GitHubUrlHandler,
+)
+from functions.inputs_autofill_helper.category_handlers.generated.personal_website_category_handler import (
+    PersonalWebsiteHandler,
+)
 
 
 def get_category_handler(category_name: str, user_autofill_data):
@@ -64,11 +73,11 @@ def get_category_handler(category_name: str, user_autofill_data):
 
         # Profiles
         case InputType.LINKEDIN_URL:
-            raise NotImplementedError("No LinkedIn URL Handler Implemented")
+            return LinkedInUrlHandler(user_autofill_data)
         case InputType.GITHUB_URL:
-            raise NotImplementedError("No GitHub URL Handler Implemented")
+            return GitHubUrlHandler(user_autofill_data)
         case InputType.PERSONAL_WEBSITE:
-            raise NotImplementedError("No Personal Website Handler Implemented")
+            return PersonalWebsiteHandler(user_autofill_data)
         case InputType.OTHER_WEBSITE:
             raise NotImplementedError("No Other Website Handler Implemented")
         case InputType.JOB_DISCOVERY:
