@@ -5,6 +5,9 @@ from functions.inputs_autofill_helper.category_handlers.authorization_category_h
 from functions.inputs_autofill_helper.category_handlers.disablitiy_category_handler import (
     DisabilityHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.free_response_category_handler import (
+    FreeResponseHandler,
+)
 from functions.inputs_autofill_helper.category_handlers.job_discovery_category_handler import (
     JobDiscoveryHandler,
 )
@@ -163,6 +166,8 @@ def get_category_handler(category_name: str, user_autofill_data):
             raise NotImplementedError("No Degree Handler Implemented")
         case InputType.DISCIPLINE:
             raise NotImplementedError("No Discipline Handler Implemented")
+        case InputType.FREE_RESPONSE:
+            return FreeResponseHandler(user_autofill_data)
 
         # Default Cases
         case InputType.UNKNOWN:
