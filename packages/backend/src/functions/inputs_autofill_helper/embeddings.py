@@ -2,6 +2,8 @@ from collections import defaultdict
 import os
 import time
 from typing import Optional, cast
+
+from tqdm import tqdm
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInputList,
     Input,
@@ -24,6 +26,9 @@ from firebase.buckets import (
     cache_prototype_embeds_to_storage,
     get_cached_prototype_embeds_from_storage,
 )
+
+# EMBEDDING_MODEL_NAME = "gemini-embedding-exp-03-07"
+EMBEDDING_MODEL_NAME = "text-embedding-004"
 
 CLASSIFICATION_THRESHOLD = 0.8
 
@@ -85,7 +90,7 @@ def classify_field(
     Returns (best_label, score) if score >= threshold, else None.
     """
     resp = client.models.embed_content(
-        model="gemini-embedding-exp-03-07",
+        model=EMBEDDING_MODEL_NAME,
         contents=label_text,
         config={
             "outputDimensionality": 768,
@@ -112,7 +117,7 @@ def classify_field(
 
 def embed_content(client, contents):
     return client.models.embed_content(
-        model="gemini-embedding-exp-03-07",
+        model=EMBEDDING_MODEL_NAME,
         contents=contents,
         config={
             "outputDimensionality": 768,
@@ -140,22 +145,21 @@ def generate_prototype_embeds():
     client = get_client()
     embed_categories, texts = get_flattened_proto_strings()
 
-    # Process embeddings in batches of 100
+    # Process embeddings in batches
     batch_size = 50
     all_embeddings = []
 
-    for i in range(0, len(texts), batch_size):
+    for i in tqdm(range(0, len(texts), batch_size)):
         batch_texts = texts[i : i + batch_size]
-        print(
-            f"Processing embedding batch {i//batch_size + 1}/{(len(texts) + batch_size - 1)//batch_size}"
-        )
+        # print(
+        #     f"Processing embedding batch {i//batch_size + 1}/{(len(texts) + batch_size - 1)//batch_size}"
+        # )
 
         batch_embeds = embed_content(client, batch_texts)
         all_embeddings.extend(batch_embeds.embeddings)
 
         # Wait to avoid rate limiting
         if i < len(texts) - batch_size:
-            print("Sleeping for 120 seconds")
             time.sleep(120)
 
     prototype_embeds = np.stack(

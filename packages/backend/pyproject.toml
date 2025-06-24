@@ -28,6 +28,7 @@ textdistance = "^4.6.3"
 nltk = "^3.9.1"
 types-requests = "^2.32.4.20250611"
 contractions = "^0.1.73"
+tqdm = "^4.67.1"
 
 
 [tool.poetry.group.dev.dependencies]
