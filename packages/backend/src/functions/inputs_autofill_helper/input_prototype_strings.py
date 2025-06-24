@@ -31,6 +31,10 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "What is your last name?",
         "Surname",
     ],
+    InputType.EMAIL: [
+        "Email",
+        "Email address",
+    ],
     InputType.PHONE_NUMBER: [
         "Phone number",
         "Mobile number",

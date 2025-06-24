@@ -8,6 +8,9 @@ from functions.inputs_autofill_helper.category_handlers.cover_letter_category_ha
 from functions.inputs_autofill_helper.category_handlers.disablitiy_category_handler import (
     DisabilityHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.email_category_handler import (
+    EmailHandler,
+)
 from functions.inputs_autofill_helper.category_handlers.free_response_category_handler import (
     FreeResponseHandler,
 )
@@ -89,6 +92,8 @@ def get_category_handler(category_name: str, user_autofill_data):
             return FullNameHandler(user_autofill_data)
         case InputType.PHONE_NUMBER:
             return PhoneNumberHandler(user_autofill_data)
+        case InputType.EMAIL:
+            return EmailHandler(user_autofill_data)
         case InputType.PREFERRED_FIRST_NAME:
             raise NotImplementedError("No Preferred First Name Handler Implemented")
 
