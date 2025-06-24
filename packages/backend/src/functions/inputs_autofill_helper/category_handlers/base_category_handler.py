@@ -204,6 +204,7 @@ class EnumBasedCategoryHandler(BaseCategoryHandler, ABC):
     ) -> SaveInstruction | list[SaveInstruction]:
         value = classified_input.value
         best_canonical = get_most_similar_canonical_option(value, self.CANONICALS)
+        # print(f"value: {value} best_canonical: {best_canonical}")
 
         return {
             "path": self.VALUE_PATH,
