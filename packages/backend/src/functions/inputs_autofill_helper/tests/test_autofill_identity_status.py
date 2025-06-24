@@ -177,27 +177,26 @@ def test_identity_status_text_autofill_variations() -> None:
         # Save the Hispanic/Latino value
         save_inputs = [
             create_testing_input(
-                label=expected_text,
-                wholeQuestionLabel="Hispanic or Latino",
+                label="Hispanic or Latino",
                 fieldType="select",
                 value=expected_text,
             ),
         ]
-        save_input_values(get_testing_user(), InputList(save_inputs))
+        saves = save_input_values(get_testing_user(), InputList(save_inputs))
+        print("saved inputs", saves)
 
         # Test autofilling text input
         autofill_inputs = [
             create_testing_input(
                 label="Hispanic/Latino",
                 fieldType="text",
-                wholeQuestionLabel="Please specify your ethnicity",
             ),
         ]
 
         autofills = get_filled_inputs(get_testing_user(), InputList(autofill_inputs))
         assert (
             autofills[0]["value"] == expected_text
-        ), f"Failed for Hispanic: {hispanic_value}"
+        ), f"Failed for Hispanic: {hispanic_value} - filled value {autofills[0]['value']}"
 
     # Test transgender text responses
     transgender_test_cases = [
@@ -400,7 +399,9 @@ def test_identity_status_select_autofill_vectorized() -> None:
         "Yes|Yes, I am Hispanic or Latino|Hispanic|Latino|Latina|Latinx|Si|Sí"
     )
     for autofill in autofills:
-        assert autofill["value"] == expected_options
+        assert (
+            autofill["value"] == expected_options
+        ), f"Failed for Hispanic/Latino - filled value {autofill['value']}"
 
 
 def test_identity_status_checkbox_edge_cases() -> None:
