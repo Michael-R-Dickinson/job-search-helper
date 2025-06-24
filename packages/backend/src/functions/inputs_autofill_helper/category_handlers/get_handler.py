@@ -40,6 +40,12 @@ from functions.inputs_autofill_helper.category_handlers.unknown_category_handler
 from functions.inputs_autofill_helper.category_handlers.generated.gender_identity_category_handler import (
     GenderIdentityHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.generated.pronouns_category_handler import (
+    PronounsHandler,
+)
+from functions.inputs_autofill_helper.category_handlers.generated.sexual_orientation_category_handler import (
+    SexualOrientationHandler,
+)
 
 
 def get_category_handler(category_name: str, user_autofill_data):
@@ -116,9 +122,9 @@ def get_category_handler(category_name: str, user_autofill_data):
         case InputType.GENDER_IDENTITY:
             return GenderIdentityHandler(user_autofill_data)
         case InputType.PRONOUNS:
-            raise NotImplementedError("No Pronouns Handler Implemented")
+            return PronounsHandler(user_autofill_data)
         case InputType.SEXUAL_ORIENTATION:
-            raise NotImplementedError("No Sexual Orientation Handler Implemented")
+            return SexualOrientationHandler(user_autofill_data)
         case InputType.HISPANIC_LATINO:
             raise NotImplementedError("No Hispanic Latino Handler Implemented")
         case InputType.DESIRED_SALARY:
