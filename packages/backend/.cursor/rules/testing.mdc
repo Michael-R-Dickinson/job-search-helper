@@ -26,6 +26,29 @@ The schema is the only ts file you should be concerned with and is written using
 
 Optimization:
 If you want to test multiple autofill cases at once. Instead of making a for loop and testing each case with a call to the autofill function, put multiple cases in the inputs array and validate that one response. This allows us to vectorize autofill calculations and avoid rate limits.
+Here is how that would look for a location field:
+``` 
+location_context_variations = {
+    "Present City": "Austin",
+    "Where do you currently live?": "Austin, Texas, 78701, United States",
+    "Current Location": "Austin, Texas, 78701, United States",
+}
+
+autofill_inputs = []
+for label in location_context_variations.keys():
+    autofill_inputs.append(
+        create_testing_input(
+            label=label,
+            fieldType="text",
+        ),
+    )
+
+autofills = get_filled_inputs(get_testing_user(), InputList(autofill_inputs))
+for autofill, expected_value in zip(
+    autofills, location_context_variations.values()
+):
+    assert autofill["value"] == expected_value
+```
 
 Guidelines:
 
@@ -36,10 +59,4 @@ Aim for maybe 15-20 api calls.
 
 Use test_autofill_disabled.py and test_autofill_names.py as references for the general way we can make input fields, save their values and test autofills. Aim to do an even better job than these. 
 
-Finally, DO NOT read the handler file for the field you're testing before writing the tests. We are aiming to write the tests independently of the implementation first. 
-After you have fully written the tests, run them. 
-Then, correct any errors in the test that are simply mismatched strings on text/select inputs. For example if the handler is outputting "I am authorized to work" but we expect "I am authorized", you may change the test to fit this. 
-- the handlers are in src/functions/inputs_autofill_helper/category_handlers
-- At this step, after writing and running the inital tests, you should modify expect statements for text outputs to reflect the exact strings you expect to be outputted. 
-
-When you finish, all tests don't need to pass. They just need to be correct. Be comfortable leaving unpassing tests that correctly expose errors.
+When you finish, all tests don't need to pass. They just need to be correct. Be comfortable leaving unpassing tests that correctly expose errors. DO NOT adjust tests to fit what the implementation is doing! You may only do this for fixing tiny errors where synonymous strings are outputted. 
