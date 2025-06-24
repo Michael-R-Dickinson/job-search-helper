@@ -83,8 +83,7 @@ def test_gender_identity_text_autofill_variations() -> None:
         # Save the gender identity value
         save_inputs = [
             create_testing_input(
-                label=expected_text,  # Use the expected text as label for saving
-                wholeQuestionLabel="Gender identity",
+                label="Gender identity",
                 fieldType="select",
                 value=expected_text,
             ),
@@ -103,7 +102,7 @@ def test_gender_identity_text_autofill_variations() -> None:
         autofills = get_filled_inputs(get_testing_user(), InputList(autofill_inputs))
         assert (
             autofills[0]["value"] == expected_text
-        ), f"Failed for gender: {gender_value}"
+        ), f"Failed for gender: {gender_value} - filled value {autofills[0]['value']}"
 
 
 def test_gender_identity_save_critical_variations() -> None:
