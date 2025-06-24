@@ -6,7 +6,7 @@ from functions.save_filled_values_helper.input_saver import save_input_values
 
 def handle_save_filled_values_request(user_id, inputs):
     try:
-        validate_autofill_inputs(user_id, inputs)
+        user_id, inputs = validate_autofill_inputs(user_id, inputs)
         save_input_values(user_id, inputs)
 
     except ValueError as e:
