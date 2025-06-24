@@ -12,7 +12,6 @@ class InputElement {
   readonly wholeQuestionLabel: string | null
   readonly name: string
   readonly fieldType: InputElementType
-  readonly value: string
 
   constructor(element: ElementInfo, elementReferenceId: string) {
     this.elementReferenceId = elementReferenceId
@@ -21,8 +20,6 @@ class InputElement {
     this.wholeQuestionLabel = getWholeQuestionLabel(element)
     this.fieldType = getFieldType(element)
     this.name = element.name || ''
-
-    this.value = this.getValue()
   }
 
   get placeholder(): string {
@@ -53,13 +50,17 @@ class InputElement {
     return this.isTextInput || this.isCheckable || this.isSelectInput
   }
 
-  private getValue(): string {
+  private get value(): string {
     let value = this.element.value
       ? this.element.value
       : extractDisplayedValue(this.element, this.placeholder, this.label || '')
+
     value = removeValuePrefixes(value)
-    if (this.element instanceof HTMLInputElement) {
+    if (this.isCheckable && this.element instanceof HTMLInputElement) {
       value = this.element.checked.toString()
+    }
+    if (this.label?.toLowerCase() == InputElement.cleanLabelText(value)) {
+      return ''
     }
     return value
   }
