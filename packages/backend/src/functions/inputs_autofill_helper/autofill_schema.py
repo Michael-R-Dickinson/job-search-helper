@@ -66,6 +66,7 @@ class InputType(Enum):
     PRONOUNS = "pronouns"
     SEXUAL_ORIENTATION = "sexual_orientation"
     HISPANIC_LATINO = "hispanic_latino"
+    ETHNICITY = "ethnicity"
     DESIRED_SALARY = "desired_salary"
 
     # Education
