@@ -67,7 +67,7 @@ def save_input_values(user_id: str, inputs: InputList):
         user_autofill_data = {}
 
     classified_inputs = get_input_classifications(inputs)
-    # print("\n classifieds", classified_inputs.model_dump_json())
+    print("\n classifieds", classified_inputs.model_dump_json())
 
     save_instructions: list[SaveInstruction] = []
     for classified_input in classified_inputs:

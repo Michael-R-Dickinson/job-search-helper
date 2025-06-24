@@ -55,6 +55,15 @@ from functions.inputs_autofill_helper.category_handlers.generated.github_url_cat
 from functions.inputs_autofill_helper.category_handlers.generated.personal_website_category_handler import (
     PersonalWebsiteHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.generated.hispanic_latino_category_handler import (
+    HispanicLatinoHandler,
+)
+from functions.inputs_autofill_helper.category_handlers.generated.transgender_category_handler import (
+    TransgenderHandler,
+)
+from functions.inputs_autofill_helper.category_handlers.generated.veteran_category_handler import (
+    VeteranHandler,
+)
 
 
 def get_category_handler(category_name: str, user_autofill_data):
@@ -125,9 +134,9 @@ def get_category_handler(category_name: str, user_autofill_data):
         case InputType.DISABILITY:
             return DisabilityHandler(user_autofill_data)
         case InputType.VETERAN:
-            raise NotImplementedError("No Veteran Handler Implemented")
+            return VeteranHandler(user_autofill_data)
         case InputType.TRANSGENDER:
-            raise NotImplementedError("No Transgender Handler Implemented")
+            return TransgenderHandler(user_autofill_data)
         case InputType.GENDER_IDENTITY:
             return GenderIdentityHandler(user_autofill_data)
         case InputType.PRONOUNS:
@@ -135,7 +144,7 @@ def get_category_handler(category_name: str, user_autofill_data):
         case InputType.SEXUAL_ORIENTATION:
             return SexualOrientationHandler(user_autofill_data)
         case InputType.HISPANIC_LATINO:
-            raise NotImplementedError("No Hispanic Latino Handler Implemented")
+            return HispanicLatinoHandler(user_autofill_data)
         case InputType.DESIRED_SALARY:
             raise NotImplementedError("No Desired Salary Handler Implemented")
 
