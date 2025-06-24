@@ -81,10 +81,12 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "Location",
         "Current city and state",
         "Your location",
+        "Where do you currently live?",
     ],
     InputType.MAILING_ADDRESS: [
         "Current mailing address",
         "Address",
+        "Address Line 1",
         "Mailing address",
         "Home address",
         "Street address",
@@ -109,6 +111,11 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "Country of residence",
         "Current country",
         "What country are you in?",
+    ],
+    InputType.POSTAL_CODE: [
+        "Postal code",
+        "Zip code",
+        "Postal code",
     ],
     # Availability
     InputType.AVAILABLE_MONTHS: [

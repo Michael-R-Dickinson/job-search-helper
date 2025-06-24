@@ -8,6 +8,14 @@ from functions.inputs_autofill_helper.category_handlers.disablitiy_category_hand
 from functions.inputs_autofill_helper.category_handlers.job_discovery_category_handler import (
     JobDiscoveryHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.location_category_handlers import (
+    AddressHandler,
+    CityHandler,
+    CountryHandler,
+    GeneralLocationHandler,
+    PostalCodeHandler,
+    StateHandler,
+)
 from functions.inputs_autofill_helper.category_handlers.name_category_handlers import (
     FirstNameHandler,
     FullNameHandler,
@@ -59,15 +67,17 @@ def get_category_handler(category_name: str, user_autofill_data):
 
         # Location
         case InputType.GENERAL_LOCATION:
-            raise NotImplementedError("No General Location Handler Implemented")
+            return GeneralLocationHandler(user_autofill_data)
         case InputType.MAILING_ADDRESS:
-            raise NotImplementedError("No Mailing Address Handler Implemented")
+            return AddressHandler(user_autofill_data)
         case InputType.LOCATION_CITY:
-            raise NotImplementedError("No Location City Handler Implemented")
+            return CityHandler(user_autofill_data)
         case InputType.STATE_PROVINCE:
-            raise NotImplementedError("No State Province Handler Implemented")
+            return StateHandler(user_autofill_data)
         case InputType.COUNTRY:
-            raise NotImplementedError("No Country Handler Implemented")
+            return CountryHandler(user_autofill_data)
+        case InputType.POSTAL_CODE:
+            return PostalCodeHandler(user_autofill_data)
 
         # Availability
         case InputType.AVAILABLE_MONTHS:

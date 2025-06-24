@@ -40,6 +40,7 @@ class InputType(Enum):
     LOCATION_CITY = "location_city"
     STATE_PROVINCE = "state_province"
     COUNTRY = "country"
+    POSTAL_CODE = "postal_code"
 
     # Availability
     AVAILABLE_MONTHS = "available_months"
