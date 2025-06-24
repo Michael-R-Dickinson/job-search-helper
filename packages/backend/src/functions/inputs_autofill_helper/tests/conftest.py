@@ -48,4 +48,4 @@ def setup_tests():
 
     yield
 
-    time.sleep(5)
+    time.sleep(1)
