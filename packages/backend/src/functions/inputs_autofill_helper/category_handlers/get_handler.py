@@ -79,6 +79,9 @@ from functions.inputs_autofill_helper.category_handlers.generated.degree_categor
 from functions.inputs_autofill_helper.category_handlers.generated.discipline_category_handler import (
     DisciplineHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.generated.race_ethnicity_category_handler import (
+    RaceEthnicityHandler,
+)
 
 
 def get_category_handler(category_name: str, user_autofill_data):
@@ -162,6 +165,8 @@ def get_category_handler(category_name: str, user_autofill_data):
             return SexualOrientationHandler(user_autofill_data)
         case InputType.HISPANIC_LATINO:
             return HispanicLatinoHandler(user_autofill_data)
+        case InputType.ETHNICITY:
+            return RaceEthnicityHandler(user_autofill_data)
         case InputType.DESIRED_SALARY:
             raise NotImplementedError("No Desired Salary Handler Implemented")
 
