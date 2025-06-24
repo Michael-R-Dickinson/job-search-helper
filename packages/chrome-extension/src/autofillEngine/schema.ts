@@ -164,7 +164,7 @@ const SponsorshipSchema = z
   )
 
 const LocationSchema = z.object({
-  country: z.string().optional(),
+  country: z.enum(['usa', 'canada', 'other']).optional(),
   city: z.string().optional(),
   state: z.string().optional(),
   postal_code: z.string().optional(),
