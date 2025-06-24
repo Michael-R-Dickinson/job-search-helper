@@ -37,6 +37,9 @@ from functions.inputs_autofill_helper.category_handlers.student_category_handler
 from functions.inputs_autofill_helper.category_handlers.unknown_category_handler import (
     UnknownCategoryHandler,
 )
+from functions.inputs_autofill_helper.category_handlers.generated.gender_identity_category_handler import (
+    GenderIdentityHandler,
+)
 
 
 def get_category_handler(category_name: str, user_autofill_data):
@@ -111,7 +114,7 @@ def get_category_handler(category_name: str, user_autofill_data):
         case InputType.TRANSGENDER:
             raise NotImplementedError("No Transgender Handler Implemented")
         case InputType.GENDER_IDENTITY:
-            raise NotImplementedError("No Gender Identity Handler Implemented")
+            return GenderIdentityHandler(user_autofill_data)
         case InputType.PRONOUNS:
             raise NotImplementedError("No Pronouns Handler Implemented")
         case InputType.SEXUAL_ORIENTATION:
