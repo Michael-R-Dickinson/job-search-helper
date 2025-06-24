@@ -1,9 +1,7 @@
 import json
-from firebase import init_firebase
 from functions.inputs_autofill_helper.autofill_schema import InputList
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from firebase_functions import https_fn
-from functions.inputs_autofill_helper.testing import get_cached_inputs
 from pydantic import ValidationError
 
 
@@ -42,9 +40,3 @@ def handle_autofill_request(user_id, inputs):
         ),
         status=200,
     )
-
-
-if __name__ == "__main__":
-    init_firebase()
-    cached_inputs = get_cached_inputs()
-    handle_autofill_request("J6hCwOP0KeYUpCRPLOebTIWLA392", cached_inputs)
