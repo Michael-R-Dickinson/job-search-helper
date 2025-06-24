@@ -1,4 +1,5 @@
 import json
+from firebase import init_firebase
 from functions.inputs_autofill_helper.autofill_schema import InputList
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from firebase_functions import https_fn
@@ -39,4 +40,12 @@ def handle_autofill_request(user_id, inputs):
             }
         ),
         status=200,
+    )
+
+
+if __name__ == "__main__":
+    init_firebase()
+    handle_autofill_request(
+        "test-autofill-user",
+        [],
     )
