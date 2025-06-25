@@ -1,0 +1,11 @@
+---
+description: when you want to run/debug tests
+globs: 
+alwaysApply: false
+---
+You can run pytest tests with poetry run pytest from the backend dir. 
+You may also want to use the format
+```
+poetry run pytest src/**/test_*sometest.py
+```
+to hit a specific test
