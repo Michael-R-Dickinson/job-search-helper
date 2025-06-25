@@ -3,6 +3,7 @@ import pytest
 
 import uuid
 
+from firebase.realtime_db import save_user_autofill_data
 from functions.inputs_autofill_helper.autofill_schema import FieldType, Input
 import firebase_admin
 from firebase import init_firebase
@@ -22,6 +23,10 @@ def init_firebase_once():
     except ValueError:
         # App doesn't exist, so initialize it
         init_firebase()
+
+
+def clear_test_user_autofills():
+    save_user_autofill_data(TESTING_USER, [])
 
 
 def create_testing_input(**kwargs):
@@ -45,6 +50,7 @@ def create_testing_input(**kwargs):
 @pytest.fixture(autouse=True)
 def setup_tests():
     init_firebase_once()
+    clear_test_user_autofills()
 
     yield
 
