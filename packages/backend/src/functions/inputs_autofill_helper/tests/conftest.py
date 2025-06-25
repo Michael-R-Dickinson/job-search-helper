@@ -3,7 +3,7 @@ import pytest
 
 import uuid
 
-from firebase.realtime_db import save_user_autofill_data
+from firebase.realtime_db import get_user_autofill_data, save_user_autofill_data
 from functions.inputs_autofill_helper.autofill_schema import FieldType, Input
 import firebase_admin
 from firebase import init_firebase
@@ -61,4 +61,4 @@ def setup_tests():
 
     yield
 
-    time.sleep(1)
+    time.sleep(0.1)
