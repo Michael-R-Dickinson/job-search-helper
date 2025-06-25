@@ -6,11 +6,13 @@ from typing import Optional, cast
 from tqdm import tqdm
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInputList,
+    FieldType,
     Input,
     InputList,
     ListModel,
 )
 from functions.inputs_autofill_helper.input_prototype_strings import (
+    get_expected_field_types,
     get_flattened_proto_strings,
     InputType,
 )
@@ -30,7 +32,7 @@ from firebase.buckets import (
 # EMBEDDING_MODEL_NAME = "gemini-embedding-exp-03-07"
 EMBEDDING_MODEL_NAME = "text-embedding-004"
 
-CLASSIFICATION_THRESHOLD = 0.8
+CLASSIFICATION_THRESHOLD = 0.75
 
 
 class InputWithEmbed(BaseModel):
@@ -126,7 +128,21 @@ def embed_content(client, contents):
     )
 
 
-def get_input_type(input_embeds, prototype_embeds, categories):
+def get_field_type_adjustment(categoriesArray: list[InputType], field_type: FieldType):
+    adjustments: list[float] = []
+    for category in categoriesArray:
+        expected_field_types = get_expected_field_types(category)
+        if expected_field_types is None:
+            adjustments.append(1)
+        elif field_type in expected_field_types:
+            adjustments.append(1)
+        else:
+            adjustments.append(0.82)
+
+    return np.array(adjustments)
+
+
+def get_input_type(input_embeds, prototype_embeds, categories, adjustments_vector=None):
     # Normalize the prototypes and input embeddings
     prototypes_normalized = prototype_embeds / np.linalg.norm(
         prototype_embeds, axis=1, keepdims=True
@@ -134,6 +150,9 @@ def get_input_type(input_embeds, prototype_embeds, categories):
     input_normalized = input_embeds / np.linalg.norm(input_embeds)
 
     similarity_vector = np.dot(prototypes_normalized, input_normalized)
+    if adjustments_vector is not None:
+        similarity_vector = np.multiply(similarity_vector, adjustments_vector)
+
     best_match_label = categories[similarity_vector.argmax()]
     best_match_score = similarity_vector.max()
 
@@ -220,14 +239,30 @@ def get_input_classifications(inputs: InputList):
         input_item = input_with_embed.input_item
         label_embed = input_with_embed.label_embed
         whole_question_embed = input_with_embed.whole_question_embed
+        adjustments_vector = get_field_type_adjustment(
+            embed_categories, input_item.fieldType
+        )
+        # if input_item.label == "Do you require sponsorship?":
+        #     print(
+        #         input_item.fieldType,
+        #         [
+        #             f"cat{category}: {adjustment}"
+        #             for adjustment, category in zip(
+        #                 adjustments_vector, embed_categories
+        #             )
+        #         ],
+        #     )
 
         input_type, score = get_input_type(
-            label_embed, prototype_embeds, embed_categories
+            label_embed, prototype_embeds, embed_categories, adjustments_vector
         )
 
         if whole_question_embed is not None:
             whole_q_input_type, whole_q_score = get_input_type(
-                whole_question_embed, prototype_embeds, embed_categories
+                whole_question_embed,
+                prototype_embeds,
+                embed_categories,
+                adjustments_vector,
             )
             if whole_q_score > score:
                 input_type, score = whole_q_input_type, whole_q_score

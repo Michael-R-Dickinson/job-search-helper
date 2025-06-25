@@ -1,4 +1,4 @@
-from functions.inputs_autofill_helper.autofill_schema import InputType
+from functions.inputs_autofill_helper.autofill_schema import FieldType, InputType
 
 
 PROTOTYPES: dict[InputType, list[str]] = {
@@ -146,16 +146,14 @@ PROTOTYPES: dict[InputType, list[str]] = {
     # Work Authorization
     InputType.SPONSORSHIP_REQUIRED: [
         "Do you require or will you require sponsorship to work in the US?",
-        "Will you now or in the future require immigration sponsorship for employment with Tesla?",
+        "Will you now or in the future require immigration sponsorship for employment with this company?",
         "Will you now or in the future require sponsorship for employment visa status?",
-        "Do you now, or will you in the future, require sponsorship for employment visa status?",
-        "Do you need sponsorship to work in the United States?",
     ],
     InputType.SPONSORSHIP_EXPLANATION: [
-        "Do you require or will you require sponsorship to work in the US? If so, explain."
-        "Will you now or in the future require visa sponsorship or a transfer for employment status (e.g., H-1B visa status)? If yes, please elaborate.",
+        "Do you require or will you require sponsorship to work in the US? If so, explain.",
+        "Will you now or in the future require immigration sponsorship for employment with this company? If yes, please elaborate.",
+        "Will you now or in the future require sponsorship for employment visa status? ",
         "Please explain your sponsorship requirements",
-        "Describe your visa sponsorship needs",
     ],
     InputType.USING_WORK_VISA: [
         "Is your eligibility based on a work visa?",
@@ -235,67 +233,14 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "Ethnic background",
         "Race",
         "Racial background",
-        "What is your race?",
         "Race/Ethnicity",
         "Racial identity",
         "Ethnic identity",
         "What race do you identify as?",
-        "Please select your race",
         "Select your race or ethnicity",
         "Racial or ethnic group",
         "What is your racial/ethnic background?",
         "Race or ethnicity",
-        "Racial classification",
-        "Ethnic classification",
-        "Race/ethnic identity",
-        "What race or ethnicity do you identify with?",
-        "Primary race",
-        "Racial group",
-        "Ethnic group",
-        "Race and ethnicity",
-        "Select race",
-        "Choose your race",
-        "Racial heritage",
-        "Ethnic heritage",
-        "What is your ethnic background?",
-        "Racial preference",
-        "Ethnic preference",
-        # Specific race options to improve classification
-        "Asian",
-        "Black or African American",
-        "White",
-        "Caucasian",
-        "Hispanic or Latino",
-        "Native American",
-        "American Indian or Alaska Native",
-        "Native Hawaiian or Other Pacific Islander",
-        "Two or more races",
-        "Multiracial",
-        "Chinese",
-        "Vietnamese",
-        "Filipino",
-        "Korean",
-        "Japanese",
-        "Indian",
-        "African American",
-        "Caribbean",
-        "Mexican American",
-        "Puerto Rican",
-        "Cuban",
-        "Pacific Islander",
-        "Samoan",
-        "Hawaiian",
-        "Cherokee",
-        "Mixed race",
-        "Other race",
-        "Some other race",
-        # Decline options
-        "I prefer not to say",
-        "Prefer not to say",
-        "I would rather not say",
-        "Choose not to specify",
-        "Decline to answer",
-        "Rather not say",
     ],
     InputType.HISPANIC_LATINO: [
         "Are you Hispanic/Latino?",
@@ -368,6 +313,19 @@ PROTOTYPES: dict[InputType, list[str]] = {
     InputType.COVER_LETTER: ["cover letter", "input cover letter"],
     InputType.UNKNOWN: ["gabagabagoo"],
 }
+
+EXPECTED_FIELD_TYPES = {
+    InputType.SPONSORSHIP_REQUIRED: [
+        FieldType.RADIO,
+        FieldType.CHECKBOX,
+        FieldType.SELECT,
+    ],
+    InputType.SPONSORSHIP_EXPLANATION: [FieldType.TEXT],
+}
+
+
+def get_expected_field_types(category: InputType):
+    return EXPECTED_FIELD_TYPES.get(category, None)
 
 
 def get_flattened_proto_strings():
