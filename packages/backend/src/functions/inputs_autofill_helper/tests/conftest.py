@@ -16,6 +16,13 @@ def get_testing_user():
     return TESTING_USER
 
 
+def create_testing_user_if_none():
+    if get_user_autofill_data(TESTING_USER) is None:
+        # Save some data to the user so that we can access the key
+        # Users/test-autofill-user/autofill
+        save_user_autofill_data(TESTING_USER, {"test": "test"})
+
+
 def init_firebase_once():
     """Initialize Firebase only if it hasn't been initialized already"""
     try:

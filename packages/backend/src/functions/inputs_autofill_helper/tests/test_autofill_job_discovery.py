@@ -4,6 +4,7 @@ from functions.inputs_autofill_helper.autofill_schema import (
 from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
 from functions.inputs_autofill_helper.tests.conftest import (
     create_testing_input,
+    create_testing_user_if_none,
     get_testing_user,
 )
 from functions.save_filled_values_helper.input_saver import save_input_values
@@ -11,7 +12,7 @@ from functions.save_filled_values_helper.input_saver import save_input_values
 
 def test_job_discovery_never_saves_data() -> None:
     """Test that job discovery responses are never saved to the database"""
-
+    create_testing_user_if_none()
     # Get baseline autofill data by saving a non-job-discovery input
     baseline_input = [
         create_testing_input(
@@ -68,7 +69,7 @@ def test_job_discovery_never_saves_data() -> None:
 
 def test_job_discovery_select_field_response() -> None:
     """Test that select fields return the standard pipe-separated LinkedIn options"""
-
+    create_testing_user_if_none()
     # Test the primary select field format
     autofill_inputs = [
         create_testing_input(
@@ -97,6 +98,7 @@ def test_job_discovery_select_field_response() -> None:
 
 def test_job_discovery_radio_linkedin_preference() -> None:
     """Test that radio buttons prefer LinkedIn options when available"""
+    create_testing_user_if_none()
 
     # Test simple case with LinkedIn option
     autofill_inputs = [
@@ -134,6 +136,7 @@ def test_job_discovery_radio_linkedin_preference() -> None:
 
 def test_job_discovery_radio_fallback_to_first() -> None:
     """Test that radio buttons select first option when no LinkedIn option available"""
+    create_testing_user_if_none()
 
     # Test without any LinkedIn options
     autofill_inputs = [
@@ -165,6 +168,7 @@ def test_job_discovery_radio_fallback_to_first() -> None:
 
 def test_job_discovery_text_input_response() -> None:
     """Test that text inputs return LinkedIn as the response"""
+    create_testing_user_if_none()
 
     # Test text input with clear job discovery context
     autofill_inputs = [
@@ -190,7 +194,7 @@ def test_job_discovery_text_input_response() -> None:
 
 def test_job_discovery_checkbox_linkedin_preference() -> None:
     """Test that checkboxes prefer LinkedIn options when available"""
-
+    create_testing_user_if_none()
     # Test with LinkedIn checkbox available
     autofill_inputs = [
         create_testing_input(
@@ -223,6 +227,7 @@ def test_job_discovery_checkbox_linkedin_preference() -> None:
 
 def test_job_discovery_checkbox_fallback_to_first() -> None:
     """Test that checkboxes select first option when no LinkedIn available"""
+    create_testing_user_if_none()
 
     # Test without LinkedIn options
     autofill_inputs = [
@@ -254,6 +259,7 @@ def test_job_discovery_checkbox_fallback_to_first() -> None:
 
 def test_job_discovery_edge_cases() -> None:
     """Test edge cases and variations in job discovery questions"""
+    create_testing_user_if_none()
 
     # Test LinkedIn as part of longer text
     autofill_inputs = [
@@ -275,6 +281,7 @@ def test_job_discovery_edge_cases() -> None:
 
 def test_job_discovery_common_question_variations() -> None:
     """Test various ways companies ask about job discovery"""
+    create_testing_user_if_none()
 
     # Test different question phrasings with select fields (reduced to avoid rate limits)
     question_variations = [
