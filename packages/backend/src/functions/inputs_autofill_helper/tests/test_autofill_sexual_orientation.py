@@ -85,8 +85,7 @@ def test_sexual_orientation_text_autofill_variations() -> None:
         # Save the sexual orientation value
         save_inputs = [
             create_testing_input(
-                label=expected_text,  # Use the expected text as label for saving
-                wholeQuestionLabel="Sexual orientation",
+                label="Sexual orientation",
                 fieldType="select",
                 value=expected_text,
             ),
@@ -96,9 +95,8 @@ def test_sexual_orientation_text_autofill_variations() -> None:
         # Test autofilling text input
         autofill_inputs = [
             create_testing_input(
-                label="Sexual orientation",
+                label="Please specify your sexual orientation",
                 fieldType="text",
-                wholeQuestionLabel="Please specify your sexual orientation",
             ),
         ]
 

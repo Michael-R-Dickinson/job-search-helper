@@ -133,7 +133,7 @@ def test_sponsorship_text_input_responses() -> None:
         ),
     ]
     autofills = get_filled_inputs(get_testing_user(), InputList(yesno_text_inputs))
-    assert autofills[0]["value"] == "Yes, I require sponsorship to work"
+    assert autofills[0]["value"] == "I will because i'm a student fr fr"
 
 
 def test_sponsorship_save_critical_variations() -> None:
@@ -265,8 +265,7 @@ def test_sponsorship_select_uncommon_field_type() -> None:
     # Set up sponsorship status - save via select to ensure it's stored properly
     save_inputs = [
         create_testing_input(
-            label="",
-            wholeQuestionLabel="Do you require sponsorship?",
+            label="Do you require sponsorship?",
             fieldType="select",
             value="No, I don't require sponsorship",
         ),
