@@ -80,6 +80,9 @@ def get_most_similar_canonical_option(value: str, canonical_options: dict):
             max_similarity = similarity
             max_similarity_option = canonical_label
 
+    if max_similarity < 0.3:
+        return None
+
     return max_similarity_option
 
 
