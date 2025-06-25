@@ -9,9 +9,9 @@ from functions.inputs_autofill_helper.embeddings import get_input_classification
 
 def get_filled_inputs(user_id, inputs: InputList):
     user_autofill_data = get_user_autofill_data(user_id)
-    # print("user_autofill_data\n", user_autofill_data)
+    print("user_autofill_data\n", user_autofill_data)
     if not user_autofill_data:
-        raise ValueError("User data not found")
+        user_autofill_data = {}
 
     classified_inputs = get_input_classifications(inputs)
     print("classified\n", classified_inputs.model_dump_json(), "\n\n")

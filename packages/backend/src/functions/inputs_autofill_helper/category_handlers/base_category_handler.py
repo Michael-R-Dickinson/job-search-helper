@@ -136,8 +136,9 @@ class TextOnlyCategoryHandler(BaseCategoryHandler, ABC):
 
 
 class SimpleTextOnlyCategoryHandler(TextOnlyCategoryHandler, ABC):
-    def _get_text(self) -> str:
-        return str(dictor(self.user_autofill_data, self.VALUE_PATH.replace("/", ".")))
+    def _get_text(self) -> str | None:
+        value = dictor(self.user_autofill_data, self.VALUE_PATH.replace("/", "."))
+        return str(value) if value is not None else None
 
     @override
     def can_autofill_category(self) -> bool:
@@ -204,7 +205,9 @@ class EnumBasedCategoryHandler(BaseCategoryHandler, ABC):
     ) -> SaveInstruction | list[SaveInstruction]:
         value = classified_input.value
         best_canonical = get_most_similar_canonical_option(value, self.CANONICALS)
-        # print(f"value: {value} best_canonical: {best_canonical}")
+        # print(
+        #     f"{self.__class__.__name__} - value: {value} best_canonical: {best_canonical}"
+        # )
 
         return {
             "path": self.VALUE_PATH,
