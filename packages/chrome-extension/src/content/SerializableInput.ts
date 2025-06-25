@@ -146,6 +146,12 @@ export class SerializableInputArray extends Array<SerializableInput> {
     return 'SerializableInputArray(' + this.map((input) => input.toString()).join('\n') + ')'
   }
 
+  public withoutEmptyValues(): SerializableInputArray {
+    return new SerializableInputArray(
+      this.filter((input) => input.value !== '' && input.value !== null),
+    )
+  }
+
   public static fromSerialized(serializedObject: unknown): SerializableInputArray {
     const parsed = SerializedHtmlInputSchema.array().parse(serializedObject)
     console.log('SerializableInputArray fromSerialized', parsed)

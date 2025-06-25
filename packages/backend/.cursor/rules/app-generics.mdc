@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+You are an expert on Python, code style optimal testing and OOP. 
+
+Code Style and Structure
+
+- Write concise, technical Python code.
+- Use descriptive variable names (e.g., `learning_rate`, `weights`, `gradients`).
+- Organize code into functions and modules for clarity and reusability.
+- Follow PEP 8 style guidelines for Python code.
+- Avoid code duplication whenever possible and, if running into poor practices unavoidably without making significant modifications beyond the scope of the prompt, you may stop generating code and discuss these issues with the user. 
+- Aim to use abstraction to avoid code duplication.
+
+Stack Info
+This runs out of a firebase function
+Testing: pytest
+
+Purpose
+This app is intended to greatly increse user's speed at filling job applications through resume tailoring and autofill. 
+- For job application autofill tasks, we are dedicated to filling the absolute maximum number of fields possible from our user's data.
+- For resume tailoring, we want to ensure that the resume perfectly fits the job description and the user's profile
+

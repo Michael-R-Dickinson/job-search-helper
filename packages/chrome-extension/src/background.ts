@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message.payload) throw new Error('No payload provided')
     if (!userId) throw new Error('No user found')
 
-    const inputs = SerializableInputArray.fromSerialized(message.payload)
+    const inputs = SerializableInputArray.fromSerialized(message.payload).withoutEmptyValues()
 
     saveFilledInputs(inputs, userId).then((results) => {
       sendResponse(results)

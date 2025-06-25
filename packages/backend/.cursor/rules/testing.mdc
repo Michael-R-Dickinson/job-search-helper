@@ -1,0 +1,62 @@
+---
+description: Any pytest testing for autofills
+globs: 
+alwaysApply: false
+---
+When testing autofills or value saves, we are limited in our API calls so we will focus on achieving strong coverage without bloating ourselves with too many calls to the function. 
+Achieve this through purposeful testing. 
+- First consider the main paths, such as common input types (ie. select or radio button) for each category and the types of labels frequently used on job applications. 
+- Then aim to consider a few, important edge cases with either different phrasing, or an uncommon field type - ie a text input for a question like "do you require sponsorship to work in the US?" (normally this would be a select or radio button with a "yes" or "no" answer). 
+- Notably, avoid testing direct matches to canonicals as this generally is a waste, instead, for basic tests where you might do this, test similar strings for more free coverage. 
+
+Input Types:
+Checkables (radio buttons or checkboxes)
+- Checkables will always have a value type boolean indicating whether they are checked. When testing autofills for these, expect a boolean or None. Never expect a boolean for any non checkable input field. 
+- on inputs wholeQuestionLabel is the label encompasing a whole question, at a level above the standard label. For example the label might be "Yes" but the wholeQuestionLabel might be "Are you authorized to work in the US?". wholeQuestionLabel is only ever used on checkables - never on anything else. So do not expect or use wholeQuestionLabel on selects, text inputs or ANYTHING ELSE!
+
+Select:
+- Expect a text string back. In a practical use case, we will match the select options to the outputted text string.
+
+Text:
+- Text output generally directly from the user's autofill preferences - values they wrote themselves saved from another application. 
+
+Schema:
+When checking that values are saved to the correct locations - use the schema from the frontend. This shows you the exact user_autofill_preferences schema we expect for each value. It is located in the autofillEngine dir in the file schema.ts
+The schema is the only ts file you should be concerned with and is written using zod. 
+
+Optimization:
+If you want to test multiple autofill cases at once. Instead of making a for loop and testing each case with a call to the autofill function, put multiple cases in the inputs array and validate that one response. This allows us to vectorize autofill calculations and avoid rate limits.
+Here is how that would look for a location field:
+``` 
+location_context_variations = {
+    "Present City": "Austin",
+    "Where do you currently live?": "Austin, Texas, 78701, United States",
+    "Current Location": "Austin, Texas, 78701, United States",
+}
+
+autofill_inputs = []
+for label in location_context_variations.keys():
+    autofill_inputs.append(
+        create_testing_input(
+            label=label,
+            fieldType="text",
+        ),
+    )
+
+autofills = get_filled_inputs(get_testing_user(), InputList(autofill_inputs))
+for autofill, expected_value in zip(
+    autofills, location_context_variations.values()
+):
+    assert autofill["value"] == expected_value
+```
+
+Guidelines:
+
+Also consider that we are testing both autofilling and saving filled values. This saving step reflects the way we would save the values a user inputted into the job application so that we can more accurately fill in the future.
+When you test/call save values, these values are immidiately put into the database so you may expect them on your subsequent autofill tests. This process is intended, where you save values, ensure they were saved properly, and then are able to test autofills using these saved values. 
+
+Aim for maybe 15-20 api calls.
+
+Use test_autofill_disabled.py and test_autofill_names.py as references for the general way we can make input fields, save their values and test autofills. Aim to do an even better job than these. 
+
+When you finish, all tests don't need to pass. They just need to be correct. Be comfortable leaving unpassing tests that correctly expose errors. DO NOT adjust tests to fit what the implementation is doing! You may only do this for fixing tiny errors where synonymous strings are outputted. 

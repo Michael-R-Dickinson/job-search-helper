@@ -14,6 +14,7 @@ import { eventTypes } from '../../events'
 import { frameId } from '../../content'
 import { AutofillReadyInputArray } from '../autofillReadyInput'
 import type InputElement from '../input'
+import triggerSaveFilledValues from '../triggers/triggerSaveFilledValues'
 
 const useMonitorIframeAutofills = (setAutofillCompleted: () => void) => {
   useEffect(() => {
@@ -209,6 +210,12 @@ const useAutofillInputs = () => {
     await autofillInputElements(resumeInstructions, AutofillAnimationSpeeds.NONE)
   }
 
+  const executeSaveFilledValues = async () => {
+    const elements = elementsRef.current
+    const filledInputs = elements.filter((el) => el.isLLMAutofillable)
+    await triggerSaveFilledValues(filledInputs)
+  }
+
   const setAutofillCompleted = useCallback(() => {
     setFillingStatus('success')
   }, [setFillingStatus])
@@ -222,6 +229,7 @@ const useAutofillInputs = () => {
     fillingStatus,
     fetchStatus,
     usesIframes,
+    executeSaveFilledValues,
   }
 }
 
