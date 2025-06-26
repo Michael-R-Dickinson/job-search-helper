@@ -142,10 +142,16 @@ const FreeResponseListItemContent: React.FC<FreeResponseListItemContentProps> = 
 
   return (
     <Container>
-      <PromptText>Want help writing these responses?</PromptText>
-      <PromptText style={{ marginBottom: '0.6rem' }}>
-        {"Write a short prompt (or don't) and we'll help you out!"}
-      </PromptText>
+      {freeResponseInputs.length > 0 ? (
+        <>
+          <PromptText>Want help writing these responses?</PromptText>
+          <PromptText style={{ marginBottom: '0.6rem' }}>
+            {"Write a short prompt (or don't) and we'll help you out!"}
+          </PromptText>
+        </>
+      ) : (
+        <PromptText>No free response inputs found!</PromptText>
+      )}
       {loading ? (
         <div
           style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}

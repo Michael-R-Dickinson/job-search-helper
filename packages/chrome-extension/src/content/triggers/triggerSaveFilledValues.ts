@@ -1,13 +1,12 @@
 import { eventTypes } from '../../events'
-import type { InputInfo } from '../hooks/useInputElements'
-import { serializeInputsHtml } from '../serializeInputsHtml'
+import type InputElement from '../input'
 
-const triggerSaveFilledValues = (inputs: InputInfo[]) => {
-  const serializedInputs = serializeInputsHtml(inputs)
-  console.log('serializedInputs', serializedInputs)
+const triggerSaveFilledValues = (inputs: InputElement[]) => {
+  const parsedInputs = inputs.map((input) => input.toSerializable().toSerialized())
+  console.log('serializedInputs', parsedInputs)
   return chrome.runtime.sendMessage({
     type: eventTypes.SAVE_AUTOFILL_VALUES,
-    payload: serializedInputs,
+    payload: parsedInputs,
   })
 }
 

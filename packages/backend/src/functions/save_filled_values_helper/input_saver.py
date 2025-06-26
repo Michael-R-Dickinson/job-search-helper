@@ -1,7 +1,9 @@
 from firebase.realtime_db import get_user_autofill_data, save_user_autofill_data
-from src.functions.save_filled_values_helper.gemini_save_inputs import (
-    generate_save_input_paths,
+from functions.inputs_autofill_helper.autofill_schema import InputList, SaveInstruction
+from functions.inputs_autofill_helper.category_handlers.get_handler import (
+    get_category_handler,
 )
+from functions.inputs_autofill_helper.embeddings import get_input_classifications
 
 
 def convert_to_int(value) -> int:
@@ -26,18 +28,21 @@ TYPE_CONVERSION_MAP = {
 }
 
 
-def get_updated_user_autofill_data_obj(prev_user_autofill_data, save_values):
+def get_updated_user_autofill_data_obj(
+    prev_user_autofill_data, save_values: list[SaveInstruction]
+):
     # Start with the previous data or an empty dict if None
     updated_data = prev_user_autofill_data.copy() if prev_user_autofill_data else {}
 
     # Iterate through each save value
-    for save_input in save_values.save_values:
-        path_parts = save_input.value_save_path.split("/")
-        value = save_input.value
+    for save_input in save_values:
+        save_path = save_input["path"]
+        path_parts = save_path.split("/")
+        value = save_input["value"]
 
         # Apply type conversion if path has a converter configured
-        if save_input.value_save_path in TYPE_CONVERSION_MAP:
-            converter_func = TYPE_CONVERSION_MAP[save_input.value_save_path]
+        if save_path in TYPE_CONVERSION_MAP:
+            converter_func = TYPE_CONVERSION_MAP[save_path]
             value = converter_func(value)
 
         # Navigate/create the nested structure
@@ -56,10 +61,27 @@ def get_updated_user_autofill_data_obj(prev_user_autofill_data, save_values):
     return updated_data
 
 
-def save_input_values(user_id, inputs):
-    save_values = generate_save_input_paths(inputs)
+def save_input_values(user_id: str, inputs: InputList):
     user_autofill_data = get_user_autofill_data(user_id)
-    updated_user_autofill_data = get_updated_user_autofill_data_obj(
-        user_autofill_data, save_values
+    if not user_autofill_data:
+        user_autofill_data = {}
+
+    classified_inputs = get_input_classifications(inputs)
+    print("\n classifieds", classified_inputs.model_dump_json())
+
+    save_instructions: list[SaveInstruction] = []
+    for classified_input in classified_inputs:
+        category_handler = get_category_handler(
+            classified_input.category, user_autofill_data
+        )
+        save_instruction = category_handler.save_filled_value(classified_input)
+        if not isinstance(save_instruction, list):
+            save_instruction = [save_instruction]
+
+        save_instructions.extend(save_instruction)
+
+    updated_data = get_updated_user_autofill_data_obj(
+        user_autofill_data, save_instructions
     )
-    save_user_autofill_data(user_id, updated_user_autofill_data)
+    save_user_autofill_data(user_id, updated_data)
+    return updated_data

@@ -4,10 +4,11 @@ import {
   type SerializedHtmlInput,
 } from '../autofillEngine/schema'
 import type { InputInfo } from './hooks/useInputElements'
+import { isSelectLikeElement } from './inputsManipulation/selectMatching'
 
 export function getFieldType(el: Element): InputElementType {
   const tag = el.tagName.toLowerCase()
-  if (tag === 'select') return INPUT_ELEMENT_TYPES.SELECT
+  if (el instanceof HTMLElement && isSelectLikeElement(el)) return INPUT_ELEMENT_TYPES.SELECT
   if (tag === 'textarea') return INPUT_ELEMENT_TYPES.TEXTBOX
   if (tag === 'button') return INPUT_ELEMENT_TYPES.BUTTON
   if (tag === 'input') {

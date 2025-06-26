@@ -1,11 +1,12 @@
 from datetime import timedelta, datetime
 from LLM_tailoring.resume.schema import AnsweredResumeTailoringQuestions
+from functions.inputs_autofill_helper.input_prototype_strings import InputType
 from utils import pickle_object
 from firebase import init_firebase
-import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import db
 import pickle
 import base64
+import numpy as np
 
 
 def unpickle_object(obj: str) -> object:
@@ -68,6 +69,79 @@ def get_user_autofill_data(user_id):
 def save_user_autofill_data(user_id, data):
     ref = db.reference(get_user_autofill_values_path(user_id))
     ref.set(data)
+
+
+def get_autofill_prototype_cache_path():
+    return "autofill_prototype_cache"
+
+
+def cache_prototype_embeds(categories, prototype_embeds):
+    """
+    Cache prototype embeddings in Firebase Realtime Database.
+
+    Args:
+        categories: List of InputType enum objects
+        prototype_embeds: numpy array of shape (num_prototypes, embedding_dim)
+    """
+    # Convert enum objects to their string values for storage
+    categories_strings = [category.value for category in categories]
+
+    # Flatten the numpy array to a list for storage
+    embedding_list = prototype_embeds.flatten().tolist()
+    embedding_dim = prototype_embeds.shape[1]
+
+    cache_data = {
+        "categories": categories_strings,
+        "embedding": embedding_list,
+        "embedding_dim": embedding_dim,
+    }
+
+    ref = db.reference(get_autofill_prototype_cache_path())
+    ref.set(cache_data)
+
+
+def get_cached_prototype_embeds():
+    """
+    Retrieve cached prototype embeddings from Firebase Realtime Database.
+
+    Returns:
+        tuple: (categories, prototype_embeds) or None if cache doesn't exist
+        where categories is a list of InputType enum objects
+    """
+
+    ref = db.reference(get_autofill_prototype_cache_path())
+    cache_data = ref.get()
+
+    if cache_data is None:
+        return None
+
+    try:
+        categories_strings = cache_data["categories"]
+        embedding_list = cache_data["embedding"]
+        embedding_dim = cache_data["embedding_dim"]
+
+        # Convert string values back to InputType enum objects
+        categories = []
+        for category_str in categories_strings:
+            # Find the enum object by its value
+            for input_type in InputType:
+                if input_type.value == category_str:
+                    categories.append(input_type)
+                    break
+            else:
+                # If no matching enum is found, fall back to UNKNOWN
+                categories.append(InputType.UNKNOWN)
+
+        # Reconstruct the numpy array from the flattened list
+        num_prototypes = len(categories)
+        prototype_embeds = np.array(embedding_list).reshape(
+            num_prototypes, embedding_dim
+        )
+
+        return categories, prototype_embeds
+    except (KeyError, ValueError) as e:
+        print(f"Error retrieving cached prototype embeds: {e}")
+        return None
 
 
 if __name__ == "__main__":
