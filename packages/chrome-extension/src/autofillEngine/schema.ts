@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import type { ValueOf } from '../utils'
 import type SerializableInput from '../content/SerializableInput'
 

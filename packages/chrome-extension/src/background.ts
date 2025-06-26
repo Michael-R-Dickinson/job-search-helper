@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { eventTypes } from './events'
 import authenticate, { currentUser } from './auth/background'
 import getAutofillInstructions from './autofillEngine/getAutofillInstructions'
@@ -96,7 +96,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         })
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error('Invalid payload for resume upload:', error.errors)
+        console.error('Invalid payload for resume upload:', error)
         sendResponse(null)
       } else {
         console.error('Error processing resume upload:', error)
@@ -140,7 +140,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       })
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error('Invalid payload for write free response:', error.errors)
+        console.error('Invalid payload for write free response:', error)
         sendResponse(null)
       } else {
         console.error('Error processing write free response:', error)

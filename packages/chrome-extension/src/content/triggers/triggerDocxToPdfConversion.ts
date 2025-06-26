@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/v4'
 import { eventTypes } from '../../events'
 
 // Zod schemas for DOCX to PDF conversion validation
