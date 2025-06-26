@@ -1,3 +1,4 @@
+import time
 import base64
 from datetime import datetime
 import hashlib
@@ -40,3 +41,14 @@ def delete_top_level_files(dir_path: str):
         item_path = os.path.join(dir_path, item)
         if os.path.isfile(item_path) or os.path.islink(item_path):
             os.unlink(item_path)
+
+
+def timer(fn):
+    def wrapped(*args, **kwargs):
+        start = time.perf_counter()
+        result = fn(*args, **kwargs)
+        elapsed = time.perf_counter() - start
+        print(f"{fn.__name__!r} took {elapsed:.6f}s")
+        return result
+
+    return wrapped

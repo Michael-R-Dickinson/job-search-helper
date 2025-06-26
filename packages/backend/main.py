@@ -1,5 +1,4 @@
 import json
-import time
 
 from docx_to_pdf import convert_docx_to_pdf
 from firebase import init_firebase
@@ -12,7 +11,7 @@ from firebase.buckets import (
 )
 from firebase_functions import https_fn, options
 from functions.free_reponse.request_handler import handle_write_free_response_request
-from functions.inputs_autofill_helper.fill_inputs import get_filled_inputs
+from functions.inputs_autofill_helper.embeddings import get_stored_prototype_embeddings
 from functions.inputs_autofill_helper.request_handler import handle_autofill_request
 from functions.tailor_cover_letter.request_handler import (
     handle_cover_letter_tailor_request,
@@ -26,6 +25,9 @@ from src.functions.save_filled_values_helper.request_handler import (
 )
 
 init_firebase()
+
+# Load embeddings on startup so we don't have to wait when getting the first request
+get_stored_prototype_embeddings()
 
 
 @https_fn.on_request(

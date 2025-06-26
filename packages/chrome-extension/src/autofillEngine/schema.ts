@@ -139,10 +139,12 @@ const JobSchema = z.object({
 })
 
 const EducationSchema = z.object({
+  currently_enrolled: z.enum(['enrolled', 'not_enrolled']),
   school: z.string().optional(),
   degree: z.string().optional(),
   discipline: z.string().optional(),
   end_date_year: z.string().optional(),
+  start_date_year: z.string().optional(),
 })
 
 const PhoneTypeEnum = z.enum(['mobile', 'landline'])
@@ -162,7 +164,7 @@ const SponsorshipSchema = z
   )
 
 const LocationSchema = z.object({
-  country: z.string().optional(),
+  country: z.enum(['usa', 'canada', 'other']).optional(),
   city: z.string().optional(),
   state: z.string().optional(),
   postal_code: z.string().optional(),

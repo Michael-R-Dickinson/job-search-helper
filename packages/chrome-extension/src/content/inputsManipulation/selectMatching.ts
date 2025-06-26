@@ -59,16 +59,26 @@ export const getSelectOptions = (selectElement: HTMLSelectElement): SelectOption
     .filter((option) => option.value !== '' && option.text !== 'Select an option...')
 }
 
+const isNegated = (value: string): boolean => {
+  const negations = ['not']
+  if (negations.some((negation) => value.toLowerCase().includes(negation))) {
+    return true
+  }
+  return false
+}
+
 /**
  * Finds the best matching SelectOption for a given logical key using canonical synonyms and Fuse.js
  */
-function findBestCanonicalMatch(
+function findBestOptionMatch(
   options: SelectOption[],
-  logicalKey: string,
+  value: string,
   maxScore = 0.5,
 ): SelectOption | null {
-  const record = CANONICAL.find((r) => r.key === logicalKey.toLowerCase())
-  const synonyms = record?.synonyms || [logicalKey]
+  const synonymsStrings = value
+    .toLowerCase()
+    .split('|')
+    .map((s) => s.trim())
   if (!options.length) return null
 
   // Prepare Fuse index over lowercased option text
@@ -90,9 +100,20 @@ function findBestCanonicalMatch(
   let bestScore = Infinity
   let bestOption: SelectOption | null = null
 
-  for (const syn of synonyms) {
-    const results = fuse.search(syn.toLowerCase())
+  for (const syn of synonymsStrings) {
+    const synIsNegated = isNegated(syn)
+    const results = fuse.search(syn)
     if (!results.length) continue
+
+    results
+      .map((r) => {
+        if (isNegated(r.item.text) != synIsNegated) {
+          return { ...r, score: r?.score ? r?.score * 0.5 : 0 }
+        }
+        return r
+      })
+      .sort((a, b) => (a?.score ?? 0) - (b?.score ?? 0))
+
     const { score, item } = results[0]
     if (score !== undefined && score < bestScore && score <= maxScore) {
       bestScore = score
@@ -128,7 +149,7 @@ export const fillSelectLikeElement = async (
 
   if (selectOptions.length === 0) return
 
-  const bestMatch = findBestCanonicalMatch(selectOptions, value)
+  const bestMatch = findBestOptionMatch(selectOptions, value)
   if (!bestMatch?.value || element.value === bestMatch.value) return
 
   // const optionsString = selectOptions.map((o) => `${o.text}`).join(', ')

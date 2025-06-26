@@ -191,8 +191,6 @@ async function openDropdown(control: HTMLElement, framework: Framework): Promise
       control.dispatchEvent(
         new MouseEvent('mousedown', { bubbles: true, cancelable: true, composed: true }),
       )
-      // Small delay between mousedown and mouseup sometimes helps
-      // setTimeout(() => {
       if (!document.body.contains(control) || opened) return
       control.dispatchEvent(
         new MouseEvent('mouseup', { bubbles: true, cancelable: true, composed: true }),
@@ -200,12 +198,12 @@ async function openDropdown(control: HTMLElement, framework: Framework): Promise
       control.dispatchEvent(
         new MouseEvent('click', { bubbles: true, cancelable: true, composed: true }),
       )
-      // }, 20); // 20ms delay
 
       // Focus the element before click sometimes helps with frameworks expecting focus
       if (typeof control.focus === 'function') {
         control.focus({ preventScroll: true })
       }
+
       // Some frameworks might not fire 'click' if they preventDefault on mousedown/mouseup
       // So, if 'click' isn't caught, rely on the timeout.
     }, 50) // Initial 50ms delay before dispatching events
