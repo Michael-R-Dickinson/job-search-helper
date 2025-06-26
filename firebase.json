@@ -2,18 +2,13 @@
   "functions": [
     {
       "source": "packages/backend",
+      "runtime": "python312",
       "predeploy": [
         "cd \"$RESOURCE_DIR\" && ln -sf .venv venv && poetry export --format requirements.txt --output requirements.txt --without-hashes",
         "cd $RESOURCE_DIR && echo \"-e .\" >> requirements.txt"
       ],
       "codebase": "default",
-      "ignore": [
-        "venv",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ]
+      "ignore": ["venv", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"]
     }
   ]
 }
