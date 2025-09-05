@@ -8,5 +8,3 @@ resumes/**/*
 cover_letters/**/*
 
 llm_output_cache/**/*
-
-requirements.txt
