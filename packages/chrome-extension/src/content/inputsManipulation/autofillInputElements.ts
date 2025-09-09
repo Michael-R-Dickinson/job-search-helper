@@ -119,7 +119,7 @@ export const autofillInputElements = async (
   }
 
   for (const instruction of autofillInstructions) {
-    if (instruction.value === null || instruction.value === '') continue
+    if (instruction.autofillValue === null || instruction.autofillValue === '') continue
     await fillElementWithInstructionValue(instruction)
 
     if (animationSpeed !== AutofillAnimationSpeeds.NONE) {
