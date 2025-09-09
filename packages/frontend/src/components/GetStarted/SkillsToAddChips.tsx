@@ -1,12 +1,12 @@
 import { cva } from 'class-variance-authority'
-import { QuestionAnswerMap } from './SelectSkillsDisplay'
+import { QuestionAnswerMap } from '@/lib/api'
 
 const SkillsToAddChips: React.FC<{
   skillsSelected: QuestionAnswerMap
   setSkillsSelected: React.Dispatch<React.SetStateAction<QuestionAnswerMap>>
 }> = ({ skillsSelected, setSkillsSelected }) => {
   const toggleSkill = (skill: string) => {
-    setSkillsSelected((prev) => ({ ...prev, [skill]: !prev[skill] }))
+    setSkillsSelected((prev: QuestionAnswerMap) => ({ ...prev, [skill]: !prev[skill] }))
   }
   const styles = cva('badge badge-outline cursor-pointer', {
     variants: {
