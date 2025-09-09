@@ -11,36 +11,10 @@ import {
 import { RESUME_UPLOAD_VALUE } from '../../autofillEngine/inputCategoryHandlers'
 import { sendMessageToIframes } from '../iframe/iframeMessageHandler'
 import { eventTypes } from '../../events'
-import { frameId } from '../../content'
 import { AutofillReadyInputArray } from '../autofillReadyInput'
 import type InputElement from '../input'
 import triggerSaveFilledValues from '../triggers/triggerSaveFilledValues'
-
-const useMonitorIframeAutofills = (setAutofillCompleted: () => void) => {
-  useEffect(() => {
-    const onFrameMsg = (event: MessageEvent) => {
-      if (event.data?.type === eventTypes.AUTOFILL_WITH_IFRAMES_COMPLETED) {
-        setAutofillCompleted()
-      }
-    }
-
-    window.addEventListener('message', onFrameMsg)
-
-    return () => {
-      window.removeEventListener('message', onFrameMsg)
-    }
-  }, [setAutofillCompleted])
-}
-
-const returnCompletionMessage = () => {
-  window.top?.postMessage(
-    {
-      type: eventTypes.AUTOFILL_WITH_IFRAMES_COMPLETED,
-      fromFrame: frameId,
-    },
-    '*',
-  )
-}
+import useMonitorIframeAutofills, { returnCompletionMessage } from './useMonitorIframeAutofills'
 
 export type AutofillFetchStatus = 'loading' | 'fetched' | 'error'
 export type AutofillFillingStatus = 'idle' | 'filling_inputs' | 'success' | 'error'
@@ -219,6 +193,7 @@ const useAutofillInputs = () => {
   const setAutofillCompleted = useCallback(() => {
     setFillingStatus('success')
   }, [setFillingStatus])
+
   useMonitorIframeAutofills(setAutofillCompleted)
 
   return {
