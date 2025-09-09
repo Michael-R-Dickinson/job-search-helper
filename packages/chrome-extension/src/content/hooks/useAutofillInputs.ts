@@ -164,7 +164,7 @@ const useAutofillInputs = () => {
     await autofillInputElements(remainingAutofillInstructions, AutofillAnimationSpeeds.NONE)
 
     const resumeInstructions = simpleInputsInstructions.filter(
-      (instruction) => instruction.value === RESUME_UPLOAD_VALUE,
+      (instruction) => instruction.autofillValue === RESUME_UPLOAD_VALUE,
     )
 
     setFillingStatus('success')
