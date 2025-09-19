@@ -1,19 +1,21 @@
 {
-  "serena": {
-    "type": "stdio",
-    "command": "uvx",
-    "args": [
-      "--from",
-      "git+https://github.com/oraios/serena",
-      "serena",
-      "start-mcp-server",
-      "--context",
-      "ide-assistant",
-      "--project",
-      "/Users/big_m/Documents/Code/texas-trainer/wasm-postflop-react",
-      "--enable-web-dashboard",
-      "false"
-    ],
-    "env": {}
+  "mcpServers": {
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide-assistant",
+        "--project",
+        "/Users/big_m/Documents/Code/texas-trainer/wasm-postflop-react",
+        "--enable-web-dashboard",
+        "false"
+      ],
+      "env": {}
+    }
   }
 }
