@@ -1,0 +1,14 @@
+{
+  "folders": [
+	{
+		"path": "packages/backend"
+	},
+	{
+		"path": "packages/chrome-extension"
+	},
+	{
+		"path": "packages/frontend"
+	}
+],
+  "settings": {}
+}
