@@ -85,7 +85,7 @@ export const uploadResumeQuery = async (
     return validatedData
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.error('Backend response validation error:', error.errors)
+      console.error('Backend response validation error:', error.issues)
     } else {
       console.error('error uploading resume', error)
     }
@@ -254,7 +254,7 @@ export const writeFreeResponseQuery = async (
     return validatedData
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.error('Backend response validation error for write free response:', error.errors)
+      console.error('Backend response validation error for write free response:', error.issues)
     } else {
       console.error('Error in write free response query:', error)
     }

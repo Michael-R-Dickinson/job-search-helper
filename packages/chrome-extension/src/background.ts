@@ -96,7 +96,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         })
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error('Invalid payload for resume upload:', error.errors)
+        console.error('Invalid payload for resume upload:', error.issues)
         sendResponse(null)
       } else {
         console.error('Error processing resume upload:', error)
@@ -140,7 +140,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       })
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error('Invalid payload for write free response:', error.errors)
+        console.error('Invalid payload for write free response:', error.issues)
         sendResponse(null)
       } else {
         console.error('Error processing write free response:', error)
