@@ -1,14 +1,21 @@
 {
   "folders": [
-	{
-		"path": "packages/backend"
-	},
-	{
-		"path": "packages/chrome-extension"
-	},
-	{
-		"path": "packages/frontend"
-	}
-],
-  "settings": {}
+    {
+      "path": "packages/backend"
+    },
+    {
+      "path": "packages/chrome-extension"
+    },
+    {
+      "path": "packages/frontend"
+    }
+  ],
+  "settings": {
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true,
+      "**/venv/**": true
+    }
+  }
 }
