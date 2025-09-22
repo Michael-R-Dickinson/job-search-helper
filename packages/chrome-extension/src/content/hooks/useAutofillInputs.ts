@@ -54,12 +54,14 @@ const useAutofillInputs = () => {
       if (!shouldFetchAutofills) {
         return
       }
+      console.log('Beginning fetch autofill instructions')
 
       // Ensure the page is fully loaded before fetching autofill instructions
       await pageLoadedDeferredRef.current?.promise
 
       // Handle Fast Input Instructions
       const simpleInputsInstructions = await triggerGetSimpleAutofillValues(elements)
+      console.log('Fetched simple input instructions for inputs: ', simpleInputsInstructions)
       resolveFastInputInstructions(simpleInputsInstructions)
 
       // Handle Slow Input Instructions
