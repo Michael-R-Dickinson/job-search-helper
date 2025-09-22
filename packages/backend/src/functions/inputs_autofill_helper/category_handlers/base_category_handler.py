@@ -61,7 +61,9 @@ class BaseCategoryHandler(ABC):
         if field_type == FieldType.CHECKBOX:
             return self.fill_checkbox_input(classified_input, other_inputs)
 
-        raise ValueError(f"unsupported field type {field_type}")
+        raise ValueError(
+            f"unsupported field type {field_type} for handler {self.__class__.__name__}"
+        )
 
     # Helper for easily checking if we can autofill this input category with the user's data
     @abstractmethod
