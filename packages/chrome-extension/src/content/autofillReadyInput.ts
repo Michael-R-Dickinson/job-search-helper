@@ -70,8 +70,14 @@ export class AutofillReadyInputArray extends Array<AutofillReadyInputElement> {
 
     const autofillReadyInputs = instructions
       .map((instruction) => {
-        return AutofillReadyInputElement.fromReferenceId(instruction.input_id, instruction.value)
+        try {
+          return AutofillReadyInputElement.fromReferenceId(instruction.input_id, instruction.value)
+        } catch (e) {
+          console.error('Error creating AutofillReadyInputElement:', e)
+          return null
+        }
       })
+      .filter((i) => i !== null)
       .filter((i) => i.autofillValue !== null && i.autofillValue !== '')
     return new AutofillReadyInputArray(autofillReadyInputs)
   }
