@@ -10,8 +10,6 @@
         "start-mcp-server",
         "--context",
         "ide-assistant",
-        "--project",
-        "/Users/big_m/Documents/Code/texas-trainer/wasm-postflop-react",
         "--enable-web-dashboard",
         "false"
       ],
