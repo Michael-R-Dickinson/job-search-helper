@@ -13,6 +13,11 @@ from utils import delete_top_level_files, get_objects_hash
 
 AVAILABLE_SCHEMAS = [ResumeResponseSchema, CoverLetterSchema]
 
+LLM_MODELS = {
+    "flash": "gemini-2.5-flash",
+    "flash-light": "gemini-2.5-flash-lite",
+}
+
 
 def get_cache_name(args):
     # Generate a unique cache path based on the input parameters

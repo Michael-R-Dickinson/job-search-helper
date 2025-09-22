@@ -6,7 +6,7 @@ from LLM_tailoring.resume.schema import (
     ResumeResponseSchema,
     ResumeTailoringQuestions,
 )
-from LLM_tailoring.gemini import execute_tailoring_with_gemini, get_chat
+from LLM_tailoring.gemini import LLM_MODELS, execute_tailoring_with_gemini, get_chat
 from google.genai import types
 
 
@@ -33,10 +33,7 @@ def tailor_resume_with_llm(prompt: str, chat_history: dict):
 
 
 def generate_questions_with_llm(prompt: str):
-    chat = get_chat(
-        content_config=get_content_config(),
-        model="gemini-2.5-flash-preview-04-17",
-    )
+    chat = get_chat(content_config=get_content_config(), model=LLM_MODELS["flash"])
     response = chat.send_message(prompt)
     chat_history = chat.get_history()
 

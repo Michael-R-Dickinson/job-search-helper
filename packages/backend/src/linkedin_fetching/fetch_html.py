@@ -51,6 +51,8 @@ USER_AGENTS = [
 def get_proxies() -> str:
     load_dotenv()
     proxy = os.getenv("PROXY_URL")
+    if (proxy is None) or (proxy == ""):
+        return {}
 
     return {
         "http": proxy,
