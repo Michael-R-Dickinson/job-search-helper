@@ -46,12 +46,12 @@ class InputElement {
   }
 
   get isLabeled(): boolean {
-    return Boolean(this.label)
+    return Boolean(this.label) || Boolean(this.wholeQuestionLabel)
   }
 
   // can be autofilled by LLM - essentially text inputs and checkboxes
   get isLLMAutofillable(): boolean {
-    return this.isTextInput || this.isCheckable || this.isSelectInput || this.isLabeled
+    return (this.isTextInput || this.isCheckable || this.isSelectInput) && this.isLabeled
   }
 
   private get value(): string {
