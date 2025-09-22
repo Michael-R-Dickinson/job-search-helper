@@ -20,5 +20,6 @@ export const tailoringResumeAtom = atom<{
   name: null,
 })
 
-const testingJobUrl = 'https://www.linkedin.com/jobs/view/4198077637/?alternateChannel=search'
+const testingJobUrl =
+  'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4298168323'
 export const jobUrlAtom = atom<string | null>(testingJobUrl)
