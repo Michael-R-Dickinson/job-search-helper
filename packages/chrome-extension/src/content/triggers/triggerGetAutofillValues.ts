@@ -9,8 +9,17 @@ export const triggerGetSimpleAutofillValues = async (inputs: InputElement[]) => 
     type: eventTypes.GET_SIMPLE_AUTOFILL_VALUES,
     payload: parsedInputs,
   })
-  const parsedResponse = AutofillInstructionsSchema.parse(response)
-  return AutofillReadyInputArray.fromAutofillInstructions(parsedResponse)
+  const parsedResponse = AutofillInstructionsSchema.safeParse(response)
+  if (!parsedResponse.success) {
+    console.error(
+      'Received invalid SIMPLE autofill instructions response from background script:',
+      parsedResponse.error,
+    )
+
+    throw new Error('Failed to parse autofill instructions')
+  }
+
+  return AutofillReadyInputArray.fromAutofillInstructions(parsedResponse.data)
 }
 
 const triggerGetAutofillValues = async (inputs: InputElement[]) => {
@@ -19,8 +28,17 @@ const triggerGetAutofillValues = async (inputs: InputElement[]) => {
     type: eventTypes.GET_AUTOFILL_VALUES,
     payload: parsedInputs,
   })
-  const parsedResponse = AutofillInstructionsSchema.parse(response)
-  return AutofillReadyInputArray.fromAutofillInstructions(parsedResponse)
+  const parsedResponse = AutofillInstructionsSchema.safeParse(response)
+  if (!parsedResponse.success) {
+    console.error(
+      'Received invalid LLM autofill instructions response from background script:',
+      parsedResponse.error,
+    )
+
+    throw new Error('Failed to parse autofill instructions')
+  }
+
+  return AutofillReadyInputArray.fromAutofillInstructions(parsedResponse.data)
 }
 
 export default triggerGetAutofillValues
