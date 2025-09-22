@@ -9,7 +9,11 @@ const useFetchUserData = () => {
 
   useEffect(() => {
     triggerGetUserData().then((userData) => {
-      if (!userData) return
+      if (userData === undefined) {
+        console.warn('PERFECTIFY: No user data found, user is likely not logged in')
+        setUser(null)
+        return
+      }
       setUser(userData)
       if (userData.userResumes) {
         setResumes(userData.userResumes)
