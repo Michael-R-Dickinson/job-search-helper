@@ -82,6 +82,12 @@ export class AutofillReadyInputArray extends Array<AutofillReadyInputElement> {
   public getFreeResponseAutofills(): AutofillReadyInputArray {
     return new AutofillReadyInputArray(this.filter((input) => input.isFreeResponseAutofill()))
   }
+  public getStandardAutofills(): AutofillReadyInputArray {
+    return new AutofillReadyInputArray(
+      this.filter((input) => !input.isFreeResponseAutofill() && !input.isResumeAutofill()),
+    )
+  }
+
   public setAutofillResumeUrl(url: string): void {
     this.forEach((input) => {
       if (input.isResumeAutofill()) {
