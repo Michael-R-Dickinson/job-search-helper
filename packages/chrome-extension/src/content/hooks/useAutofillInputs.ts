@@ -49,14 +49,14 @@ const useAutofillInputs = () => {
 
   useEffect(() => {
     const beginFetchAutofillInstructionsSequence = async () => {
-      const shouldFetchAutofills = elementsRef.current.length > 3
+      const elements = elementsRef.current
+      const shouldFetchAutofills = elements.length > 3
       if (!shouldFetchAutofills) {
         return
       }
 
       // Ensure the page is fully loaded before fetching autofill instructions
       await pageLoadedDeferredRef.current?.promise
-      const elements = elementsRef.current
 
       // Handle Fast Input Instructions
       const simpleInputsInstructions = await triggerGetSimpleAutofillValues(elements)
