@@ -12,7 +12,7 @@ export type AutofillFetchStates = {
   fetchStatus: AutofillFetchStatus
   fastInputInstructionsPromiseRef: React.RefObject<Promise<AutofillReadyInputArray> | null>
   slowInputInstructionsPromiseRef: React.RefObject<Promise<AutofillReadyInputArray> | null>
-  resumeInstructionsRef: React.MutableRefObject<AutofillReadyInputArray>
+  resumeInstructionsRef: React.RefObject<AutofillReadyInputArray>
 }
 
 type UseAutofillStatesResult = {
