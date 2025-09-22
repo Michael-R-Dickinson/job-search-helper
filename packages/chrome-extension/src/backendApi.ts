@@ -12,8 +12,7 @@ import {
   WriteFreeResponseResponseSchema,
   type WriteFreeResponseResponse,
 } from './content/triggers/triggerWriteFreeResponse'
-
-const API_URL = 'http://127.0.0.1:5001/jobsearchhelper-231cf/us-central1'
+import { BACKEND_API_URL } from './constants'
 
 export const autofillInstructionsQuery = async (
   inputs: Partial<MinifiedInput>[],
@@ -26,7 +25,7 @@ export const autofillInstructionsQuery = async (
   })
   console.log('fltered inputs', filteredInputs)
   const response = await fetch(
-    `${API_URL}/get_input_autofill_instructions?${queryParams.toString()}`,
+    `${BACKEND_API_URL}/get_input_autofill_instructions?${queryParams.toString()}`,
     {
       method: 'POST',
       headers: {
@@ -53,7 +52,7 @@ export const saveFilledInputsQuery = async (inputs: Partial<MinifiedInput>[], us
   const queryParams = new URLSearchParams({
     userId,
   })
-  await fetch(`${API_URL}/save_filled_inputs?${queryParams.toString()}`, {
+  await fetch(`${BACKEND_API_URL}/save_filled_inputs?${queryParams.toString()}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -73,7 +72,7 @@ export const uploadResumeQuery = async (
     userId,
   })
   try {
-    const response = await fetch(`${API_URL}/upload_resume?${queryParams.toString()}`, {
+    const response = await fetch(`${BACKEND_API_URL}/upload_resume?${queryParams.toString()}`, {
       method: 'POST',
       body: formData,
     })
@@ -101,7 +100,7 @@ export const getResumesQuery = async (userId: string): Promise<ResumeQueryRespon
   const queryParams = new URLSearchParams({
     userId,
   })
-  const response = await fetch(`${API_URL}/get_resume_list?${queryParams.toString()}`)
+  const response = await fetch(`${BACKEND_API_URL}/get_resume_list?${queryParams.toString()}`)
   const data: ResumeQueryResponse = await response.json()
   console.log('get resumes response', data)
 
@@ -135,7 +134,7 @@ export const getTailoringQuestions = async (
     jobDescriptionLink: linkedInJobUrl,
   })
 
-  const url = `${API_URL}/on_request?${queryParams.toString()}`
+  const url = `${BACKEND_API_URL}/on_request?${queryParams.toString()}`
   const res = await fetch(url, {
     method: 'GET',
   })
@@ -175,7 +174,7 @@ export const getTailoredResume = async (
       experience_questions: questionAnswers.experienceQuestions,
     }),
   })
-  const url = `${API_URL}/on_request?${queryParams.toString()}`
+  const url = `${BACKEND_API_URL}/on_request?${queryParams.toString()}`
   const res = await fetch(url, {
     method: 'GET',
     cache: 'force-cache',
@@ -203,9 +202,12 @@ export const convertDocxToPdfQuery = async (
     fileName,
   })
 
-  const response = await fetch(`${API_URL}/convert_resume_to_pdf?${queryParams.toString()}`, {
-    method: 'GET',
-  })
+  const response = await fetch(
+    `${BACKEND_API_URL}/convert_resume_to_pdf?${queryParams.toString()}`,
+    {
+      method: 'GET',
+    },
+  )
   const data = await response.json()
   try {
     // Validate the response using Zod schema
@@ -244,9 +246,12 @@ export const writeFreeResponseQuery = async (
   }
 
   try {
-    const response = await fetch(`${API_URL}/write_free_response?${queryParams.toString()}`, {
-      method: 'GET',
-    })
+    const response = await fetch(
+      `${BACKEND_API_URL}/write_free_response?${queryParams.toString()}`,
+      {
+        method: 'GET',
+      },
+    )
     const data = await response.json()
 
     // Validate the response using Zod schema

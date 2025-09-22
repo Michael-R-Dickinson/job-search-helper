@@ -1,9 +1,9 @@
 import os
 import random
 
+from constants import PROXY_URL
 from errors.data_fetching_errors import LinkedinError
 import requests
-from dotenv import load_dotenv
 
 
 USER_AGENTS = [
@@ -49,14 +49,12 @@ USER_AGENTS = [
 
 
 def get_proxies() -> str:
-    load_dotenv()
-    proxy = os.getenv("PROXY_URL")
-    if (proxy is None) or (proxy == ""):
+    if (PROXY_URL is None) or (PROXY_URL == ""):
         return {}
-
+      
     return {
-        "http": proxy,
-        "https": proxy,
+        "http": PROXY_URL,
+        "https": PROXY_URL,
     }
 
 

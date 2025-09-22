@@ -1,3 +1,16 @@
+# ENV Vars
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+GCP_API_KEY = os.environ.get("GCP_AI_API_KEY")
+CACHE_LLM_RESPONSES = os.environ.get("CACHE_LLM_RESPONSES")
+CLOUDCONVERT_API_KEY = os.environ.get("CLOUDCONVERT_API_KEY")
+PROXY_URL = os.environ.get("PROXY_URL")
+
 PROJECT_ID = "jobsearchhelper-231cf"
 REGION = "us-central1"
 

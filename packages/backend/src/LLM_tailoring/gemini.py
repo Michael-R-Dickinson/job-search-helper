@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from constants import CACHE_PATH
+from constants import CACHE_LLM_RESPONSES, CACHE_PATH, GCP_API_KEY
 from utils import delete_top_level_files, get_objects_hash
 
 AVAILABLE_SCHEMAS = [ResumeResponseSchema, CoverLetterSchema]
@@ -27,7 +27,7 @@ def get_cache_name(args):
 
 
 def load_cached_response(*args):
-    if not (os.environ["CACHE_LLM_RESPONSES"] == "True"):
+    if not (CACHE_LLM_RESPONSES == "True"):
         return None
 
     cache_name = get_cache_name(args)
@@ -64,7 +64,7 @@ def cache_response(*args, response):
 
 def get_chat(content_config: types.GenerateContentConfig, **kwargs):
     load_dotenv()
-    api_key = os.environ.get("GCP_AI_API_KEY")
+    api_key = GCP_API_KEY
     client = genai.Client(api_key=api_key)
 
     chat = client.chats.create(

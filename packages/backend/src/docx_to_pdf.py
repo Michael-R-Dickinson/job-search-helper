@@ -2,7 +2,7 @@ import os
 from typing import Union
 from io import IOBase
 
-from constants import RESUMES_PATH
+from constants import CLOUDCONVERT_API_KEY, RESUMES_PATH
 import cloudconvert
 from dotenv import load_dotenv
 import requests
@@ -20,7 +20,7 @@ def convert_docx_to_pdf(docx_input: Union[str, IOBase]):
     """
     load_dotenv()
 
-    api_key = os.environ["CLOUDCONVERT_API_KEY"]
+    api_key = CLOUDCONVERT_API_KEY
     if not api_key:
         raise RuntimeError("Missing CLOUDCONVERT_API_KEY env var")
 

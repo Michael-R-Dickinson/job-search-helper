@@ -4,6 +4,7 @@ import time
 from typing import Optional, cast
 
 from tqdm import tqdm
+from constants import GCP_API_KEY
 from functions.inputs_autofill_helper.autofill_schema import (
     ClassifiedInputList,
     FieldType,
@@ -72,7 +73,7 @@ def get_stored_prototype_embeddings():
 
 def get_client():
     load_dotenv()
-    api_key = os.environ.get("GCP_AI_API_KEY")
+    api_key = GCP_API_KEY
     client = genai.Client(api_key=api_key)
     return client
 
