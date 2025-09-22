@@ -79,13 +79,8 @@ class InputType(Enum):
     DISCIPLINE = "discipline"
 
     FREE_RESPONSE = "free_response"
-    COVER_LETTER = "cover_letter"
 
     UNKNOWN = "unknown"
-
-
-def get_cover_letter_value():
-    return "<COVER_LETTER>"
 
 
 def get_free_response_value():

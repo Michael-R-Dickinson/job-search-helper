@@ -2,9 +2,6 @@ from functions.inputs_autofill_helper.autofill_schema import InputType
 from functions.inputs_autofill_helper.category_handlers.authorization_category_handler import (
     AuthorizationHandler,
 )
-from functions.inputs_autofill_helper.category_handlers.cover_letter_category_handler import (
-    CoverLetterHandler,
-)
 from functions.inputs_autofill_helper.category_handlers.disablitiy_category_handler import (
     DisabilityHandler,
 )
@@ -187,8 +184,6 @@ def get_category_handler(category_name: str, user_autofill_data):
             return DisciplineHandler(user_autofill_data)
         case InputType.FREE_RESPONSE:
             return FreeResponseHandler(user_autofill_data)
-        case InputType.COVER_LETTER:
-            return CoverLetterHandler(user_autofill_data)
 
         # Default Cases
         case InputType.UNKNOWN:

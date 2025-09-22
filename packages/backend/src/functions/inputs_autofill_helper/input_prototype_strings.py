@@ -310,7 +310,6 @@ PROTOTYPES: dict[InputType, list[str]] = {
         "Academic discipline",
     ],
     InputType.FREE_RESPONSE: ["why do you want to work for this company"],
-    InputType.COVER_LETTER: ["cover letter", "input cover letter"],
     InputType.UNKNOWN: ["gabagabagoo"],
 }
 
