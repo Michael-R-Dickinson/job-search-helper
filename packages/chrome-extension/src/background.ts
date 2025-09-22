@@ -10,6 +10,7 @@ import {
   getTailoringQuestions,
   convertDocxToPdfQuery,
   writeFreeResponseQuery,
+  healthCheckQuery,
 } from './backendApi'
 import type { UserDataResponse } from './content/triggers/triggerGetUserData'
 import { UploadResumePayloadSchema } from './content/triggers/triggerResumeUpload'
@@ -18,6 +19,19 @@ import { WriteFreeResponsePayloadSchema } from './content/triggers/triggerWriteF
 import { SerializableInputArray } from './content/SerializableInput'
 
 console.log('Background script loaded')
+
+// Simple health check on startup
+async function performStartupHealthCheck() {
+  const isHealthy = await healthCheckQuery()
+  if (isHealthy) {
+    console.log('✅ Backend connection verified')
+  } else {
+    console.error('❌ Backend connection failed - check VITE_BACKEND_API_URL and server status')
+  }
+}
+
+// Run health check after a short delay to allow extension to fully initialize
+setTimeout(performStartupHealthCheck, 1000)
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === eventTypes.BEGIN_AUTHENTICATION_FLOW) {

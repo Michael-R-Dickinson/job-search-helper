@@ -14,6 +14,20 @@ import {
 } from './content/triggers/triggerWriteFreeResponse'
 import { BACKEND_API_URL } from './constants'
 
+export const healthCheckQuery = async (): Promise<boolean> => {
+  try {
+    const response = await fetch(`${BACKEND_API_URL}/health_check`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return response.ok
+  } catch (error) {
+    return false
+  }
+}
+
 export const autofillInstructionsQuery = async (
   inputs: Partial<MinifiedInput>[],
   userId: string,

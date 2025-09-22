@@ -33,6 +33,21 @@ get_stored_prototype_embeddings()
 @https_fn.on_request(
     cors=options.CorsOptions(
         cors_origins=["*"],
+        cors_methods=["GET", "OPTIONS"],
+    )
+)
+def health_check(req: https_fn.Request) -> https_fn.Response:
+    """Minimal health check endpoint for extension connectivity verification."""
+    return https_fn.Response(
+        json.dumps({"status": "ok"}),
+        status=200,
+        headers={"Content-Type": "application/json"}
+    )
+
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=["*"],
         cors_methods=["GET", "POST", "OPTIONS"],
     )
 )
