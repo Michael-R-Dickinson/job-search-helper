@@ -1,9 +1,9 @@
-import z from 'zod'
+import { z } from 'zod'
 import { eventTypes } from '../../events'
 // Shared Zod schemas for resume upload validation
 export const UploadResumeResponseSchema = z.object({
   message: z.string(),
-  public_url: z.string().url(),
+  public_url: z.string(),
 })
 
 export const UploadResumePayloadSchema = z.object({

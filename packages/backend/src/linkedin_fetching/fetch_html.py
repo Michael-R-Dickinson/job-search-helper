@@ -49,6 +49,9 @@ USER_AGENTS = [
 
 
 def get_proxies() -> str:
+    if (PROXY_URL is None) or (PROXY_URL == ""):
+        return {}
+      
     return {
         "http": PROXY_URL,
         "https": PROXY_URL,

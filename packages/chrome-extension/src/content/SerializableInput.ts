@@ -1,4 +1,4 @@
-import z from 'zod'
+import { z } from 'zod'
 import {
   INPUT_ELEMENT_TYPES,
   type InputElementType,

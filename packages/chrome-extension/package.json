@@ -24,7 +24,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "xhr2": "^0.2.1",
-    "zod": "^3.25.31"
+    "zod": "^4.1.9"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.33",

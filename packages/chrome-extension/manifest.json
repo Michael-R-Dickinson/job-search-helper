@@ -22,7 +22,7 @@
     }
   ],
 
-  "permissions": ["tabs", "scripting", "storage", "activeTab"],
+  "permissions": ["tabs", "scripting", "storage", "activeTab", "identity"],
 
   "host_permissions": ["<all_urls>"],
 
