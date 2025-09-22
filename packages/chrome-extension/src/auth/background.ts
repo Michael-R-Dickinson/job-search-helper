@@ -67,7 +67,9 @@ const authenticate = () => {
 let currentUser: User | null = null
 onAuthStateChanged(auth, (u) => {
   currentUser = u
+  // console.log('Auth state changed, currentUser:', currentUser)
 })
+// console.log('Initial auth state, currentUser:', currentUser)
 
 export { currentUser }
 
