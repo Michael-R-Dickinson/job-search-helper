@@ -7,3 +7,15 @@ export const FIREBASE_APP_ID = import.meta.env.VITE_FIREBASE_APP_ID!
 export const FIREBASE_MEASUREMENT_ID = import.meta.env.VITE_FIREBASE_MEASUREMENT_ID!
 
 export const BACKEND_API_URL = import.meta.env.VITE_BACKEND_API_URL
+
+// Debug logs
+// console.log({
+//   FIREBASE_API_KEY,
+//   FIREBASE_AUTH_DOMAIN,
+//   FIREBASE_PROJECT_ID,
+//   FIREBASE_STORAGE_BUCKET,
+//   FIREBASE_MESSAGING_SENDER_ID,
+//   FIREBASE_APP_ID,
+//   FIREBASE_MEASUREMENT_ID,
+//   BACKEND_API_URL,
+// })
