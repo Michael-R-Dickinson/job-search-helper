@@ -92,11 +92,6 @@ const useAutofillInstructionStates = (
 
       _resolveFastInputInstructions(inputs.getStandardAutofills())
       setResumeAutofillInstructions(inputs.getResumeAutofills())
-
-      console.log('finished resolve on fast inputs', {
-        resumeInstructions: resumeInstructionsRef.current,
-        fastInputs: fastInputInstructionsValueRef.current,
-      })
     },
     [_resolveFastInputInstructions],
   )

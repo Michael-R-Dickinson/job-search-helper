@@ -69,6 +69,7 @@ const useAutofillInputs = () => {
       const complexInputsInstructions = await triggerGetAutofillValues(remainingUnfilled)
       // ! WHILE TESTING WE DON'T WANT TO COST LLM TOKENS
       // const complexInputsInstructions = new AutofillReadyInputArray([])
+      console.log('Fetched complex input instructions for inputs: ', complexInputsInstructions)
 
       resolveSlowInputInstructions(complexInputsInstructions)
     }
