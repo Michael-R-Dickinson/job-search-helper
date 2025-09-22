@@ -1,5 +1,6 @@
 import os
 import random
+from typing import Dict
 
 from constants import PROXY_URL
 from errors.data_fetching_errors import LinkedinError
@@ -48,10 +49,10 @@ USER_AGENTS = [
 ]
 
 
-def get_proxies() -> str:
+def get_proxies() -> Dict:
     if (PROXY_URL is None) or (PROXY_URL == ""):
         return {}
-      
+
     return {
         "http": PROXY_URL,
         "https": PROXY_URL,
