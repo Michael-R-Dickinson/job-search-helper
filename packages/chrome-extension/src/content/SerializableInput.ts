@@ -125,7 +125,6 @@ class SerializableInput {
 
 export class SerializableInputArray extends Array<SerializableInput> {
   constructor(inputs: SerializableInput[]) {
-    console.log('SerializableInputArray constructor', typeof inputs, inputs)
     // Convert to proper Array to ensure it's iterable before spreading
     const inputsArray = Array.isArray(inputs)
       ? inputs
