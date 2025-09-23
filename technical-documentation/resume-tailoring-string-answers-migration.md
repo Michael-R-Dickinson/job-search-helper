@@ -27,12 +27,7 @@ This is a **migration** to enhance the resume tailoring experience questions to 
    - **Choice**: Create `QuestionAnswer` type with `answer: boolean` and `additional_info: string` fields
    - **Why**: Provides clear separation between the yes/no decision and additional context, making the data structure more explicit and easier to work with.
 
-2. **UI Flow for Experience Questions**: Show additional input after "Yes" is selected
-
-   - **Choice**: Two-step process: first select Yes/No, then optionally provide additional context with a confirm button
-   - **Why**: Matches user's specified UX requirements and maintains clear separation between boolean selection and optional context.
-
-3. **LLM Prompt Updates**: Modify prompt to handle both boolean and string responses
+2. **LLM Prompt Updates**: Modify prompt to handle both boolean and string responses
    - **Choice**: Update prompt template to display string responses as additional context after the yes/no answer
    - **Why**: Allows LLM to use the rich context while maintaining clear understanding of the yes/no decision.
 
@@ -64,8 +59,9 @@ export type QuestionAnswerMap = Record<string, QuestionAnswer>
 type ExperienceAnswerState = {
   hasAnswered: boolean
   currentAnswer: QuestionAnswer | null
-  isEditingAdditionalInfo: boolean
+  additionalInfoValue: string
   isConfirmed: boolean
+  showConfirmButton: boolean
 }
 ```
 
@@ -91,6 +87,42 @@ const updateQuestionAnswer = (
   }
 }
 ```
+
+## UI Flow Design
+
+### Experience Questions UI Flow
+
+**Initial State:**
+- Question text displayed
+- Yes/No buttons visible
+- Additional info input field visible below buttons (initially empty and unfocused)
+- No confirm button visible
+
+**User selects "No":**
+- Immediately proceeds to next question (existing behavior)
+- No additional info collection needed
+
+**User selects "Yes":**
+- Yes button remains selected/highlighted
+- Focus automatically moves to additional info input field
+- Confirm checkmark button appears inside the input field (right side)
+- User can type additional context
+
+**User submits additional info:**
+- Via Enter key: Submits current answer and proceeds to next question
+- Via confirm button click: Submits current answer and proceeds to next question
+- Additional info can be empty (optional)
+
+**Skills Questions UI Flow:**
+- Maintains existing simple Yes/No flow with immediate progression
+- No additional info input shown
+
+### Key Interaction Differences
+
+| Question Type | UI Elements | Flow |
+|---------------|-------------|------|
+| Skills | Yes/No buttons only | Select → Immediate next |
+| Experience | Yes/No buttons + Additional info input | "No" → Immediate next<br>"Yes" → Focus input → Enter/Click confirm → Next |
 
 ## Implementation Process (High-Level)
 
@@ -124,12 +156,61 @@ const updateQuestionAnswer = (
   - Replace `QuestionAnswerMap = Record<string, boolean>` with `Record<string, QuestionAnswer>`
   - Update `QuestionAnswers` interface to use new structure
 - Update `packages/chrome-extension/src/content/components/AnimatedQuestionCard.tsx`:
-  - Add conditional additional info input UI for experience questions
-  - Implement two-step flow: Yes/No selection → Additional info input → Confirm
+  - Add additional info input UI that's always visible below Yes/No buttons for experience questions
+  - Implement conditional flow: "No" immediately proceeds → "Yes" focuses additional info input and shows confirm button
+  - Support Enter key submission within additional info input
 - Update `packages/chrome-extension/src/content/components/TailoringQuestions.tsx`:
-  - Modify answer handling to create QuestionAnswer objects
+  - Modify answer handling to accept both immediate boolean answers (skills/No responses) and structured QuestionAnswer objects (experience Yes responses)
+  - Update `handleAnswer` to handle both boolean and QuestionAnswer parameters
   - Update state management for structured answers
 - Update `packages/chrome-extension/src/utils.ts`:
   - Modify `getEmptyQuestionAnswers` to return proper QuestionAnswer structure
 - Update `packages/chrome-extension/src/content/components/autofillListItems/ResumeListItemContent.tsx`:
   - Update type references to use new QuestionAnswer structure
+
+**AnimatedQuestionCard Implementation Details:**
+
+```typescript
+// Updated component props
+type AnimatedQuestionCardProps = {
+  question: string
+  onAnswer: (answer: boolean | QuestionAnswer) => void // Support both types
+  onNextQuestion: () => void
+  isSkillsQuestion: boolean
+  isLastQuestion: boolean
+}
+
+// Internal state for experience questions
+const [yesSelected, setYesSelected] = useState(false)
+const [additionalInfo, setAdditionalInfo] = useState('')
+const [showConfirmButton, setShowConfirmButton] = useState(false)
+
+// Handle "No" - immediate submission with boolean
+const handleNo = () => {
+  if (isSkillsQuestion) {
+    onAnswer(false) // Skills: boolean
+  } else {
+    onAnswer({ answer: false, additional_info: '' }) // Experience: QuestionAnswer
+  }
+  // Proceed to next question immediately
+}
+
+// Handle "Yes" - different behavior for skills vs experience
+const handleYes = () => {
+  if (isSkillsQuestion) {
+    onAnswer(true) // Skills: immediate boolean submission
+    // Proceed to next question immediately
+  } else {
+    setYesSelected(true)
+    setShowConfirmButton(true)
+    // Focus additional info input
+    // Wait for user to submit via Enter or confirm button
+  }
+}
+
+// Handle additional info submission for experience questions
+const handleSubmitExperienceAnswer = () => {
+  onAnswer({ answer: true, additional_info: additionalInfo.trim() })
+  // Proceed to next question
+}
+```
