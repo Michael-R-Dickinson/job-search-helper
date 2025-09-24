@@ -93,36 +93,41 @@ const updateQuestionAnswer = (
 ### Experience Questions UI Flow
 
 **Initial State:**
+
 - Question text displayed
 - Yes/No buttons visible
 - Additional info input field visible below buttons (initially empty and unfocused)
 - No confirm button visible
 
 **User selects "No":**
+
 - Immediately proceeds to next question (existing behavior)
 - No additional info collection needed
 
 **User selects "Yes":**
+
 - Yes button remains selected/highlighted
 - Focus automatically moves to additional info input field
 - Confirm checkmark button appears inside the input field (right side)
 - User can type additional context
 
 **User submits additional info:**
+
 - Via Enter key: Submits current answer and proceeds to next question
 - Via confirm button click: Submits current answer and proceeds to next question
 - Additional info can be empty (optional)
 
 **Skills Questions UI Flow:**
+
 - Maintains existing simple Yes/No flow with immediate progression
 - No additional info input shown
 
 ### Key Interaction Differences
 
-| Question Type | UI Elements | Flow |
-|---------------|-------------|------|
-| Skills | Yes/No buttons only | Select → Immediate next |
-| Experience | Yes/No buttons + Additional info input | "No" → Immediate next<br>"Yes" → Focus input → Enter/Click confirm → Next |
+| Question Type | UI Elements                            | Flow                                                                      |
+| ------------- | -------------------------------------- | ------------------------------------------------------------------------- |
+| Skills        | Yes/No buttons only                    | Select → Immediate next                                                   |
+| Experience    | Yes/No buttons + Additional info input | "No" → Immediate next<br>"Yes" → Focus input → Enter/Click confirm → Next |
 
 ## Implementation Process (High-Level)
 
