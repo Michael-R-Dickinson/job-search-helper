@@ -11,9 +11,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        // Auth iframe for handling authentication
-        // Has to load a separate unchanged html file
-        auth: resolve(__dirname, 'auth.html'),
       },
     },
   },
