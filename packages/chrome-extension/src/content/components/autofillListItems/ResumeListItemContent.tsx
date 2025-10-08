@@ -1,6 +1,6 @@
 import { Select, type SelectProps, Checkbox } from '@mantine/core'
 import styled from '@emotion/styled'
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/react'
 import { jobUrlAtom, tailoringResumeAtom, userAtom, userResumesAtom } from '../../atoms'
 import {
@@ -171,6 +171,8 @@ const ResumeListItemContent: React.FC = () => {
 
   const setAutofillResume = useSetAtom(tailoringResumeAtom)
   const [resumesState, dispatch] = useReducer(resumesReducer, {})
+  // Prevent double fetches on re-renders before state has updated
+  const fetchGuardRef = useRef<string | null>(null)
 
   // UI state
   const [selectedResume, setSelectedResume] = useState<string | null>(null)
@@ -220,53 +222,58 @@ const ResumeListItemContent: React.FC = () => {
   const selectedResumeExists = selectedResumeState !== null
   const fetchingQuestions = selectedResumeState?.status === 'fetchingQuestions'
   const alreadyFetched = selectedResumeState?.tailoring.questionAnswers
-  useEffect(() => {
-    if (!selectedResume || !selectedResumeExists || !jobUrl || resumeUploading) return
+  useEffect(
+    () => {
+      if (!selectedResume || !selectedResumeExists || !jobUrl || resumeUploading) return
 
-    if (shouldTailorResume) {
-      // We already have questions fetched so return
-      if (alreadyFetched || fetchingQuestions) return
+      if (shouldTailorResume) {
+        // We already have questions fetched so return
+        if (alreadyFetched || fetchingQuestions || fetchGuardRef.current === selectedResume) return
 
-      dispatch({ type: 'START_FETCH_QS', name: selectedResume })
-      triggerGetTailoringQuestions(selectedResume, jobUrl).then(({ json }) => {
-        if (!json) return
-        dispatch({
-          type: 'FINISH_FETCH_QS',
-          name: selectedResume,
-          questions: json.questions,
-          chatId: json.chat_id,
+        dispatch({ type: 'START_FETCH_QS', name: selectedResume })
+        fetchGuardRef.current = selectedResume
+        triggerGetTailoringQuestions(selectedResume, jobUrl).then(({ json }) => {
+          fetchGuardRef.current = null
+
+          if (!json) return
+          dispatch({
+            type: 'FINISH_FETCH_QS',
+            name: selectedResume,
+            questions: json.questions,
+            chatId: json.chat_id,
+          })
         })
-      })
-    } else if (!selectedResumeState?.pdfUrl) {
-      const pdfPromise = triggerDocxToPdfConversion(selectedResume).then((response) => {
-        if (!response) throw new Error('No response from docx to pdf conversion')
-        dispatch({
-          type: 'PDF_CONVERSION_FINISHED',
-          name: selectedResume,
-          url: response.public_url,
+      } else if (!selectedResumeState?.pdfUrl) {
+        const pdfPromise = triggerDocxToPdfConversion(selectedResume).then((response) => {
+          if (!response) throw new Error('No response from docx to pdf conversion')
+          dispatch({
+            type: 'PDF_CONVERSION_FINISHED',
+            name: selectedResume,
+            url: response.public_url,
+          })
+          return response.public_url
         })
-        return response.public_url
-      })
-      console.log('Setting resume to promise: Pdf conversion - ', selectedResume)
-      setAutofillResume({
-        promise: pdfPromise,
-        name: selectedResume,
-      })
-    } else {
-      // Reset to finished upload state
-      dispatch({ type: 'FINISH_UPLOAD', name: selectedResume })
-    }
-  }, [
-    selectedResume,
-    shouldTailorResume,
-    jobUrl,
-    resumeUploading,
-    selectedResumeState?.pdfUrl,
-    fetchingQuestions,
-    alreadyFetched,
-    setAutofillResume,
-    selectedResumeExists,
-  ])
+        console.log('Setting resume to promise: Pdf conversion - ', selectedResume)
+        setAutofillResume({
+          promise: pdfPromise,
+          name: selectedResume,
+        })
+      } else {
+        // Reset to finished upload state
+        dispatch({ type: 'FINISH_UPLOAD', name: selectedResume })
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      selectedResume,
+      shouldTailorResume,
+      jobUrl,
+      resumeUploading,
+      selectedResumeState?.pdfUrl,
+      setAutofillResume,
+      selectedResumeExists,
+    ],
+  )
 
   useEffect(() => {
     if (!resumes) return
