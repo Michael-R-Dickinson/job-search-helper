@@ -125,7 +125,11 @@ const AnimatedQuestionCard: React.FC<AnimatedQuestionCardProps> = ({
   }
 
   const handleYesClick = () => {
-    setShowContextInput(true)
+    if (isSkillsQuestion) {
+      handleAnswer('Yes')
+    } else {
+      setShowContextInput(true)
+    }
   }
 
   const handleContextSubmit = () => {
