@@ -118,8 +118,7 @@ if __name__ == "__main__":
                 thinking_budget=0
             ),
         ),
-        model="gemini-2.5-flash-preview-04-17",
-        # model="claude-3-7-sonnet@20250219",
+        model=LLM_MODELS["flash"],
     )
 
     print(response)

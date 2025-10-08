@@ -27,7 +27,7 @@ def tailor_resume_with_llm(prompt: str, chat_history: dict):
     return execute_tailoring_with_gemini(
         prompt=prompt,
         content_config=get_content_config(),
-        model="gemini-2.5-flash-preview-04-17",
+        model=LLM_MODELS["flash"],
         chat_history=chat_history,
     )
 
