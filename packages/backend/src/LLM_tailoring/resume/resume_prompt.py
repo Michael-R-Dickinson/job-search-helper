@@ -94,35 +94,6 @@ def generate_questions_llm_prompt(
     )
 
 
-def _format_structured_answers(question_responses: AnsweredResumeTailoringQuestions) -> str:
-    """
-    Format structured QuestionAnswer objects for LLM consumption.
-
-    For each question, shows the yes/no answer and any additional context provided.
-    """
-    formatted_dict = {}
-
-    # Format skills_to_add answers
-    skills_formatted = {}
-    for question, answer_obj in question_responses.skills_to_add.items():
-        if answer_obj.additional_info.strip():
-            skills_formatted[question] = f"{'Yes' if answer_obj.answer else 'No'} - {answer_obj.additional_info.strip()}"
-        else:
-            skills_formatted[question] = 'Yes' if answer_obj.answer else 'No'
-    formatted_dict['skills_to_add'] = skills_formatted
-
-    # Format experience_questions answers
-    experience_formatted = {}
-    for question, answer_obj in question_responses.experience_questions.items():
-        if answer_obj.additional_info.strip():
-            experience_formatted[question] = f"{'Yes' if answer_obj.answer else 'No'} - {answer_obj.additional_info.strip()}"
-        else:
-            experience_formatted[question] = 'Yes' if answer_obj.answer else 'No'
-    formatted_dict['experience_questions'] = experience_formatted
-
-    return json.dumps(formatted_dict, indent=2)
-
-
 def generate_tailoring_llm_prompt(
     experience_paragraphs: str,
     skills_paragraphs: str,
@@ -139,11 +110,8 @@ def generate_tailoring_llm_prompt(
     Returns:
         str: The generated LLM prompt.
     """
-    # Format structured answers for LLM consumption
-    formatted_responses = _format_structured_answers(question_responses)
-
     return LLM_TAILORING_PROMPT_TEMPLATE.format(
         experience_paragraphs=experience_paragraphs,
         skills_paragraphs=skills_paragraphs,
-        question_responses=formatted_responses,
+        question_responses=json.dumps(question_responses.to_dict()),
     )
