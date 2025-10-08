@@ -51,7 +51,7 @@ const flattenQuestions = (tailoringQuestions: QuestionAnswersAllowUnfilled): Fla
 const updateQuestionAnswer = (
   tailoringQuestions: QuestionAnswersAllowUnfilled,
   question: FlatQuestion,
-  answer: boolean,
+  answer: string,
 ): QuestionAnswersAllowUnfilled => {
   return {
     ...tailoringQuestions,
@@ -89,7 +89,7 @@ const TailoringQuestions = ({
     setCurrentQuestionIndex((prev) => prev + 1)
   }
 
-  const handleAnswer = (answer: boolean) => {
+  const handleAnswer = (answer: string) => {
     if (!currentQuestion || !tailoringQuestions) return
 
     const newAnswers = updateQuestionAnswer(tailoringQuestions, currentQuestion, answer)

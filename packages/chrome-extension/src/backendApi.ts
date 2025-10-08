@@ -123,7 +123,7 @@ export const getResumesQuery = async (userId: string): Promise<ResumeQueryRespon
 
 // ! Copied from backendApi.ts in frontend
 // TODO: Create a shared package for these
-export type QuestionAnswerMap = Record<string, boolean>
+export type QuestionAnswerMap = Record<string, string>
 export interface QuestionAnswers {
   skillsToAdd: QuestionAnswerMap
   experienceQuestions: QuestionAnswerMap

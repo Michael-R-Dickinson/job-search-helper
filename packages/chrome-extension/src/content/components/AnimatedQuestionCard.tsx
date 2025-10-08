@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { useSlideAnimation } from '../hooks/useSlideAnimation'
+import { useState } from 'react'
 
 const QuestionCardContainer = styled.div({
   padding: '0.7rem',
@@ -52,9 +53,21 @@ const YesNoButton = styled('button')(({ variant }: { variant: 'green' | 'red' })
   },
 }))
 
+const ContextInput = styled.input({
+  width: '100%',
+  padding: '0.5rem',
+  fontSize: '0.75rem',
+  border: '1px solid rgba(0, 0, 0, 0.1)',
+  borderRadius: '0.5rem',
+  outline: 'none',
+  '&:focus': {
+    border: '1px solid #67c26d',
+  },
+})
+
 type AnimatedQuestionCardProps = {
   question: string
-  onAnswer: (answer: boolean) => void
+  onAnswer: (answer: string) => void
   onNextQuestion: () => void
   isSkillsQuestion: boolean
   isLastQuestion: boolean
@@ -68,8 +81,10 @@ const AnimatedQuestionCard: React.FC<AnimatedQuestionCardProps> = ({
   isLastQuestion,
 }) => {
   const { isTransitioning, animationClass, slideToNext, slideOut } = useSlideAnimation()
+  const [showContextInput, setShowContextInput] = useState(false)
+  const [contextText, setContextText] = useState('')
 
-  const handleAnswer = (answer: boolean) => {
+  const handleAnswer = (answer: string) => {
     if (isTransitioning) return
 
     onAnswer(answer)
@@ -81,6 +96,27 @@ const AnimatedQuestionCard: React.FC<AnimatedQuestionCardProps> = ({
     }
   }
 
+  const handleNoClick = () => {
+    handleAnswer('No')
+  }
+
+  const handleYesClick = () => {
+    setShowContextInput(true)
+  }
+
+  const handleContextSubmit = () => {
+    const answer = contextText.trim() ? `Yes: ${contextText.trim()}` : 'Yes'
+    setShowContextInput(false)
+    setContextText('')
+    handleAnswer(answer)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleContextSubmit()
+    }
+  }
+
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '0.5rem' }}
@@ -89,14 +125,25 @@ const AnimatedQuestionCard: React.FC<AnimatedQuestionCardProps> = ({
         {isSkillsQuestion && <QuestionCaption>Do you have this skill?</QuestionCaption>}
         <QuestionText>{question}</QuestionText>
       </QuestionCardContainer>
-      <ButtonContainer>
-        <YesNoButton variant="red" onClick={() => handleAnswer(false)} disabled={isTransitioning}>
-          No
-        </YesNoButton>
-        <YesNoButton variant="green" onClick={() => handleAnswer(true)} disabled={isTransitioning}>
-          Yes
-        </YesNoButton>
-      </ButtonContainer>
+      {showContextInput ? (
+        <ContextInput
+          type="text"
+          placeholder="Add context (optional) and press Enter..."
+          value={contextText}
+          onChange={(e) => setContextText(e.target.value)}
+          onKeyPress={handleKeyPress}
+          autoFocus
+        />
+      ) : (
+        <ButtonContainer>
+          <YesNoButton variant="red" onClick={handleNoClick} disabled={isTransitioning}>
+            No
+          </YesNoButton>
+          <YesNoButton variant="green" onClick={handleYesClick} disabled={isTransitioning}>
+            Yes
+          </YesNoButton>
+        </ButtonContainer>
+      )}
     </div>
   )
 }

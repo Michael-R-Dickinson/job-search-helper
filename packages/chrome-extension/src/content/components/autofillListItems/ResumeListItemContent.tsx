@@ -31,7 +31,7 @@ const PointerCheckbox = styled(Checkbox)({
   },
 })
 
-export type QuestionAnswerMapAllowUnfilled = Record<string, boolean | null>
+export type QuestionAnswerMapAllowUnfilled = Record<string, string | null>
 export type QuestionAnswersAllowUnfilled = {
   skillsToAdd: QuestionAnswerMapAllowUnfilled
   experienceQuestions: QuestionAnswerMapAllowUnfilled
