@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { useSlideAnimation } from '../hooks/useSlideAnimation'
 import { useState } from 'react'
+import { Check } from 'lucide-react'
 
 const QuestionCardContainer = styled.div({
   padding: '0.7rem',
@@ -53,8 +54,14 @@ const YesNoButton = styled('button')(({ variant }: { variant: 'green' | 'red' })
   },
 }))
 
+const InputContainer = styled.div({
+  display: 'flex',
+  gap: '0.5rem',
+  alignItems: 'center',
+})
+
 const ContextInput = styled.input({
-  width: '100%',
+  flex: 1,
   padding: '0.5rem',
   fontSize: '0.75rem',
   border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -62,6 +69,23 @@ const ContextInput = styled.input({
   outline: 'none',
   '&:focus': {
     border: '1px solid #67c26d',
+  },
+})
+
+const SubmitButton = styled.button({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '2rem',
+  height: '2rem',
+  padding: '0',
+  backgroundColor: '#3cb544',
+  border: '1px solid #67c26d',
+  borderRadius: '0.5rem',
+  cursor: 'pointer',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: '#35a03a',
   },
 })
 
@@ -126,14 +150,19 @@ const AnimatedQuestionCard: React.FC<AnimatedQuestionCardProps> = ({
         <QuestionText>{question}</QuestionText>
       </QuestionCardContainer>
       {showContextInput ? (
-        <ContextInput
-          type="text"
-          placeholder="Add context (optional) and press Enter..."
-          value={contextText}
-          onChange={(e) => setContextText(e.target.value)}
-          onKeyPress={handleKeyPress}
-          autoFocus
-        />
+        <InputContainer>
+          <ContextInput
+            type="text"
+            placeholder="Add context (optional) and press Enter..."
+            value={contextText}
+            onChange={(e) => setContextText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            autoFocus
+          />
+          <SubmitButton onClick={handleContextSubmit} type="button">
+            <Check size={16} />
+          </SubmitButton>
+        </InputContainer>
       ) : (
         <ButtonContainer>
           <YesNoButton variant="red" onClick={handleNoClick} disabled={isTransitioning}>
