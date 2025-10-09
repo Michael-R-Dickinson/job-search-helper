@@ -149,8 +149,8 @@ if __name__ == "__main__":
     print("Firebase initialized")
 
     obj = AnsweredResumeTailoringQuestions(
-        skills_to_add={"skill1": True, "skill2": False},
-        experience_questions={"question1": True, "question2": False},
+        skills_to_add={"skill1": "yes", "skill2": "no"},
+        experience_questions={"question1": "yes", "question2": "no"},
     )
 
     cache_set_object("testObject", obj, 3600)

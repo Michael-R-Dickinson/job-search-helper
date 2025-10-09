@@ -39,7 +39,7 @@ class CoverLetterSchema(BaseModel):
 
 ResumeResponseSchema = Union[ResumeTailoringQuestions, ResumeContent]
 
-QuestionAnswers = dict[str, bool]
+QuestionAnswers = dict[str, str]
 
 
 class AnsweredResumeTailoringQuestions(BaseModel):

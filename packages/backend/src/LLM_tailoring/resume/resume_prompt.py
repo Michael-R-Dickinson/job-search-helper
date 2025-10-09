@@ -10,7 +10,7 @@ Here is your process: First, you will be given the the job description and resum
 For the skills_to_add list, each skill should just be a single word or short phrase, essentially the exact skill name that would be added to the skills section of the resume. The user will be able to select which skills to keep or remove later. These will often be specific technologies, programming languages, or methodologies. For example, "NextJS" or "Scrum". These would be things that could be directly added to the skills section of the resume. You must have no more than 5 skills in this list.
 
 For the experience_questions list, each question should be a specific single sentence that will allow you to tailor the experience section of the resume. For example, "Did you use NextJS for your "Web Scraping Twitter" project?" or "Did your team use the Scrum methodology at Google?"
-Each question should be answerable simply with a Yes or No and correspond to a specific intended change to a paragraph. You must have between 1-3 questions. Do not ask obvious questions or interest based questions where if the answer was No the user would not be applying. 
+Each question should correspond to a specific intended change to a paragraph. You must have between 1-3 questions. Do not ask obvious questions or interest based questions where if the answer indicates lack of experience the user would not be applying. 
 
 ## 2: Tailor the resume - do not attempt until you have been provided with the second message containing the paragraphs and the user's answers to the questions.
 You will be provided the specific paragraphs and runs from the resume's word doc and required to output a similar structure, this time with the tailored content. 
