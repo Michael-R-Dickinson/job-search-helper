@@ -49,15 +49,25 @@ class CoverLetterSchema(BaseModel):
 
 ResumeResponseSchema = Union[ResumeTailoringQuestions, ResumeContent]
 
-QuestionAnswers = dict[str, str]
+
+class AnsweredTailoringQuestion(BaseModel):
+    question: str
+    key: str
+    answer: Optional[str] = None
 
 
 class AnsweredResumeTailoringQuestions(BaseModel):
-    skills_to_add: QuestionAnswers
-    experience_questions: QuestionAnswers
+    skills_to_add: list[AnsweredTailoringQuestion]
+    experience_questions: list[AnsweredTailoringQuestion]
 
     def to_dict(self) -> dict:
         return {
-            "skills_to_add": self.skills_to_add,
-            "experience_questions": self.experience_questions,
+            "skills_to_add": [
+                {"question": q.question, "key": q.key, "answer": q.answer}
+                for q in self.skills_to_add
+            ],
+            "experience_questions": [
+                {"question": q.question, "key": q.key, "answer": q.answer}
+                for q in self.experience_questions
+            ],
         }
