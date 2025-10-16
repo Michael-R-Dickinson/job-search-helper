@@ -41,11 +41,8 @@ def tailor_resume(
 
     # ChatID allows us to pull in the chat history object
     cached_data = cache_get_object(chat_id)
-    chat_history = (
-        cached_data["chat_history"]
-        if isinstance(cached_data, dict) and "chat_history" in cached_data
-        else cached_data
-    )
+    chat_history, questions = cached_data["chat_history"], cached_data["questions"]
+
     updated_resume_data = tailor_resume_with_llm(
         prompt=resume_tailoring_prompt, chat_history=chat_history
     )
