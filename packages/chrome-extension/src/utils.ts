@@ -82,15 +82,11 @@ export function useOnPageLoad(
 export const getEmptyQuestionAnswers = (
   questions: QuestionsResponse['questions'],
 ): QuestionAnswersAllowUnfilled => {
-  const skillsToAdd = questions.skills_to_add.reduce((acc, question) => {
-    acc[question] = null
-    return acc
-  }, {} as QuestionAnswerMapAllowUnfilled)
-  const experienceQuestions = questions.experience_questions.reduce((acc, question) => {
-    acc[question] = null
-    return acc
-  }, {} as QuestionAnswerMapAllowUnfilled)
-  return { skillsToAdd, experienceQuestions }
+  // Questions are already TailoringQuestion objects with keys, just return them
+  return {
+    skillsToAdd: questions.skills_to_add,
+    experienceQuestions: questions.experience_questions,
+  }
 }
 
 export function shortHash(str: string): string {

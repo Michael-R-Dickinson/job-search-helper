@@ -26,6 +26,7 @@ const HeadingText = styled(PromptText)({
 type FlatQuestion = {
   type: 'skillsToAdd' | 'experienceQuestions'
   question: string
+  key: string
 }
 
 type Props = {
@@ -35,14 +36,16 @@ type Props = {
 }
 
 const flattenQuestions = (tailoringQuestions: QuestionAnswersAllowUnfilled): FlatQuestion[] => {
-  const skills = Object.keys(tailoringQuestions.skillsToAdd).map((skill) => ({
+  const skills = tailoringQuestions.skillsToAdd.map((q) => ({
     type: 'skillsToAdd' as const,
-    question: skill,
+    question: q.question,
+    key: q.key,
   }))
 
-  const experience = Object.keys(tailoringQuestions.experienceQuestions).map((question) => ({
+  const experience = tailoringQuestions.experienceQuestions.map((q) => ({
     type: 'experienceQuestions' as const,
-    question,
+    question: q.question,
+    key: q.key,
   }))
 
   return [...skills, ...experience]
@@ -55,17 +58,16 @@ const updateQuestionAnswer = (
 ): QuestionAnswersAllowUnfilled => {
   return {
     ...tailoringQuestions,
-    [question.type]: {
-      ...tailoringQuestions[question.type],
-      [question.question]: answer,
-    },
+    [question.type]: tailoringQuestions[question.type].map((q) =>
+      q.key === question.key ? { ...q, answer } : q
+    ),
   }
 }
 
 const allQuestionsAnswered = (questionAnswers: QuestionAnswersAllowUnfilled): boolean => {
   return (
-    Object.values(questionAnswers.experienceQuestions).every((answer) => answer !== null) &&
-    Object.values(questionAnswers.skillsToAdd).every((answer) => answer !== null)
+    questionAnswers.experienceQuestions.every((q) => q.answer !== undefined) &&
+    questionAnswers.skillsToAdd.every((q) => q.answer !== undefined)
   )
 }
 

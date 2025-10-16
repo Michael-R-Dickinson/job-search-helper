@@ -7,6 +7,7 @@ import {
   getTailoredResume,
   type QuestionAnswers,
   type QuestionsResponse,
+  type TailoringQuestion,
 } from '../../../backendApi'
 import TailoringQuestions from '../TailoringQuestions'
 import { getEmptyQuestionAnswers } from '../../../utils'
@@ -31,7 +32,7 @@ const PointerCheckbox = styled(Checkbox)({
   },
 })
 
-export type QuestionAnswerMapAllowUnfilled = Record<string, string | null>
+export type QuestionAnswerMapAllowUnfilled = TailoringQuestion[]
 export type QuestionAnswersAllowUnfilled = {
   skillsToAdd: QuestionAnswerMapAllowUnfilled
   experienceQuestions: QuestionAnswerMapAllowUnfilled

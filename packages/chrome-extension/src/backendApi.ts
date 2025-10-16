@@ -123,7 +123,12 @@ export const getResumesQuery = async (userId: string): Promise<ResumeQueryRespon
 
 // ! Copied from backendApi.ts in frontend
 // TODO: Create a shared package for these
-export type QuestionAnswerMap = Record<string, string>
+export type TailoringQuestion = {
+  question: string
+  answer?: string
+  key: string
+}
+export type QuestionAnswerMap = TailoringQuestion[]
 export interface QuestionAnswers {
   skillsToAdd: QuestionAnswerMap
   experienceQuestions: QuestionAnswerMap
@@ -131,8 +136,8 @@ export interface QuestionAnswers {
 export interface QuestionsResponse {
   message: string
   questions: {
-    skills_to_add: string[]
-    experience_questions: string[]
+    skills_to_add: TailoringQuestion[]
+    experience_questions: TailoringQuestion[]
   }
   chat_id: string
 }
@@ -160,7 +165,22 @@ export const getTailoringQuestions = async (
     throw new Error(`Error: ${res.status} ${res.statusText} - ${errorText}`)
   }
 
-  return { json: json, status: res.status, statusText: res.statusText }
+  // Transform string arrays to TailoringQuestion arrays with UUIDs
+  const transformedJson: QuestionsResponse = {
+    ...json,
+    questions: {
+      skills_to_add: json.questions.skills_to_add.map((q: string) => ({
+        question: q,
+        key: crypto.randomUUID(),
+      })),
+      experience_questions: json.questions.experience_questions.map((q: string) => ({
+        question: q,
+        key: crypto.randomUUID(),
+      })),
+    },
+  }
+
+  return { json: transformedJson, status: res.status, statusText: res.statusText }
 }
 interface TailoredResumeResponse {
   message: string
