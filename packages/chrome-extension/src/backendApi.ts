@@ -123,24 +123,31 @@ export const getResumesQuery = async (userId: string): Promise<ResumeQueryRespon
 
 // ! Copied from backendApi.ts in frontend
 // TODO: Create a shared package for these
-export type TailoringQuestion = {
-  question: string
-  answer?: string
-  key: string
-}
+const TailoringQuestionSchema = z.object({
+  question: z.string(),
+  key: z.string(),
+  answer: z.string().optional(),
+})
+
+export type TailoringQuestion = z.infer<typeof TailoringQuestionSchema>
+
 export type QuestionAnswerMap = TailoringQuestion[]
+
 export interface QuestionAnswers {
   skillsToAdd: QuestionAnswerMap
   experienceQuestions: QuestionAnswerMap
 }
-export interface QuestionsResponse {
-  message: string
-  questions: {
-    skills_to_add: TailoringQuestion[]
-    experience_questions: TailoringQuestion[]
-  }
-  chat_id: string
-}
+
+const QuestionsResponseSchema = z.object({
+  message: z.string(),
+  questions: z.object({
+    skills_to_add: z.array(TailoringQuestionSchema),
+    experience_questions: z.array(TailoringQuestionSchema),
+  }),
+  chat_id: z.string(),
+})
+
+export type QuestionsResponse = z.infer<typeof QuestionsResponseSchema>
 export const getTailoringQuestions = async (
   userId: string,
   fileName: string,
@@ -165,7 +172,16 @@ export const getTailoringQuestions = async (
     throw new Error(`Error: ${res.status} ${res.statusText} - ${errorText}`)
   }
 
-  return { json, status: res.status, statusText: res.statusText }
+  try {
+    const validatedData = QuestionsResponseSchema.parse(json)
+    return { json: validatedData, status: res.status, statusText: res.statusText }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error('Questions response validation error:', error.issues)
+      console.error('Received data:', json)
+    }
+    throw error
+  }
 }
 interface TailoredResumeResponse {
   message: string
