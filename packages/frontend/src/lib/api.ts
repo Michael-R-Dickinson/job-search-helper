@@ -1,5 +1,10 @@
 import { BACKEND_API_URL } from '@/constants'
 
+export type TailoringQuestion = {
+  question: string
+  key: string
+}
+
 export type QuestionAnswerMap = Record<string, boolean>
 
 export interface QuestionAnswers {
@@ -10,8 +15,8 @@ export interface QuestionAnswers {
 export interface QuestionsResponse {
   message: string
   questions: {
-    skills_to_add: string[]
-    experience_questions: string[]
+    skills_to_add: TailoringQuestion[]
+    experience_questions: TailoringQuestion[]
   }
   chat_id: string
 }

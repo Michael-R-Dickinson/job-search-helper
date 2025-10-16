@@ -42,8 +42,8 @@ const SelectSkillsHandler: React.FC<SelectSkillsHandlerProps> = ({
         <GenericLoader size={45} />
       ) : (
         <SelectSkillsDisplay
-          skillsToAdd={data.json.questions.skills_to_add}
-          experienceQuestions={data.json.questions.experience_questions}
+          skillsToAdd={data.json.questions.skills_to_add.map((q) => q.question)}
+          experienceQuestions={data.json.questions.experience_questions.map((q) => q.question)}
           setResumeDetail={setResumeDetail}
           onQuestionsAnsweredCallback={onQuestionsAnsweredCallback}
         />
