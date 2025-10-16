@@ -165,7 +165,7 @@ export const getTailoringQuestions = async (
     method: 'GET',
   })
   const json = await res.json()
-  console.log('Questions Response JSON:', json)
+
   if (!res.ok) {
     const errorText = json?.message || 'No error message provided'
     console.log('Question fetch error response:', json)
@@ -174,11 +174,12 @@ export const getTailoringQuestions = async (
 
   try {
     const validatedData = QuestionsResponseSchema.parse(json)
+    console.log('questions response validated', validatedData)
     return { json: validatedData, status: res.status, statusText: res.statusText }
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error('Questions response validation error:', error.issues)
-      console.error('Received data:', json)
+      console.error('Questions Response JSON:', json)
     }
     throw error
   }
