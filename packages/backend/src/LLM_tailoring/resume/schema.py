@@ -22,14 +22,24 @@ class ResumeContent(BaseModel):
     skillsAdded: list[str]
 
 
+class TailoringQuestion(BaseModel):
+    question: str
+    key: str
+
+
 class ResumeTailoringQuestions(BaseModel):
-    skills_to_add: list[str]
-    experience_questions: list[str]
+    skills_to_add: list[TailoringQuestion]
+    experience_questions: list[TailoringQuestion]
 
     def to_dict(self) -> dict:
         return {
-            "skills_to_add": self.skills_to_add,
-            "experience_questions": self.experience_questions,
+            "skills_to_add": [
+                {"question": q.question, "key": q.key} for q in self.skills_to_add
+            ],
+            "experience_questions": [
+                {"question": q.question, "key": q.key}
+                for q in self.experience_questions
+            ],
         }
 
 

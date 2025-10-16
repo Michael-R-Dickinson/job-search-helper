@@ -165,22 +165,7 @@ export const getTailoringQuestions = async (
     throw new Error(`Error: ${res.status} ${res.statusText} - ${errorText}`)
   }
 
-  // Transform string arrays to TailoringQuestion arrays with UUIDs
-  const transformedJson: QuestionsResponse = {
-    ...json,
-    questions: {
-      skills_to_add: json.questions.skills_to_add.map((q: string) => ({
-        question: q,
-        key: crypto.randomUUID(),
-      })),
-      experience_questions: json.questions.experience_questions.map((q: string) => ({
-        question: q,
-        key: crypto.randomUUID(),
-      })),
-    },
-  }
-
-  return { json: transformedJson, status: res.status, statusText: res.statusText }
+  return { json, status: res.status, statusText: res.statusText }
 }
 interface TailoredResumeResponse {
   message: string

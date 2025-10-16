@@ -50,7 +50,7 @@ def handle_resume_questions_request(
         chat_id = generate_uuid()
         cache_set_object(
             id=chat_id,
-            obj=chat_history,
+            obj={"chat_history": chat_history, "questions": questions.to_dict()},
         )
 
         return https_fn.Response(

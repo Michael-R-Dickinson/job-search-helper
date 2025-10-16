@@ -59,7 +59,7 @@ const updateQuestionAnswer = (
   return {
     ...tailoringQuestions,
     [question.type]: tailoringQuestions[question.type].map((q) =>
-      q.key === question.key ? { ...q, answer } : q
+      q.key === question.key ? { ...q, answer } : q,
     ),
   }
 }
