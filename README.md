@@ -20,12 +20,7 @@ A Chrome extension that detects and fills form fields across job application web
 
 **Pattern Matching**: Categorizes common fields (name, email, LinkedIn URL, pronouns, GitHub, etc.) using predicate functions that analyze field attributes and labels. Fills these directly from user preferences stored in Firebase.
 
-**LLM-Based Autofill**: For complex or ambiguous fields, sends field metadata to a Gemini-based backend endpoint. The LLM:
-- Receives field information (id, name, type, label, current value)
-- Maps fields to user profile data using a value path syntax
-- Handles conditional logic for boolean fields (radio/checkboxes)
-- Uses text similarity algorithms (Sorensen distance with negation detection) to match options to canonical values
-- Returns autofill instructions that the extension executes
+**Backend Autofill**: For complex or ambiguous fields, sends field metadata to backend endpoints that use a combination of embedding-based similarity matching and LLM interpretation to determine appropriate values. Returns autofill instructions that the extension executes.
 
 The extension runs content scripts on all URLs, detects form changes, and applies autofill on user trigger.
 
@@ -66,7 +61,15 @@ The autofill system handles field interpretation through two paths:
 
 1. **Simple categorization**: Direct pattern matching on field labels/names using regex and keyword detection. Returns values immediately from user profile.
 
-2. **LLM interpretation**: Sends field data to backend where Gemini:
+2. **Backend processing**: Sends field data to backend endpoints that employ two different approaches:
+
+   **Embedding + Cosine Similarity**: For fields with predefined options (select menus, radio buttons), the system:
+   - Computes text embeddings for option labels
+   - Compares against canonical value embeddings using cosine similarity
+   - Uses tokenization with contraction expansion and negation detection (words like "not", "can't", "isn't") to penalize mismatched negations
+   - Returns the best matching option based on similarity scores
+
+   **LLM Interpretation**: For open-ended or complex fields, Gemini:
    - Analyzes field context against user data schema
    - Generates value path strings like `{name/first_name} {name/last_name}`
    - Creates conditional expressions for boolean fields: `if {authorization} equals "us_authorized" then {true} else {false}`
@@ -74,5 +77,3 @@ The autofill system handles field interpretation through two paths:
    - Identifies free-response fields that require generated content
 
 The extension parses returned instructions and fills fields accordingly. For free-response fields, it can optionally trigger the free response generation endpoint.
-
-Text similarity matching uses tokenization with contraction expansion, Sorensen coefficient calculation, and negation detection (words like "not", "can't", "isn't") to penalize mismatched negations between option labels and canonical values.
