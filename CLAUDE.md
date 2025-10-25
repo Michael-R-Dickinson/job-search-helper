@@ -29,9 +29,9 @@ pnpm run preview # Preview built extension
 
 ### Backend (`/packages/backend/`)
 ```bash
-uv sync           # Install dependencies
-uv run pytest     # Run tests
-uv run mypy src   # Type check
+uv sync --all-extras  # Install dependencies (including dev tools)
+uv run pytest         # Run tests
+uv run mypy src       # Type check
 ```
 
 ## Architecture Overview

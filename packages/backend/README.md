@@ -8,10 +8,10 @@ Install dependencies using uv:
 
 ```sh
 cd packages/backend
-uv sync
+uv sync --all-extras
 ```
 
-This will create a virtual environment in `.venv` and install all dependencies.
+This will create a virtual environment in `.venv` and install all dependencies including dev tools (pytest, mypy).
 
 ### Run the development server
 
