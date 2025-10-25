@@ -1,4 +1,4 @@
-# Perfectify
+# ResuMe
 
 A job search platform that automates resume tailoring, form autofill, and application tracking. The system consists of a Next.js web application, Chrome extension, and Python backend with Firebase Functions.
 
