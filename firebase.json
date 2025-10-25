@@ -4,8 +4,8 @@
       "source": "packages/backend",
       "runtime": "python312",
       "predeploy": [
-        "cd \"$RESOURCE_DIR\" && poetry export --format requirements.txt --output requirements.txt --without-hashes",
-        "cd $RESOURCE_DIR && echo \"-e .\" >> requirements.txt"
+        "cd \"$RESOURCE_DIR\" && uv export --no-hashes --no-dev --format requirements-txt > requirements.txt",
+        "cd $RESOURCE_DIR && echo \".\" >> requirements.txt"
       ],
       "codebase": "default",
       "ignore": ["venv", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"]
