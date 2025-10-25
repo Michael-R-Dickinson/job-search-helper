@@ -6,25 +6,25 @@ From the `packages/backend` directory:
 
 ```bash
 # Run all tests
-poetry run pytest
+uv run pytest
 
 # Run with verbose output
-poetry run pytest -v
+uv run pytest -v
 
 # Run specific test file
-poetry run pytest tests/test_utils.py
+uv run pytest tests/test_utils.py
 
 # Run specific test class
-poetry run pytest tests/test_validation.py::TestLinkedInURLValidation
+uv run pytest tests/test_validation.py::TestLinkedInURLValidation
 
 # Run specific test
-poetry run pytest tests/test_utils.py::TestUUIDGeneration::test_generate_uuid_uniqueness
+uv run pytest tests/test_utils.py::TestUUIDGeneration::test_generate_uuid_uniqueness
 
 # Run only unit tests
-poetry run pytest -m unit
+uv run pytest -m unit
 
 # Run with coverage
-poetry run pytest --cov=src --cov-report=term-missing
+uv run pytest --cov=src --cov-report=term-missing
 ```
 
 ## Test Structure

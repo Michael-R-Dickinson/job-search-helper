@@ -28,7 +28,11 @@ pnpm run preview # Preview built extension
 ```
 
 ### Backend (`/packages/backend/`)
-Uses Poetry for dependency management. Deploy via Firebase Functions.
+```bash
+uv sync           # Install dependencies
+uv run pytest     # Run tests
+uv run mypy src   # Type check
+```
 
 ## Architecture Overview
 
@@ -107,7 +111,7 @@ Uses Poetry for dependency management. Deploy via Firebase Functions.
 ### Package-Specific
 - **Frontend**: React 19, Tailwind, React Query, DaisyUI
 - **Extension**: Mantine, Jotai, Fuse.js for fuzzy search, Zod for validation
-- **Backend**: Poetry dependency management, pytest, mypy
+- **Backend**: uv dependency management, pytest, mypy
 
 ## Important Notes
 

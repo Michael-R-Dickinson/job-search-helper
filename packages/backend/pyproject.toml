@@ -1,44 +1,45 @@
-[tool.poetry]
+[project]
 name = "backend"
 version = "0.1.0"
 description = ""
-authors = ["MichaelDickinson20I <michael.dickinson3949@gmail.com>"]
+authors = [
+  { name = "MichaelDickinson20I", email = "michael.dickinson3949@gmail.com" }
+]
 readme = "README.md"
-packages = [
-  { include = "*", from = "src" }
+requires-python = ">=3.12"
+dependencies = [
+  "python-docx>=1.1.2",
+  "firebase-admin>=6.8.0",
+  "requests>=2.32.3",
+  "beautifulsoup4>=4.13.4",
+  "pydantic>=2.11.4",
+  "md2docx-python>=1.0.0",
+  "google-genai>=1.14.0",
+  "python-dotenv>=1.1.0",
+  "firebase-functions>=0.4.2",
+  "cloudconvert>=2.1.0",
+  "anthropic>=0.52.1",
+  "numpy>=2.3.0",
+  "dictor>=0.1.12",
+  "textdistance>=4.6.3",
+  "nltk>=3.9.1",
+  "types-requests>=2.32.4.20250611",
+  "contractions>=0.1.73",
+  "tqdm>=4.67.1",
 ]
 
-
-[tool.poetry.dependencies]
-python = "^3.12"
-python-docx = "^1.1.2"
-firebase-admin = "^6.8.0"
-requests = "^2.32.3"
-beautifulsoup4 = "^4.13.4"
-pydantic = "^2.11.4"
-md2docx-python = "^1.0.0"
-google-genai = "^1.14.0"
-python-dotenv = "^1.1.0"
-firebase-functions = "^0.4.2"
-cloudconvert = "^2.1.0"
-anthropic = "^0.52.1"
-numpy = "^2.3.0"
-dictor = "^0.1.12"
-textdistance = "^4.6.3"
-nltk = "^3.9.1"
-types-requests = "^2.32.4.20250611"
-contractions = "^0.1.73"
-tqdm = "^4.67.1"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.4.1"
-mypy = "^1.16.1"
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4.1",
+  "mypy>=1.16.1",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
 
 [tool.mypy]
 ignore_missing_imports = true
