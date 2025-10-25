@@ -71,21 +71,17 @@ dependencies = [
     { name = "firebase-functions" },
     { name = "google-genai" },
     { name = "md2docx-python" },
+    { name = "mypy" },
     { name = "nltk" },
     { name = "numpy" },
     { name = "pydantic" },
+    { name = "pytest" },
     { name = "python-docx" },
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "textdistance" },
     { name = "tqdm" },
     { name = "types-requests" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
 ]
 
 [package.metadata]
@@ -99,11 +95,11 @@ requires-dist = [
     { name = "firebase-functions", specifier = ">=0.4.2" },
     { name = "google-genai", specifier = ">=1.14.0" },
     { name = "md2docx-python", specifier = ">=1.0.0" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.16.1" },
+    { name = "mypy", specifier = ">=1.16.1" },
     { name = "nltk", specifier = ">=3.9.1" },
     { name = "numpy", specifier = ">=2.3.0" },
     { name = "pydantic", specifier = ">=2.11.4" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.4.1" },
+    { name = "pytest", specifier = ">=8.4.1" },
     { name = "python-docx", specifier = ">=1.1.2" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "requests", specifier = ">=2.32.3" },

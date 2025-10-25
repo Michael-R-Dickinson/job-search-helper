@@ -26,13 +26,10 @@ dependencies = [
   "types-requests>=2.32.4.20250611",
   "contractions>=0.1.73",
   "tqdm>=4.67.1",
-]
-
-[project.optional-dependencies]
-dev = [
   "pytest>=8.4.1",
   "mypy>=1.16.1",
 ]
+
 
 [build-system]
 requires = ["hatchling"]
